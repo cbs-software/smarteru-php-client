@@ -16,6 +16,7 @@ CBS\SmarterU\Queries\BaseQuery
 |[getEmail](#listusersquerygetemail)|Return the tag representing the email to query for.|
 |[getEmployeeId](#listusersquerygetemployeeid)|Return the tag representing the employee ID to query for.|
 |[getGroupName](#listusersquerygetgroupname)|Return the name of the group containing the users to query for.|
+|[getHomeGroup](#listusersquerygethomegroup)|Get the name of the home group of users to query for.|
 |[getModifiedDate](#listusersquerygetmodifieddate)|Return the date range when the user's account was last updated.|
 |[getName](#listusersquerygetname)|Return the tag representing the name to query for.|
 |[getPage](#listusersquerygetpage)|Return the page to get.|
@@ -28,6 +29,7 @@ CBS\SmarterU\Queries\BaseQuery
 |[setEmail](#listusersquerysetemail)|Set the tag representing the email to query for.|
 |[setEmployeeId](#listusersquerysetemployeeid)|Set the tag representing the employee ID to query for.|
 |[setGroupName](#listusersquerysetgroupname)|Set the name of the group containing the users to query for.|
+|[setHomeGroup](#listusersquerysethomegroup)|Set the name of the home group of users to query for.|
 |[setModifiedDate](#listusersquerysetmodifieddate)|Set the date range when the user's account was last updated.|
 |[setName](#listusersquerysetname)|Set the tag representing the name to query for.|
 |[setPage](#listusersquerysetpage)|Set the page to get.|
@@ -36,8 +38,7 @@ CBS\SmarterU\Queries\BaseQuery
 |[setSortOrder](#listusersquerysetsortorder)|Set the direction the results are sorted in.|
 |[setTeams](#listusersquerysetteams)|Set the container for the teams the user is assigned to.|
 |[setUserStatus](#listusersquerysetuserstatus)|Set the status of the users to query for.|
-|[toXml](#listusersquerytoxml)|Generate an XML representation of the query, to be passed into the
-SmarterU API.|
+|[toXml](#listusersquerytoxml)|Generate an XML representation of the query, to be passed into the SmarterU API.|
 
 ## Inherited methods
 
@@ -151,6 +152,32 @@ Return the name of the group containing the users to query for.
 `?string`
 
 > the name of the group containing the users to query for
+
+
+<hr />
+
+
+### ListUsersQuery::getHomeGroup  
+
+**Description**
+
+```php
+public getHomeGroup (void)
+```
+
+Get the name of the home group of users to query for. 
+
+ 
+
+**Parameters**
+
+`This function has no parameters.`
+
+**Return Values**
+
+`?string`
+
+> the name of the home group
 
 
 <hr />
@@ -473,6 +500,33 @@ Set the name of the group containing the users to query for.
 <hr />
 
 
+### ListUsersQuery::setHomeGroup  
+
+**Description**
+
+```php
+public setHomeGroup (string $homeGroup)
+```
+
+Set the name of the home group of users to query for. 
+
+ 
+
+**Parameters**
+
+* `(string) $homeGroup`
+: the name of the home group  
+
+**Return Values**
+
+`self`
+
+
+
+
+<hr />
+
+
 ### ListUsersQuery::setModifiedDate  
 
 **Description**
@@ -698,8 +752,7 @@ Set the status of the users to query for.
 public toXml (void)
 ```
 
-Generate an XML representation of the query, to be passed into the
-SmarterU API. 
+Generate an XML representation of the query, to be passed into the SmarterU API. 
 
  
 

@@ -1,0 +1,23 @@
+name: Generate API Documentation
+
+on:
+  pull_request:
+    paths:
+      - '**.php'
+
+jobs:
+  get_php_classes_list:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.pull_request.head.ref }}
+      - uses: php-actions/composer@v5
+      - name: Generating documentation...
+        run: ./vendor/bin/phpdoc-md
+      - name: Commit Changes
+        uses: EndBug/add-and-commit@v9
+        with:
+          default_author: github_actions
+          add: 'docs/*'

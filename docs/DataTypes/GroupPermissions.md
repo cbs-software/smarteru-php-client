@@ -17,22 +17,49 @@ Unnecessary attributes will be ignored.
 
 | Name | Description |
 |------|-------------|
+|[getAction](#grouppermissionsgetaction)|Get whether the user is to be added to or removed from the group.|
 |[getEmail](#grouppermissionsgetemail)|Get the email address of the user you want to assign to the group.|
 |[getEmployeeId](#grouppermissionsgetemployeeid)|Get the employee ID of the user you want to assign to the group.|
 |[getGroupId](#grouppermissionsgetgroupid)|Get the user-specified ID of the group the user is a member of.|
 |[getGroupName](#grouppermissionsgetgroupname)|Get the name of the group the user is a member of.|
 |[getHomeGroup](#grouppermissionsgethomegroup)|Get whether or not this group is the user's home group.|
-|[getPermissions](#grouppermissionsgetpermissions)|Get the container for the permissions to be granted or denied to the
-user within the group.|
+|[getPermissions](#grouppermissionsgetpermissions)|Get the container for the permissions to be granted or denied to the user within the group.|
+|[setAction](#grouppermissionssetaction)|Set whether the user is to be added to or removed from the group.|
 |[setEmail](#grouppermissionssetemail)|Set the email address of the user you want to assign to the group.|
 |[setEmployeeId](#grouppermissionssetemployeeid)|Set the employee ID of the user you want to assign to the group.|
 |[setGroupId](#grouppermissionssetgroupid)|Set the user-specified ID of the group the user is a member of.|
 |[setGroupName](#grouppermissionssetgroupname)|Set the name of the group the user is a member of.|
 |[setHomeGroup](#grouppermissionssethomegroup)|Set whether or not this group is the user's home group.|
-|[setPermissions](#grouppermissionssetpermissions)|Set the container for the permissions to be granted or denied to the
-user within the group.|
+|[setPermissions](#grouppermissionssetpermissions)|Set the container for the permissions to be granted or denied to the user within the group.|
 
 
+
+
+### GroupPermissions::getAction  
+
+**Description**
+
+```php
+public getAction (void)
+```
+
+Get whether the user is to be added to or removed from the group. 
+
+ 
+
+**Parameters**
+
+`This function has no parameters.`
+
+**Return Values**
+
+`?string`
+
+> whether the user is to be added to or removed from the  
+group
+
+
+<hr />
 
 
 ### GroupPermissions::getEmail  
@@ -173,8 +200,7 @@ Get whether or not this group is the user's home group.
 public getPermissions (void)
 ```
 
-Get the container for the permissions to be granted or denied to the
-user within the group. 
+Get the container for the permissions to be granted or denied to the user within the group. 
 
  
 
@@ -187,6 +213,34 @@ user within the group.
 `array`
 
 > the container for the permissions
+
+
+<hr />
+
+
+### GroupPermissions::setAction  
+
+**Description**
+
+```php
+public setAction (string $action)
+```
+
+Set whether the user is to be added to or removed from the group. 
+
+ 
+
+**Parameters**
+
+* `(string) $action`
+: whether the user is to be added to or removed  
+from the group  
+
+**Return Values**
+
+`self`
+
+
 
 
 <hr />
@@ -334,8 +388,7 @@ home group
 public setPermissions (array $permissions)
 ```
 
-Set the container for the permissions to be granted or denied to the
-user within the group. 
+Set the container for the permissions to be granted or denied to the user within the group. 
 
  
 

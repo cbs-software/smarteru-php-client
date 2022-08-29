@@ -11,8 +11,7 @@ SmarterU API query.
 
 | Name | Description |
 |------|-------------|
-|[createBaseXml](#basequerycreatebasexml)|Create the base XML element containing the features that are common to
-all queries.|
+|[createBaseXml](#basequerycreatebasexml)|Create the base XML element containing the features that are common to all queries.|
 |[getAccountApi](#basequerygetaccountapi)|Return the account API key.|
 |[getUserApi](#basequerygetuserapi)|Return the user API key.|
 |[setAccountApi](#basequerysetaccountapi)|Set the account API key.|
@@ -29,8 +28,7 @@ all queries.|
 public createBaseXml (void)
 ```
 
-Create the base XML element containing the features that are common to
-all queries. 
+Create the base XML element containing the features that are common to all queries. 
 
  
 

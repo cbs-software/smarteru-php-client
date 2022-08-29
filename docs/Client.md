@@ -11,20 +11,21 @@ appropriate object.
 
 | Name | Description |
 |------|-------------|
-|[__construct](#client__construct)|Initialize a client for making queries to the SmarterU API. By default a
-GuzzleHttp\Client will be automatically created as needed to communicate
-with the SmarterU API.|
+|[__construct](#client__construct)|Initialize a client for making queries to the SmarterU API. By default a GuzzleHttp\Client will be automatically created as needed to communicate with the SmarterU API.|
+|[createGroup](#clientcreategroup)|Make a CreateGroup query to the SmarterU API.|
 |[createUser](#clientcreateuser)|Make a CreateUser query to the SmarterU API.|
 |[getAccountApi](#clientgetaccountapi)|Get the account API key.|
-|[getHttpClient](#clientgethttpclient)|Get the HTTP Client. If the client has not already been provided, a
-new default HttpClient instance will be created and returned.|
+|[getGroup](#clientgetgroup)|Make a GetGroup query to the SmarterU API.|
+|[getHttpClient](#clientgethttpclient)|Get the HTTP Client. If the client has not already been provided, a new default HttpClient instance will be created and returned.|
 |[getUser](#clientgetuser)|Make a GetUser query to the SmarterU API.|
 |[getUserApi](#clientgetuserapi)|Get the user API key.|
 |[getUserGroups](#clientgetusergroups)|Make a GetUserGroups query to the SmarterU API.|
+|[listGroups](#clientlistgroups)|Make a ListGroups query to the SmarterU API.|
 |[listUsers](#clientlistusers)|Make a ListUsers query to the SmarterU API.|
 |[setAccountApi](#clientsetaccountapi)|Set the account API key.|
 |[setHttpClient](#clientsethttpclient)|Set the HTTP Client.|
 |[setUserApi](#clientsetuserapi)|Set the user API key.|
+|[updateGroup](#clientupdategroup)|Make an UpdateGroup query to the SmarterU API.|
 |[updateUser](#clientupdateuser)|Make an UpdateUser query to the SmarterU API.|
 
 
@@ -38,9 +39,7 @@ new default HttpClient instance will be created and returned.|
 public __construct (string|null $apiKey, string|null $apiUserKey)
 ```
 
-Initialize a client for making queries to the SmarterU API. By default a
-GuzzleHttp\Client will be automatically created as needed to communicate
-with the SmarterU API. 
+Initialize a client for making queries to the SmarterU API. By default a GuzzleHttp\Client will be automatically created as needed to communicate with the SmarterU API. 
 
  
 
@@ -63,6 +62,51 @@ SmarterU API
 
 `void`
 
+
+<hr />
+
+
+### Client::createGroup  
+
+**Description**
+
+```php
+public createGroup (\Group $group)
+```
+
+Make a CreateGroup query to the SmarterU API. 
+
+ 
+
+**Parameters**
+
+* `(\Group) $group`
+: The Group to create  
+
+**Return Values**
+
+`array`
+
+> An array of [$result, $errors] where $result is an array  
+of any information returned by the SmarterU API and $errors is an  
+array of any error messages returned by the SmarterU API.
+
+
+**Throws Exceptions**
+
+
+`\MissingValueException`
+> If the Account API Key and/or the User  
+API Key are unset.
+
+`\ClientException`
+> If the HTTP response includes a status code  
+indicating that an HTTP error has prevented the request from  
+being made.
+
+`\SmarterUException`
+> If the response from the SmarterU API  
+reports a fatal error that prevents the request from executing.
 
 <hr />
 
@@ -138,6 +182,52 @@ Get the account API key.
 <hr />
 
 
+### Client::getGroup  
+
+**Description**
+
+```php
+public getGroup (\GetGroupQuery $query)
+```
+
+Make a GetGroup query to the SmarterU API. 
+
+ 
+
+**Parameters**
+
+* `(\GetGroupQuery) $query`
+: The query representing the Group to return  
+
+**Return Values**
+
+`array`
+
+> An array of [$result, $errors] where $result is an array  
+of any information returned by the SmarterU API and $errors is an  
+array of any error messages returned by the SmarterU API.
+
+
+**Throws Exceptions**
+
+
+`\MissingValueException`
+> If the Account API Key and/or the User  
+API Key are unset in both this instance of the Client and in the  
+query passed in as a parameter.
+
+`\ClientException`
+> If the HTTP response includes a status code  
+indicating that an HTTP error has prevented the request from  
+being made.
+
+`\SmarterUException`
+> If the response from the SmarterU API  
+reports a fatal error that prevents the request from executing.
+
+<hr />
+
+
 ### Client::getHttpClient  
 
 **Description**
@@ -146,8 +236,7 @@ Get the account API key.
 public getHttpClient (void)
 ```
 
-Get the HTTP Client. If the client has not already been provided, a
-new default HttpClient instance will be created and returned. 
+Get the HTTP Client. If the client has not already been provided, a new default HttpClient instance will be created and returned. 
 
  
 
@@ -254,6 +343,52 @@ Make a GetUserGroups query to the SmarterU API.
 * `(\GetUserQuery) $query`
 : The query representing the User whose Groups  
 are to be read.  
+
+**Return Values**
+
+`array`
+
+> An array of [$result, $errors] where $result is an array  
+of any information returned by the SmarterU API and $errors is an  
+array of any error messages returned by the SmarterU API.
+
+
+**Throws Exceptions**
+
+
+`\MissingValueException`
+> If the Account API Key and/or the User  
+API Key are unset in both this instance of the Client and in the  
+query passed in as a parameter.
+
+`\ClientException`
+> If the HTTP response includes a status code  
+indicating that an HTTP error has prevented the request from  
+being made.
+
+`\SmarterUException`
+> If the response from the SmarterU API  
+reports a fatal error that prevents the request from executing.
+
+<hr />
+
+
+### Client::listGroups  
+
+**Description**
+
+```php
+public listGroups (\ListGroupsQuery $query)
+```
+
+Make a ListGroups query to the SmarterU API. 
+
+ 
+
+**Parameters**
+
+* `(\ListGroupsQuery) $query`
+: The query representing the Groups to return  
 
 **Return Values**
 
@@ -407,6 +542,51 @@ Set the user API key.
 
 
 
+
+<hr />
+
+
+### Client::updateGroup  
+
+**Description**
+
+```php
+public updateGroup (\Group $group)
+```
+
+Make an UpdateGroup query to the SmarterU API. 
+
+ 
+
+**Parameters**
+
+* `(\Group) $group`
+: The Group to update  
+
+**Return Values**
+
+`array`
+
+> An array of [$result, $errors] where $result is an array  
+of any information returned by the SmarterU API and $errors is an  
+array of any error messages returned by the SmarterU API.
+
+
+**Throws Exceptions**
+
+
+`\MissingValueException`
+> If the Account API Key and/or the User  
+API Key are unset.
+
+`\ClientException`
+> If the HTTP response includes a status code  
+indicating that an HTTP error has prevented the request from  
+being made.
+
+`\SmarterUException`
+> If the response from the SmarterU API  
+reports a fatal error that prevents the request from executing.
 
 <hr />
 
