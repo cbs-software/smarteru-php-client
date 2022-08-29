@@ -1,0 +1,27 @@
+<?php
+return (object)[
+    'rootNamespace' => 'CBS\SmarterU',
+    'destDirectory' => 'docs',
+    'format' => 'github',
+    'classes' => [
+        '\CBS\SmarterU\Client',
+        '\CBS\SmarterU\DataTypes\Group',
+        '\CBS\SmarterU\DataTypes\GroupPermissions',
+        '\CBS\SmarterU\DataTypes\LearningModule',
+        '\CBS\SmarterU\DataTypes\Permission',
+        '\CBS\SmarterU\DataTypes\SubscriptionVariant',
+        '\CBS\SmarterU\DataTypes\Tag',
+        '\CBS\SmarterU\DataTypes\User',
+        '\CBS\SmarterU\Exceptions\HttpException',
+        '\CBS\SmarterU\Exceptions\InvalidArgumentException',
+        '\CBS\SmarterU\Exceptions\MissingValueException',
+        '\CBS\SmarterU\Exceptions\SmarterUException',
+        '\CBS\SmarterU\Queries\BaseQuery',
+        '\CBS\SmarterU\Queries\GetGroupQuery',
+        '\CBS\SmarterU\Queries\GetUserQuery',
+        '\CBS\SmarterU\Queries\ListGroupsQuery',
+        '\CBS\SmarterU\Queries\ListUsersQuery',
+        '\CBS\SmarterU\Queries\Tags\DateRangeTag',
+        '\CBS\SmarterU\Queries\Tags\MatchTag',
+    ],
+];
