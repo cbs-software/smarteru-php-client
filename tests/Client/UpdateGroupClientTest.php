@@ -746,73 +746,6 @@ class UpdateGroupClientTest extends TestCase {
 
     /**
      * Test that updateGroup() returns the expected output when the SmarterU
-     * API returns a non-fatal error.
-     */
-    public function testUpdateGroupHandlesNonFatalError() {
-        $accountApi = 'account';
-        $userApi = 'user';
-        $client = new Client($accountApi, $userApi);
-
-        $name = $this->group->getName();
-        $groupId = $this->group->getGroupId();
-
-        $xmlString = <<<XML
-        <SmarterU>
-            <Result>Success</Result>
-            <Info>
-                <Group>$name</Group>
-                <GroupID>$groupId</GroupID>
-            </Info>
-            <Errors>
-                <Error>
-                    <ErrorID>Error1</ErrorID>
-                    <ErrorMessage>Testing</ErrorMessage>
-                </Error>
-                <Error>
-                    <ErrorID>Error2</ErrorID>
-                    <ErrorMessage>123</ErrorMessage>
-                </Error>
-            </Errors>
-        </SmarterU>
-        XML;
-
-        $response = new Response(200, [], $xmlString);
-        $container = [];
-        $history = Middleware::history($container);
-        $mock = (new MockHandler([$response]));
-        $handlerStack = HandlerStack::create($mock);
-        $handlerStack->push($history);
-        $httpClient = new HttpClient(['handler' => $handlerStack]);
-        $client->setHttpClient($httpClient);
-
-        // Make the request.
-        $result = $client->updateGroup($this->group);
-
-        self::assertIsArray($result);
-        self::assertCount(2, $result);
-        self::assertArrayHasKey('Response', $result);
-        self::assertArrayHasKey('Errors', $result);
-
-        $response = $result['Response'];
-        $errors = $result['Errors'];
-
-        self::assertIsArray($response);
-        self::assertCount(2, $response);
-        self::assertArrayHasKey('Group', $response);
-        self::assertEquals($response['Group'], $this->group->getName());
-        self::assertArrayHasKey('GroupID', $response);
-        self::assertEquals($response['GroupID'], $this->group->getGroupId());
-
-        self::assertIsArray($errors);
-        self::assertCount(2, $errors);
-        self::assertArrayHasKey('Error1', $errors);
-        self::assertEquals($errors['Error1'], 'Testing');
-        self::assertArrayHasKey('Error2', $errors);
-        self::assertEquals($errors['Error2'], '123');
-    }
-
-    /**
-     * Test that updateGroup() returns the expected output when the SmarterU
      * API returns no errors.
      */
     public function testUpdateGroupProducesCorrectOutput() {
@@ -862,7 +795,7 @@ class UpdateGroupClientTest extends TestCase {
         self::assertArrayHasKey('GroupID', $response);
         self::assertEquals($response['GroupID'], $this->group->getGroupId());
 
-        self::assertIsArray($errors);
-        self::assertCount(0, $errors);
+        self::assertIsString($errors);
+        self::assertEquals('', $errors);
     }
 }

@@ -41,16 +41,40 @@ class Client {
     public const POST_URL = 'https://api.smarteru.com/apiv2/';
 
     /**
+     * The method name to pass into the XML body when making a CreateUser query
+     * to the SmarterU API.
+     */
+    protected const SMARTERU_API_CREATE_USER_QUERY_METHOD = 'createUser';
+
+    /**
      * The method name to pass into the query object when making a GetUser
      * query to the SmarterU API.
      */
     protected const SMARTERU_API_GET_USER_QUERY_METHOD = 'getUser';
 
     /**
+     * The method name to pass into the query object when making a ListUsers
+     * query to the SmarterU API.
+     */
+    protected const SMARTERU_API_LIST_USERS_QUERY_METHOD = 'listUsers';
+
+    /**
+     * The method name to pass into the XML body when making an UpdateUser
+     * query to the SmarterU API.
+     */
+    protected const SMARTERU_API_UPDATE_USER_QUERY_METHOD = 'updateUser';
+
+    /**
      * The method name to pass into the query object when making a
      * GetUserGroups query to the SmarterU API.
      */
     protected const SMARTERU_API_GET_USER_GROUPS_QUERY_METHOD = 'getUserGroups';
+
+    /**
+     * The beginning of the message to use to throw an exception when the
+     * SmarterU API returns a fatal error.
+     */
+    protected const SMARTERU_EXCEPTION_PREAMBLE = 'SmarterU rejected the request due to the following error(s): ';
 
     #endregion constants
 
@@ -170,9 +194,7 @@ class Client {
      * Make a CreateUser query to the SmarterU API.
      *
      * @param User $user the user to create
-     * @return array An array of [$result, $errors] where $result is an array
-     *      of any information returned by the SmarterU API and $errors is an
-     *      array of any error messages returned by the SmarterU API.
+     * @return User The user as created by the API.
      * @throws MissingValueException If the Account API Key and/or the User
      *      API Key are unset.
      * @throws ClientException If the HTTP response includes a status code
@@ -181,11 +203,11 @@ class Client {
      * @throws SmarterUException If the response from the SmarterU API
      *      reports a fatal error that prevents the request from executing.
      */
-    public function createUser(User $user): array {
+    public function createUser(User $user): User {
         $xml = $user->toXml(
             $this->getAccountApi(),
             $this->getUserApi(),
-            'createUser'
+            self::SMARTERU_API_CREATE_USER_QUERY_METHOD
         );
 
         $response = $this
@@ -194,51 +216,26 @@ class Client {
                 'Package' => $xml]
         ]);
 
-        $body = (string) $response->getBody();
-        $bodyAsXml = simplexml_load_string($body);
+        $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
-        $result = (string) $bodyAsXml->Result;
-
-        $errorMessages = [];
-        $errors = $bodyAsXml->Errors;
-        if ($errors->count() !== 0) {
-            $errorMessages = $this->readErrors($errors);
-        }
-
-        if ($result === 'Failed') {
-            $errorsAsString = 'SmarterU rejected the request due to the following errors: ';
-            foreach ($errorMessages as $id => $message) {
-                $errorsAsString .= $id;
-                $errorsAsString .= ": ";
-                $errorsAsString .= $message;
-                $errorsAsString .= ", ";
-            }
-            throw new SmarterUException($errorsAsString);
+        if ((string) $bodyAsXml->Result === 'Failed') {
+            throw new SmarterUException($this->readErrors($bodyAsXml->Errors));
         }
 
         $email = (string) $bodyAsXml->Info->Email;
         $employeeId = (string) $bodyAsXml->Info->EmployeeID;
 
-        $userAsArray = [
-            'Email' => $email,
-            'EmployeeID' => $employeeId
-        ];
-
-        $result = [
-            'Response' => $userAsArray,
-            'Errors' => $errorMessages
-        ];
-
-        return $result;
+        return (clone $user)
+            ->setEmail($email)
+            ->setEmployeeId($employeeId);
     }
 
     /**
      * Make a GetUser query to the SmarterU API.
      *
      * @param GetUserQuery $query The query representing the User to return
-     * @return array An array of [$result, $errors] where $result is an array
-     *      of any information returned by the SmarterU API and $errors is an
-     *      array of any error messages returned by the SmarterU API.
+     * @return ?User The User matching the identifier specified in the query,
+     *      or null if no such User exists within your SmarterU account.
      * @throws MissingValueException If the Account API Key and/or the User
      *      API Key are unset in both this instance of the Client and in the
      *      query passed in as a parameter.
@@ -259,28 +256,16 @@ class Client {
                 'Package' => $xml]
         ]);
 
-        $body = (string) $response->getBody();
-        $bodyAsXml = simplexml_load_string($body);
-        $result = (string) $bodyAsXml->Result;
+        $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
-        $errorMessages = [];
-        $errors = $bodyAsXml->Errors;
-        if (count($errors) !== 0) {
-            $errorMessages = $this->readErrors($errors);
-        }
-
-        if ($result === 'Failed') {
-            $errorsAsString = 'SmarterU rejected the request due to the following errors: ';
-            foreach ($errorMessages as $id => $message) {
-                $errorsAsString .= $id;
-                $errorsAsString .= ': ';
-                $errorsAsString .= $message;
-                $errorsAsString .= ', ';
-            }
-            throw new SmarterUException($errorsAsString);
+        if ((string) $bodyAsXml->Result === 'Failed') {
+            throw new SmarterUException($this->readErrors($bodyAsXml->Errors));
         }
 
         $user = $bodyAsXml->Info->User;
+        if ($user->count() === 0) {
+            return null;
+        }
         $teams = [];
 
         /**
@@ -293,66 +278,65 @@ class Client {
             $teams[] = $team;
         }
 
-        $userAsRead = [
-            'ID' => $user->ID,
-            'Email' => $user->Email,
-            'EmployeeID' => $user->EmployeeID,
-            'CreatedDate' => $user->CreatedDate,
-            'ModifiedDate' => $user->ModifiedDate,
-            'GivenName' => $user->GivenName,
-            'Surname' => $user->Surname,
-            'Language' => $user->Language,
-            'AllowFeedback' => $user->AllowFeedback,
-            'Status' => $user->Status,
-            'AuthenticationType' => $user->AuthenticationType,
-            'Timezone' => $user->Timezone,
-            'AlternateEmail' => $user->AlternateEmail,
-            'HomeGroup' => $user->HomeGroup,
-            'Organization' => $user->Organization,
-            'Title' => $user->Title,
-            'Division' => $user->Division,
+        return (new User())
+            ->setId((string) $user->ID)
+            ->setEmail((string) $user->Email)
+            ->setEmployeeId((string) $user->EmployeeID)
+            ->setCreatedDate(new DateTime($user->CreatedDate))
+            ->setModifiedDate(new DateTime($user->ModifiedDate))
+            ->setGivenName((string) $user->GivenName)
+            ->setSurname((string) $user->Surname)
+            ->setLanguage((string) $user->Language)
+            ->setAllowFeedback(filter_var(
+                (string) $user->AllowFeedback,
+                FILTER_VALIDATE_BOOLEAN
+            ))
+            ->setStatus((string) $user->Status)
+            ->setAuthenticationType((string) $user->AuthenticationType)
+            ->setTimezone((string) $user->Timezone)
+            ->setAlternateEmail((string) $user->AlternateEmail)
+            ->setHomeGroup((string) $user->HomeGroup)
+            ->setOrganization((string) $user->Organization)
+            ->setTitle((string) $user->Title)
+            ->setDivision((string) $user->Organization)
             // TODO implement supervisors. For iteration 1, we can assume it's blank
-            'Supervisors' => [],
-            'PhonePrimary' => $user->PhonePrimary,
-            'PhoneAlternate' => $user->PhoneAlternate,
-            'PhoneMobile' => $user->PhoneMobile,
-            'SendMailTo' => $user->SendMailTo,
-            'SendEmailTo' => $user->SendEmailTo,
-            'Fax' => $user->Fax,
-            'Address1' => $user->Address1,
-            'Address2' => $user->Address2,
-            'City' => $user->City,
-            'PostalCode' => $user->PostalCode,
-            'Province' => $user->Province,
-            'Country' => $user->Country,
-            'LearnerNotifications' => $user->SendWeeklyTaskReminder,
-            'SupervisorNotifications' => $user->SendWeeklyProgressSummary,
-            'Teams' => $teams,
+            ->setPhonePrimary((string) $user->PhonePrimary)
+            ->setPhoneAlternate((string) $user->PhoneAlternate)
+            ->setPhoneMobile((string) $user->PhoneMobile)
+            ->setSendMailTo((string) $user->SendMailTo)
+            ->setSendEmailTo((string) $user->SendEmailTo)
+            ->setFax((string) $user->Fax)
+            ->setAddress1((string) $user->Address1)
+            ->setAddress2((string) $user->Address2)
+            ->setCity((string) $user->City)
+            ->setPostalCode((string) $user->PostalCode)
+            ->setProvince((string) $user->Province)
+            ->setCountry((string) $user->Country)
+            ->setLearnerNotifications(filter_var(
+                (string) $user->SendWeeklyTaskReminder,
+                FILTER_VALIDATE_BOOLEAN
+            ))
+            ->setSupervisorNotifications(filter_var(
+                (string) $user->SendWeeklyProgressSummary,
+                FILTER_VALIDATE_BOOLEAN
+            ))
+            ->setTeams($teams)
             // TODO implement roles. For iteration 1, we can assume it's blank.
-            'Roles' => [],
             // TODO implement custom fields. For iteration 1, we can assume it's blank.
-            'CustomFields' => [],
             // TODO implement venues. For iteration 1, we can assume it's blank.
-            'Venues' => [],
             // TODO implement wages. For iteration 1, we can assume it's blank.
-            'Wages' => [],
-            'ReceiveNotifications' => $user->ReceiveNotifications
-        ];
-
-        $results = [
-            'Response' => $userAsRead,
-            'Errors' => $errorMessages
-        ];
-        return $results;
+            ->setReceiveNotifications(filter_var(
+                (string) $user->ReceiveNotifications,
+                FILTER_VALIDATE_BOOLEAN
+            ));
     }
 
     /**
      * Make a ListUsers query to the SmarterU API.
      *
      * @param ListUsersQuery $query The query representing the Users to return
-     * @return array An array of [$result, $errors] where $result is an array
-     *      of any information returned by the SmarterU API and $errors is an
-     *      array of any error messages returned by the SmarterU API.
+     * @return array An array of all Users matching the parameters specified by
+     *      the query passed into the SmarterU API.
      * @throws MissingValueException If the Account API Key and/or the User
      *      API Key are unset in both this instance of the Client and in the
      *      query passed in as a parameter.
@@ -371,31 +355,14 @@ class Client {
                 'Package' => $xml]
         ]);
 
-        $body = (string) $response->getBody();
-        $bodyAsXml = simplexml_load_string($body);
+        $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
-        $result = (string) $bodyAsXml->Result;
-
-        $errorMessages = [];
-        $errors = $bodyAsXml->Errors;
-        if (count($errors) !== 0) {
-            $errorMessages = $this->readErrors($errors);
-        }
-
-        if ($result === 'Failed') {
-            $errorsAsString = 'SmarterU rejected the request due to the following errors: ';
-            foreach ($errorMessages as $id => $message) {
-                $errorsAsString .= $id;
-                $errorsAsString .= ': ';
-                $errorsAsString .= $message;
-                $errorsAsString .= ', ';
-            }
-            throw new SmarterUException($errorsAsString);
+        if ((string) $bodyAsXml->Result === 'Failed') {
+            throw new SmarterUException($this->readErrors($bodyAsXml->Errors));
         }
 
         $users = [];
         foreach ($bodyAsXml->Info->Users->children() as $user) {
-            $currentUser = [];
             $teams = [];
 
             /**
@@ -407,36 +374,31 @@ class Client {
             foreach ((array) $user->Teams->Team as $team) {
                 $teams[] = $team;
             }
-            $currentUser['ID'] = (string) $user->ID;
-            $currentUser['Email'] = (string) $user->Email;
-            $currentUser['EmployeeID'] = (string) $user->EmployeeID;
-            $currentUser['GivenName'] = (string) $user->GivenName;
-            $currentUser['Surname'] = (string) $user->Surname;
-            $currentUser['Name'] = (string) $user->GivenName . ' ' . (string) $user->Surname;
-            $currentUser['Status'] = (string) $user->Status;
-            $currentUser['Title'] = (string) $user->Title;
-            $currentUser['Division'] = (string) $user->Division;
-            $currentUser['HomeGroup'] = (string) $user->HomeGroup;
-            $currentUser['CreatedDate'] = (string) $user->CreatedDate;
-            $currentUser['ModifiedDate'] = (string) $user->ModifiedDate;
-            $currentUser['Teams'] = $teams;
+            $currentUser = (new User())
+                ->setId((string) $user->ID)
+                ->setEmail((string) $user->Email)
+                ->setEmployeeId((string) $user->EmployeeID)
+                ->setGivenName((string) $user->GivenName)
+                ->setSurname((string) $user->Surname)
+                ->setStatus((string) $user->Status)
+                ->setTitle((string) $user->Title)
+                ->setDivision((string) $user->Division)
+                ->setHomeGroup((string) $user->HomeGroup)
+                ->setCreatedDate(new DateTime((string) $user->CreatedDate))
+                ->setModifiedDate((new DateTime((string) $user->ModifiedDate)))
+                ->setTeams($teams);
+
             $users[] = $currentUser;
         }
 
-        $result = [
-            'Response' => $users,
-            'Errors' => $errorMessages
-        ];
-        return $result;
+        return $users;
     }
 
     /**
      * Make an UpdateUser query to the SmarterU API.
      *
      * @param User $user The User to update
-     * @return array An array of [$result, $errors] where $result is an array
-     *      of any information returned by the SmarterU API and $errors is an
-     *      array of any error messages returned by the SmarterU API.
+     * @return array The User as updated by the SmarterU API.
      * @throws MissingValueException If the Account API Key and/or the User
      *      API Key are unset.
      * @throws ClientException If the HTTP response includes a status code
@@ -445,11 +407,11 @@ class Client {
      * @throws SmarterUException If the response from the SmarterU API
      *      reports a fatal error that prevents the request from executing.
      */
-    public function updateUser(User $user): array {
+    public function updateUser(User $user): User {
         $xml = $user->toXml(
             $this->getAccountApi(),
             $this->getUserApi(),
-            'updateUser'
+            self::SMARTERU_API_UPDATE_USER_QUERY_METHOD
         );
 
         $response = $this
@@ -458,42 +420,18 @@ class Client {
                 'Package' => $xml]
         ]);
 
-        $body = (string) $response->getBody();
-        $bodyAsXml = simplexml_load_string($body);
+        $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
-        $result = (string) $bodyAsXml->Result;
-
-        $errorMessages = [];
-        $errors = $bodyAsXml->Errors;
-        if ($errors->count() !== 0) {
-            $errorMessages = $this->readErrors($errors);
-        }
-
-        if ($result === 'Failed') {
-            $errorsAsString = 'SmarterU rejected the request due to the following errors: ';
-            foreach ($errorMessages as $id => $message) {
-                $errorsAsString .= $id;
-                $errorsAsString .= ": ";
-                $errorsAsString .= $message;
-                $errorsAsString .= ", ";
-            }
-            throw new SmarterUException($errorsAsString);
+        if ((string) $bodyAsXml->Result === 'Failed') {
+            throw new SmarterUException($this->readErrors($bodyAsXml->Errors));
         }
 
         $email = (string) $bodyAsXml->Info->Email;
         $employeeId = (string) $bodyAsXml->Info->EmployeeID;
 
-        $userAsArray = [
-            'Email' => $email,
-            'EmployeeID' => $employeeId
-        ];
-
-        $result = [
-            'Response' => $userAsArray,
-            'Errors' => $errorMessages
-        ];
-
-        return $result;
+        return (clone $user)
+            ->setEmail($email)
+            ->setEmployeeId($employeeId);
     }
 
     /**
@@ -524,25 +462,10 @@ class Client {
                 'Package' => $xml]
         ]);
 
-        $body = (string) $response->getBody();
-        $bodyAsXml = simplexml_load_string($body);
-        $result = (string) $bodyAsXml->Result;
+        $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
-        $errorMessages = [];
-        $errors = $bodyAsXml->Errors;
-        if (count($errors) !== 0) {
-            $errorMessages = $this->readErrors($errors);
-        }
-
-        if ($result === 'Failed') {
-            $errorsAsString = 'SmarterU rejected the request due to the following errors: ';
-            foreach ($errorMessages as $id => $message) {
-                $errorsAsString .= $id;
-                $errorsAsString .= ': ';
-                $errorsAsString .= $message;
-                $errorsAsString .= ', ';
-            }
-            throw new SmarterUException($errorsAsString);
+        if ((string) $bodyAsXml->Result === 'Failed') {
+            throw new SmarterUException($this->readErrors($bodyAsXml->Errors));
         }
 
         $groups = [];
@@ -595,25 +518,10 @@ class Client {
                 'Package' => $xml]
         ]);
 
-        $body = (string) $response->getBody();
-        $bodyAsXml = simplexml_load_string($body);
+        $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
-        $result = (string) $bodyAsXml->Result;
-
-        $errorMessages = [];
-        $errors = $bodyAsXml->Errors;
-        if ($errors->count() !== 0) {
-            $errorMessages = $this->readErrors($errors);
-        }
-        if ($result === 'Failed') {
-            $errorsAsString = 'SmarterU rejected the request due to the following error(s): ';
-            foreach ($errorMessages as $id => $message) {
-                $errorsAsString .= $id;
-                $errorsAsString .= ": ";
-                $errorsAsString .= $message;
-                $errorsAsString .= ", ";
-            }
-            throw new SmarterUException($errorsAsString);
+        if ((string) $bodyAsXml->Result === 'Failed') {
+            throw new SmarterUException($this->readErrors($bodyAsXml->Errors));
         }
 
         $groupName = (string) $bodyAsXml->Info->Group;
@@ -660,25 +568,10 @@ class Client {
                 'Package' => $xml]
         ]);
 
-        $body = (string) $response->getBody();
-        $bodyAsXml = simplexml_load_string($body);
-        $result = (string) $bodyAsXml->Result;
+        $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
-        $errorMessages = [];
-        $errors = $bodyAsXml->Errors;
-        if (count($errors) !== 0) {
-            $errorMessages = $this->readErrors($errors);
-        }
-
-        if ($result === 'Failed') {
-            $errorsAsString = 'SmarterU rejected the request due to the following error(s): ';
-            foreach ($errorMessages as $id => $message) {
-                $errorsAsString .= $id;
-                $errorsAsString .= ': ';
-                $errorsAsString .= $message;
-                $errorsAsString .= ', ';
-            }
-            throw new SmarterUException($errorsAsString);
+        if ((string) $bodyAsXml->Result === 'Failed') {
+            throw new SmarterUException($this->readErrors($bodyAsXml->Errors));
         }
 
         $group = $bodyAsXml->Info->Group;
@@ -749,25 +642,10 @@ class Client {
                 'Package' => $xml]
         ]);
 
-        $body = (string) $response->getBody();
-        $bodyAsXml = simplexml_load_string($body);
-        $result = (string) $bodyAsXml->Result;
+        $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
-        $errorMessages = [];
-        $errors = $bodyAsXml->Errors;
-        if (count($errors) !== 0) {
-            $errorMessages = $this->readErrors($errors);
-        }
-
-        if ($result === 'Failed') {
-            $errorsAsString = 'SmarterU rejected the request due to the following errors: ';
-            foreach ($errorMessages as $id => $message) {
-                $errorsAsString .= $id;
-                $errorsAsString .= ': ';
-                $errorsAsString .= $message;
-                $errorsAsString .= ', ';
-            }
-            throw new SmarterUException($errorsAsString);
+        if ((string) $bodyAsXml->Result === 'Failed') {
+            throw new SmarterUException($this->readErrors($bodyAsXml->Errors));
         }
 
         $groups = [];
@@ -813,32 +691,18 @@ class Client {
                 'Package' => $xml]
         ]);
 
-        $body = (string) $response->getBody();
-        $bodyAsXml = simplexml_load_string($body);
-    
-        $result = (string) $bodyAsXml->Result;
-    
-        $errorMessages = [];
-        $errors = $bodyAsXml->Errors;
-        if ($errors->count() !== 0) {
-            $errorMessages = $this->readErrors($errors);
-        }
-    
-        if ($result === 'Failed') {
-            $errorsAsString = 'SmarterU rejected the request due to the following error(s): ';
-            foreach ($errorMessages as $id => $message) {
-                $errorsAsString .= $id;
-                $errorsAsString .= ": ";
-                $errorsAsString .= $message;
-                $errorsAsString .= ", ";
-            }
-            throw new SmarterUException($errorsAsString);
+        $bodyAsXml = simplexml_load_string((string) $response->getBody());
+
+        if ((string) $bodyAsXml->Result === 'Failed') {
+            throw new SmarterUException($this->readErrors($bodyAsXml->Errors));
         }
     
         $groupAsArray = [
             'Group' => (string) $bodyAsXml->Info->Group,
             'GroupID' => (string) $bodyAsXml->Info->GroupID
         ];
+
+        $errorMessages = $bodyAsXml->Errors->count() === 1 ? '' : $this->readErrors($bodyAsXml->Errors);
     
         $result = [
             'Response' => $groupAsArray,
@@ -849,20 +713,20 @@ class Client {
     }
 
     /**
-     * Translate the error message(s) returned by the SmarterU API to an array
-     * of 'ErrorID' => 'ErrorMessage'. For any non-fatal errors, this array
-     * will be part of the array returned by the request methods. For any fatal
-     * errors, this array will be converted into a comma-separated string and
-     * used to throw an exception.
+     * Translate the error message(s) returned by the SmarterU API to a string
+     * representing the message to use for an exception.
      *
      * @param SimpleXMLElement $errors the <errors> portion of the response
-     * @return array an array representation of these errors
+     * @return string a string representation of these errors
      */
-    private function readErrors(SimpleXMLElement $errors): array {
-        $errorsAsArray = [];
+    private function readErrors(SimpleXMLElement $errors): string {
+        $errorsAsString = self::SMARTERU_EXCEPTION_PREAMBLE;
         foreach ($errors->children() as $error) {
-            $errorsAsArray[(string) $error->ErrorID] = (string) $error->ErrorMessage;
+            $errorsAsString .= (string) $error->ErrorID;
+            $errorsAsString .= ': ';
+            $errorsAsString .= (string) $error->ErrorMessage;
+            $errorsAsString .= ', ';
         }
-        return $errorsAsArray;
+        return substr($errorsAsString, 0, -2);
     }
 }

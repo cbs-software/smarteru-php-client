@@ -16,6 +16,7 @@ namespace CBS\SmarterU\DataTypes;
 
 use CBS\SmarterU\Exceptions\MissingValueException;
 use CBS\SmarterU\Queries\BaseQuery;
+use DateTime;
 use SimpleXMLElement;
 
 /**
@@ -309,6 +310,16 @@ class User {
      * A container for adding a user's wages.
      */
     protected ?array $wages = null;
+
+    /**
+     * The date the User was created.
+     */
+    protected ?DateTime $createdDate = null;
+
+    /**
+     * The date the User was last modified.
+     */
+    protected ?DateTime $modifiedDate = null;
 
     #endregion Properties
 
@@ -1157,6 +1168,46 @@ class User {
     }
 
     /**
+     * Get the date the User was created.
+     *
+     * @return ?DateTime the date the User was created
+     */
+    public function getCreatedDate(): ?DateTime {
+        return $this->createdDate;
+    }
+
+    /**
+     * Set the date the User was created.
+     *
+     * @param DateTime $createdDate The date the User was created
+     * @return self
+     */
+    public function setCreatedDate(DateTime $createdDate): self {
+        $this->createdDate = $createdDate;
+        return $this;
+    }
+
+    /**
+     * Get the date the User was last modified.
+     *
+     * @return ?DateTime the date the User was last modified
+     */
+    public function getModifiedDate(): ?DateTime {
+        return $this->modifiedDate;
+    }
+
+    /**
+     * Set the date the User was last modified.
+     *
+     * @param DateTime $modifiedDate The date the User was last modified
+     * @return self
+     */
+    public function setModifiedDate(DateTime $modifiedDate): self {
+        $this->modifiedDate = $modifiedDate;
+        return $this;
+    }
+
+    /**
      * Generate an XML representation of the user, to be passed into the API
      * for a CreateUser or UpdateUser query.
      *
@@ -1292,7 +1343,10 @@ class User {
             $profile->addChild('Division', $this->getDivision());
         }
         if (!empty($this->getAllowFeedback())) {
-            $profile->addChild('AllowFeedback', (string) $this->getAllowFeedback());
+            $profile->addChild(
+                'AllowFeedback',
+                $this->getAllowFeedback() ? '1' : '0'
+            );
         }
         if (!empty($this->getPhonePrimary())) {
             $profile->addChild('PhonePrimary', $this->getPhonePrimary());
