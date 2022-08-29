@@ -1,0 +1,17 @@
+# CBS\SmarterU
+
+* [Client](Client.md) 
+* [DataTypes\Group](DataTypes/Group.md) 
+* [DataTypes\GroupPermissions](DataTypes/GroupPermissions.md) 
+* [DataTypes\LearningModule](DataTypes/LearningModule.md) 
+* [DataTypes\Permission](DataTypes/Permission.md) 
+* [DataTypes\SubscriptionVariant](DataTypes/SubscriptionVariant.md) 
+* [DataTypes\Tag](DataTypes/Tag.md) 
+* [DataTypes\User](DataTypes/User.md) 
+* [Exceptions\HttpException](Exceptions/HttpException.md) 
+* [Exceptions\InvalidArgumentException](Exceptions/InvalidArgumentException.md) 
+* [Exceptions\MissingValueException](Exceptions/MissingValueException.md) 
+* [Exceptions\SmarterUException](Exceptions/SmarterUException.md) 
+* [Queries\BaseQuery](Queries/BaseQuery.md) 
+* [Queries\GetUserQuery](Queries/GetUserQuery.md) 
+* [Queries\ListUsersQuery](Queries/ListUsersQuery.md) 

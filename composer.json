@@ -1,0 +1,29 @@
+{
+    "name": "cbssoftware/smarteru-client",
+    "description": "PHP 8 Client for SmarterU API",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "CBS\\SmarterU\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Brian Reich",
+            "email": "brian.reich@thecoresolution.com"
+        },
+        {
+            "name": "Will Santanen",
+            "email": "will.santanen@thecoresolution.com"
+        }
+    ],
+    "require": {
+        "guzzlehttp/guzzle": "^7.0",
+        "ext-SimpleXML": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "9.5",
+        "clean/phpdoc-md": "^0.19.1"
+    }
+}
