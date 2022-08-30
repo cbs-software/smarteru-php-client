@@ -795,7 +795,7 @@ class UpdateGroupClientTest extends TestCase {
         self::assertArrayHasKey('GroupID', $response);
         self::assertEquals($response['GroupID'], $this->group->getGroupId());
 
-        self::assertIsString($errors);
-        self::assertEquals('', $errors);
+        self::assertIsArray($errors);
+        self::assertCount(0, $errors);
     }
 }

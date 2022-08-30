@@ -384,98 +384,9 @@ class ListGroupsClientTest extends TestCase {
 
         self::expectException(SmarterUException::class);
         self::expectExceptionMessage(
-            'SmarterU rejected the request due to the following errors: Error1: Testing, Error2: 123'
+            'SmarterU rejected the request due to the following error(s): Error1: Testing, Error2: 123'
         );
         $client->listGroups($query);
-    }
-
-    /**
-     * Test that listGroups() produces the correct output when a non-fatal
-     * error occurs and multiple groups are returned.
-     */
-    public function testListGroupsHandlesNonFatalError() {
-        $accountApi = 'account';
-        $userApi = 'user';
-        $client = new Client($accountApi, $userApi);
-
-        $query = new ListGroupsQuery();
-
-        $group1Name = 'Group 1';
-        $group1Id = '1';
-        $group2Name = 'Group 2';
-        $group2Id = '2';
-        $group3Name = 'Group 3';
-        $group3Id = '3';
-
-        $xmlString = <<<XML
-        <SmarterU>
-            <Result>Success</Result>
-            <Info>
-                <Groups>
-                    <Group>
-                        <Name>$group1Name</Name>
-                        <GroupID>$group1Id</GroupID>
-                    </Group>
-                    <Group>
-                        <Name>$group2Name</Name>
-                        <GroupID>$group2Id</GroupID>
-                    </Group>
-                    <Group>
-                        <Name>$group3Name</Name>
-                        <GroupID>$group3Id</GroupID>
-                    </Group>
-                </Groups>
-            </Info>
-            <Errors>
-                <Error>
-                    <ErrorID>Error1</ErrorID>
-                    <ErrorMessage>Testing</ErrorMessage>
-                </Error>
-                <Error>
-                    <ErrorID>Error2</ErrorID>
-                    <ErrorMessage>123</ErrorMessage>
-                </Error>
-            </Errors>
-        </SmarterU>
-        XML;
-
-        // Set up the container to capture the request.
-        $response = new Response(200, [], $xmlString);
-        $container = [];
-        $history = Middleware::history($container);
-        $mock = (new MockHandler([$response]));
-        $handlerStack = HandlerStack::create($mock);
-        $handlerStack->push($history);
-        $httpClient = new HttpClient(['handler' => $handlerStack]);
-        $client->setHttpClient($httpClient);
-
-        // Make the request.
-        $result = $client->listGroups($query);
-
-        self::assertIsArray($result);
-        self::assertCount(2, $result);
-        self::assertArrayHasKey('Response', $result);
-        self::assertIsArray($result['Response']);
-        self::assertCount(3, $result['Response']);
-        foreach ($result['Response'] as $group) {
-            self::assertCount(2, $group);
-            self::assertArrayHasKey('Name', $group);
-            self::assertArrayHasKey('GroupID', $group);
-        }
-        self::assertEquals($group1Name, $result['Response'][0]['Name']);
-        self::assertEquals($group1Id, $result['Response'][0]['GroupID']);
-        self::assertEquals($group2Name, $result['Response'][1]['Name']);
-        self::assertEquals($group2Id, $result['Response'][1]['GroupID']);
-        self::assertEquals($group3Name, $result['Response'][2]['Name']);
-        self::assertEquals($group3Id, $result['Response'][2]['GroupID']);
-
-        self::assertArrayHasKey('Errors', $result);
-        self::assertIsArray($result['Errors']);
-        self::assertCount(2, $result['Errors']);
-        self::assertArrayHasKey('Error1', $result['Errors']);
-        self::assertEquals('Testing', $result['Errors']['Error1']);
-        self::assertArrayHasKey('Error2', $result['Errors']);
-        self::assertEquals('123', $result['Errors']['Error2']);
     }
 
     /**

@@ -245,7 +245,7 @@ class Client {
      * @throws SmarterUException If the response from the SmarterU API
      *      reports a fatal error that prevents the request from executing.
      */
-    public function getUser(GetUserQuery $query): array {
+    public function getUser(GetUserQuery $query): ?User {
         $query->setMethod(self::SMARTERU_API_GET_USER_QUERY_METHOD);
 
         $xml = $query->toXml($this->getAccountApi(), $this->getUserApi());
@@ -263,7 +263,7 @@ class Client {
         }
 
         $user = $bodyAsXml->Info->User;
-        if ($user->count() === 0) {
+        if (count($user->children()) === 0) {
             return null;
         }
         $teams = [];
@@ -282,8 +282,8 @@ class Client {
             ->setId((string) $user->ID)
             ->setEmail((string) $user->Email)
             ->setEmployeeId((string) $user->EmployeeID)
-            ->setCreatedDate(new DateTime($user->CreatedDate))
-            ->setModifiedDate(new DateTime($user->ModifiedDate))
+            ->setCreatedDate(new DateTime((string) $user->CreatedDate))
+            ->setModifiedDate(new DateTime((string) $user->ModifiedDate))
             ->setGivenName((string) $user->GivenName)
             ->setSurname((string) $user->Surname)
             ->setLanguage((string) $user->Language)
@@ -298,7 +298,7 @@ class Client {
             ->setHomeGroup((string) $user->HomeGroup)
             ->setOrganization((string) $user->Organization)
             ->setTitle((string) $user->Title)
-            ->setDivision((string) $user->Organization)
+            ->setDivision((string) $user->Division)
             // TODO implement supervisors. For iteration 1, we can assume it's blank
             ->setPhonePrimary((string) $user->PhonePrimary)
             ->setPhoneAlternate((string) $user->PhoneAlternate)
@@ -484,7 +484,7 @@ class Client {
 
         $result = [
             'Response' => $groups,
-            'Errors' => $errorMessages
+            'Errors' => []
         ];
 
         return $result;
@@ -537,7 +537,7 @@ class Client {
 
         $result = [
             'Response' => $groupAsArray,
-            'Errors' => $errorMessages
+            'Errors' => []
         ];
 
         return $result;
@@ -612,7 +612,7 @@ class Client {
 
         $results = [
             'Response' => $groupAsRead,
-            'Errors' => $errorMessages
+            'Errors' => []
         ];
         return $results;
     }
@@ -658,7 +658,7 @@ class Client {
 
         $result = [
             'Response' => $groups,
-            'Errors' => $errorMessages
+            'Errors' => []
         ];
         return $result;
     }
@@ -701,12 +701,10 @@ class Client {
             'Group' => (string) $bodyAsXml->Info->Group,
             'GroupID' => (string) $bodyAsXml->Info->GroupID
         ];
-
-        $errorMessages = $bodyAsXml->Errors->count() === 1 ? '' : $this->readErrors($bodyAsXml->Errors);
     
         $result = [
             'Response' => $groupAsArray,
-            'Errors' => $errorMessages
+            'Errors' => []
         ];
     
         return $result;

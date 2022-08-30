@@ -527,69 +527,9 @@ class CreateUserClientTest extends TestCase {
 
         self::expectException(SmarterUException::class);
         self::expectExceptionMessage(
-            'SmarterU rejected the request due to the following errors: Error1: Testing, Error2: 123'
+            'SmarterU rejected the request due to the following error(s): Error1: Testing, Error2: 123'
         );
         $client->createUser($this->user1);
-    }
-
-    /**
-     * Test that createUser() returns the expected output when the SmarterU API
-     * returns a non-fatal error.
-     */
-    public function testCreateUserHandlesNonFatalError() {
-        $accountApi = 'account';
-        $userApi = 'user';
-        $client = new Client($accountApi, $userApi);
-
-        $xmlString = <<<XML
-        <SmarterU>
-        </SmarterU>
-        XML;
-        $xml = simplexml_load_string($xmlString);
-        $xml->addChild('Result', 'Success');
-        $info = $xml->addChild('Info');
-        $info->addChild('Email', $this->user1->getEmail());
-        $info->addChild('EmployeeID', $this->user1->getEmployeeId());
-        $errors = $xml->addChild('Errors');
-        $error = $errors->addChild('Error');
-        $error->addChild('ErrorID', 'Error 1');
-        $error->addChild('ErrorMessage', 'Non-fatal Error');
-        $body = $xml->asXML();
-    
-        $response = new Response(200, [], $body);
-        $container = [];
-        $history = Middleware::history($container);
-        $mock = (new MockHandler([$response]));
-        $handlerStack = HandlerStack::create($mock);
-        $handlerStack->push($history);
-        $httpClient = new HttpClient(['handler' => $handlerStack]);
-        $client->setHttpClient($httpClient);
-            
-        // Make the request.
-        $result = $client->createUser($this->user1);
-        
-        self::assertIsArray($result);
-        self::assertCount(2, $result);
-        self::assertArrayHasKey('Response', $result);
-        self::assertArrayHasKey('Errors', $result);
-
-        $response = $result['Response'];
-        $errors = $result['Errors'];
-
-        self::assertIsArray($response);
-        self::assertCount(2, $response);
-        self::assertArrayHasKey('Email', $response);
-        self::assertEquals($response['Email'], $this->user1->getEmail());
-        self::assertArrayHasKey('EmployeeID', $response);
-        self::assertEquals(
-            $response['EmployeeID'],
-            $this->user1->getEmployeeId()
-        );
-
-        self::assertIsArray($errors);
-        self::assertCount(1, $errors);
-        self::assertArrayHasKey('Error 1', $errors);
-        self::assertEquals($errors['Error 1'], 'Non-fatal Error');
     }
 
     /**
@@ -625,25 +565,7 @@ class CreateUserClientTest extends TestCase {
         // Make the request.
         $result = $client->createUser($this->user1);
         
-        self::assertIsArray($result);
-        self::assertCount(2, $result);
-        self::assertArrayHasKey('Response', $result);
-        self::assertArrayHasKey('Errors', $result);
-
-        $response = $result['Response'];
-        $errors = $result['Errors'];
-
-        self::assertIsArray($response);
-        self::assertCount(2, $response);
-        self::assertArrayHasKey('Email', $response);
-        self::assertEquals($response['Email'], $this->user1->getEmail());
-        self::assertArrayHasKey('EmployeeID', $response);
-        self::assertEquals(
-            $response['EmployeeID'],
-            $this->user1->getEmployeeId()
-        );
-
-        self::assertIsArray($errors);
-        self::assertCount(0, $errors);
+        self::assertInstanceOf(User::class, $result);
+        self::assertEquals($this->user1, $result);
     }
 }
