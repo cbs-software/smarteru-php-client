@@ -635,10 +635,13 @@ class GetUserClientTest extends TestCase {
         </SmarterU>
         XML;
         $xml = simplexml_load_string($xmlString);
-        $xml->addChild('Result', 'Success');
+        $xml->addChild('Result', 'Failed');
         $info = $xml->addChild('Info');
         $user = $info->addChild('User');
         $errors = $xml->addChild('Errors');
+        $error = $errors->addChild('Error');
+        $error->addChild('ErrorID', 'GU:03');
+        $error->addChild('ErrorMessage', 'The user requested does not exist.');
         $body = $xml->asXML();
     
         $response = new Response(200, [], $body);
