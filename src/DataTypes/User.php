@@ -16,7 +16,7 @@ namespace CBS\SmarterU\DataTypes;
 
 use CBS\SmarterU\Exceptions\MissingValueException;
 use CBS\SmarterU\Queries\BaseQuery;
-use DateTime;
+use DateTimeInterface;
 use SimpleXMLElement;
 
 /**
@@ -314,12 +314,12 @@ class User {
     /**
      * The date the User was created.
      */
-    protected ?DateTime $createdDate = null;
+    protected ?DateTimeInterface $createdDate = null;
 
     /**
      * The date the User was last modified.
      */
-    protected ?DateTime $modifiedDate = null;
+    protected ?DateTimeInterface $modifiedDate = null;
 
     #endregion Properties
 
@@ -1170,19 +1170,19 @@ class User {
     /**
      * Get the date the User was created.
      *
-     * @return ?DateTime the date the User was created
+     * @return ?DateTimeInterface the date the User was created
      */
-    public function getCreatedDate(): ?DateTime {
+    public function getCreatedDate(): ?DateTimeInterface {
         return $this->createdDate;
     }
 
     /**
      * Set the date the User was created.
      *
-     * @param DateTime $createdDate The date the User was created
+     * @param DateTimeInterface $createdDate The date the User was created
      * @return self
      */
-    public function setCreatedDate(DateTime $createdDate): self {
+    public function setCreatedDate(DateTimeInterface $createdDate): self {
         $this->createdDate = $createdDate;
         return $this;
     }
@@ -1190,19 +1190,19 @@ class User {
     /**
      * Get the date the User was last modified.
      *
-     * @return ?DateTime the date the User was last modified
+     * @return ?DateTimeInterface the date the User was last modified
      */
-    public function getModifiedDate(): ?DateTime {
+    public function getModifiedDate(): ?DateTimeInterface {
         return $this->modifiedDate;
     }
 
     /**
      * Set the date the User was last modified.
      *
-     * @param DateTime $modifiedDate The date the User was last modified
+     * @param DateTimeInterface $modifiedDate The date the User was last modified
      * @return self
      */
-    public function setModifiedDate(DateTime $modifiedDate): self {
+    public function setModifiedDate(DateTimeInterface $modifiedDate): self {
         $this->modifiedDate = $modifiedDate;
         return $this;
     }
