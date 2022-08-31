@@ -779,23 +779,7 @@ class UpdateGroupClientTest extends TestCase {
 
         // Make the request.
         $result = $client->updateGroup($this->group);
-
-        self::assertIsArray($result);
-        self::assertCount(2, $result);
-        self::assertArrayHasKey('Response', $result);
-        self::assertArrayHasKey('Errors', $result);
-
-        $response = $result['Response'];
-        $errors = $result['Errors'];
-
-        self::assertIsArray($response);
-        self::assertCount(2, $response);
-        self::assertArrayHasKey('Group', $response);
-        self::assertEquals($response['Group'], $this->group->getName());
-        self::assertArrayHasKey('GroupID', $response);
-        self::assertEquals($response['GroupID'], $this->group->getGroupId());
-
-        self::assertIsArray($errors);
-        self::assertCount(0, $errors);
+        self::assertInstanceOf(Group::class, $result);
+        self::assertEquals($this->group, $result);
     }
 }

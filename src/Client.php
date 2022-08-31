@@ -15,6 +15,9 @@ declare(strict_types=1);
 namespace CBS\SmarterU;
 
 use CBS\SmarterU\DataTypes\Group;
+use CBS\SmarterU\DataTypes\GroupPermissions;
+use CBS\SmarterU\DataTypes\Permission;
+use CBS\SmarterU\DataTypes\Tag;
 use CBS\SmarterU\DataTypes\User;
 use CBS\SmarterU\Exceptions\SmarterUException;
 use CBS\SmarterU\Queries\BaseQuery;
@@ -69,6 +72,18 @@ class Client {
      * GetUserGroups query to the SmarterU API.
      */
     protected const SMARTERU_API_GET_USER_GROUPS_QUERY_METHOD = 'getUserGroups';
+
+    /**
+     * The method name to pass into the XML body when making a CreateGroup
+     * query to the SmarterU API.
+     */
+    protected const SMARTERU_API_CREATE_GROUP_QUERY_METHOD = 'createGroup';
+
+    /**
+     * The method name to pass into the XML body when making an UpdateGroup
+     * query to the SmarterU API.
+     */
+    protected const SMARTERU_API_UPDATE_GROUP_QUERY_METHOD = 'updateGroup';
 
     /**
      * The beginning of the message to use to throw an exception when the
@@ -474,13 +489,13 @@ class Client {
             foreach ($group->Permissions->children() as $code) {
                 $permission = (new Permission())
                     ->setCode((string) $code);
-                $permissions[] = $permission
+                $permissions[] = $permission;
             }
             $currentGroup = (new GroupPermissions())
-                ->setGroupName($group->Name)
-                ->setGroupId($group->Identifier)
+                ->setGroupName((string) $group->Name)
+                ->setGroupId((string) $group->Identifier)
                 ->setHomeGroup(filter_var(
-                    (string) $user->ReceiveNotifications,
+                    (string) $group->IsHomeGroup,
                     FILTER_VALIDATE_BOOLEAN
                 ))
                 ->setPermissions($permissions);
@@ -507,7 +522,7 @@ class Client {
         $xml = $group->toXml(
             $this->getAccountApi(),
             $this->getUserApi(),
-            'createGroup'
+            self::SMARTERU_API_CREATE_GROUP_QUERY_METHOD
         );
 
         $response = $this
@@ -566,7 +581,7 @@ class Client {
             if (str_contains($errors, 'GG:03: The requested group does not exist.')) {
                 return null;
             }
-            throw new SmarterUException($this->readErrors($errors));
+            throw new SmarterUException($errors);
         }
 
         $group = $bodyAsXml->Info->Group;
@@ -585,11 +600,11 @@ class Client {
         }
 
         foreach ($group->Tags2->children() as $tag) {
-            $tags[] = [
-                'TagID' => (string) $tag->TagID,
-                'TagName' => (string) $tag->TagName,
-                'TagValues' => (string) $tag->TagValues
-            ];
+            $currentTag = (new Tag())
+                ->setTagId((string) $tag->TagID)
+                ->setTagName((string) $tag->TagName)
+                ->setTagValues((string) $tag->TagValues);
+            $tags[] = $currentTag;
         }
 
         return (new Group())
@@ -663,7 +678,7 @@ class Client {
         $xml = $group->toXml(
             $this->getAccountApi(),
             $this->getUserApi(),
-            'updateGroup'
+            self::SMARTERU_API_UPDATE_GROUP_QUERY_METHOD
         );
 
         $response = $this
@@ -677,6 +692,9 @@ class Client {
         if ((string) $bodyAsXml->Result === 'Failed') {
             throw new SmarterUException($this->readErrors($bodyAsXml->Errors));
         }
+
+        $groupName = (string) $bodyAsXml->Info->Group;
+        $groupId = (string) $bodyAsXml->Info->GroupID;
     
         return (clone $group)
             ->setName($groupName)

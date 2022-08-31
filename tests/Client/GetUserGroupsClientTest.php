@@ -455,31 +455,19 @@ class GetUserGroupsClientTest extends TestCase {
         $result = $client->getUserGroups($query);
         
         self::assertIsArray($result);
-        self::assertCount(2, $result);
-        self::assertArrayHasKey('Response', $result);
-        self::assertArrayHasKey('Errors', $result);
-
-        $response = $result['Response'];
-        $errors = $result['Errors'];
-
-        self::assertIsArray($response);
-        self::assertCount(1, $response);
-        foreach ($response as $group) {
-            self::assertIsArray($group);
-            self::assertArrayHasKey('Name', $group);
-            self::assertArrayHasKey('Identifier', $group);
-            self::assertArrayHasKey('IsHomeGroup', $group);
-            self::assertArrayHasKey('Permissions', $group);
-            self::assertIsArray($group['Permissions']);
-        }
-        self::assertEquals($response[0]['Name'], $name1);
-        self::assertEquals($response[0]['Identifier'], $identifier1);
-        self::assertEquals($response[0]['IsHomeGroup'], $isHomeGroup1);
-        self::assertCount(2, $response[0]['Permissions']);
-        self::assertContains($permission1, $response[0]['Permissions']);
-        self::assertContains($permission2, $response[0]['Permissions']);
-        self::assertIsArray($errors);
-        self::assertCount(0, $errors);
+        self::assertCount(1, $result);
+        self::assertInstanceOf(GroupPermissions::class, $result[0]);
+        self::assertEquals($name1, $result[0]->getGroupName());
+        self::assertEquals($identifier1, $result[0]->getGroupId());
+        self::assertCount(2, $result[0]->getPermissions());
+        self::assertEquals(
+            $permission1,
+            $result[0]->getPermissions()[0]->getCode()
+        );
+        self::assertEquals(
+            $permission2,
+            $result[0]->getPermissions()[1]->getCode()
+        );
     }
 
     /**
@@ -556,42 +544,32 @@ class GetUserGroupsClientTest extends TestCase {
             
         // Make the request.
         $result = $client->getUserGroups($query);
-        
+
         self::assertIsArray($result);
-        self::assertCount(2, $result);
-        self::assertArrayHasKey('Response', $result);
-        self::assertArrayHasKey('Errors', $result);
-
-        $response = $result['Response'];
-        $errors = $result['Errors'];
-
-        self::assertIsArray($response);
-        self::assertCount(3, $response);
-        foreach ($response as $group) {
-            self::assertIsArray($group);
-            self::assertArrayHasKey('Name', $group);
-            self::assertArrayHasKey('Identifier', $group);
-            self::assertArrayHasKey('IsHomeGroup', $group);
-            self::assertArrayHasKey('Permissions', $group);
-            self::assertIsArray($group['Permissions']);
-        }
-        self::assertEquals($response[0]['Name'], $name1);
-        self::assertEquals($response[0]['Identifier'], $identifier1);
-        self::assertEquals($response[0]['IsHomeGroup'], $isHomeGroup1);
-        self::assertCount(2, $response[0]['Permissions']);
-        self::assertContains($permission1, $response[0]['Permissions']);
-        self::assertContains($permission2, $response[0]['Permissions']);
-        self::assertEquals($response[1]['Name'], $name2);
-        self::assertEquals($response[1]['Identifier'], $identifier2);
-        self::assertEquals($response[1]['IsHomeGroup'], $isHomeGroup2);
-        self::assertCount(0, $response[1]['Permissions']);
-        self::assertEquals($response[2]['Name'], $name3);
-        self::assertEquals($response[2]['Identifier'], $identifier3);
-        self::assertEquals($response[2]['IsHomeGroup'], $isHomeGroup3);
-        self::assertCount(1, $response[2]['Permissions']);
-        self::assertContains($permission1, $response[2]['Permissions']);
-
-        self::assertIsArray($errors);
-        self::assertCount(0, $errors);
+        self::assertCount(3, $result);
+        self::assertInstanceOf(GroupPermissions::class, $result[0]);
+        self::assertEquals($name1, $result[0]->getGroupName());
+        self::assertEquals($identifier1, $result[0]->getGroupId());
+        self::assertCount(2, $result[0]->getPermissions());
+        self::assertEquals(
+            $permission1,
+            $result[0]->getPermissions()[0]->getCode()
+        );
+        self::assertEquals(
+            $permission2,
+            $result[0]->getPermissions()[1]->getCode()
+        );
+        self::assertInstanceOf(GroupPermissions::class, $result[1]);
+        self::assertEquals($name2, $result[1]->getGroupName());
+        self::assertEquals($identifier2, $result[1]->getGroupId());
+        self::assertCount(0, $result[1]->getPermissions());
+        self::assertInstanceOf(GroupPermissions::class, $result[2]);
+        self::assertEquals($name3, $result[2]->getGroupName());
+        self::assertEquals($identifier3, $result[2]->getGroupId());
+        self::assertCount(1, $result[2]->getPermissions());
+        self::assertEquals(
+            $permission1,
+            $result[2]->getPermissions()[0]->getCode()
+        );
     }
 }

@@ -31,22 +31,11 @@ class TagTest extends TestCase {
 
         $tag = (new Tag())
             ->setTagId($tagId)
+            ->setTagName($tagName)
             ->setTagValues($tagValues);
 
         self::assertEquals($tagId, $tag->getTagId());
         self::assertEquals($tagValues, $tag->getTagValues());
-        self::assertNull($tag->getTagName());
-
-        // Test that tagName and tagId are mutually exclusive, so that
-        // when one is set the other becomes null.
-        $tag->setTagName($tagName);
-
         self::assertEquals($tagName, $tag->getTagName());
-        self::assertNull($tag->getTagId());
-
-        $tag->setTagId($tagId);
-
-        self::assertEquals($tagId, $tag->getTagId());
-        self::assertNull($tag->getTagName());
     }
 }
