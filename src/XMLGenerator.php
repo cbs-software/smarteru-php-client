@@ -14,6 +14,9 @@ declare(strict_types=1);
 
 namespace CBS\SmarterU;
 
+use CBS\SmarterU\DataTypes\User;
+use CBS\SmarterU\Queries\GetUserQuery;
+use CBS\SmarterU\Queries\ListUsersQuery;
 use SimpleXMLElement;
 
 /**
@@ -210,7 +213,7 @@ class XMLGenerator {
     }
 
     /**
-     * Generate the XML body for a ListUser query.
+     * Generate the XML body for a ListUsers query.
      *
      * @param string $accountApi The SmarterU API key identifying the account
      *      making the request.
@@ -219,7 +222,7 @@ class XMLGenerator {
      * @param ListUsersQuery $query The query to translate to XML
      * @return string an XML representation of the query
      */
-    public function toXml(
+    public function listUsers(
         string $accountApi,
         string $userApi,
         ListUsersQuery $query
@@ -249,12 +252,12 @@ class XMLGenerator {
                 $email->addChild('MatchType', $query->getEmail()->getMatchType());
                 $email->addChild('Value', $query->getEmail()->getValue());
             }
-            if (!empty($query->employeeId)) {
+            if (!empty($query->getEmployeeId())) {
                 $employeeId = $userIdentifier->addChild('EmployeeID');
                 $employeeId->addChild('MatchType', $query->getEmployeeId()->getMatchType());
                 $employeeId->addChild('Value', $query->getEmployeeId()->getValue());
             }
-            if (!empty($query->name)) {
+            if (!empty($query->getName())) {
                 $name = $userIdentifier->addChild('Name');
                 $name->addChild('MatchType', $query->getName()->getMatchType());
                 $name->addChild('Value', $query->getName()->getValue());
@@ -471,6 +474,6 @@ class XMLGenerator {
      * @return bool True if and only if the query should contain a <Users> tag
      */
     private function listUsersIncludeUsersTag(ListUsersQuery $query): bool {
-        return !empty($query->email) || !empty($query->employeeId) || !empty($query->name);
+        return !empty($query->getEmail()) || !empty($query->getEmployeeId()) || !empty($query->getName());
     }
 }

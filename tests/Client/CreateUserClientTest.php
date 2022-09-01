@@ -288,7 +288,7 @@ class CreateUserClientTest extends TestCase {
         );
         self::assertContains('AllowFeedback', $profileTag);
         self::assertEquals(
-            (string) $this->user1->getAllowFeedback(),
+            $this->user1->getAllowFeedback() ? 'True' : 'False',
             $packageAsXml->Parameters->User->Profile->AllowFeedback
         );
         self::assertContains('PhonePrimary', $profileTag);
@@ -353,7 +353,7 @@ class CreateUserClientTest extends TestCase {
         );
         self::assertContains('ReceiveNotifications', $profileTag);
         self::assertEquals(
-            (string) $this->user1->getReceiveNotifications(),
+            $this->user1->getReceiveNotifications() ? 'True' : 'False',
             $packageAsXml->Parameters->User->Profile->ReceiveNotifications
         );
         self::assertContains('HomeGroup', $profileTag);
@@ -364,7 +364,6 @@ class CreateUserClientTest extends TestCase {
 
         // Ensure that the <Groups> tag has the correct children.
         $group1 = $packageAsXml->Parameters->User->Groups->Group[0];
-        $group2 = $packageAsXml->Parameters->User->Groups->Group[1];
         $group1Elements = [];
         foreach ($group1->children() as $group) {
             $group1Elements[] = $group->getName();
@@ -372,7 +371,7 @@ class CreateUserClientTest extends TestCase {
         self::assertCount(2, $group1Elements);
         self::assertContains('GroupName', $group1Elements);
         self::assertEquals(
-            $this->user1->getGroups()[0]->getGroupName(),
+            $this->user1->getHomeGroup(),
             $group1->GroupName
         );
         self::assertContains('GroupPermissions', $group1Elements);
@@ -380,68 +379,7 @@ class CreateUserClientTest extends TestCase {
         foreach ($group1->GroupPermissions->children() as $tag) {
             $permissionTags[] = (array) $tag;
         }
-        self::assertCount(2, $permissionTags);
-        foreach ($permissionTags as $tag) {
-            self::assertIsArray($tag);
-            self::assertCount(2, $tag);
-            self::assertArrayHasKey('Action', $tag);
-            self::assertArrayHasKey('Code', $tag);
-        }
-        self::assertEquals(
-            $this->user1->getGroups()[0]->getPermissions()[0]->getAction(),
-            $permissionTags[0]['Action']
-        );
-        self::assertEquals(
-            $this->user1->getGroups()[0]->getPermissions()[0]->getCode(),
-            $permissionTags[0]['Code']
-        );
-        self::assertEquals(
-            $this->user1->getGroups()[0]->getPermissions()[1]->getAction(),
-            $permissionTags[1]['Action']
-        );
-        self::assertEquals(
-            $this->user1->getGroups()[0]->getPermissions()[1]->getCode(),
-            $permissionTags[1]['Code']
-        );
-
-        $group2Elements = [];
-        foreach ($group2->children() as $group) {
-            $group2Elements[] = $group->getName();
-        }
-        self::assertCount(2, $group2Elements);
-        self::assertContains('GroupName', $group2Elements);
-        self::assertEquals(
-            $this->user1->getGroups()[1]->getGroupName(),
-            $group2->GroupName
-        );
-        self::assertContains('GroupPermissions', $group2Elements);
-        $permissionTags = [];
-        foreach ($group2->GroupPermissions->children() as $tag) {
-            $permissionTags[] = (array) $tag;
-        }
-        self::assertCount(2, $permissionTags);
-        foreach ($permissionTags as $tag) {
-            self::assertIsArray($tag);
-            self::assertCount(2, $tag);
-            self::assertArrayHasKey('Action', $tag);
-            self::assertArrayHasKey('Code', $tag);
-        }
-        self::assertEquals(
-            $this->user1->getGroups()[1]->getPermissions()[0]->getAction(),
-            $permissionTags[0]['Action']
-        );
-        self::assertEquals(
-            $this->user1->getGroups()[1]->getPermissions()[0]->getCode(),
-            $permissionTags[0]['Code']
-        );
-        self::assertEquals(
-            $this->user1->getGroups()[1]->getPermissions()[1]->getAction(),
-            $permissionTags[1]['Action']
-        );
-        self::assertEquals(
-            $this->user1->getGroups()[1]->getPermissions()[1]->getCode(),
-            $permissionTags[1]['Code']
-        );
+        self::assertCount(0, $permissionTags);
 
         // Ensure that the <Venues> and <Wages> tags are empty.
         self::assertCount(

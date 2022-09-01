@@ -215,10 +215,11 @@ class Client {
      */
     public function setXMLGenerator(XMLGenerator $xmlGenerator): self {
         $this->xmlGenerator = $xmlGenerator;
+        return $this;
     }
 
     /**
-     * Make a CreateUser query to the SmarterU API.
+     * * Make a CreateUser query to the SmarterU API.
      *
      * @param User $user the user to create
      * @return User The user as created by the API.
@@ -230,7 +231,7 @@ class Client {
      * @throws SmarterUException If the response from the SmarterU API
      *      reports a fatal error that prevents the request from executing.
      */
-    public function createUser(User $user): array {
+    public function createUser(User $user): User {
         $xml = $this->getXMLGenerator()->createUser(
             $this->getAccountApi(),
             $this->getUserApi(),
@@ -449,7 +450,7 @@ class Client {
      * @throws SmarterUException If the response from the SmarterU API
      *      reports a fatal error that prevents the request from executing.
      */
-    public function updateUser(User $user): array {
+    public function updateUser(User $user): User {
         $xml = $this->getXMLGenerator()->updateUser(
             $this->getAccountApi(),
             $this->getUserApi(),
@@ -496,7 +497,11 @@ class Client {
     public function getUserGroups(GetUserQuery $query): array {
         $query->setMethod(self::SMARTERU_API_GET_USER_GROUPS_QUERY_METHOD);
 
-        $xml = $query->toXml($this->getAccountApi(), $this->getUserApi());
+        $xml = $this->getXMLGenerator()->getUser(
+            $this->getAccountApi(),
+            $this->getUserApi(),
+            $query
+        );
 
         $response = $this
             ->getHttpClient()

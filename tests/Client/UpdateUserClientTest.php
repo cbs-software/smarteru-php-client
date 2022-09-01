@@ -408,79 +408,10 @@ class UpdateUserClientTest extends TestCase {
             $packageAsXml->Parameters->User->Profile->HomeGroup
         );
 
-        // Ensure that the <Groups> tag has the correct children.
-        $group1 = $packageAsXml->Parameters->User->Groups->Group[0];
-        $group2 = $packageAsXml->Parameters->User->Groups->Group[1];
-        $group1Elements = [];
-        foreach ($group1->children() as $group) {
-            $group1Elements[] = $group->getName();
-        }
-        self::assertCount(3, $group1Elements);
-        self::assertContains('GroupName', $group1Elements);
-        self::assertEquals(
-            $user->getGroups()[0]->getGroupName(),
-            $group1->GroupName
+        self::assertCount(
+            0,
+            $packageAsXml->Parameters->User->Groups->children()
         );
-        self::assertContains('GroupAction', $group1Elements);
-        self::assertEquals(
-            $user->getGroups()[0]->getAction(),
-            $group1->GroupAction
-        );
-        self::assertContains('GroupPermissions', $group1Elements);
-        $permission1 = $group1->GroupPermissions->Permission[0];
-        $permission2 = $group1->GroupPermissions->Permission[1];
-        $permission1Tags = [];
-        foreach ($permission1->children() as $tag) {
-            $permission1Tags[] = $tag->getName();
-        }
-        self::assertCount(2, $permission1Tags);
-        self::assertContains('Action', $permission1Tags);
-        self::assertEquals(
-            $user->getGroups()[0]->getPermissions()[0]->getAction(),
-            $group1->GroupPermissions->Permission[0]->Action
-        );
-        self::assertContains('Code', $permission1Tags);
-        self::assertEquals(
-            $user->getGroups()[0]->getPermissions()[0]->getCode(),
-            $group1->GroupPermissions->Permission[0]->Code
-        );
-        $permission2Tags = [];
-        foreach ($permission2->children() as $tag) {
-            $permission2Tags[] = $tag->getName();
-        }
-        self::assertCount(2, $permission2Tags);
-        self::assertContains('Action', $permission2Tags);
-        self::assertEquals(
-            $user->getGroups()[0]->getPermissions()[1]->getAction(),
-            $group1->GroupPermissions->Permission[1]->Action
-        );
-        self::assertContains('Code', $permission2Tags);
-        self::assertEquals(
-            $user->getGroups()[0]->getPermissions()[1]->getCode(),
-            $group1->GroupPermissions->Permission[1]->Code
-        );
-
-        $group2Elements = [];
-        foreach ($group2->children() as $group) {
-            $group2Elements[] = $group->getName();
-        }
-        self::assertCount(3, $group2Elements);
-        self::assertContains('GroupName', $group2Elements);
-        self::assertEquals(
-            $user->getGroups()[1]->getGroupName(),
-            $group2->GroupName
-        );
-        self::assertContains('GroupAction', $group2Elements);
-        self::assertEquals(
-            $user->getGroups()[1]->getGroupName(),
-            $group2->GroupName
-        );
-        self::assertContains('GroupPermissions', $group2Elements);
-        $permissionTags = [];
-        foreach ($group2->GroupPermissions->children() as $tag) {
-            $permissionTags[] = $tag->getName();
-        }
-        self::assertCount(0, $permissionTags);
 
         // Ensure that the <Venues> and <Wages> tags are empty.
         self::assertCount(
@@ -653,79 +584,10 @@ class UpdateUserClientTest extends TestCase {
             $packageAsXml->Parameters->User->Profile->ReceiveNotifications
         );
 
-        // Ensure that the <Groups> tag has the correct children.
-        $group1 = $packageAsXml->Parameters->User->Groups->Group[0];
-        $group2 = $packageAsXml->Parameters->User->Groups->Group[1];
-        $group1Elements = [];
-        foreach ($group1->children() as $group) {
-            $group1Elements[] = $group->getName();
-        }
-        self::assertCount(3, $group1Elements);
-        self::assertContains('GroupName', $group1Elements);
-        self::assertEquals(
-            $user->getGroups()[0]->getGroupName(),
-            $group1->GroupName
+        self::assertCount(
+            0,
+            $packageAsXml->Parameters->User->Groups->children()
         );
-        self::assertContains('GroupAction', $group1Elements);
-        self::assertEquals(
-            $user->getGroups()[0]->getAction(),
-            $group1->GroupAction
-        );
-        self::assertContains('GroupPermissions', $group1Elements);
-        $permission1 = $group1->GroupPermissions->Permission[0];
-        $permission2 = $group1->GroupPermissions->Permission[1];
-        $permission1Tags = [];
-        foreach ($permission1->children() as $tag) {
-            $permission1Tags[] = $tag->getName();
-        }
-        self::assertCount(2, $permission1Tags);
-        self::assertContains('Action', $permission1Tags);
-        self::assertEquals(
-            $user->getGroups()[0]->getPermissions()[0]->getAction(),
-            $group1->GroupPermissions->Permission[0]->Action
-        );
-        self::assertContains('Code', $permission1Tags);
-        self::assertEquals(
-            $user->getGroups()[0]->getPermissions()[0]->getCode(),
-            $group1->GroupPermissions->Permission[0]->Code
-        );
-        $permission2Tags = [];
-        foreach ($permission2->children() as $tag) {
-            $permission2Tags[] = $tag->getName();
-        }
-        self::assertCount(2, $permission2Tags);
-        self::assertContains('Action', $permission2Tags);
-        self::assertEquals(
-            $user->getGroups()[0]->getPermissions()[1]->getAction(),
-            $group1->GroupPermissions->Permission[1]->Action
-        );
-        self::assertContains('Code', $permission2Tags);
-        self::assertEquals(
-            $user->getGroups()[0]->getPermissions()[1]->getCode(),
-            $group1->GroupPermissions->Permission[1]->Code
-        );
-
-        $group2Elements = [];
-        foreach ($group2->children() as $group) {
-            $group2Elements[] = $group->getName();
-        }
-        self::assertCount(3, $group2Elements);
-        self::assertContains('GroupName', $group2Elements);
-        self::assertEquals(
-            $user->getGroups()[1]->getGroupName(),
-            $group2->GroupName
-        );
-        self::assertContains('GroupAction', $group2Elements);
-        self::assertEquals(
-            $user->getGroups()[1]->getGroupName(),
-            $group2->GroupName
-        );
-        self::assertContains('GroupPermissions', $group2Elements);
-        $permissionTags = [];
-        foreach ($group2->GroupPermissions->children() as $tag) {
-            $permissionTags[] = $tag->getName();
-        }
-        self::assertCount(0, $permissionTags);
 
         // Ensure that the <Venues> and <Wages> tags are empty.
         self::assertCount(
