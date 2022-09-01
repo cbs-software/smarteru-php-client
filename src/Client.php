@@ -120,12 +120,12 @@ class Client {
      * GuzzleHttp\Client will be automatically created as needed to communicate
      * with the SmarterU API.
      *
-     * @param string|null $apiKey  the account API key, used for authentication
+     * @param string $apiKey  the account API key, used for authentication
      *      purposes when making requests to the SmarterU API. Defaults to null.
      *      You must set the account API key via the constructor or
      *      `setAccountApi` before invoking methods which interact with the
      *      SmarterU API
-     * @param string|null $apiUserKey  the user API key, used for authentication
+     * @param string $apiUserKey  the user API key, used for authentication
      *      purposes when making requests to the SmarterU API. Defaults to null.
      *      You must set the user API key via the constructor or
      *      `setUserApi` before invoking methods which interact with the
@@ -274,7 +274,14 @@ class Client {
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
         if ((string) $bodyAsXml->Result === 'Failed') {
-            throw new SmarterUException($this->readErrors($bodyAsXml->Errors));
+            $errors = $this->readErrors($bodyAsXml->Errors);
+            // The SmarterU API treats "User not found" as a fatal error.
+            // If the API returns this error, this if statement will catch it
+            // before it becomes an exception and return null.
+            if (str_contains($errors, 'GU:03: The user requested does not exist.')) {
+                return null;
+            }
+            throw new SmarterUException($errors);
         }
 
         $user = $bodyAsXml->Info->User;
