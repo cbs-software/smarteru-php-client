@@ -105,6 +105,8 @@ class ListUsersClientTest extends TestCase {
             ->setSendMailTo('Personal')
             ->setReceiveNotifications(true)
             ->setHomeGroup('My Home Group')
+            ->setCreatedDate(new DateTime('2022-07-20'))
+            ->setModifiedDate(new DateTime('2022-07-29'))
             ->setGroups([$groupPermissions, $groupPermission2]);
 
         $this->user2 = (new User())
@@ -142,6 +144,8 @@ class ListUsersClientTest extends TestCase {
             ->setSendMailTo('Personal')
             ->setReceiveNotifications(true)
             ->setHomeGroup('My Home Group')
+            ->setCreatedDate(new DateTime('2022-07-21'))
+            ->setModifiedDate(new DateTime('2022-07-30'))
             ->setGroups([$groupPermissions, $groupPermission2]);
 
         $this->user3 = (new User())
@@ -179,6 +183,8 @@ class ListUsersClientTest extends TestCase {
             ->setSendMailTo('Personal')
             ->setReceiveNotifications(true)
             ->setHomeGroup('My Home Group')
+            ->setCreatedDate(new DateTime('2022-07-22'))
+            ->setModifiedDate(new DateTime('2022-07-28'))
             ->setGroups([$groupPermissions, $groupPermission2]);
     }
 
@@ -542,16 +548,16 @@ class ListUsersClientTest extends TestCase {
 
         self::expectException(SmarterUException::class);
         self::expectExceptionMessage(
-            'SmarterU rejected the request due to the following errors: Error1: Testing, Error2: 123'
+            'SmarterU rejected the request due to the following error(s): Error1: Testing, Error2: 123'
         );
         $client->listUsers($query);
     }
 
     /**
      * Test that listUsers() returns the expected output when the SmarterU API
-     * returns a non-fatal error.
+     * does not return any Users.
      */
-    public function testListUsersHandlesNonFatalError() {
+    public function testListUsersReturnsExpectedNoUsers() {
         $sortField = 'NAME';
         $sortOrder = 'ASC';
         $email = (new MatchTag())
@@ -607,31 +613,8 @@ class ListUsersClientTest extends TestCase {
         $xml->addChild('Result', 'Success');
         $info = $xml->addChild('Info');
         $users = $info->addChild('Users');
-        $user = $users->addChild('User');
-        $user->addChild('ID', $this->user1->getId());
-        $user->addChild('Email', $this->user1->getEmail());
-        $user->addChild('EmployeeID', $this->user1->getEmployeeId());
-        $user->addChild('GivenName', $this->user1->getGivenName());
-        $user->addChild('Surname', $this->user1->getSurname());
-        $user->addChild(
-            'Name',
-            $this->user1->getGivenName() . ' ' . $this->user1->getSurname()
-        );
-        $user->addChild('Status', $this->user1->getStatus());
-        $user->addChild('Title', $this->user1->getTitle());
-        $user->addChild('Division', $this->user1->getDivision());
-        $user->addChild('HomeGroup', $this->user1->getHomeGroup());
-        $user->addChild('CreatedDate', $createdDate);
-        $user->addChild('ModifiedDate', $modifiedDate);
-        $teams = $user->addChild('Teams');
-        foreach ($this->user1->getTeams() as $team) {
-            $teams->addChild('Team', $team);
-        }
-        $info->addChild('TotalRecords', '1');
+        $info->addChild('TotalRecords', '0');
         $errors = $xml->addChild('Errors');
-        $error = $errors->addChild('Error');
-        $error->addChild('ErrorID', 'Error 1');
-        $error->addChild('ErrorMessage', 'Non-fatal Error');
         $body = $xml->asXML();
     
         $response = new Response(200, [], $body);
@@ -647,53 +630,7 @@ class ListUsersClientTest extends TestCase {
         $result = $client->listUsers($query);
         
         self::assertIsArray($result);
-        self::assertCount(2, $result);
-        self::assertArrayHasKey('Response', $result);
-        self::assertArrayHasKey('Errors', $result);
-
-        $response = $result['Response'];
-        $errors = $result['Errors'];
-        
-        self::assertIsArray($response);
-        $user = $response[0];
-        self::assertIsArray($user);
-        self::assertArrayHasKey('ID', $user);
-        self::assertEquals($this->user1->getId(), $user['ID']);
-        self::assertArrayHasKey('Email', $user);
-        self::assertEquals($this->user1->getEmail(), $user['Email']);
-        self::assertArrayHasKey('EmployeeID', $user);
-        self::assertEquals($this->user1->getEmployeeID(), $user['EmployeeID']);
-        self::assertArrayHasKey('GivenName', $user);
-        self::assertEquals($this->user1->getGivenName(), $user['GivenName']);
-        self::assertArrayHasKey('Surname', $user);
-        self::assertEquals($this->user1->getSurname(), $user['Surname']);
-        self::assertArrayHasKey('Name', $user);
-        self::assertEquals(
-            $this->user1->getGivenName() . ' ' . $this->user1->getSurname(),
-            $user['Name']
-        );
-        self::assertArrayHasKey('Status', $user);
-        self::assertEquals($this->user1->getStatus(), $user['Status']);
-        self::assertArrayHasKey('Title', $user);
-        self::assertEquals($this->user1->getTitle(), $user['Title']);
-        self::assertArrayHasKey('Division', $user);
-        self::assertEquals($this->user1->getDivision(), $user['Division']);
-        self::assertArrayHasKey('HomeGroup', $user);
-        self::assertEquals($this->user1->getHomeGroup(), $user['HomeGroup']);
-        self::assertArrayHasKey('CreatedDate', $user);
-        self::assertEquals($createdDate, $user['CreatedDate']);
-        self::assertArrayHasKey('ModifiedDate', $user);
-        self::assertEquals($modifiedDate, $user['ModifiedDate']);
-        self::assertArrayHasKey('Teams', $user);
-        self::assertCount(count($this->user1->getTeams()), $user['Teams']);
-        foreach ($this->user1->getTeams() as $team) {
-            self::assertContains($team, $user['Teams']);
-        }
-
-        self::assertIsArray($errors);
-        self::assertCount(1, $errors);
-        self::assertArrayHasKey('Error 1', $errors);
-        self::assertEquals('Non-fatal Error', $errors['Error 1']);
+        self::assertCount(0, $result);
     }
 
     /**
@@ -745,9 +682,6 @@ class ListUsersClientTest extends TestCase {
             ->setModifiedDate($modifiedDate)
             ->setTeams($teams);
 
-        $createdDate = '2022-07-20';
-        $modifiedDate = '2022-07-29';
-
         $xmlString = <<<XML
         <SmarterU>
         </SmarterU>
@@ -770,8 +704,14 @@ class ListUsersClientTest extends TestCase {
         $user->addChild('Title', $this->user1->getTitle());
         $user->addChild('Division', $this->user1->getDivision());
         $user->addChild('HomeGroup', $this->user1->getHomeGroup());
-        $user->addChild('CreatedDate', $createdDate);
-        $user->addChild('ModifiedDate', $modifiedDate);
+        $user->addChild(
+            'CreatedDate',
+            $this->user1->getCreatedDate()->format('Y/m/d')
+        );
+        $user->addChild(
+            'ModifiedDate',
+            $this->user1->getModifiedDate()->format('Y/m/d')
+        );
         $teams = $user->addChild('Teams');
         foreach ($this->user1->getTeams() as $team) {
             $teams->addChild('Team', $team);
@@ -793,52 +733,56 @@ class ListUsersClientTest extends TestCase {
         $result = $client->listUsers($query);
         
         self::assertIsArray($result);
-        self::assertCount(2, $result);
-        self::assertArrayHasKey('Response', $result);
-        self::assertArrayHasKey('Errors', $result);
-
-        $response = $result['Response'];
-        $errors = $result['Errors'];
-        
-        self::assertIsArray($response);
-        self::assertCount(1, $response);
-        $user = $response[0];
-        self::assertIsArray($user);
-        self::assertArrayHasKey('ID', $user);
-        self::assertEquals($this->user1->getId(), $user['ID']);
-        self::assertArrayHasKey('Email', $user);
-        self::assertEquals($this->user1->getEmail(), $user['Email']);
-        self::assertArrayHasKey('EmployeeID', $user);
-        self::assertEquals($this->user1->getEmployeeID(), $user['EmployeeID']);
-        self::assertArrayHasKey('GivenName', $user);
-        self::assertEquals($this->user1->getGivenName(), $user['GivenName']);
-        self::assertArrayHasKey('Surname', $user);
-        self::assertEquals($this->user1->getSurname(), $user['Surname']);
-        self::assertArrayHasKey('Name', $user);
+        self::assertCount(1, $result);
+        self::assertInstanceOf(User::class, $result[0]);
         self::assertEquals(
-            $this->user1->getGivenName() . ' ' . $this->user1->getSurname(),
-            $user['Name']
+            $this->user1->getId(),
+            $result[0]->getId()
         );
-        self::assertArrayHasKey('Status', $user);
-        self::assertEquals($this->user1->getStatus(), $user['Status']);
-        self::assertArrayHasKey('Title', $user);
-        self::assertEquals($this->user1->getTitle(), $user['Title']);
-        self::assertArrayHasKey('Division', $user);
-        self::assertEquals($this->user1->getDivision(), $user['Division']);
-        self::assertArrayHasKey('HomeGroup', $user);
-        self::assertEquals($this->user1->getHomeGroup(), $user['HomeGroup']);
-        self::assertArrayHasKey('CreatedDate', $user);
-        self::assertEquals($createdDate, $user['CreatedDate']);
-        self::assertArrayHasKey('ModifiedDate', $user);
-        self::assertEquals($modifiedDate, $user['ModifiedDate']);
-        self::assertArrayHasKey('Teams', $user);
-        self::assertCount(count($this->user1->getTeams()), $user['Teams']);
-        foreach ($this->user1->getTeams() as $team) {
-            self::assertContains($team, $user['Teams']);
-        }
-
-        self::assertIsArray($errors);
-        self::assertCount(0, $errors);
+        self::assertEquals(
+            $this->user1->getEmail(),
+            $result[0]->getEmail()
+        );
+        self::assertEquals(
+            $this->user1->getEmployeeId(),
+            $result[0]->getEmployeeId()
+        );
+        self::assertEquals(
+            $this->user1->getGivenName(),
+            $result[0]->getGivenName()
+        );
+        self::assertEquals(
+            $this->user1->getSurname(),
+            $result[0]->getSurname()
+        );
+        self::assertEquals(
+            $this->user1->getStatus(),
+            $result[0]->getStatus()
+        );
+        self::assertEquals(
+            $this->user1->getTitle(),
+            $result[0]->getTitle()
+        );
+        self::assertEquals(
+            $this->user1->getDivision(),
+            $result[0]->getDivision()
+        );
+        self::assertEquals(
+            $this->user1->getHomeGroup(),
+            $result[0]->getHomeGroup()
+        );
+        self::assertEquals(
+            $this->user1->getCreatedDate(),
+            $result[0]->getCreatedDate()
+        );
+        self::assertEquals(
+            $this->user1->getModifiedDate(),
+            $result[0]->getModifiedDate()
+        );
+        self::assertEquals(
+            $this->user1->getTeams(),
+            $result[0]->getTeams()
+        );
     }
 
     /**
@@ -890,9 +834,6 @@ class ListUsersClientTest extends TestCase {
             ->setModifiedDate($modifiedDate)
             ->setTeams($teams);
 
-        $createdDate = '2022-07-20';
-        $modifiedDate = '2022-07-29';
-
         $xmlString = <<<XML
         <SmarterU>
         </SmarterU>
@@ -915,8 +856,14 @@ class ListUsersClientTest extends TestCase {
         $user1->addChild('Title', $this->user1->getTitle());
         $user1->addChild('Division', $this->user1->getDivision());
         $user1->addChild('HomeGroup', $this->user1->getHomeGroup());
-        $user1->addChild('CreatedDate', $createdDate);
-        $user1->addChild('ModifiedDate', $modifiedDate);
+        $user1->addChild(
+            'CreatedDate',
+            $this->user1->getCreatedDate()->format('Y/m/d')
+        );
+        $user1->addChild(
+            'ModifiedDate',
+            $this->user1->getModifiedDate()->format('Y/m/d')
+        );
         $teams1 = $user1->addChild('Teams');
         foreach ($this->user1->getTeams() as $team) {
             $teams1->addChild('Team', $team);
@@ -935,8 +882,14 @@ class ListUsersClientTest extends TestCase {
         $user2->addChild('Title', $this->user2->getTitle());
         $user2->addChild('Division', $this->user2->getDivision());
         $user2->addChild('HomeGroup', $this->user2->getHomeGroup());
-        $user2->addChild('CreatedDate', $createdDate);
-        $user2->addChild('ModifiedDate', $modifiedDate);
+        $user2->addChild(
+            'CreatedDate',
+            $this->user2->getCreatedDate()->format('Y/m/d')
+        );
+        $user2->addChild(
+            'ModifiedDate',
+            $this->user2->getModifiedDate()->format('Y/m/d')
+        );
         $teams2 = $user2->addChild('Teams');
         foreach ($this->user2->getTeams() as $team) {
             $teams2->addChild('Team', $team);
@@ -955,8 +908,14 @@ class ListUsersClientTest extends TestCase {
         $user3->addChild('Title', $this->user3->getTitle());
         $user3->addChild('Division', $this->user3->getDivision());
         $user3->addChild('HomeGroup', $this->user3->getHomeGroup());
-        $user3->addChild('CreatedDate', $createdDate);
-        $user3->addChild('ModifiedDate', $modifiedDate);
+        $user3->addChild(
+            'CreatedDate',
+            $this->user3->getCreatedDate()->format('Y/m/d')
+        );
+        $user3->addChild(
+            'ModifiedDate',
+            $this->user3->getModifiedDate()->format('Y/m/d')
+        );
         $teams3 = $user3->addChild('Teams');
         foreach ($this->user3->getTeams() as $team) {
             $teams3->addChild('Team', $team);
@@ -978,130 +937,155 @@ class ListUsersClientTest extends TestCase {
         $result = $client->listUsers($query);
         
         self::assertIsArray($result);
-        self::assertCount(2, $result);
-        self::assertArrayHasKey('Response', $result);
-        self::assertArrayHasKey('Errors', $result);
+        self::assertCount(3, $result);
+        self::assertInstanceOf(User::class, $result[0]);
+        self::assertEquals(
+            $this->user1->getId(),
+            $result[0]->getId()
+        );
+        self::assertEquals(
+            $this->user1->getEmail(),
+            $result[0]->getEmail()
+        );
+        self::assertEquals(
+            $this->user1->getEmployeeId(),
+            $result[0]->getEmployeeId()
+        );
+        self::assertEquals(
+            $this->user1->getGivenName(),
+            $result[0]->getGivenName()
+        );
+        self::assertEquals(
+            $this->user1->getSurname(),
+            $result[0]->getSurname()
+        );
+        self::assertEquals(
+            $this->user1->getStatus(),
+            $result[0]->getStatus()
+        );
+        self::assertEquals(
+            $this->user1->getTitle(),
+            $result[0]->getTitle()
+        );
+        self::assertEquals(
+            $this->user1->getDivision(),
+            $result[0]->getDivision()
+        );
+        self::assertEquals(
+            $this->user1->getHomeGroup(),
+            $result[0]->getHomeGroup()
+        );
+        self::assertEquals(
+            $this->user1->getCreatedDate(),
+            $result[0]->getCreatedDate()
+        );
+        self::assertEquals(
+            $this->user1->getModifiedDate(),
+            $result[0]->getModifiedDate()
+        );
+        self::assertEquals(
+            $this->user1->getTeams(),
+            $result[0]->getTeams()
+        );
 
-        $response = $result['Response'];
-        $errors = $result['Errors'];
-        
-        self::assertIsArray($response);
-        self::assertCount(3, $response);
-        $user1 = $response[0];
-        self::assertIsArray($user1);
-        self::assertArrayHasKey('ID', $user1);
-        self::assertEquals($this->user1->getId(), $user1['ID']);
-        self::assertArrayHasKey('Email', $user1);
-        self::assertEquals($this->user1->getEmail(), $user1['Email']);
-        self::assertArrayHasKey('EmployeeID', $user1);
+        self::assertInstanceOf(User::class, $result[1]);
         self::assertEquals(
-            $this->user1->getEmployeeID(),
-            $user1['EmployeeID']
+            $this->user2->getId(),
+            $result[1]->getId()
         );
-        self::assertArrayHasKey('GivenName', $user1);
-        self::assertEquals($this->user1->getGivenName(), $user1['GivenName']);
-        self::assertArrayHasKey('Surname', $user1);
-        self::assertEquals($this->user1->getSurname(), $user1['Surname']);
-        self::assertArrayHasKey('Name', $user1);
         self::assertEquals(
-            $this->user1->getGivenName() . ' ' . $this->user1->getSurname(),
-            $user1['Name']
+            $this->user2->getEmail(),
+            $result[1]->getEmail()
         );
-        self::assertArrayHasKey('Status', $user1);
-        self::assertEquals($this->user1->getStatus(), $user1['Status']);
-        self::assertArrayHasKey('Title', $user1);
-        self::assertEquals($this->user1->getTitle(), $user1['Title']);
-        self::assertArrayHasKey('Division', $user1);
-        self::assertEquals($this->user1->getDivision(), $user1['Division']);
-        self::assertArrayHasKey('HomeGroup', $user1);
-        self::assertEquals($this->user1->getHomeGroup(), $user1['HomeGroup']);
-        self::assertArrayHasKey('CreatedDate', $user1);
-        self::assertEquals($createdDate, $user1['CreatedDate']);
-        self::assertArrayHasKey('ModifiedDate', $user1);
-        self::assertEquals($modifiedDate, $user1['ModifiedDate']);
-        self::assertArrayHasKey('Teams', $user1);
-        self::assertCount(count($this->user1->getTeams()), $user1['Teams']);
-        foreach ($this->user1->getTeams() as $team) {
-            self::assertContains($team, $user1['Teams']);
-        }
+        self::assertEquals(
+            $this->user2->getEmployeeId(),
+            $result[1]->getEmployeeId()
+        );
+        self::assertEquals(
+            $this->user2->getGivenName(),
+            $result[1]->getGivenName()
+        );
+        self::assertEquals(
+            $this->user2->getSurname(),
+            $result[1]->getSurname()
+        );
+        self::assertEquals(
+            $this->user2->getStatus(),
+            $result[1]->getStatus()
+        );
+        self::assertEquals(
+            $this->user2->getTitle(),
+            $result[1]->getTitle()
+        );
+        self::assertEquals(
+            $this->user2->getDivision(),
+            $result[1]->getDivision()
+        );
+        self::assertEquals(
+            $this->user2->getHomeGroup(),
+            $result[1]->getHomeGroup()
+        );
+        self::assertEquals(
+            $this->user2->getCreatedDate(),
+            $result[1]->getCreatedDate()
+        );
+        self::assertEquals(
+            $this->user2->getModifiedDate(),
+            $result[1]->getModifiedDate()
+        );
+        self::assertEquals(
+            $this->user2->getTeams(),
+            $result[1]->getTeams()
+        );
 
-        $user2 = $response[1];
-        self::assertIsArray($user2);
-        self::assertArrayHasKey('ID', $user2);
-        self::assertEquals($this->user2->getId(), $user2['ID']);
-        self::assertArrayHasKey('Email', $user2);
-        self::assertEquals($this->user2->getEmail(), $user2['Email']);
-        self::assertArrayHasKey('EmployeeID', $user2);
+        self::assertInstanceOf(User::class, $result[2]);
         self::assertEquals(
-            $this->user2->getEmployeeID(),
-            $user2['EmployeeID']
+            $this->user3->getId(),
+            $result[2]->getId()
         );
-        self::assertArrayHasKey('GivenName', $user2);
-        self::assertEquals($this->user2->getGivenName(), $user2['GivenName']);
-        self::assertArrayHasKey('Surname', $user2);
-        self::assertEquals($this->user2->getSurname(), $user2['Surname']);
-        self::assertArrayHasKey('Name', $user2);
         self::assertEquals(
-            $this->user2->getGivenName() . ' ' . $this->user2->getSurname(),
-            $user2['Name']
+            $this->user3->getEmail(),
+            $result[2]->getEmail()
         );
-        self::assertArrayHasKey('Status', $user2);
-        self::assertEquals($this->user1->getStatus(), $user2['Status']);
-        self::assertArrayHasKey('Title', $user2);
-        self::assertEquals($this->user1->getTitle(), $user2['Title']);
-        self::assertArrayHasKey('Division', $user2);
-        self::assertEquals($this->user1->getDivision(), $user2['Division']);
-        self::assertArrayHasKey('HomeGroup', $user2);
-        self::assertEquals($this->user1->getHomeGroup(), $user2['HomeGroup']);
-        self::assertArrayHasKey('CreatedDate', $user2);
-        self::assertEquals($createdDate, $user2['CreatedDate']);
-        self::assertArrayHasKey('ModifiedDate', $user2);
-        self::assertEquals($modifiedDate, $user2['ModifiedDate']);
-        self::assertArrayHasKey('Teams', $user2);
-        self::assertCount(count($this->user2->getTeams()), $user2['Teams']);
-        foreach ($this->user2->getTeams() as $team) {
-            self::assertContains($team, $user2['Teams']);
-        }
-
-        $user3 = $response[2];
-        self::assertIsArray($user3);
-        self::assertArrayHasKey('ID', $user3);
-        self::assertEquals($this->user3->getId(), $user3['ID']);
-        self::assertArrayHasKey('Email', $user3);
-        self::assertEquals($this->user3->getEmail(), $user3['Email']);
-        self::assertArrayHasKey('EmployeeID', $user3);
         self::assertEquals(
-            $this->user3->getEmployeeID(),
-            $user3['EmployeeID']
+            $this->user3->getEmployeeId(),
+            $result[2]->getEmployeeId()
         );
-        self::assertArrayHasKey('GivenName', $user3);
-        self::assertEquals($this->user3->getGivenName(), $user3['GivenName']);
-        self::assertArrayHasKey('Surname', $user3);
-        self::assertEquals($this->user3->getSurname(), $user3['Surname']);
-        self::assertArrayHasKey('Name', $user3);
         self::assertEquals(
-            $this->user3->getGivenName() . ' ' . $this->user3->getSurname(),
-            $user3['Name']
+            $this->user3->getGivenName(),
+            $result[2]->getGivenName()
         );
-        self::assertArrayHasKey('Status', $user3);
-        self::assertEquals($this->user3->getStatus(), $user3['Status']);
-        self::assertArrayHasKey('Title', $user3);
-        self::assertEquals($this->user3->getTitle(), $user3['Title']);
-        self::assertArrayHasKey('Division', $user3);
-        self::assertEquals($this->user3->getDivision(), $user3['Division']);
-        self::assertArrayHasKey('HomeGroup', $user3);
-        self::assertEquals($this->user3->getHomeGroup(), $user3['HomeGroup']);
-        self::assertArrayHasKey('CreatedDate', $user3);
-        self::assertEquals($createdDate, $user3['CreatedDate']);
-        self::assertArrayHasKey('ModifiedDate', $user3);
-        self::assertEquals($modifiedDate, $user3['ModifiedDate']);
-        self::assertArrayHasKey('Teams', $user3);
-        self::assertCount(count($this->user3->getTeams()), $user3['Teams']);
-        foreach ($this->user3->getTeams() as $team) {
-            self::assertContains($team, $user3['Teams']);
-        }
-
-        self::assertIsArray($errors);
-        self::assertCount(0, $errors);
+        self::assertEquals(
+            $this->user3->getSurname(),
+            $result[2]->getSurname()
+        );
+        self::assertEquals(
+            $this->user3->getStatus(),
+            $result[2]->getStatus()
+        );
+        self::assertEquals(
+            $this->user3->getTitle(),
+            $result[2]->getTitle()
+        );
+        self::assertEquals(
+            $this->user3->getDivision(),
+            $result[2]->getDivision()
+        );
+        self::assertEquals(
+            $this->user3->getHomeGroup(),
+            $result[2]->getHomeGroup()
+        );
+        self::assertEquals(
+            $this->user3->getCreatedDate(),
+            $result[2]->getCreatedDate()
+        );
+        self::assertEquals(
+            $this->user3->getModifiedDate(),
+            $result[2]->getModifiedDate()
+        );
+        self::assertEquals(
+            $this->user3->getTeams(),
+            $result[2]->getTeams()
+        );
     }
 }

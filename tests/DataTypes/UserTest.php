@@ -18,6 +18,7 @@ use CBS\SmarterU\DataTypes\GroupPermissions;
 use CBS\SmarterU\DataTypes\Permission;
 use CBS\SmarterU\DataTypes\User;
 use CBS\SmarterU\Exceptions\InvalidArgumentException;
+use DateTime;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -29,6 +30,7 @@ class UserTest extends TestCase {
      */
     public function testAgreement() {
         $id = '17';
+        $createdDate = new DateTime();
         $email = 'phpunit@test.com';
         $employeeId = '16';
         $givenName = 'test';
@@ -75,6 +77,7 @@ class UserTest extends TestCase {
         $groups = [$group1, $group2];
         // TODO implement venues. For iteration 1, we can assume it's empty.
         // TODO implement wages. For iteration 1, we can assume it's empty.
+        $modifiedDate = new DateTime();
 
         $user = (new User())
             ->setId($id)
@@ -109,6 +112,8 @@ class UserTest extends TestCase {
             ->setPostalCode($postalCode)
             ->setSendMailTo($sendMailTo)
             ->setHomeGroup($homeGroup)
+            ->setCreatedDate($createdDate)
+            ->setModifiedDate($modifiedDate)
             ->setGroups($groups);
 
         self::assertEquals($id, $user->getId());
@@ -145,6 +150,8 @@ class UserTest extends TestCase {
         self::assertEquals($postalCode, $user->getPostalCode());
         self::assertEquals($sendMailTo, $user->getSendMailTo());
         self::assertEquals($homeGroup, $user->getHomeGroup());
+        self::assertEquals($createdDate, $user->getCreatedDate());
+        self::assertEquals($modifiedDate, $user->getModifiedDate());
         self::assertCount(2, $user->getGroups());
         self::assertContains($group1, $user->getGroups());
         self::assertContains($group2, $user->getGroups());
