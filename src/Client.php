@@ -74,6 +74,12 @@ class Client {
      */
     protected HttpClient $httpClient;
 
+    /**
+     * The XML Generator responsible for translating the input from the user to
+     * XML in order to send the request to the SmarterU API.
+     */
+    protected XMLGenerator $xmlGenerator;
+
     #endregion properties
 
     /**
@@ -167,6 +173,27 @@ class Client {
     }
 
     /**
+     * Get the XML Generator. If one has not already been provided, a new
+     * default XMLGenerator instance will be created and returned.
+     */
+    public function getXMLGenerator(): XMLGenerator {
+        if (!isset($this->xmlGenerator)) {
+            $this->setXMLGenerator(new XMLGenerator());
+        }
+        return $this->xmlGenerator;
+    }
+
+    /**
+     * Set the XML Generator.
+     *
+     * @param XMLGenerator $xmlGenerator The XML generator.
+     * @return self
+     */
+    public function setXMLGenerator(XMLGenerator $xmlGenerator): self {
+        $this->xmlGenerator = $xmlGenerator;
+    }
+
+    /**
      * Make a CreateUser query to the SmarterU API.
      *
      * @param User $user the user to create
@@ -182,10 +209,10 @@ class Client {
      *      reports a fatal error that prevents the request from executing.
      */
     public function createUser(User $user): array {
-        $xml = $user->toXml(
+        $xml = $this->getXMLGenerator()->createUser(
             $this->getAccountApi(),
             $this->getUserApi(),
-            'createUser'
+            $user
         );
 
         $response = $this
@@ -251,7 +278,11 @@ class Client {
     public function getUser(GetUserQuery $query): array {
         $query->setMethod(self::SMARTERU_API_GET_USER_QUERY_METHOD);
 
-        $xml = $query->toXml($this->getAccountApi(), $this->getUserApi());
+        $xml = $this->getXMLGenerator()->getUser(
+            $this->getAccountApi(),
+            $this->getUserApi(),
+            $query
+        );
 
         $response = $this
             ->getHttpClient()
@@ -363,7 +394,11 @@ class Client {
      *      reports a fatal error that prevents the request from executing.
      */
     public function listUsers(ListUsersQuery $query): array {
-        $xml = $query->toXml($this->getAccountApi(), $this->getUserApi());
+        $xml = $this->getXMLGenerator()->listUsers(
+            $this->getAccountApi(),
+            $this->getUserApi(),
+            $query
+        );
 
         $response = $this
             ->getHttpClient()
@@ -446,10 +481,10 @@ class Client {
      *      reports a fatal error that prevents the request from executing.
      */
     public function updateUser(User $user): array {
-        $xml = $user->toXml(
+        $xml = $this->getXMLGenerator()->updateUser(
             $this->getAccountApi(),
             $this->getUserApi(),
-            'updateUser'
+            $user
         );
 
         $response = $this
