@@ -260,11 +260,9 @@ class Client {
 
         if ((string) $bodyAsXml->Result === 'Failed') {
             $errors = $this->readErrors($bodyAsXml->Errors);
-            /**
-             * The SmarterU API treats "User not found" as a fatal error.
-             * If the API returns this error, this if statement will catch it
-             * before it becomes an exception and return null.
-             */
+            // The SmarterU API treats "User not found" as a fatal error.
+            // If the API returns this error, this if statement will catch it
+            // before it becomes an exception and return null.
             if (str_contains($errors, 'GU:03: The user requested does not exist.')) {
                 return null;
             }
