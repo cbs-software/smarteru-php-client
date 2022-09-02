@@ -57,35 +57,35 @@ class GetUserXMLTest extends TestCase {
 
         $xml = $xmlGenerator->getUser($accountApi, $userApi, $query);
         self::assertIsString($xml);
-        $xmlAsElement = simplexml_load_string($xml);
-        self::assertEquals('SmarterU', $xmlAsElement->getName());
-        self::assertCount(4, $xmlAsElement);
+        $xml = simplexml_load_string($xml);
+        self::assertEquals('SmarterU', $xml->getName());
+        self::assertCount(4, $xml);
         $elements = [];
-        foreach ($xmlAsElement->children() as $element) {
+        foreach ($xml->children() as $element) {
             $elements[] = $element->getName();
         }
         self::assertContains('AccountAPI', $elements);
-        self::assertEquals($accountApi, $xmlAsElement->AccountAPI);
+        self::assertEquals($accountApi, $xml->AccountAPI);
         self::assertContains('UserAPI', $elements);
-        self::assertEquals($userApi, $xmlAsElement->UserAPI);
+        self::assertEquals($userApi, $xml->UserAPI);
         self::assertContains('Method', $elements);
-        self::assertEquals('getUser', $xmlAsElement->Method);
+        self::assertEquals('getUser', $xml->Method);
         self::assertContains('Parameters', $elements);
         $parameters = [];
-        foreach ($xmlAsElement->Parameters->children() as $parameter) {
+        foreach ($xml->Parameters->children() as $parameter) {
             $parameters[] = $parameter->getName();
         }
         self::assertCount(1, $parameters);
         self::assertContains('User', $parameters);
-        self::assertEquals('User', $xmlAsElement->Parameters->User->getName());
+        self::assertEquals('User', $xml->Parameters->User->getName());
 
         $users = [];
-        foreach ($xmlAsElement->Parameters->User->children() as $user) {
+        foreach ($xml->Parameters->User->children() as $user) {
             $users[] = $user->getName();
         }
         self::assertCount(1, $users);
         self::assertContains('ID', $users);
-        self::assertEquals($id, $xmlAsElement->Parameters->User->ID);
+        self::assertEquals($id, $xml->Parameters->User->ID);
     }
 
     /**
@@ -104,35 +104,35 @@ class GetUserXMLTest extends TestCase {
 
         $xml = $xmlGenerator->getUser($accountApi, $userApi, $query);
         self::assertIsString($xml);
-        $xmlAsElement = simplexml_load_string($xml);
-        self::assertEquals('SmarterU', $xmlAsElement->getName());
-        self::assertCount(4, $xmlAsElement);
+        $xml = simplexml_load_string($xml);
+        self::assertEquals('SmarterU', $xml->getName());
+        self::assertCount(4, $xml);
         $elements = [];
-        foreach ($xmlAsElement->children() as $element) {
+        foreach ($xml->children() as $element) {
             $elements[] = $element->getName();
         }
         self::assertContains('AccountAPI', $elements);
-        self::assertEquals($accountApi, $xmlAsElement->AccountAPI);
+        self::assertEquals($accountApi, $xml->AccountAPI);
         self::assertContains('UserAPI', $elements);
-        self::assertEquals($userApi, $xmlAsElement->UserAPI);
+        self::assertEquals($userApi, $xml->UserAPI);
         self::assertContains('Method', $elements);
-        self::assertEquals('getUser', $xmlAsElement->Method);
+        self::assertEquals('getUser', $xml->Method);
         self::assertContains('Parameters', $elements);
         $parameters = [];
-        foreach ($xmlAsElement->Parameters->children() as $parameter) {
+        foreach ($xml->Parameters->children() as $parameter) {
             $parameters[] = $parameter->getName();
         }
         self::assertCount(1, $parameters);
         self::assertContains('User', $parameters);
-        self::assertEquals('User', $xmlAsElement->Parameters->User->getName());
+        self::assertEquals('User', $xml->Parameters->User->getName());
 
         $users = [];
-        foreach ($xmlAsElement->Parameters->User->children() as $user) {
+        foreach ($xml->Parameters->User->children() as $user) {
             $users[] = $user->getName();
         }
         self::assertCount(1, $users);
         self::assertContains('Email', $users);
-        self::assertEquals($email, $xmlAsElement->Parameters->User->Email);
+        self::assertEquals($email, $xml->Parameters->User->Email);
     }
 
     /**
@@ -151,34 +151,37 @@ class GetUserXMLTest extends TestCase {
 
         $xml = $xmlGenerator->getUser($accountApi, $userApi, $query);
         self::assertIsString($xml);
-        $xmlAsElement = simplexml_load_string($xml);
-        self::assertEquals('SmarterU', $xmlAsElement->getName());
-        self::assertCount(4, $xmlAsElement);
+        $xml = simplexml_load_string($xml);
+        self::assertEquals('SmarterU', $xml->getName());
+        self::assertCount(4, $xml);
         $elements = [];
-        foreach ($xmlAsElement->children() as $element) {
+        foreach ($xml->children() as $element) {
             $elements[] = $element->getName();
         }
         self::assertContains('AccountAPI', $elements);
-        self::assertEquals($accountApi, $xmlAsElement->AccountAPI);
+        self::assertEquals($accountApi, $xml->AccountAPI);
         self::assertContains('UserAPI', $elements);
-        self::assertEquals($userApi, $xmlAsElement->UserAPI);
+        self::assertEquals($userApi, $xml->UserAPI);
         self::assertContains('Method', $elements);
-        self::assertEquals('getUser', $xmlAsElement->Method);
+        self::assertEquals('getUser', $xml->Method);
         self::assertContains('Parameters', $elements);
         $parameters = [];
-        foreach ($xmlAsElement->Parameters->children() as $parameter) {
+        foreach ($xml->Parameters->children() as $parameter) {
             $parameters[] = $parameter->getName();
         }
         self::assertCount(1, $parameters);
         self::assertContains('User', $parameters);
-        self::assertEquals('User', $xmlAsElement->Parameters->User->getName());
+        self::assertEquals('User', $xml->Parameters->User->getName());
 
         $users = [];
-        foreach ($xmlAsElement->Parameters->User->children() as $user) {
+        foreach ($xml->Parameters->User->children() as $user) {
             $users[] = $user->getName();
         }
         self::assertCount(1, $users);
         self::assertContains('EmployeeID', $users);
-        self::assertEquals($employeeId, $xmlAsElement->Parameters->User->EmployeeID);
+        self::assertEquals(
+            $employeeId,
+            $xml->Parameters->User->EmployeeID
+        );
     }
 }
