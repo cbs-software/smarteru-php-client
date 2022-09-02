@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace CBS\SmarterU;
 
 use CBS\SmarterU\DataTypes\User;
+use CBS\SmarterU\Exceptions\MissingValueException;
 use CBS\SmarterU\Queries\GetUserQuery;
 use CBS\SmarterU\Queries\ListUsersQuery;
 use SimpleXMLElement;
@@ -51,8 +52,17 @@ class XMLGenerator {
         $parameters = $xml->addChild('Parameters');
         $userTag = $parameters->addChild('User');
         $info = $userTag->addChild('Info');
-        $info->addChild('Email', $user->getEmail());
-        $info->addChild('EmployeeID', $user->getEmployeeId());
+        if (empty($user->getEmail()) && empty($user->getEmployeeId())) {
+            throw new missingValueException(
+                'Cannot create a User without either an email or employee ID.'
+            );
+        }
+        if (!empty($user->getEmail())) {
+            $info->addChild('Email', $user->getEmail());
+        }
+        if (!empty($user->getEmployeeId())) {
+            $info->addChild('EmployeeID', $user->getEmployeeId());
+        }
         $info->addChild('GivenName', $user->getGivenName());
         $info->addChild('Surname', $user->getSurname());
         $info->addChild('Password', $user->getPassword());
@@ -68,7 +78,9 @@ class XMLGenerator {
             $user->getSupervisorNotifications() ? '1' : '0'
         );
         $info->addChild('SendEmailTo', $user->getSendEmailTo());
-        $info->addChild('AlternateEmail', $user->getAlternateEmail());
+        if (!empty($user->getAlternateEmail())) {
+            $info->addChild('AlternateEmail', $user->getAlternateEmail());
+        }
         $info->addChild('AuthenticationType', $user->getAuthenticationType());
 
         $profile = $userTag->addChild('Profile');
