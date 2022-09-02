@@ -340,8 +340,12 @@ class XMLGenerator {
             // the current value can still be used to identify the user.
             if (!empty($user->getEmail())) {
                 $identifier->addChild('Email', $user->getEmail());
-            } else {
+            } else if (!empty($user->getEmployeeId())){
                 $identifier->addChild('EmployeeID', $user->getEmployeeId());
+            } else {
+                throw new MissingValueException(
+                    'A User cannot be updated without either an email address or an employee ID.'
+                );
             }
         }
         $info = $userTag->addChild('Info');
@@ -415,7 +419,10 @@ class XMLGenerator {
             $profile->addChild('Division', $user->getDivision());
         }
         if (!empty($user->getAllowFeedback())) {
-            $profile->addChild('AllowFeedback', (string) $user->getAllowFeedback());
+            $profile->addChild(
+                'AllowFeedback',
+                $user->getAllowFeedback() ? 'True' : 'False'
+            );
         }
         if (!empty($user->getPhonePrimary())) {
             $profile->addChild('PhonePrimary', $user->getPhonePrimary());
@@ -457,7 +464,10 @@ class XMLGenerator {
             // TODO implement this. For iteration 1, we can assume this is empty.
         }
         if (!empty($user->getReceiveNotifications())) {
-            $profile->addChild('ReceiveNotifications', (string) $user->getReceiveNotifications());
+            $profile->addChild(
+                'ReceiveNotifications',
+                $user->getReceiveNotifications() ? 'True' : 'False'
+            );
         }
         if (!empty($user->getHomeGroup())) {
             $profile->addChild('HomeGroup', $user->getHomeGroup());
