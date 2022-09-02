@@ -340,7 +340,7 @@ class XMLGenerator {
             // the current value can still be used to identify the user.
             if (!empty($user->getEmail())) {
                 $identifier->addChild('Email', $user->getEmail());
-            } else if (!empty($user->getEmployeeId())){
+            } else if (!empty($user->getEmployeeId())) {
                 $identifier->addChild('EmployeeID', $user->getEmployeeId());
             } else {
                 throw new MissingValueException(
