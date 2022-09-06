@@ -149,6 +149,16 @@ class Group {
     protected array $learningModules = [];
 
     /**
+     * The number of Users assigned to the Group.
+     */
+    protected int $userCount;
+
+    /**
+     * The number of LearningModules assigned to the Group.
+     */
+    protected int $learningModuleCount;
+
+    /**
      * A container for assigning subscription variants to the group. Each element
      * must be an instance of CBS\SmarterU\DataTypes\SubscriptionVariant.
      */
@@ -322,6 +332,52 @@ class Group {
      */
     public function setLearningModules(array $learningModules): self {
         $this->learningModules = $learningModules;
+        return $this;
+    }
+
+    /**
+     * Get the number of Users assigned to the Group.
+     *
+     * @return int the number of Users.
+     */
+    public function getUserCount(): int {
+        if (!isset($this->userCount)) {
+            return count($this->getUsers());
+        }
+        return $this->userCount;
+    }
+
+    /**
+     * Set the number of Users assigned to the Group.
+     *
+     * @param int $userCount the number of Users
+     * @return self
+     */
+    public function setUserCount(int $userCount): self {
+        $this->userCount = $userCount;
+        return $this;
+    }
+
+    /**
+     * Get the number of LearningModules assigned to the Group.
+     *
+     * @return int the number of LearningModules.
+     */
+    public function getLearningModuleCount(): int {
+        if (!isset($this->learningModuleCount)) {
+            return count($this->getLearningModules());
+        }
+        return $this->learningModuleCount;
+    }
+
+    /**
+     * Set the number of LearningModules assigned to the Group.
+     *
+     * @param int $learningModuleCount the number of LearningModules
+     * @return self
+     */
+    public function setLearningModuleCount(int $learningModuleCount): self {
+        $this->learningModuleCount = $learningModuleCount;
         return $this;
     }
 

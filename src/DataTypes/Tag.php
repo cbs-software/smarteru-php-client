@@ -44,7 +44,6 @@ class Tag {
      */
     public function setTagId(string $tagId): self {
         $this->tagId = $tagId;
-        $this->tagName = null;
         return $this;
     }
 
@@ -65,7 +64,6 @@ class Tag {
      */
     public function setTagName(string $tagName): self {
         $this->tagName = $tagName;
-        $this->tagId = null;
         return $this;
     }
 

@@ -15,6 +15,9 @@ declare(strict_types=1);
 namespace CBS\SmarterU;
 
 use CBS\SmarterU\DataTypes\Group;
+use CBS\SmarterU\DataTypes\GroupPermissions;
+use CBS\SmarterU\DataTypes\Permission;
+use CBS\SmarterU\DataTypes\Tag;
 use CBS\SmarterU\DataTypes\User;
 use CBS\SmarterU\Exceptions\SmarterUException;
 use CBS\SmarterU\Queries\BaseQuery;
@@ -69,6 +72,18 @@ class Client {
      * GetUserGroups query to the SmarterU API.
      */
     protected const SMARTERU_API_GET_USER_GROUPS_QUERY_METHOD = 'getUserGroups';
+
+    /**
+     * The method name to pass into the XML body when making a CreateGroup
+     * query to the SmarterU API.
+     */
+    protected const SMARTERU_API_CREATE_GROUP_QUERY_METHOD = 'createGroup';
+
+    /**
+     * The method name to pass into the XML body when making an UpdateGroup
+     * query to the SmarterU API.
+     */
+    protected const SMARTERU_API_UPDATE_GROUP_QUERY_METHOD = 'updateGroup';
 
     /**
      * The beginning of the message to use to throw an exception when the
@@ -482,9 +497,9 @@ class Client {
      *
      * @param GetUserQuery $query The query representing the User whose Groups
      *      are to be read.
-     * @return array An array of [$result, $errors] where $result is an array
-     *      of any information returned by the SmarterU API and $errors is an
-     *      array of any error messages returned by the SmarterU API.
+     * @return array An array of GroupPermissions instances representing the
+     *      specified User's membership in the Group(s) he or she is a member
+     *      of.
      * @throws MissingValueException If the Account API Key and/or the User
      *      API Key are unset in both this instance of the Client and in the
      *      query passed in as a parameter.
@@ -517,33 +532,31 @@ class Client {
 
         $groups = [];
         foreach ($bodyAsXml->Info->UserGroups->children() as $group) {
-            $currentGroup = [];
             $permissions = [];
-            foreach ($group->Permissions->children() as $permission) {
-                $permissions[] = (string) $permission;
+            foreach ($group->Permissions->children() as $code) {
+                $permission = (new Permission())
+                    ->setCode((string) $code);
+                $permissions[] = $permission;
             }
-            $currentGroup['Name'] = $group->Name;
-            $currentGroup['Identifier'] = $group->Identifier;
-            $currentGroup['IsHomeGroup'] = $group->IsHomeGroup;
-            $currentGroup['Permissions'] = $permissions;
+            $currentGroup = (new GroupPermissions())
+                ->setGroupName((string) $group->Name)
+                ->setGroupId((string) $group->Identifier)
+                ->setHomeGroup(filter_var(
+                    (string) $group->IsHomeGroup,
+                    FILTER_VALIDATE_BOOLEAN
+                ))
+                ->setPermissions($permissions);
             $groups[] = $currentGroup;
         }
 
-        $result = [
-            'Response' => $groups,
-            'Errors' => []
-        ];
-
-        return $result;
+        return $groups;
     }
 
     /**
      * Make a CreateGroup query to the SmarterU API.
      *
      * @param Group $group The Group to create
-     * @return array An array of [$result, $errors] where $result is an array
-     *      of any information returned by the SmarterU API and $errors is an
-     *      array of any error messages returned by the SmarterU API.
+     * @return Group The group as created by the SmarterU API.
      * @throws MissingValueException If the Account API Key and/or the User
      *      API Key are unset.
      * @throws ClientException If the HTTP response includes a status code
@@ -552,7 +565,7 @@ class Client {
      * @throws SmarterUException If the response from the SmarterU API
      *      reports a fatal error that prevents the request from executing.
      */
-    public function createGroup(Group $group): array {
+    public function createGroup(Group $group): Group {
         $xml = $this->getXMLGenerator()->createGroup(
             $this->getAccountApi(),
             $this->getUserApi(),
@@ -574,29 +587,17 @@ class Client {
         $groupName = (string) $bodyAsXml->Info->Group;
         $groupId = (string) $bodyAsXml->Info->GroupID;
 
-        $groupAsArray = [
-            'Group' => $groupName
-        ];
-
-        if (!empty($groupId)) {
-            $groupAsArray['GroupID'] = $groupId;
-        }
-
-        $result = [
-            'Response' => $groupAsArray,
-            'Errors' => []
-        ];
-
-        return $result;
+        return (clone $group)
+            ->setName($groupName)
+            ->setGroupId($groupId);
     }
 
     /**
      * Make a GetGroup query to the SmarterU API.
      *
      * @param GetGroupQuery $query The query representing the Group to return
-     * @return array An array of [$result, $errors] where $result is an array
-     *      of any information returned by the SmarterU API and $errors is an
-     *      array of any error messages returned by the SmarterU API.
+     * @return ?Group The Group as read by the API, or null if no Group
+     *      matching the query exists within your SmarterU account.
      * @throws MissingValueException If the Account API Key and/or the User
      *      API Key are unset in both this instance of the Client and in the
      *      query passed in as a parameter.
@@ -606,7 +607,7 @@ class Client {
      * @throws SmarterUException If the response from the SmarterU API
      *      reports a fatal error that prevents the request from executing.
      */
-    public function getGroup(GetGroupQuery $query): array {
+    public function getGroup(GetGroupQuery $query): ?Group {
         $xml = $this->getXMLGenerator()->getGroup(
             $this->getAccountApi(),
             $this->getUserApi(),
@@ -622,10 +623,20 @@ class Client {
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
         if ((string) $bodyAsXml->Result === 'Failed') {
-            throw new SmarterUException($this->readErrors($bodyAsXml->Errors));
+            $errors = $this->readErrors($bodyAsXml->Errors);
+            /**
+             * The SmarterU API treats "Group not found" as a fatal error.
+             * If the API returns this error, this if statement will catch it
+             * before it becomes an exception and return null.
+             */
+            if (str_contains($errors, 'GG:03: The requested group does not exist.')) {
+                return null;
+            }
+            throw new SmarterUException($errors);
         }
 
         $group = $bodyAsXml->Info->Group;
+
         $notificationEmails = [];
         $tags = [];
 
@@ -640,41 +651,32 @@ class Client {
         }
 
         foreach ($group->Tags2->children() as $tag) {
-            $tags[] = [
-                'TagID' => (string) $tag->TagID,
-                'TagName' => (string) $tag->TagName,
-                'TagValues' => (string) $tag->TagValues
-            ];
+            $currentTag = (new Tag())
+                ->setTagId((string) $tag->TagID)
+                ->setTagName((string) $tag->TagName)
+                ->setTagValues((string) $tag->TagValues);
+            $tags[] = $currentTag;
         }
 
-        $groupAsRead = [
-            'Name' => (string) $group->Name,
-            'GroupID' => (string) $group->GroupID,
-            'CreatedDate' => (string) $group->CreatedDate,
-            'ModifiedDate' => (string) $group->ModifiedDate,
-            'Description' => (string) $group->Description,
-            'HomeGroupMessage' => (string) $group->HomeGroupMessage,
-            'NotificationEmails' => $notificationEmails,
-            'UserCount' => (string) $group->UserCount,
-            'LearningModuleCount' => (string) $group->LearningModuleCount,
-            'Tags2' => $tags,
-            'Status' => (string) $group->Status
-        ];
-
-        $results = [
-            'Response' => $groupAsRead,
-            'Errors' => []
-        ];
-        return $results;
+        return (new Group())
+            ->setName((string) $group->Name)
+            ->setGroupId((string) $group->GroupID)
+            ->setCreatedDate(new DateTime((string) $group->CreatedDate))
+            ->setModifiedDate(new DateTime((string) $group->ModifiedDate))
+            ->setDescription((string) $group->Description)
+            ->setHomeGroupMessage((string) $group->HomeGroupMessage)
+            ->setNotificationEmails($notificationEmails)
+            ->setUserCount((int) $group->UserCount)
+            ->setLearningModuleCount((int) $group->LearningModuleCount)
+            ->setTags($tags)
+            ->setStatus((string) $group->Status);
     }
 
     /**
      * Make a ListGroups query to the SmarterU API.
      *
      * @param ListGroupsQuery $query The query representing the Groups to return
-     * @return array An array of [$result, $errors] where $result is an array
-     *      of any information returned by the SmarterU API and $errors is an
-     *      array of any error messages returned by the SmarterU API.
+     * @return array An array of any Groups returned by the SmarterU API.
      * @throws MissingValueException If the Account API Key and/or the User
      *      API Key are unset in both this instance of the Client and in the
      *      query passed in as a parameter.
@@ -705,26 +707,20 @@ class Client {
 
         $groups = [];
         foreach ($bodyAsXml->Info->Groups->children() as $group) {
-            $currentGroup = [];
-            $currentGroup['Name'] = (string) $group->Name;
-            $currentGroup['GroupID'] = (string) $group->GroupID;
+            $currentGroup = (new Group())
+                ->setName((string) $group->Name)
+                ->setGroupId((string) $group->GroupID);
             $groups[] = $currentGroup;
         }
 
-        $result = [
-            'Response' => $groups,
-            'Errors' => []
-        ];
-        return $result;
+        return $groups;
     }
 
     /**
      * Make an UpdateGroup query to the SmarterU API.
      *
      * @param Group $group The Group to update
-     * @return array An array of [$result, $errors] where $result is an array
-     *      of any information returned by the SmarterU API and $errors is an
-     *      array of any error messages returned by the SmarterU API.
+     * @return array The Group as updated by the SmarterU API.
      * @throws MissingValueException If the Account API Key and/or the User
      *      API Key are unset.
      * @throws ClientException If the HTTP response includes a status code
@@ -733,7 +729,7 @@ class Client {
      * @throws SmarterUException If the response from the SmarterU API
      *      reports a fatal error that prevents the request from executing.
      */
-    public function updateGroup(Group $group): array {
+    public function updateGroup(Group $group): Group {
         $xml = $this->getXMLGenerator()->createGroup(
             $this->getAccountApi(),
             $this->getUserApi(),
@@ -751,18 +747,13 @@ class Client {
         if ((string) $bodyAsXml->Result === 'Failed') {
             throw new SmarterUException($this->readErrors($bodyAsXml->Errors));
         }
+
+        $groupName = (string) $bodyAsXml->Info->Group;
+        $groupId = (string) $bodyAsXml->Info->GroupID;
     
-        $groupAsArray = [
-            'Group' => (string) $bodyAsXml->Info->Group,
-            'GroupID' => (string) $bodyAsXml->Info->GroupID
-        ];
-    
-        $result = [
-            'Response' => $groupAsArray,
-            'Errors' => []
-        ];
-    
-        return $result;
+        return (clone $group)
+            ->setName($groupName)
+            ->setGroupId($groupId);
     }
 
     /**

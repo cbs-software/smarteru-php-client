@@ -31,14 +31,14 @@ class GroupPermissions {
      * The name of the group the user is a member of. Mutually exclusive with
      * the group's ID.
      */
-    protected ?string $groupName;
+    protected ?string $groupName = null;
 
     /**
      * The user-specified ID of the group the user is a member of. This is the
      * GroupID returned by the getGroup and listGroups methods. Mutually
      * exclusive with the group's name.
      */
-    protected ?int $groupId;
+    protected ?string $groupId = null;
 
     /**
      * The email address of the user you want to assign to the group. The user
@@ -91,27 +91,25 @@ class GroupPermissions {
      */
     public function setGroupName(string $groupName): self {
         $this->groupName = $groupName;
-        $this->groupId = null;
         return $this;
     }
 
     /**
      * Get the user-specified ID of the group the user is a member of.
      *
-     * @return ?int the ID of the group the user is a member of.
+     * @return ?string the ID of the group the user is a member of.
      */
-    public function getGroupId(): ?int {
+    public function getGroupId(): ?string {
         return $this->groupId;
     }
 
     /**
      * Set the user-specified ID of the group the user is a member of.
      *
-     * @param int $groupId the id of the group the user is a member of
+     * @param string $groupId the id of the group the user is a member of
      * @return self
      */
-    public function setGroupId(int $groupId): self {
-        $this->groupName = null;
+    public function setGroupId(string $groupId): self {
         $this->groupId = $groupId;
         return $this;
     }
