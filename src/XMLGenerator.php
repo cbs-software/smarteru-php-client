@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace CBS\SmarterU;
 
+use CBS\SmarterU\DataTypes\Group;
 use CBS\SmarterU\DataTypes\User;
 use CBS\SmarterU\Exceptions\MissingValueException;
 use CBS\SmarterU\Queries\GetUserQuery;
@@ -517,7 +518,7 @@ class XMLGenerator {
         $groupTag = $parameters->addChild('Group');
         $groupTag->addChild('Name', $group->getName());
         if (!empty($group->getGroupId())) {
-            $group->addChild('GroupID', $group->getGroupId());
+            $groupTag->addChild('GroupID', $group->getGroupId());
         }
         $groupTag->addChild('Status', $group->getStatus());
         $groupTag->addChild('Description', $group->getDescription());
@@ -546,7 +547,7 @@ class XMLGenerator {
             );
         }
         if (!empty($group->getUserHelpText())) {
-            $groupTag>addChild('UserHelpText', $group->getUserHelpText());
+            $groupTag->addChild('UserHelpText', $group->getUserHelpText());
         }
         if (!empty($group->getTags())) {
             $tags2 = $groupTag->addChild('Tags2');
@@ -558,7 +559,7 @@ class XMLGenerator {
                     $tag2->addChild('TagName', $tag->getTagName());
                 } else {
                     throw new MissingValueException(
-                        'Every tag must have either a name or an ID'
+                        'Every tag must have either a name or an ID.'
                     );
                 }
                 $tag2->addChild('TagValues', $tag->getTagValues());
@@ -583,12 +584,6 @@ class XMLGenerator {
         foreach ($group->getLearningModules() as $module) {
             $learningModule = $learningModules->addChild('LearningModule');
             $learningModule->addChild('ID', $module->getId());
-            if ($methodName === 'updateGroup') {
-                $learningModule->addChild(
-                    'LearningModuleAction',
-                    $module->getAction()
-                );
-            }
             $learningModule->addChild(
                 'AllowSelfEnroll',
                 $module->getAllowSelfEnroll() ? '1' : '0'
@@ -607,15 +602,9 @@ class XMLGenerator {
                     'SubscriptionVariant'
                 );
                 $subscriptionVariant->addChild('ID', $variant->getId());
-                if ($methodName === 'updateGroup') {
-                    $subscriptionVariant->addChild(
-                        'SubscriptionVariantAction',
-                        $variant->getAction()
-                    );
-                }
                 $subscriptionVariant->addChild(
                     'RequiresCredits',
-                    $variant->getRequiresCredits() ? '1' : '0';
+                    $variant->getRequiresCredits() ? '1' : '0'
                 );
             }
         }
@@ -838,12 +827,10 @@ class XMLGenerator {
         foreach ($group->getLearningModules() as $module) {
             $learningModule = $learningModules->addChild('LearningModule');
             $learningModule->addChild('ID', $module->getId());
-            if ($methodName === 'updateGroup') {
-                $learningModule->addChild(
-                    'LearningModuleAction',
-                    $module->getAction()
-                );
-            }
+            $learningModule->addChild(
+                'LearningModuleAction',
+                $module->getAction()
+            );
             $learningModule->addChild(
                 'AllowSelfEnroll',
                 $module->getAllowSelfEnroll() ? '1' : '0'
@@ -859,15 +846,13 @@ class XMLGenerator {
                 'SubscriptionVariant'
             );
             $subscriptionVariant->addChild('ID', $variant->getId());
-            if ($methodName === 'updateGroup') {
-                $subscriptionVariant->addChild(
-                    'SubscriptionVariantAction',
-                    $variant->getAction()
-                );
-            }
+            $subscriptionVariant->addChild(
+                'SubscriptionVariantAction',
+                $variant->getAction()
+            );
             $subscriptionVariant->addChild(
                 'RequiresCredits',
-                $variant->getRequiresCredits() ? '1' : '0';
+                $variant->getRequiresCredits() ? '1' : '0'
             );
         }
         if (!empty($group->getDashboardSetId())) {
