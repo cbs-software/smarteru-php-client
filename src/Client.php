@@ -553,10 +553,10 @@ class Client {
      *      reports a fatal error that prevents the request from executing.
      */
     public function createGroup(Group $group): array {
-        $xml = $group->toXml(
+        $xml = $this->getXMLGenerator()->createGroup(
             $this->getAccountApi(),
             $this->getUserApi(),
-            'createGroup'
+            $group
         );
 
         $response = $this
@@ -607,7 +607,11 @@ class Client {
      *      reports a fatal error that prevents the request from executing.
      */
     public function getGroup(GetGroupQuery $query): array {
-        $xml = $query->toXml($this->getAccountApi(), $this->getUserApi());
+        $xml = $this->getXMLGenerator()->getGroup(
+            $this->getAccountApi(),
+            $this->getUserApi(),
+            $query
+        );
 
         $response = $this
             ->getHttpClient()
@@ -681,7 +685,11 @@ class Client {
      *      reports a fatal error that prevents the request from executing.
      */
     public function listGroups(ListGroupsQuery $query): array {
-        $xml = $query->toXml($this->getAccountApi(), $this->getUserApi());
+        $xml = $this->getXMLGenerator()->createGroup(
+            $this->getAccountApi(),
+            $this->getUserApi(),
+            $query
+        );
 
         $response = $this
             ->getHttpClient()
@@ -726,10 +734,10 @@ class Client {
      *      reports a fatal error that prevents the request from executing.
      */
     public function updateGroup(Group $group): array {
-        $xml = $group->toXml(
+        $xml = $this->getXMLGenerator()->createGroup(
             $this->getAccountApi(),
             $this->getUserApi(),
-            'updateGroup'
+            $group
         );
 
         $response = $this

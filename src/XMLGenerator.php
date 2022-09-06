@@ -488,6 +488,396 @@ class XMLGenerator {
     }
 
     /**
+     * Generate the XML body for a createGroup query.
+     *
+     * @param string $accountApi The SmarterU API key identifying the account
+     *      making the request.
+     * @param string $userApi The SmarterU API key identifying the user within
+     *      that account who is making the request.
+     * @param Group $group The Group to translate to XML
+     * @return string an XML representation of the Group
+     * @throws MissingValueException If one of the Tags is missing both its
+     *      name and its ID.
+     */
+    public function createGroup(
+        string $accountApi,
+        string $userApi,
+        Group $group
+    ): string {
+        $xmlString = <<<XML
+        <SmarterU>
+        </SmarterU>
+        XML;
+
+        $xml = simplexml_load_string($xmlString);
+        $xml->addChild('AccountAPI', $accountApi);
+        $xml->addChild('UserAPI', $userApi);
+        $xml->addChild('Method', 'createGroup');
+        $parameters = $xml->addChild('Parameters');
+        $groupTag = $parameters->addChild('Group');
+        $groupTag->addChild('Name', $group->getName());
+        if (!empty($group->getGroupId())) {
+            $group->addChild('GroupID', $group->getGroupId());
+        }
+        $groupTag->addChild('Status', $group->getStatus());
+        $groupTag->addChild('Description', $group->getDescription());
+        $groupTag->addChild('HomeGroupMessage', $group->getHomeGroupMessage());
+        $notificationEmails = $groupTag->addChild('NotificationEmails');
+        foreach ($group->getNotificationEmails() as $email) {
+            $notificationEmails->addChild('NotificationEmail', $email);
+        }
+
+        if ($group->getUserHelpOverrideDefault() !== null) {
+            $groupTag->addChild(
+                'UserHelpOverrideDefault',
+                $group->getUserHelpOverrideDefault() ? '1' : '0'
+            );
+        }
+        if ($group->getUserHelpEnabled() !== null) {
+            $groupTag->addChild(
+                'UserHelpEnabled',
+                $group->getUserHelpEnabled() ? '1' : '0'
+            );
+        }
+        if (!empty($group->getUserHelpEmail())) {
+            $groupTag->addChild(
+                'UserHelpEmail',
+                implode(',', $group->getUserHelpEmail())
+            );
+        }
+        if (!empty($group->getUserHelpText())) {
+            $groupTag>addChild('UserHelpText', $group->getUserHelpText());
+        }
+        if (!empty($group->getTags())) {
+            $tags2 = $groupTag->addChild('Tags2');
+            foreach ($group->getTags() as $tag) {
+                $tag2 = $tags2->addChild('Tag2');
+                if (!empty($tag->getTagId())) {
+                    $tag2->addChild('TagID', $tag->getTagId());
+                } else if (!empty($tag->getTagName())) {
+                    $tag2->addChild('TagName', $tag->getTagName());
+                } else {
+                    throw new MissingValueException(
+                        'Every tag must have either a name or an ID'
+                    );
+                }
+                $tag2->addChild('TagValues', $tag->getTagValues());
+            }
+        }
+        if (
+            !empty($group->getUserLimitEnabled())
+            && !empty($group->getUserLimitAmount())
+        ) {
+            $userLimit = $groupTag->addChild('UserLimit');
+            $userLimit->addChild(
+                'Enabled',
+                $group->getUserLimitEnabled() ? '1' : '0'
+            );
+            $userLimit->addChild(
+                'Amount',
+                (string) $group->getUserLimitAmount()
+            );
+        }
+        $users = $groupTag->addChild('Users');
+        $learningModules = $groupTag->addChild('LearningModules');
+        foreach ($group->getLearningModules() as $module) {
+            $learningModule = $learningModules->addChild('LearningModule');
+            $learningModule->addChild('ID', $module->getId());
+            if ($methodName === 'updateGroup') {
+                $learningModule->addChild(
+                    'LearningModuleAction',
+                    $module->getAction()
+                );
+            }
+            $learningModule->addChild(
+                'AllowSelfEnroll',
+                $module->getAllowSelfEnroll() ? '1' : '0'
+            );
+            $learningModule->addChild(
+                'AutoEnroll',
+                $module->getAutoEnroll() ? '1' : '0'
+            );
+        }
+        if (!empty($group->getSubscriptionVariants())) {
+            $subscriptionVariants = $groupTag->addChild(
+                'SubscriptionVariants'
+            );
+            foreach ($group->getSubscriptionVariants() as $variant) {
+                $subscriptionVariant = $subscriptionVariants->addChild(
+                    'SubscriptionVariant'
+                );
+                $subscriptionVariant->addChild('ID', $variant->getId());
+                if ($methodName === 'updateGroup') {
+                    $subscriptionVariant->addChild(
+                        'SubscriptionVariantAction',
+                        $variant->getAction()
+                    );
+                }
+                $subscriptionVariant->addChild(
+                    'RequiresCredits',
+                    $variant->getRequiresCredits() ? '1' : '0';
+                );
+            }
+        }
+        if (!empty($group->getDashboardSetId())) {
+            $groupTag->addChild('DashboardSetID', $group->getDashboardSetId());
+        }
+
+        return $xml->asXML();
+    }
+
+    /**
+     * Generate the XML body for a getGroup query.
+     *
+     * @param string $accountApi The SmarterU API key identifying the account
+     *      making the request.
+     * @param string $userApi The SmarterU API key identifying the user within
+     *      that account who is making the request.
+     * @param GetGroupQuery $query The query to translate to XML
+     * @return string an XML representation of the query
+     * @throws MissingValueException if the group identifier is not set.
+     */
+    public function getGroup(
+        string $accountApi,
+        string $userApi,
+        GetGroupQuery $query
+    ): string {
+        $query->setAccountApi($accountApi);
+        $query->setUserApi($userApi);
+        $xml = $group->createBaseXml();
+        $xml->addChild('Method', 'getGroup');
+        $parameters = $xml->addChild('Parameters');
+        $user = $parameters->addChild('Group');
+        if ($group->getName() !== null) {
+            $user->addChild('Name', $group->getName());
+        } else if ($query->getGroupId() !== null) {
+            $user->addChild('GroupID', $group->getGroupId());
+        } else {
+            throw new MissingValueException(
+                'Group identifier must be specified when creating a GetGroupQuery.'
+            );
+        }
+        return $xml->asXML();
+    }
+
+    /**
+     * Generate the XML body for a listGroups query.
+     *
+     * @param string $accountApi The SmarterU API key identifying the account
+     *      making the request.
+     * @param string $userApi The SmarterU API key identifying the user within
+     *      that account who is making the request.
+     * @param ListGroupsQuery $query The query to translate to XML
+     * @return string an XML representation of the query
+     * @throws MissingValueException If one of the Tags is missing both its
+     *      name and its ID.
+     */
+    public function toXml(
+        string $accountApi,
+        string $userApi,
+        ListGroupsQuery $query
+    ): string {
+        $query->setAccountApi($accountApi);
+        $query->setUserApi($userApi);
+        $xml = $query->createBaseXml();
+        $xml->addChild('Method', 'listGroups');
+        $parameters = $xml->addChild('Parameters');
+        $group = $parameters->addChild('Group');
+        $filters = $group->addChild('Filters');
+        if (!empty($query->getGroupName())) {
+            $groupName = $filters->addChild('GroupName');
+            $groupName->addChild(
+                'MatchType',
+                $query->getGroupName()->getMatchType()
+            );
+            $groupName->addChild(
+                'Value',
+                $query->getGroupName()->getValue()
+            );
+        }
+        if (!empty($query->getGroupStatus())) {
+            $filters->addChild('GroupStatus', $query->getGroupStatus());
+        }
+        if (!empty($query->getTags())) {
+            $tags = $filters->addChild('Tags2');
+            foreach ($query->getTags() as $tag) {
+                $tag2 = $tags->addChild('Tag2');
+                if (!empty($tag->getTagId())) {
+                    $tag2->addChild('TagID', $tag->getTagId());
+                } else if (!empty($tag->getTagName())) {
+                    $tag2->addChild('TagName', $tag->getTagName());
+                } else {
+                    throw new MissingValueException(
+                        'Tags must include a tag identifier when creating a ListGroups query.'
+                    );
+                }
+                $tag2->addChild('TagValues', $tag->getTagValues());
+            }
+        }
+        return $xml->asXML();
+    }
+
+    /**
+     * Generate the XML body for an updateGroup query.
+     *
+     * @param string $accountApi The SmarterU API key identifying the account
+     *      making the request.
+     * @param string $userApi The SmarterU API key identifying the user within
+     *      that account who is making the request.
+     * @param Group $group The Group to translate to XML
+     * @return string an XML representation of the User
+     * @throws MissingValueException If one of the Tags is missing both its
+     *      name and its ID.
+     */
+    public function updateGroup(
+        string $accountApi,
+        string $userApi,
+        Group $group
+    ): string {
+        $xmlString = <<<XML
+        <SmarterU>
+        </SmarterU>
+        XML;
+
+        $xml = simplexml_load_string($xmlString);
+        $xml->addChild('AccountAPI', $accountApi);
+        $xml->addChild('UserAPI', $userApi);
+        $xml->addChild('Method', 'updateGroup');
+        $parameters = $xml->addChild('Parameters');
+        $identifier = $parameters->addChild('Identifier');
+        if (!empty($group->getOldName())) {
+            $identifier->addChild('Name', $group->getOldName());
+        } else if (!empty($group->getOldGroupId())) {
+            $identifier->addChild('GroupID', $group->getOldGroupId());
+        } else {
+            // If neither of the above conditionals are true, then the
+            // group name and ID are not being updated and the current
+            // value can still be used to identify the group.
+            $identifier->addChild('Name', $group->getName());
+        }
+        $groupTag = $parameters->addChild('Group');
+        if (!empty($group->getOldName())) {
+            $groupTag->addChild('Name', $group->getName());
+            $group->setOldName(null);
+        }
+        if (!empty($group->getOldGroupId())) {
+            $groupTag->addChild('GroupID', $group->getGroupId());
+            $group->setOldGroupId(null);
+        }
+        if (!empty($group->getStatus())) {
+            $groupTag->addChild('Status', $group->getStatus());
+        }
+        if (!empty($group->getDescription())) {
+            $groupTag->addChild('Description', $group->getDescription());
+        }
+        if (!empty($group->getHomeGroupMessage())) {
+            $groupTag->addChild(
+                'HomeGroupMessage',
+                $group->getHomeGroupMessage()
+            );
+        }
+        if (!empty($group->getNotificationEmails())) {
+            $notificationEmails = $groupTag->addChild('NotificationEmails');
+            foreach ($group->getNotificationEmails() as $email) {
+                $notificationEmails->addChild('NotificationEmail', $email);
+            }
+        }
+        if ($group->getUserHelpOverrideDefault() !== null) {
+            $groupTag->addChild(
+                'UserHelpOverrideDefault',
+                $group->getUserHelpOverrideDefault() ? '1' : '0'
+            );
+        }
+        if ($group->getUserHelpEnabled() !== null) {
+            $groupTag->addChild(
+                'UserHelpEnabled',
+                $group->getUserHelpEnabled() ? '1' : '0'
+            );
+        }
+        if (!empty($group->getUserHelpEmail())) {
+            $groupTag->addChild(
+                'UserHelpEmail',
+                implode(',', $group->getUserHelpEmail())
+            );
+        }
+        if (!empty($group->getUserHelpText())) {
+            $groupTag->addChild('UserHelpText', $group->getUserHelpText());
+        }
+        if (!empty($group->getTags())) {
+            $tags2 = $groupTag->addChild('Tags2');
+            foreach ($group->getTags() as $tag) {
+                $tag2 = $tags2->addChild('Tag2');
+                if (!empty($tag->getTagId())) {
+                    $tag2->addChild('TagID', $tag->getTagId());
+                } else if (!empty($tag->getTagName())) {
+                    $tag2->addChild('TagName', $tag->getTagName());
+                } else {
+                    throw new MissingValueException(
+                        'Every tag must have either a name or an ID'
+                    );
+                }
+                $tag2->addChild('TagValues', $tag->getTagValues());
+            }
+        }
+        if (
+            !empty($group->getUserLimitEnabled())
+            && !empty($group->getUserLimitAmount())
+        ) {
+            $userLimit = $groupTag->addChild('UserLimit');
+            $userLimit->addChild(
+                'Enabled',
+                $group->getUserLimitEnabled() ? '1' : '0'
+            );
+            $userLimit->addChild(
+                'Amount',
+                (string) $group->getUserLimitAmount()
+            );
+        }
+        $users = $groupTag->addChild('Users');
+        $learningModules = $groupTag->addChild('LearningModules');
+        foreach ($group->getLearningModules() as $module) {
+            $learningModule = $learningModules->addChild('LearningModule');
+            $learningModule->addChild('ID', $module->getId());
+            if ($methodName === 'updateGroup') {
+                $learningModule->addChild(
+                    'LearningModuleAction',
+                    $module->getAction()
+                );
+            }
+            $learningModule->addChild(
+                'AllowSelfEnroll',
+                $module->getAllowSelfEnroll() ? '1' : '0'
+            );
+            $learningModule->addChild(
+                'AutoEnroll',
+                $module->getAutoEnroll() ? '1' : '0'
+            );
+        }
+        $subscriptionVariants = $groupTag->addChild('SubscriptionVariants');
+        foreach ($group->getSubscriptionVariants() as $variant) {
+            $subscriptionVariant = $subscriptionVariants->addChild(
+                'SubscriptionVariant'
+            );
+            $subscriptionVariant->addChild('ID', $variant->getId());
+            if ($methodName === 'updateGroup') {
+                $subscriptionVariant->addChild(
+                    'SubscriptionVariantAction',
+                    $variant->getAction()
+                );
+            }
+            $subscriptionVariant->addChild(
+                'RequiresCredits',
+                $variant->getRequiresCredits() ? '1' : '0';
+            );
+        }
+        if (!empty($group->getDashboardSetId())) {
+            $groupTag->addChild('DashboardSetID', $group->getDashboardSetId());
+        }
+
+        return $xml->asXML();
+    }
+
+    /**
      * Determine whether or not to filter listUsers results based on the user's
      * identifying information.
      *
@@ -496,6 +886,10 @@ class XMLGenerator {
      * @return bool True if and only if the query should contain a <Users> tag
      */
     private function listUsersIncludeUsersTag(ListUsersQuery $query): bool {
-        return !empty($query->getEmail()) || !empty($query->getEmployeeId()) || !empty($query->getName());
+        return (
+            !empty($query->getEmail())
+            || !empty($query->getEmployeeId())
+            || !empty($query->getName())
+        );
     }
 }

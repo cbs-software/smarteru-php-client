@@ -74,37 +74,4 @@ class GetGroupQuery extends BaseQuery {
         $this->groupId = $groupId;
         return $this;
     }
-
-    /**
-     * Generate an XML representation of the query, to be passed into the
-     * SmarterU API.
-     *
-     * @param string $accountApi The SmarterU API key identifying the account
-     *      making the request.
-     * @param string $userApi The SmarterU API key identifying the individual
-     *      user within the account who is making the request.
-     * @return string the XML representation of the query
-     * @throws MissingValueException if the group identifier is not set.
-     */
-    public function toXml(
-        string $accountApi,
-        string $userApi
-    ): string {
-        $this->setAccountApi($accountApi);
-        $this->setUserApi($userApi);
-        $xml = $this->createBaseXml();
-        $xml->addChild('Method', 'getGroup');
-        $parameters = $xml->addChild('Parameters');
-        $user = $parameters->addChild('Group');
-        if ($this->getName() !== null) {
-            $user->addChild('Name', $this->getName());
-        } else if ($this->getGroupId() !== null) {
-            $user->addChild('GroupID', $this->getGroupId());
-        } else {
-            throw new MissingValueException(
-                'Group identifier must be specified when creating a GetGroupQuery.'
-            );
-        }
-        return $xml->asXML();
-    }
 }
