@@ -663,7 +663,7 @@ class XMLGenerator {
      * @throws MissingValueException If one of the Tags is missing both its
      *      name and its ID.
      */
-    public function toXml(
+    public function listGroups(
         string $accountApi,
         string $userApi,
         ListGroupsQuery $query
