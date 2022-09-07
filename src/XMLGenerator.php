@@ -17,7 +17,9 @@ namespace CBS\SmarterU;
 use CBS\SmarterU\DataTypes\Group;
 use CBS\SmarterU\DataTypes\User;
 use CBS\SmarterU\Exceptions\MissingValueException;
+use CBS\SmarterU\Queries\GetGroupQuery;
 use CBS\SmarterU\Queries\GetUserQuery;
+use CBS\SmarterU\Queries\ListGroupsQuery;
 use CBS\SmarterU\Queries\ListUsersQuery;
 use SimpleXMLElement;
 
@@ -633,14 +635,14 @@ class XMLGenerator {
     ): string {
         $query->setAccountApi($accountApi);
         $query->setUserApi($userApi);
-        $xml = $group->createBaseXml();
+        $xml = $query->createBaseXml();
         $xml->addChild('Method', 'getGroup');
         $parameters = $xml->addChild('Parameters');
-        $user = $parameters->addChild('Group');
-        if ($group->getName() !== null) {
-            $user->addChild('Name', $group->getName());
+        $group = $parameters->addChild('Group');
+        if ($query->getName() !== null) {
+            $group->addChild('Name', $query->getName());
         } else if ($query->getGroupId() !== null) {
-            $user->addChild('GroupID', $group->getGroupId());
+            $group->addChild('GroupID', $query->getGroupId());
         } else {
             throw new MissingValueException(
                 'Group identifier must be specified when creating a GetGroupQuery.'
