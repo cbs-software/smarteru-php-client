@@ -804,7 +804,7 @@ class XMLGenerator {
                     $tag2->addChild('TagName', $tag->getTagName());
                 } else {
                     throw new MissingValueException(
-                        'Every tag must have either a name or an ID'
+                        'Every tag must have either a name or an ID.'
                     );
                 }
                 $tag2->addChild('TagValues', $tag->getTagValues());
