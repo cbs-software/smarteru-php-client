@@ -44,28 +44,10 @@ class Client {
     public const POST_URL = 'https://api.smarteru.com/apiv2/';
 
     /**
-     * The method name to pass into the XML body when making a CreateUser query
-     * to the SmarterU API.
-     */
-    protected const SMARTERU_API_CREATE_USER_QUERY_METHOD = 'createUser';
-
-    /**
      * The method name to pass into the query object when making a GetUser
      * query to the SmarterU API.
      */
     protected const SMARTERU_API_GET_USER_QUERY_METHOD = 'getUser';
-
-    /**
-     * The method name to pass into the query object when making a ListUsers
-     * query to the SmarterU API.
-     */
-    protected const SMARTERU_API_LIST_USERS_QUERY_METHOD = 'listUsers';
-
-    /**
-     * The method name to pass into the XML body when making an UpdateUser
-     * query to the SmarterU API.
-     */
-    protected const SMARTERU_API_UPDATE_USER_QUERY_METHOD = 'updateUser';
 
     /**
      * The method name to pass into the query object when making a
@@ -74,16 +56,20 @@ class Client {
     protected const SMARTERU_API_GET_USER_GROUPS_QUERY_METHOD = 'getUserGroups';
 
     /**
-     * The method name to pass into the XML body when making a CreateGroup
-     * query to the SmarterU API.
+     * All valid Permissions that can be granted to a User, as defined here:
+     * https://support.smarteru.com/docs/api-updateuser
      */
-    protected const SMARTERU_API_CREATE_GROUP_QUERY_METHOD = 'createGroup';
-
-    /**
-     * The method name to pass into the XML body when making an UpdateGroup
-     * query to the SmarterU API.
-     */
-    protected const SMARTERU_API_UPDATE_GROUP_QUERY_METHOD = 'updateGroup';
+    protected const VALID_PERMISSIONS = [
+        'MANAGE_GROUP',
+        'CREATE_COURSE',
+        'MANAGE_GROUP_COURSES',
+        'MANAGE_USERS',
+        'MANAGE_GROUP_USERS',
+        'VIEW_LEARNER_RESULTS',
+        'PROCTOR',
+        'MARKER',
+        'INSTRUCTOR'
+    ];
 
     /**
      * The beginning of the message to use to throw an exception when the
@@ -794,7 +780,8 @@ class Client {
     /**
      * Make an addUsersToGroup query to the SmarterU API. This query will add
      * any specified Users to the Group, but will not grant them any
-     * permissions within the Group.
+     * permissions within the Group. If you would like the Users to have any
+     * additional permissions, you must call Client::grantPermissions().
      *
      * @param array $users An array containing one or more Users to add to the
      *      Group.
@@ -883,6 +870,74 @@ class Client {
         return (new Group())
             ->setName($groupName)
             ->setGroupId($groupId);
+    }
+
+    /**
+     * Make a GrantPermissions request to the SmarterU API.
+     *
+     * @param User $user The User to grant permissions to.
+     * @param Group $group The Group in which the User will be granted
+     *      the specified permissions.
+     * @param array $permissions The permissions to be granted to the specified
+     *      User within the specified Group.
+     * @return array The User as updated by the SmarterU API.
+     * @throws InvalidArgumentException If any value in the "$permissions"
+     *      array is not a string or is not one of the permissions accepted
+     *      by the SmarterU API.
+     * @throws MissingValueException If the user whose permissions are being
+     *      modified doesn't have an email address or an employee ID, or if the
+     *      Group in which the permissions are being modified does not have a
+     *      name or an ID.
+     * @throws ClientException If the HTTP response includes a status code
+     *      indicating that an HTTP error has prevented the request from
+     *      being made.
+     * @throws SmarterUException If the response from the SmarterU API
+     *      reports a fatal error that prevents the request from executing.
+     */
+    public function grantPermissions(
+        User $user,
+        Group $group,
+        array $permissions
+    ): User {
+        foreach ($permissions as $permission) {
+            if (!is_string($permission)) {
+                throw new InvalidArgumentException(
+                    '"$permissions" must be an array of strings.'
+                );
+            }
+            if (!in_array($permission, self::VALID_PERMISSIONS)) {
+                throw new InvalidArgumentException(
+                    '"' . $permission . '" is not one of the valid permissions.'
+                );
+            }
+        }
+        $xml = $this->getXMLGenerator()->changePermissions(
+            $this->getAccountApi(),
+            $this->getUserApi(),
+            $user,
+            $group,
+            $permissions,
+            'Grant'
+        );
+
+        $response = $this
+            ->getHttpClient()
+            ->request('POST', self::POST_URL, ['form_params' => [
+                'Package' => $xml]
+        ]);
+
+        $bodyAsXml = simplexml_load_string((string) $response->getBody());
+
+        if ((string) $bodyAsXml->Result === 'Failed') {
+            throw new SmarterUException($this->readErrors($bodyAsXml->Errors));
+        }
+
+        $email = (string) $bodyAsXml->Info->Email;
+        $employeeId = (string) $bodyAsXml->Info->EmployeeID;
+
+        return (new User())
+            ->setEmail($email)
+            ->setEmployeeId($employeeId);
     }
 
     /**

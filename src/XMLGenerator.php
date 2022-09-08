@@ -945,10 +945,10 @@ class XMLGenerator {
      * @param array $permissions The permissions to be granted or revoked.
      * @param string $action Whether the permissions are being granted or revoked.
      * @return string an XML representation of the query.
-     * @throws InvalidArgumentException If the "$users" array contains a value
-     *      that is not a User.
-     * @throws MissingValueException If the "$users" array contains a User that
-     *      does not have an email address or an employee ID.
+     * @throws MissingValueException If the user whose permissions are being
+     *      modified doesn't have an email address or an employee ID, or if the
+     *      Group in which the permissions are being modified does not have a
+     *      name or an ID.
      */
     public function changePermissions(
         string $accountApi,
