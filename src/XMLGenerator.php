@@ -861,6 +861,54 @@ class XMLGenerator {
     }
 
     /**
+     * TODO fill this in
+     */
+    public function addUsersToGroup(
+        string $accountApi,
+        string $userApi,
+        array $users,
+        Group $group
+    ): string {
+        $xmlString = <<<XML
+        <SmarterU>
+        </SmarterU>
+        XML;
+
+        $xml = simplexml_load_string($xmlString);
+        $xml->addChild('AccountAPI', $accountApi);
+        $xml->addChild('UserAPI', $userApi);
+        $xml->addChild('Method', 'updateGroup');
+        $parameters = $xml->addChild('Parameters');
+        $identifier = $parameters->addChild('Identifier');
+        $identifier->addChild('Name', $group->getName());
+        }
+        $groupTag = $parameters->addChild('Group');
+        $usersTag = $groupTag->addChild('Users');
+        foreach ($users as $user) {
+            $currentUser = $usersTag->addChild('User');
+            if (!empty($user->getEmail())) {
+                $currentUser->addChild('Email', $user->getEmail());
+            } else if (!empty($user->getEmployeeId())) {
+                $currentUser->addChild('EmployeeID', $user->getEmployeeId());
+            } else {
+                throw new MissingValueException(
+                    'All Users being added to a Group must have an email address or employee ID.'
+                );
+            }
+            $currentUser->addChild('UserAction', 'Add');
+            $currentUser->addChild(
+                'HomeGroup',
+                $user->getHomeGroup() === $group->getName() ? '1' : '0'
+            );
+            $currentUser->addChild('Permissions');
+        }
+
+        $learningModules = $groupTag->addChild('LearningModules');
+        $subscriptionVariants = $groupTag->addChild('SubscriptionVariants');
+        return $xml->asXML();
+    }
+
+    /**
      * Determine whether or not to filter listUsers results based on the user's
      * identifying information.
      *
