@@ -931,6 +931,92 @@ class XMLGenerator {
     }
 
     /**
+     * Generate the XML body for a grantPermission or revokePermission query.
+     * Functionally, this is just a specific type of updateGroup query.
+     *
+     * @param string $accountApi The SmarterU API key identifying the account
+     *      making the request.
+     * @param string $userApi The SmarterU API key identifying the user within
+     *      that account who is making the request.
+     * @param array $user The User whose permissions within the Group are being
+     *      updated.
+     * @param Group $group The Group in which the User's permissions are being
+     *      updated.
+     * @param array $permissions The permissions to be granted or revoked.
+     * @param string $action Whether the permissions are being granted or revoked.
+     * @return string an XML representation of the query.
+     * @throws InvalidArgumentException If the "$users" array contains a value
+     *      that is not a User.
+     * @throws MissingValueException If the "$users" array contains a User that
+     *      does not have an email address or an employee ID.
+     */
+    public function changePermissions(
+        string $accountApi,
+        string $userApi,
+        User $user,
+        Group $group,
+        array $permissions,
+        string $action
+    ): string {
+        $xmlString = <<<XML
+        <SmarterU>
+        </SmarterU>
+        XML;
+
+        $xml = simplexml_load_string($xmlString);
+        $xml->addChild('AccountAPI', $accountApi);
+        $xml->addChild('UserAPI', $userApi);
+        $xml->addChild('Method', 'updateUser');
+        $parameters = $xml->addChild('Parameters');
+        $userTag = $parameters->addChild('User');
+        $identifier = $userTag->addChild('Identifier');
+        if (!empty($user->getEmail())) {
+            $identifier->addChild('Email', $user->getEmail());
+        } else if (!empty($user->getEmployeeId())) {
+            $identifier->addChild('EmployeeID', $user->getEmployeeId());
+        } else {
+            throw new MissingValueException(
+                'A User cannot be updated without either an email address or an employee ID.'
+            );
+        }
+        $info = $userTag->addChild('Info');
+        $info->addChild(
+            'LearnerNotifications',
+            $user->getLearnerNotifications() ? '1' : '0'
+        );
+        $info->addChild(
+            'SupervisorNotifications',
+            $user->getSupervisorNotifications() ? '1' : '0'
+        );
+        $profile = $userTag->addChild('Profile');
+        
+        $groups = $userTag->addChild('Groups');
+        $groupTag = $groups->addChild('Group');
+        if (!empty($group->getName())) {
+            $groupTag->addChild('GroupName', $group->getName());
+        } else if (!empty($group->getGroupId())) {
+            $groupTag->addChild('GroupID', $group->getGroupId());
+        } else {
+            throw new MissingValueException(
+                'Cannot assign permissions in a Group that has no name or ID.'
+            );
+        }
+        $groupTag->addChild('GroupAction', 'Add');
+        $groupPermissions = $groupTag->addChild('GroupPermissions');
+        foreach ($permissions as $permission) {
+            $permissionTag = $groupPermissions->addChild('Permission');
+            $permissionTag->addChild('Action', $action);
+            $permissionTag->addChild('Code', $permission);
+        }
+
+        $venues = $userTag->addChild('Venues');
+        $wages = $userTag->addChild('Wages');
+        return $xml->asXML();
+    }
+
+
+
+    /**
      * Determine whether or not to filter listUsers results based on the user's
      * identifying information.
      *

@@ -831,11 +831,50 @@ class Client {
             throw new SmarterUException($this->readErrors($bodyAsXml->Errors));
         }
 
-        // Make sure the change is reflected locally if the API accepted the
-        // request.
-        $group->setUsers(array_merge($group->getUsers(), $users));
-        foreach ($users as $user) {
-            $user->setGroups(array_merge($user->getGroups(), [$group]));
+        $groupName = (string) $bodyAsXml->Info->Group;
+        $groupId = (string) $bodyAsXml->Info->GroupID;
+    
+        return (new Group())
+            ->setName($groupName)
+            ->setGroupId($groupId);
+    }
+
+    /**
+     * Make a removeUsersFromGroup query to the SmarterU API.
+     *
+     * @param array $users An array containing one or more Users to remove from
+     *      the Group.
+     * @param Group $group The Group from which the Users will be removed.
+     * @return Group The Group as updated by the SmarterU API.
+     * @throws InvalidArgumentException If the "$users" array contains a value
+     *      that is not a User.
+     * @throws MissingValueException If the "$users" array contains a User that
+     *      does not have an email address or an employee ID.
+     * @throws ClientException If the HTTP response includes a status code
+     *      indicating that an HTTP error has prevented the request from
+     *      being made.
+     * @throws SmarterUException If the response from the SmarterU API
+     *      reports a fatal error that prevents the request from executing.
+     */
+    public function removeUsersFromGroup(array $users, Group $group): Group {
+        $xml = $this->getXMLGenerator()->changeGroupMembers(
+            $this->getAccountApi(),
+            $this->getUserApi(),
+            $users,
+            $group,
+            'Remove'
+        );
+
+        $response = $this
+            ->getHttpClient()
+            ->request('POST', self::POST_URL, ['form_params' => [
+                'Package' => $xml]
+        ]);
+
+        $bodyAsXml = simplexml_load_string((string) $response->getBody());
+
+        if ((string) $bodyAsXml->Result === 'Failed') {
+            throw new SmarterUException($this->readErrors($bodyAsXml->Errors));
         }
 
         $groupName = (string) $bodyAsXml->Info->Group;
