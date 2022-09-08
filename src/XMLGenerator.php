@@ -861,7 +861,8 @@ class XMLGenerator {
     }
 
     /**
-     * Generate the XML body for an addUsersToGroup or removeUsersFromGroup query.
+     * Generate the XML body for an addUsersToGroup or removeUsersFromGroup
+     * query. Functionally, this is just a specific type of updateGroup query.
      *
      * @param string $accountApi The SmarterU API key identifying the account
      *      making the request.
@@ -879,7 +880,7 @@ class XMLGenerator {
      * @throws MissingValueException If the "$users" array contains a User that
      *      does not have an email address or an employee ID.
      */
-    public function groupMembershipQuery(
+    public function changeGroupMembers(
         string $accountApi,
         string $userApi,
         array $users,

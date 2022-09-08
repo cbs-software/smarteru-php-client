@@ -743,7 +743,7 @@ class Client {
      * updating a Group's name and/or ID.
      *
      * @param Group $group The Group to update
-     * @return array The Group as updated by the SmarterU API.
+     * @return Group The Group as updated by the SmarterU API.
      * @throws MissingValueException If the Account API Key and/or the User
      *      API Key are unset.
      * @throws ClientException If the HTTP response includes a status code
@@ -791,7 +791,60 @@ class Client {
             ->setGroupId($groupId);
     }
 
+    /**
+     * Make an addUsersToGroup query to the SmarterU API. This query will add
+     * any specified Users to the Group, but will not grant them any
+     * permissions within the Group.
+     *
+     * @param array $users An array containing one or more Users to add to the
+     *      Group.
+     * @param Group $group The Group to which the Users will be added.
+     * @return Group The Group as updated by the SmarterU API.
+     * @throws InvalidArgumentException If the "$users" array contains a value
+     *      that is not a User.
+     * @throws MissingValueException If the "$users" array contains a User that
+     *      does not have an email address or an employee ID.
+     * @throws ClientException If the HTTP response includes a status code
+     *      indicating that an HTTP error has prevented the request from
+     *      being made.
+     * @throws SmarterUException If the response from the SmarterU API
+     *      reports a fatal error that prevents the request from executing.
+     */
+    public function addUsersToGroup(array $users, Group $group): Group {
+        $xml = $this->getXMLGenerator()->changeGroupMembers(
+            $this->getAccountApi(),
+            $this->getUserApi(),
+            $users,
+            $group,
+            'Add'
+        );
+
+        $response = $this
+            ->getHttpClient()
+            ->request('POST', self::POST_URL, ['form_params' => [
+                'Package' => $xml]
+        ]);
+
+        $bodyAsXml = simplexml_load_string((string) $response->getBody());
+
+        if ((string) $bodyAsXml->Result === 'Failed') {
+            throw new SmarterUException($this->readErrors($bodyAsXml->Errors));
+        }
+
+        // Make sure the change is reflected locally if the API accepted the
+        // request.
+        $group->setUsers(array_merge($group->getUsers(), $users));
+        foreach ($users as $user) {
+            $user->setGroups(array_merge($user->getGroups(), [$group]));
+        }
+
+        $groupName = (string) $bodyAsXml->Info->Group;
+        $groupId = (string) $bodyAsXml->Info->GroupID;
     
+        return (new Group())
+            ->setName($groupName)
+            ->setGroupId($groupId);
+    }
 
     /**
      * Translate the error message(s) returned by the SmarterU API to a string
