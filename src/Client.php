@@ -240,7 +240,7 @@ class Client {
         $email = (string) $bodyAsXml->Info->Email;
         $employeeId = (string) $bodyAsXml->Info->EmployeeID;
 
-        return (clone $user)
+        return (new User())
             ->setEmail($email)
             ->setEmployeeId($employeeId);
     }
@@ -451,7 +451,7 @@ class Client {
         $email = (string) $bodyAsXml->Info->Email;
         $employeeId = (string) $bodyAsXml->Info->EmployeeID;
 
-        return (clone $user)
+        return (new User())
             ->setEmail($email)
             ->setEmployeeId($employeeId);
     }
@@ -547,7 +547,7 @@ class Client {
         $groupName = (string) $bodyAsXml->Info->Group;
         $groupId = (string) $bodyAsXml->Info->GroupID;
 
-        return (clone $group)
+        return (new Group())
             ->setName($groupName)
             ->setGroupId($groupId);
     }
@@ -703,7 +703,7 @@ class Client {
         $groupName = (string) $bodyAsXml->Info->Group;
         $groupId = (string) $bodyAsXml->Info->GroupID;
     
-        return (clone $group)
+        return (new Group())
             ->setName($groupName)
             ->setGroupId($groupId);
     }
