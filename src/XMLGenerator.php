@@ -747,11 +747,9 @@ class XMLGenerator {
         $groupTag = $parameters->addChild('Group');
         if (!empty($group->getOldName())) {
             $groupTag->addChild('Name', $group->getName());
-            $group->setOldName(null);
         }
         if (!empty($group->getOldGroupId())) {
             $groupTag->addChild('GroupID', $group->getGroupId());
-            $group->setOldGroupId(null);
         }
         if (!empty($group->getStatus())) {
             $groupTag->addChild('Status', $group->getStatus());
