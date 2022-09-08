@@ -453,7 +453,12 @@ class Client {
     }
 
     /**
-     * Make an UpdateUser query to the SmarterU API.
+     * Make an UpdateUser query to the SmarterU API. In the event that the
+     * User's email address and/or employee ID are being updated, the fields
+     * used to keep track of the old values in the User object will be erased
+     * while making the request. This prevents outdated information from
+     * mistakenly being passed into the SmarterU API when making an additional
+     * updateUser query after updating a User's email address and/or employee ID.
      *
      * @param User $user The User to update
      * @return array The User as updated by the SmarterU API.
@@ -471,6 +476,19 @@ class Client {
             $this->getUserApi(),
             $user
         );
+
+        // If the User's email address and/or employee ID are being updated,
+        // reset the old values to null after generating the XML. This prevents
+        // any future updateUser requests on the same User object from
+        // mistakenly attempting to identify the User using old information
+        // that was changed by the updateUser request that made changes to the
+        // User's email address and/or employee ID.
+        if (!empty($user->getOldEmail())) {
+            $user->setOldEmail(null);
+        }
+        if (!empty($user->getOldEmployeeId())) {
+            $user->setOldEmployeeId(null);
+        }
 
         $response = $this
             ->getHttpClient()

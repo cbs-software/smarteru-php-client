@@ -351,11 +351,9 @@ class XMLGenerator {
         $info = $userTag->addChild('Info');
         if (!empty($user->getOldEmail())) {
             $info->addChild('Email', $user->getEmail());
-            $user->setOldEmail(null);
         }
         if (!empty($user->getOldEmployeeId())) {
             $info->addChild('EmployeeID', $user->getEmployeeId());
-            $user->setOldEmployeeId(null);
         }
         if (!empty($user->getGivenName())) {
             $info->addChild('GivenName', $user->getGivenName());
