@@ -173,6 +173,8 @@ class GroupTest extends TestCase {
             ->setRequiresCredits(false);
         $subscriptionVariants = [$variant1, $variant2];
         $dashboardSetId = '8';
+        $userCount = 2;
+        $learningModuleCount = 3;
 
         $group = (new Group())
             ->setName($name)
@@ -193,7 +195,9 @@ class GroupTest extends TestCase {
             ->setUsers($users)
             ->setLearningModules($learningModules)
             ->setSubscriptionVariants($subscriptionVariants)
-            ->setDashboardSetId($dashboardSetId);
+            ->setDashboardSetId($dashboardSetId)
+            ->setUserCount($userCount)
+            ->setLearningModuleCount($learningModuleCount);
 
         self::assertEquals($name, $group->getName());
         self::assertEquals($groupId, $group->getGroupId());
@@ -238,6 +242,8 @@ class GroupTest extends TestCase {
             self::assertContains($variant, $group->getSubscriptionVariants());
         }
         self::assertEquals($dashboardSetId, $group->getDashboardSetId());
+        self::assertEquals($userCount, $group->getUserCount());
+        self::assertEquals($learningModuleCount, $group->getLearningModuleCount());
     }
 
     /**

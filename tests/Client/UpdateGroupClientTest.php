@@ -361,6 +361,7 @@ class UpdateGroupClientTest extends TestCase {
         // Make the request.
         $result = $client->updateGroup($this->group);
         self::assertInstanceOf(Group::class, $result);
-        self::assertEquals($this->group, $result);
+        self::assertEquals($this->group->getName(), $result->getName());
+        self::assertEquals($this->group->getGroupId(), $result->getGroupId());
     }
 }

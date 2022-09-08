@@ -260,6 +260,10 @@ class CreateUserClientTest extends TestCase {
         $result = $client->createUser($this->user1);
         
         self::assertInstanceOf(User::class, $result);
-        self::assertEquals($this->user1, $result);
+        self::assertEquals($result->getEmail(), $this->user1->getEmail());
+        self::assertEquals(
+            $result->getEmployeeId(),
+            $this->user1->getEmployeeId()
+        );
     }
 }

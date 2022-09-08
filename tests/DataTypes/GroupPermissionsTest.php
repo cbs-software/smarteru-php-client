@@ -46,12 +46,16 @@ class GroupPermissionsTest extends TestCase {
         $permissions = [$permission1, $permission2];
 
         $groupPermission = (new GroupPermissions())
-            ->setGroupName($groupName)
-            ->setGroupId($groupId)
             ->setPermissions($permissions)
             ->setEmail($email)
             ->setHomeGroup($homeGroup)
             ->setAction($action);
+
+        self::assertNull($groupPermission->getGroupId());
+        self::assertNull($groupPermission->getGroupName());
+
+        $groupPermission->setGroupName($groupName);
+        $groupPermission->setGroupId($groupId);
 
         self::assertEquals($groupName, $groupPermission->getGroupName());
         self::assertEquals($groupId, $groupPermission->getGroupId());
