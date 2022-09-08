@@ -791,6 +791,8 @@ class Client {
             ->setGroupId($groupId);
     }
 
+    
+
     /**
      * Translate the error message(s) returned by the SmarterU API to a string
      * representing the message to use for an exception.

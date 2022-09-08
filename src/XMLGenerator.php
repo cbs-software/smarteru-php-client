@@ -861,13 +861,30 @@ class XMLGenerator {
     }
 
     /**
-     * TODO fill this in
+     * Generate the XML body for an addUsersToGroup or removeUsersFromGroup query.
+     *
+     * @param string $accountApi The SmarterU API key identifying the account
+     *      making the request.
+     * @param string $userApi The SmarterU API key identifying the user within
+     *      that account who is making the request.
+     * @param array $users The Users who are being added to or removed from the
+     *      Group.
+     * @param Group $group The Group to which the Users are being added or
+     *      removed.
+     * @param string $action Whether the Users are being added to or removed
+     *      from the Group.
+     * @return string an XML representation of the query.
+     * @throws InvalidArgumentException If the "$users" array contains a value
+     *      that is not a User.
+     * @throws MissingValueException If the "$users" array contains a User that
+     *      does not have an email address or an employee ID.
      */
-    public function addUsersToGroup(
+    public function groupMembershipQuery(
         string $accountApi,
         string $userApi,
         array $users,
-        Group $group
+        Group $group,
+        string $action
     ): string {
         $xmlString = <<<XML
         <SmarterU>
@@ -881,10 +898,14 @@ class XMLGenerator {
         $parameters = $xml->addChild('Parameters');
         $identifier = $parameters->addChild('Identifier');
         $identifier->addChild('Name', $group->getName());
-        }
         $groupTag = $parameters->addChild('Group');
         $usersTag = $groupTag->addChild('Users');
         foreach ($users as $user) {
+            if (!($user instanceof User)) {
+                throw new InvalidArgumentException(
+                    '"$users" must be an array of CBS\SmarterU\DataTypes\User instances'
+                );
+            }
             $currentUser = $usersTag->addChild('User');
             if (!empty($user->getEmail())) {
                 $currentUser->addChild('Email', $user->getEmail());
@@ -892,10 +913,10 @@ class XMLGenerator {
                 $currentUser->addChild('EmployeeID', $user->getEmployeeId());
             } else {
                 throw new MissingValueException(
-                    'All Users being added to a Group must have an email address or employee ID.'
+                    'All Users being added to or removed from a Group must have an email address or employee ID.'
                 );
             }
-            $currentUser->addChild('UserAction', 'Add');
+            $currentUser->addChild('UserAction', $action);
             $currentUser->addChild(
                 'HomeGroup',
                 $user->getHomeGroup() === $group->getName() ? '1' : '0'
