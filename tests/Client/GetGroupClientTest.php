@@ -125,39 +125,12 @@ class GetGroupClientTest extends TestCase {
         self::assertCount(1, $container);
         $request = $container[0]['request'];
         $decodedBody = urldecode((string) $request->getBody());
-        $body = strrpos($decodedBody, 'Package=') === 0 ? substr($decodedBody, 8, null) : '';
-        $packageAsXml = simplexml_load_string($body);
-        
-        self::assertEquals($packageAsXml->getName(), 'SmarterU');
-        $elements = [];
-        foreach ($packageAsXml->children() as $element) {
-            $elements[] = $element->getName();
-        }
-        self::assertContains('AccountAPI', $elements);
-        self::assertEquals($accountApi, $packageAsXml->AccountAPI);
-        self::assertContains('UserAPI', $elements);
-        self::assertEquals($userApi, $packageAsXml->UserAPI);
-        self::assertContains('Method', $elements);
-        self::assertEquals('getGroup', $packageAsXml->Method);
-        self::assertContains('Parameters', $elements);
-
-        // Ensure that the <Parameters> tag has the correct children.
-        $parameters = [];
-        foreach ($packageAsXml->Parameters->children() as $parameter) {
-            $parameters[] = $parameter->getName();
-        }
-        self::assertCount(1, $parameters);
-        self::assertContains('Group', $parameters);
-        $groupIdentifier = [];
-        foreach ($packageAsXml->Parameters->Group->children() as $identifier) {
-            $groupIdentifier[] = $identifier->getName();
-        }
-        self::assertCount(1, $groupIdentifier);
-        self::assertContains('Name', $groupIdentifier);
-        self::assertEquals(
-            $query->getName(),
-            $packageAsXml->Parameters->Group->Name
+        $expectedBody = 'Package=' . $client->getXMLGenerator()->getGroup(
+            $accountApi,
+            $userApi,
+            $query
         );
+        self::assertEquals($decodedBody, $expectedBody);
     }
 
     /**
@@ -252,39 +225,12 @@ class GetGroupClientTest extends TestCase {
         self::assertCount(1, $container);
         $request = $container[0]['request'];
         $decodedBody = urldecode((string) $request->getBody());
-        $body = strrpos($decodedBody, 'Package=') === 0 ? substr($decodedBody, 8, null) : '';
-        $packageAsXml = simplexml_load_string($body);
-        
-        self::assertEquals($packageAsXml->getName(), 'SmarterU');
-        $elements = [];
-        foreach ($packageAsXml->children() as $element) {
-            $elements[] = $element->getName();
-        }
-        self::assertContains('AccountAPI', $elements);
-        self::assertEquals($accountApi, $packageAsXml->AccountAPI);
-        self::assertContains('UserAPI', $elements);
-        self::assertEquals($userApi, $packageAsXml->UserAPI);
-        self::assertContains('Method', $elements);
-        self::assertEquals('getGroup', $packageAsXml->Method);
-        self::assertContains('Parameters', $elements);
-
-        // Ensure that the <Parameters> tag has the correct children.
-        $parameters = [];
-        foreach ($packageAsXml->Parameters->children() as $parameter) {
-            $parameters[] = $parameter->getName();
-        }
-        self::assertCount(1, $parameters);
-        self::assertContains('Group', $parameters);
-        $groupIdentifier = [];
-        foreach ($packageAsXml->Parameters->Group->children() as $identifier) {
-            $groupIdentifier[] = $identifier->getName();
-        }
-        self::assertCount(1, $groupIdentifier);
-        self::assertContains('GroupID', $groupIdentifier);
-        self::assertEquals(
-            $query->getGroupId(),
-            $packageAsXml->Parameters->Group->GroupID
+        $expectedBody = 'Package=' . $client->getXMLGenerator()->getGroup(
+            $accountApi,
+            $userApi,
+            $query
         );
+        self::assertEquals($decodedBody, $expectedBody);
     }
 
     /**

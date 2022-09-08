@@ -687,7 +687,7 @@ class Client {
      *      reports a fatal error that prevents the request from executing.
      */
     public function listGroups(ListGroupsQuery $query): array {
-        $xml = $this->getXMLGenerator()->createGroup(
+        $xml = $this->getXMLGenerator()->listGroups(
             $this->getAccountApi(),
             $this->getUserApi(),
             $query
@@ -730,7 +730,7 @@ class Client {
      *      reports a fatal error that prevents the request from executing.
      */
     public function updateGroup(Group $group): Group {
-        $xml = $this->getXMLGenerator()->createGroup(
+        $xml = $this->getXMLGenerator()->updateGroup(
             $this->getAccountApi(),
             $this->getUserApi(),
             $group
