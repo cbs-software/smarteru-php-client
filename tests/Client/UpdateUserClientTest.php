@@ -850,6 +850,10 @@ class UpdateUserClientTest extends TestCase {
         $result = $client->updateUser($this->user1);
         
         self::assertInstanceOf(User::class, $result);
-        self::assertEquals($result, $this->user1);
+        self::assertEquals($result->getEmail(), $this->user1->getEmail());
+        self::assertEquals(
+            $result->getEmployeeId(),
+            $this->user1->getEmployeeId()
+        );
     }
 }
