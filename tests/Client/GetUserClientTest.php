@@ -210,39 +210,12 @@ class GetUserClientTest extends TestCase {
         self::assertCount(1, $container);
         $request = $container[0]['request'];
         $decodedBody = urldecode((string) $request->getBody());
-        $body = strrpos($decodedBody, 'Package=') === 0 ? substr($decodedBody, 8, null) : '';
-        $packageAsXml = simplexml_load_string($body);
-        
-        self::assertEquals($packageAsXml->getName(), 'SmarterU');
-        $elements = [];
-        foreach ($packageAsXml->children() as $element) {
-            $elements[] = $element->getName();
-        }
-        self::assertContains('AccountAPI', $elements);
-        self::assertEquals($accountApi, $packageAsXml->AccountAPI);
-        self::assertContains('UserAPI', $elements);
-        self::assertEquals($userApi, $packageAsXml->UserAPI);
-        self::assertContains('Method', $elements);
-        self::assertEquals('getUser', $packageAsXml->Method);
-        self::assertContains('Parameters', $elements);
-
-        // Ensure that the <Parameters> tag has the correct children.
-        $parameters = [];
-        foreach ($packageAsXml->Parameters->children() as $parameter) {
-            $parameters[] = $parameter->getName();
-        }
-        self::assertCount(1, $parameters);
-        self::assertContains('User', $parameters);
-        $userIdentifier = [];
-        foreach ($packageAsXml->Parameters->User->children() as $identifier) {
-            $userIdentifier[] = $identifier->getName();
-        }
-        self::assertCount(1, $userIdentifier);
-        self::assertContains('ID', $userIdentifier);
-        self::assertEquals(
-            $query->getId(),
-            $packageAsXml->Parameters->User->ID
+        $expectedBody = 'Package=' . $client->getXMLGenerator()->getUser(
+            $accountApi,
+            $userApi,
+            $query
         );
+        self::assertEquals($decodedBody, $expectedBody);
     }
 
     /**
@@ -355,39 +328,12 @@ class GetUserClientTest extends TestCase {
         self::assertCount(1, $container);
         $request = $container[0]['request'];
         $decodedBody = urldecode((string) $request->getBody());
-        $body = strrpos($decodedBody, 'Package=') === 0 ? substr($decodedBody, 8, null) : '';
-        $packageAsXml = simplexml_load_string($body);
-        
-        self::assertEquals($packageAsXml->getName(), 'SmarterU');
-        $elements = [];
-        foreach ($packageAsXml->children() as $element) {
-            $elements[] = $element->getName();
-        }
-        self::assertContains('AccountAPI', $elements);
-        self::assertEquals($accountApi, $packageAsXml->AccountAPI);
-        self::assertContains('UserAPI', $elements);
-        self::assertEquals($userApi, $packageAsXml->UserAPI);
-        self::assertContains('Method', $elements);
-        self::assertEquals('getUser', $packageAsXml->Method);
-        self::assertContains('Parameters', $elements);
-
-        // Ensure that the <Parameters> tag has the correct children.
-        $parameters = [];
-        foreach ($packageAsXml->Parameters->children() as $parameter) {
-            $parameters[] = $parameter->getName();
-        }
-        self::assertCount(1, $parameters);
-        self::assertContains('User', $parameters);
-        $userIdentifier = [];
-        foreach ($packageAsXml->Parameters->User->children() as $identifier) {
-            $userIdentifier[] = $identifier->getName();
-        }
-        self::assertCount(1, $userIdentifier);
-        self::assertContains('Email', $userIdentifier);
-        self::assertEquals(
-            $query->getEmail(),
-            $packageAsXml->Parameters->User->Email
+        $expectedBody = 'Package=' . $client->getXMLGenerator()->getUser(
+            $accountApi,
+            $userApi,
+            $query
         );
+        self::assertEquals($decodedBody, $expectedBody);
     }
 
     /**
@@ -500,39 +446,12 @@ class GetUserClientTest extends TestCase {
         self::assertCount(1, $container);
         $request = $container[0]['request'];
         $decodedBody = urldecode((string) $request->getBody());
-        $body = strrpos($decodedBody, 'Package=') === 0 ? substr($decodedBody, 8, null) : '';
-        $packageAsXml = simplexml_load_string($body);
-        
-        self::assertEquals($packageAsXml->getName(), 'SmarterU');
-        $elements = [];
-        foreach ($packageAsXml->children() as $element) {
-            $elements[] = $element->getName();
-        }
-        self::assertContains('AccountAPI', $elements);
-        self::assertEquals($accountApi, $packageAsXml->AccountAPI);
-        self::assertContains('UserAPI', $elements);
-        self::assertEquals($userApi, $packageAsXml->UserAPI);
-        self::assertContains('Method', $elements);
-        self::assertEquals('getUser', $packageAsXml->Method);
-        self::assertContains('Parameters', $elements);
-
-        // Ensure that the <Parameters> tag has the correct children.
-        $parameters = [];
-        foreach ($packageAsXml->Parameters->children() as $parameter) {
-            $parameters[] = $parameter->getName();
-        }
-        self::assertCount(1, $parameters);
-        self::assertContains('User', $parameters);
-        $userIdentifier = [];
-        foreach ($packageAsXml->Parameters->User->children() as $identifier) {
-            $userIdentifier[] = $identifier->getName();
-        }
-        self::assertCount(1, $userIdentifier);
-        self::assertContains('EmployeeID', $userIdentifier);
-        self::assertEquals(
-            $query->getEmployeeId(),
-            $packageAsXml->Parameters->User->EmployeeID
+        $expectedBody = 'Package=' . $client->getXMLGenerator()->getUser(
+            $accountApi,
+            $userApi,
+            $query
         );
+        self::assertEquals($decodedBody, $expectedBody);
     }
 
     /**

@@ -130,39 +130,4 @@ class GetUserQuery extends BaseQuery {
         $this->method = $method;
         return $this;
     }
-
-    /**
-     * Generate an XML representation of the query, to be passed into the
-     * SmarterU API.
-     *
-     * @param string $accountApi The SmarterU API key identifying the account
-     *      making the request.
-     * @param string $userApi The SmarterU API key identifying the individual
-     *      user within the account who is making the request.
-     * @return string the XML representation of the query
-     * @throws MissingValueException if the user identifier is not set.
-     */
-    public function toXml(
-        string $accountApi,
-        string $userApi
-    ): string {
-        $this->setAccountApi($accountApi);
-        $this->setUserApi($userApi);
-        $xml = $this->createBaseXml();
-        $xml->addChild('Method', $this->getMethod());
-        $parameters = $xml->addChild('Parameters');
-        $user = $parameters->addChild('User');
-        if ($this->getId() !== null) {
-            $user->addChild('ID', $this->getId());
-        } else if ($this->getEmail() !== null) {
-            $user->addChild('Email', $this->getEmail());
-        } else if ($this->getEmployeeId() !== null) {
-            $user->addChild('EmployeeID', $this->getEmployeeId());
-        } else {
-            throw new MissingValueException(
-                'User identifier must be specified when creating a GetUserQuery.'
-            );
-        }
-        return $xml->asXML();
-    }
 }

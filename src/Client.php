@@ -113,6 +113,12 @@ class Client {
      */
     protected HttpClient $httpClient;
 
+    /**
+     * The XML Generator responsible for translating the input from the user to
+     * XML in order to send the request to the SmarterU API.
+     */
+    protected XMLGenerator $xmlGenerator;
+
     #endregion properties
 
     /**
@@ -206,7 +212,29 @@ class Client {
     }
 
     /**
-     * Make a CreateUser query to the SmarterU API.
+     * Get the XML Generator. If one has not already been provided, a new
+     * default XMLGenerator instance will be created and returned.
+     */
+    public function getXMLGenerator(): XMLGenerator {
+        if (!isset($this->xmlGenerator)) {
+            $this->setXMLGenerator(new XMLGenerator());
+        }
+        return $this->xmlGenerator;
+    }
+
+    /**
+     * Set the XML Generator.
+     *
+     * @param XMLGenerator $xmlGenerator The XML generator.
+     * @return self
+     */
+    public function setXMLGenerator(XMLGenerator $xmlGenerator): self {
+        $this->xmlGenerator = $xmlGenerator;
+        return $this;
+    }
+
+    /**
+     * * Make a CreateUser query to the SmarterU API.
      *
      * @param User $user the user to create
      * @return User The user as created by the API.
@@ -219,10 +247,10 @@ class Client {
      *      reports a fatal error that prevents the request from executing.
      */
     public function createUser(User $user): User {
-        $xml = $user->toXml(
+        $xml = $this->getXMLGenerator()->createUser(
             $this->getAccountApi(),
             $this->getUserApi(),
-            self::SMARTERU_API_CREATE_USER_QUERY_METHOD
+            $user
         );
 
         $response = $this
@@ -263,7 +291,11 @@ class Client {
     public function getUser(GetUserQuery $query): ?User {
         $query->setMethod(self::SMARTERU_API_GET_USER_QUERY_METHOD);
 
-        $xml = $query->toXml($this->getAccountApi(), $this->getUserApi());
+        $xml = $this->getXMLGenerator()->getUser(
+            $this->getAccountApi(),
+            $this->getUserApi(),
+            $query
+        );
 
         $response = $this
             ->getHttpClient()
@@ -369,7 +401,11 @@ class Client {
      *      reports a fatal error that prevents the request from executing.
      */
     public function listUsers(ListUsersQuery $query): array {
-        $xml = $query->toXml($this->getAccountApi(), $this->getUserApi());
+        $xml = $this->getXMLGenerator()->listUsers(
+            $this->getAccountApi(),
+            $this->getUserApi(),
+            $query
+        );
 
         $response = $this
             ->getHttpClient()
@@ -417,7 +453,12 @@ class Client {
     }
 
     /**
-     * Make an UpdateUser query to the SmarterU API.
+     * Make an UpdateUser query to the SmarterU API. In the event that the
+     * User's email address and/or employee ID are being updated, the fields
+     * used to keep track of the old values in the User object will be erased
+     * while making the request. This prevents outdated information from
+     * mistakenly being passed into the SmarterU API when making an additional
+     * updateUser query after updating a User's email address and/or employee ID.
      *
      * @param User $user The User to update
      * @return array The User as updated by the SmarterU API.
@@ -430,11 +471,24 @@ class Client {
      *      reports a fatal error that prevents the request from executing.
      */
     public function updateUser(User $user): User {
-        $xml = $user->toXml(
+        $xml = $this->getXMLGenerator()->updateUser(
             $this->getAccountApi(),
             $this->getUserApi(),
-            self::SMARTERU_API_UPDATE_USER_QUERY_METHOD
+            $user
         );
+
+        // If the User's email address and/or employee ID are being updated,
+        // reset the old values to null after generating the XML. This prevents
+        // any future updateUser requests on the same User object from
+        // mistakenly attempting to identify the User using old information
+        // that was changed by the updateUser request that made changes to the
+        // User's email address and/or employee ID.
+        if (!empty($user->getOldEmail())) {
+            $user->setOldEmail(null);
+        }
+        if (!empty($user->getOldEmployeeId())) {
+            $user->setOldEmployeeId(null);
+        }
 
         $response = $this
             ->getHttpClient()
@@ -476,7 +530,11 @@ class Client {
     public function getUserGroups(GetUserQuery $query): array {
         $query->setMethod(self::SMARTERU_API_GET_USER_GROUPS_QUERY_METHOD);
 
-        $xml = $query->toXml($this->getAccountApi(), $this->getUserApi());
+        $xml = $this->getXMLGenerator()->getUser(
+            $this->getAccountApi(),
+            $this->getUserApi(),
+            $query
+        );
 
         $response = $this
             ->getHttpClient()
