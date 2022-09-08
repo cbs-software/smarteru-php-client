@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace Tests\CBS\SmarterU;
 
+use CBS\SmarterU\DataTypes\Group;
 use CBS\SmarterU\DataTypes\Tag;
 use CBS\SmarterU\Exceptions\MissingValueException;
 use CBS\SmarterU\Exceptions\SmarterUException;
@@ -433,21 +434,10 @@ class ListGroupsClientTest extends TestCase {
         $result = $client->listGroups($query);
 
         self::assertIsArray($result);
-        self::assertCount(2, $result);
-        self::assertArrayHasKey('Response', $result);
-        self::assertIsArray($result['Response']);
-        self::assertCount(1, $result['Response']);
-        foreach ($result['Response'] as $group) {
-            self::assertCount(2, $group);
-            self::assertArrayHasKey('Name', $group);
-            self::assertArrayHasKey('GroupID', $group);
-        }
-        self::assertEquals($groupName, $result['Response'][0]['Name']);
-        self::assertEquals($groupId, $result['Response'][0]['GroupID']);
-
-        self::assertArrayHasKey('Errors', $result);
-        self::assertIsArray($result['Errors']);
-        self::assertCount(0, $result['Errors']);
+        self::assertCount(1, $result);
+        self::assertInstanceOf(Group::class, $result[0]);
+        self::assertEquals($groupName, $result[0]->getName());
+        self::assertEquals($groupId, $result[0]->getGroupId());
     }
 
     /**
@@ -506,24 +496,15 @@ class ListGroupsClientTest extends TestCase {
         $result = $client->listGroups($query);
 
         self::assertIsArray($result);
-        self::assertCount(2, $result);
-        self::assertArrayHasKey('Response', $result);
-        self::assertIsArray($result['Response']);
-        self::assertCount(3, $result['Response']);
-        foreach ($result['Response'] as $group) {
-            self::assertCount(2, $group);
-            self::assertArrayHasKey('Name', $group);
-            self::assertArrayHasKey('GroupID', $group);
-        }
-        self::assertEquals($group1Name, $result['Response'][0]['Name']);
-        self::assertEquals($group1Id, $result['Response'][0]['GroupID']);
-        self::assertEquals($group2Name, $result['Response'][1]['Name']);
-        self::assertEquals($group2Id, $result['Response'][1]['GroupID']);
-        self::assertEquals($group3Name, $result['Response'][2]['Name']);
-        self::assertEquals($group3Id, $result['Response'][2]['GroupID']);
-
-        self::assertArrayHasKey('Errors', $result);
-        self::assertIsArray($result['Errors']);
-        self::assertCount(0, $result['Errors']);
+        self::assertCount(3, $result);
+        self::assertInstanceOf(Group::class, $result[0]);
+        self::assertEquals($group1Name, $result[0]->getName());
+        self::assertEquals($group1Id, $result[0]->getGroupId());
+        self::assertInstanceOf(Group::class, $result[1]);
+        self::assertEquals($group2Name, $result[1]->getName());
+        self::assertEquals($group2Id, $result[1]->getGroupId());
+        self::assertInstanceOf(Group::class, $result[2]);
+        self::assertEquals($group3Name, $result[2]->getName());
+        self::assertEquals($group3Id, $result[2]->getGroupId());
     }
 }

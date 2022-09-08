@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace Tests\CBS\SmarterU;
 
+use CBS\SmarterU\DataTypes\Group;
 use CBS\SmarterU\Exceptions\MissingValueException;
 use CBS\SmarterU\Exceptions\SmarterUException;
 use CBS\SmarterU\Queries\GetGroupQuery;
@@ -373,10 +374,71 @@ class GetGroupClientTest extends TestCase {
     }
 
     /**
+     * Test that getGroup() returns null when the SmarterU API throws an error
+     * indicating that the Group requested does not exist.
+     */
+    public function testGetGroupReturnsNullWhenGroupDoesNotExist() {
+        $accountApi = 'account';
+        $userApi = 'user';
+        $groupId = '1';
+        $client = new Client($accountApi, $userApi);
+
+        $query = (new GetGroupQuery())
+            ->setGroupId($groupId);
+
+        $name = 'My Group';
+        $createdDate = '2022-07-29';
+        $modifiedDate = '2022-07-30';
+        $description = 'This is a group description.';
+        $homeGroupMessage = 'My Home Group';
+        $email1 = 'test@test.com';
+        $email2 = 'phpunit@test.com';
+        $userCount = '5';
+        $learningModuleCount = '2';
+        $tag1Id = '1';
+        $tag1Name = 'First Tag';
+        $tag1Values = 'Tag, 1\'s, values';
+        $tag2Id = '2';
+        $tag2Name = 'Second Tag';
+        $tag2Values = 'Some, values';
+        $status = 'Active';
+
+        $xmlString = <<<XML
+        <SmarterU>
+            <Result>Failed</Result>
+            <Info>
+                <Group>
+                </Group>
+            </Info>
+            <Errors>
+                <Error>
+                    <ErrorID>GG:03</ErrorID>
+                    <ErrorMessage>The requested group does not exist.</ErrorMessage>
+                </Error>
+            </Errors>
+        </SmarterU>
+        XML;
+    
+        $response = new Response(200, [], $xmlString);
+        $container = [];
+        $history = Middleware::history($container);
+        $mock = (new MockHandler([$response]));
+        $handlerStack = HandlerStack::create($mock);
+        $handlerStack->push($history);
+        $httpClient = new HttpClient(['handler' => $handlerStack]);
+        $client->setHttpClient($httpClient);
+            
+        // Make the request.
+        $result = $client->getGroup($query);
+        
+        self::assertNull($result);
+    }
+
+    /**
      * Test that getGroup() returns the expected output when the SmarterU API
      * does not return any errors.
      */
-    public function testGetUserGroupsProducesCorrectOutput() {
+    public function testGetGroupProducesCorrectOutput() {
         $accountApi = 'account';
         $userApi = 'user';
         $groupId = '1';
@@ -451,62 +513,24 @@ class GetGroupClientTest extends TestCase {
         // Make the request.
         $result = $client->getGroup($query);
         
-        self::assertIsArray($result);
-        self::assertCount(2, $result);
-        self::assertArrayHasKey('Response', $result);
-        self::assertArrayHasKey('Errors', $result);
-
-        $response = $result['Response'];
-        $errors = $result['Errors'];
-
-        self::assertIsArray($response);
-        self::assertCount(11, $response);
-        self::assertArrayHasKey('Name', $response);
-        self::assertEquals($name, $response['Name']);
-        self::assertArrayHasKey('GroupID', $response);
-        self::assertEquals($groupId, $response['GroupID']);
-        self::assertArrayHasKey('CreatedDate', $response);
-        self::assertEquals($createdDate, $response['CreatedDate']);
-        self::assertArrayHasKey('ModifiedDate', $response);
-        self::assertEquals($modifiedDate, $response['ModifiedDate']);
-        self::assertArrayHasKey('Description', $response);
-        self::assertEquals($description, $response['Description']);
-        self::assertArrayHasKey('HomeGroupMessage', $response);
-        self::assertEquals($homeGroupMessage, $response['HomeGroupMessage']);
-        self::assertArrayHasKey('NotificationEmails', $response);
-        self::assertIsArray($response['NotificationEmails']);
-        self::assertCount(2, $response['NotificationEmails']);
-        self::assertContains($email1, $response['NotificationEmails']);
-        self::assertContains($email2, $response['NotificationEmails']);
-        self::assertArrayHasKey('UserCount', $response);
-        self::assertEquals($userCount, $response['UserCount']);
-        self::assertArrayHasKey('LearningModuleCount', $response);
-        self::assertEquals(
-            $learningModuleCount,
-            $response['LearningModuleCount']
-        );
-        self::assertArrayHasKey('Tags2', $response);
-        $tags2 = $response['Tags2'];
-        self::assertIsArray($tags2);
-        self::assertCount(2, $tags2);
-        self::assertIsArray($tags2[0]);
-        self::assertArrayHasKey('TagID', $tags2[0]);
-        self::assertEquals($tag1Id, $tags2[0]['TagID']);
-        self::assertArrayHasKey('TagName', $tags2[0]);
-        self::assertEquals($tag1Name, $tags2[0]['TagName']);
-        self::assertArrayHasKey('TagValues', $tags2[0]);
-        self::assertEquals($tag1Values, $tags2[0]['TagValues']);
-        self::assertIsArray($tags2[1]);
-        self::assertArrayHasKey('TagID', $tags2[1]);
-        self::assertEquals($tag2Id, $tags2[1]['TagID']);
-        self::assertArrayHasKey('TagName', $tags2[1]);
-        self::assertEquals($tag2Name, $tags2[1]['TagName']);
-        self::assertArrayHasKey('TagValues', $tags2[1]);
-        self::assertEquals($tag2Values, $tags2[1]['TagValues']);
-        self::assertArrayHasKey('Status', $response);
-        self::assertEquals($status, $response['Status']);
-
-        self::assertIsArray($errors);
-        self::assertCount(0, $errors);
+        self::assertInstanceOf(Group::class, $result);
+        self::assertEquals($name, $result->getName());
+        self::assertEquals(new DateTime($createdDate), $result->getCreatedDate());
+        self::assertEquals(new DateTime($modifiedDate), $result->getModifiedDate());
+        self::assertEquals($description, $result->getDescription());
+        self::assertEquals($homeGroupMessage, $result->getHomeGroupMessage());
+        self::assertCount(2, $result->getNotificationEmails());
+        self::assertContains($email1, $result->getNotificationEmails());
+        self::assertContains($email2, $result->getNotificationEmails());
+        self::assertEquals((int) $userCount, $result->getUserCount());
+        self::assertEquals((int) $learningModuleCount, $result->getLearningModuleCount());
+        self::assertEquals($status, $result->getStatus());
+        self::assertCount(2, $result->getTags());
+        self::assertEquals($tag1Id, $result->getTags()[0]->getTagId());
+        self::assertEquals($tag1Name, $result->getTags()[0]->getTagName());
+        self::assertEquals($tag1Values, $result->getTags()[0]->getTagValues());
+        self::assertEquals($tag2Id, $result->getTags()[1]->getTagId());
+        self::assertEquals($tag2Name, $result->getTags()[1]->getTagName());
+        self::assertEquals($tag2Values, $result->getTags()[1]->getTagValues());
     }
 }

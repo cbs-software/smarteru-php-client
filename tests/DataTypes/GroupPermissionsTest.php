@@ -27,7 +27,7 @@ class GroupPermissionsTest extends TestCase {
      */
     public function testAgreement() {
         $groupName = 'phpunit';
-        $groupId = 12;
+        $groupId = '12';
 
         $email = 'phpunit@test.com';
         $employeeId = '4';
@@ -46,14 +46,19 @@ class GroupPermissionsTest extends TestCase {
         $permissions = [$permission1, $permission2];
 
         $groupPermission = (new GroupPermissions())
-            ->setGroupName($groupName)
             ->setPermissions($permissions)
             ->setEmail($email)
             ->setHomeGroup($homeGroup)
             ->setAction($action);
 
-        self::assertEquals($groupName, $groupPermission->getGroupName());
         self::assertNull($groupPermission->getGroupId());
+        self::assertNull($groupPermission->getGroupName());
+
+        $groupPermission->setGroupName($groupName);
+        $groupPermission->setGroupId($groupId);
+
+        self::assertEquals($groupName, $groupPermission->getGroupName());
+        self::assertEquals($groupId, $groupPermission->getGroupId());
         self::assertEquals($email, $groupPermission->getEmail());
         self::assertNull($groupPermission->getEmployeeId());
         self::assertEquals($homeGroup, $groupPermission->getHomeGroup());
@@ -63,14 +68,6 @@ class GroupPermissionsTest extends TestCase {
         self::assertContains($permission2, $groupPermission->getPermissions());
 
         // Test that the mutually exclusive properties are mutually exclusive.
-
-        $groupPermission->setGroupId($groupId);
-        self::assertEquals($groupId, $groupPermission->getGroupId());
-        self::assertNull($groupPermission->getGroupName());
-
-        $groupPermission->setGroupName($groupName);
-        self::assertEquals($groupName, $groupPermission->getGroupName());
-        self::assertNull($groupPermission->getGroupId());
 
         $groupPermission->setEmployeeId($employeeId);
         self::assertEquals($employeeId, $groupPermission->getEmployeeId());
