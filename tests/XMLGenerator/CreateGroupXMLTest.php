@@ -27,34 +27,12 @@ use PHPUnit\Framework\TestCase;
  */
 class CreateGroupXMLTest extends TestCase {
     /**
-     * A Group to use for testing purposes. This Group has all optional and all
-     * required information set.
+     * Tests that the XML generation process for a CreateGroup request throws
+     * an exception if the Group being created has a Tag that does not have
+     * an identifier.
      */
-    protected Group $group1;
-
-    /**
-     * A Group to use for testing purposes. This Group only has optional
-     * information set.
-     */
-    protected Group $group2;
-
-    /**
-     * A Group to use for testing purposes. This Group has a missing attribute
-     * that will trigger an exception.
-     */
-    protected Group $group3;
-
-    /**
-     * Set up the test Groups.
-     */
-    public function setUp(): void {
-        $tag1 = (new Tag())
-            ->setTagId('1')
-            ->setTagValues('Tag1 values');
-        $tag2 = (new Tag())
-            ->setTagName('My Tag')
-            ->setTagValues('Tag2 values');
-        $tag3 = (new Tag())
+    public function testCreateGroupThrowsExceptionWhenNoTagIdentifier() {
+        $tag = (new Tag())
             ->setTagValues('This will throw an exception');
 
         $module1 = (new LearningModule())
@@ -66,64 +44,16 @@ class CreateGroupXMLTest extends TestCase {
             ->setAllowSelfEnroll(false)
             ->setAutoEnroll(true);
 
-        $variant1 = (new SubscriptionVariant())
-            ->setId('6')
-            ->setRequiresCredits(true);
-        $variant2 = (new SubscriptionVariant())
-            ->setId('7')
-            ->setRequiresCredits(false);
-
-        $this->group1 = (new Group())
-            ->setName('First Group')
-            ->setGroupId('1')
-            ->setStatus('Active')
-            ->setDescription('A Group with all optional values')
-            ->setHomeGroupMessage('First group\'s message')
-            ->setNotificationEmails(['test@test.com', 'test2@test.com'])
-            ->setUserHelpOverrideDefault(false)
-            ->setUserHelpEnabled(true)
-            ->setUserHelpEmail(['help@test.com', 'help2@test.com'])
-            ->setUserHelpText('Help')
-            ->setTags([$tag1, $tag2])
-            ->setUserLimitEnabled(true)
-            ->setUserLimitAmount(20)
-            ->setLearningModules([$module1, $module2])
-            ->setSubscriptionVariants([$variant1, $variant2])
-            ->setDashboardSetId('3');
-
-        $this->group2 = (new Group())
-        ->setName('Second Group')
-        ->setStatus('Active')
-        ->setDescription('A Group without optional values')
-        ->setHomeGroupMessage('Second group\'s message')
-        ->setNotificationEmails(['test3@test.com', 'test4@test.com'])
-        ->setLearningModules([$module1, $module2]);
-
-        $this->group3 = (new Group())
+        $group = (new Group())
         ->setName('Third Group')
         ->setGroupId('3')
         ->setStatus('Active')
         ->setDescription('A Group with an invalid tag')
         ->setHomeGroupMessage('Third group\'s message')
         ->setNotificationEmails(['test5@test.com', 'test6@test.com'])
-        ->setUserHelpOverrideDefault(false)
-        ->setUserHelpEnabled(true)
-        ->setUserHelpEmail(['help3@test.com', 'help4@test.com'])
-        ->setUserHelpText('Help')
-        ->setTags([$tag3])
-        ->setUserLimitEnabled(true)
-        ->setUserLimitAmount(20)
-        ->setLearningModules([$module1, $module2])
-        ->setSubscriptionVariants([$variant1, $variant2])
-        ->setDashboardSetId('3');
-    }
+        ->setTags([$tag])
+        ->setLearningModules([$module1, $module2]);
 
-    /**
-     * Tests that the XML generation process for a CreateGroup request throws
-     * an exception if the Group being created has a Tag that does not have
-     * an identifier.
-     */
-    public function testCreateGroupThrowsExceptionWhenNoTagIdentifier() {
         $xmlGenerator = new XMLGenerator();
         $accountApi = 'account';
         $userApi = 'user';
@@ -134,7 +64,7 @@ class CreateGroupXMLTest extends TestCase {
         $xml = $xmlGenerator->createGroup(
             $accountApi,
             $userApi,
-            $this->group3
+            $group
         );
     }
 
@@ -144,13 +74,30 @@ class CreateGroupXMLTest extends TestCase {
      * optional attributes are left blank.
      */
     public function testCreateGroupProducesExpectedOutputWithoutOptionalInfo() {
+        $module1 = (new LearningModule())
+            ->setId('4')
+            ->setAllowSelfEnroll(true)
+            ->setAutoEnroll(false);
+        $module2 = (new LearningModule())
+            ->setId('5')
+            ->setAllowSelfEnroll(false)
+            ->setAutoEnroll(true);
+
+        $group = (new Group())
+        ->setName('Second Group')
+        ->setStatus('Active')
+        ->setDescription('A Group without optional values')
+        ->setHomeGroupMessage('Second group\'s message')
+        ->setNotificationEmails(['test3@test.com', 'test4@test.com'])
+        ->setLearningModules([$module1, $module2]);
+
         $xmlGenerator = new XMLGenerator();
         $accountApi = 'account';
         $userApi = 'user';
         $xml = $xmlGenerator->createGroup(
             $accountApi,
             $userApi,
-            $this->group2
+            $group
         );
 
         self::assertIsString($xml);
@@ -183,22 +130,22 @@ class CreateGroupXMLTest extends TestCase {
         self::assertCount(7, $groupTags);
         self::assertContains('Name', $groupTags);
         self::assertEquals(
-            $this->group2->getName(),
+            $group->getName(),
             $xml->Parameters->Group->Name
         );
         self::assertContains('Status', $groupTags);
         self::assertEquals(
-            $this->group2->getStatus(),
+            $group->getStatus(),
             $xml->Parameters->Group->Status
         );
         self::assertContains('Description', $groupTags);
         self::assertEquals(
-            $this->group2->getDescription(),
+            $group->getDescription(),
             $xml->Parameters->Group->Description
         );
         self::assertContains('HomeGroupMessage', $groupTags);
         self::assertEquals(
-            $this->group2->getHomeGroupMessage(),
+            $group->getHomeGroupMessage(),
             $xml->Parameters->Group->HomeGroupMessage
         );
         self::assertContains('NotificationEmails', $groupTags);
@@ -208,12 +155,12 @@ class CreateGroupXMLTest extends TestCase {
         }
         self::assertEquals(
             count($emails),
-            count($this->group2->getNotificationEmails())
+            count($group->getNotificationEmails())
         );
         foreach ($emails as $email) {
             self::assertContains(
                 $email,
-                $this->group2->getNotificationEmails()
+                $group->getNotificationEmails()
             );
         }
         
@@ -227,7 +174,7 @@ class CreateGroupXMLTest extends TestCase {
 
         self::assertEquals(
             count($modules),
-            count($this->group2->getLearningModules())
+            count($group->getLearningModules())
         );
         foreach ($modules as $module) {
             self::assertIsArray($module);
@@ -238,27 +185,27 @@ class CreateGroupXMLTest extends TestCase {
         }
         self::assertEquals(
             $modules[0]['ID'],
-            $this->group2->getLearningModules()[0]->getId()
+            $group->getLearningModules()[0]->getId()
         );
         self::assertEquals(
             $modules[0]['AllowSelfEnroll'],
-            $this->group2->getLearningModules()[0]->getAllowSelfEnroll() ? '1' : '0'
+            $group->getLearningModules()[0]->getAllowSelfEnroll() ? '1' : '0'
         );
         self::assertEquals(
             $modules[0]['AutoEnroll'],
-            $this->group2->getLearningModules()[0]->getAutoEnroll() ? '1' : '0'
+            $group->getLearningModules()[0]->getAutoEnroll() ? '1' : '0'
         );
         self::assertEquals(
             $modules[1]['ID'],
-            $this->group2->getLearningModules()[1]->getId()
+            $group->getLearningModules()[1]->getId()
         );
         self::assertEquals(
             $modules[1]['AllowSelfEnroll'],
-            $this->group2->getLearningModules()[1]->getAllowSelfEnroll() ? '1' : '0'
+            $group->getLearningModules()[1]->getAllowSelfEnroll() ? '1' : '0'
         );
         self::assertEquals(
             $modules[1]['AutoEnroll'],
-            $this->group2->getLearningModules()[1]->getAutoEnroll() ? '1' : '0'
+            $group->getLearningModules()[1]->getAutoEnroll() ? '1' : '0'
         );
     }
 
@@ -267,13 +214,55 @@ class CreateGroupXMLTest extends TestCase {
      * the expected output when all required and optional information is present.
      */
     public function testCreateGroupProducesExpectedOutputWithAllInfo() {
+        $tag1 = (new Tag())
+            ->setTagId('1')
+            ->setTagValues('Tag1 values');
+        $tag2 = (new Tag())
+            ->setTagName('My Tag')
+            ->setTagValues('Tag2 values');
+        $tag3 = (new Tag())
+            ->setTagValues('This will throw an exception');
+
+        $module1 = (new LearningModule())
+            ->setId('4')
+            ->setAllowSelfEnroll(true)
+            ->setAutoEnroll(false);
+        $module2 = (new LearningModule())
+            ->setId('5')
+            ->setAllowSelfEnroll(false)
+            ->setAutoEnroll(true);
+
+        $variant1 = (new SubscriptionVariant())
+            ->setId('6')
+            ->setRequiresCredits(true);
+        $variant2 = (new SubscriptionVariant())
+            ->setId('7')
+            ->setRequiresCredits(false);
+
+        $group = (new Group())
+            ->setName('First Group')
+            ->setGroupId('1')
+            ->setStatus('Active')
+            ->setDescription('A Group with all optional values')
+            ->setHomeGroupMessage('First group\'s message')
+            ->setNotificationEmails(['test@test.com', 'test2@test.com'])
+            ->setUserHelpOverrideDefault(false)
+            ->setUserHelpEnabled(true)
+            ->setUserHelpEmail(['help@test.com', 'help2@test.com'])
+            ->setUserHelpText('Help')
+            ->setTags([$tag1, $tag2])
+            ->setUserLimitEnabled(true)
+            ->setUserLimitAmount(20)
+            ->setLearningModules([$module1, $module2])
+            ->setSubscriptionVariants([$variant1, $variant2])
+            ->setDashboardSetId('3');
         $xmlGenerator = new XMLGenerator();
         $accountApi = 'account';
         $userApi = 'user';
         $xml = $xmlGenerator->createGroup(
             $accountApi,
             $userApi,
-            $this->group1
+            $group
         );
 
         self::assertIsString($xml);
@@ -306,27 +295,27 @@ class CreateGroupXMLTest extends TestCase {
         self::assertCount(16, $groupTags);
         self::assertContains('Name', $groupTags);
         self::assertEquals(
-            $this->group1->getName(),
+            $group->getName(),
             $xml->Parameters->Group->Name
         );
         self::assertContains('GroupID', $groupTags);
         self::assertEquals(
-            $this->group1->getGroupId(),
+            $group->getGroupId(),
             $xml->Parameters->Group->GroupID
         );
         self::assertContains('Status', $groupTags);
         self::assertEquals(
-            $this->group1->getStatus(),
+            $group->getStatus(),
             $xml->Parameters->Group->Status
         );
         self::assertContains('Description', $groupTags);
         self::assertEquals(
-            $this->group1->getDescription(),
+            $group->getDescription(),
             $xml->Parameters->Group->Description
         );
         self::assertContains('HomeGroupMessage', $groupTags);
         self::assertEquals(
-            $this->group1->getHomeGroupMessage(),
+            $group->getHomeGroupMessage(),
             $xml->Parameters->Group->HomeGroupMessage
         );
         self::assertContains('NotificationEmails', $groupTags);
@@ -336,32 +325,32 @@ class CreateGroupXMLTest extends TestCase {
         }
         self::assertEquals(
             count($emails),
-            count($this->group1->getNotificationEmails())
+            count($group->getNotificationEmails())
         );
         foreach ($emails as $email) {
             self::assertContains(
                 $email,
-                $this->group1->getNotificationEmails()
+                $group->getNotificationEmails()
             );
         }
         self::assertContains('UserHelpOverrideDefault', $groupTags);
         self::assertEquals(
-            $this->group1->getUserHelpOverrideDefault() ? '1' : '0',
+            $group->getUserHelpOverrideDefault() ? '1' : '0',
             (string) $xml->Parameters->Group->UserHelpOverrideDefault
         );
         self::assertContains('UserHelpEnabled', $groupTags);
         self::assertEquals(
-            $this->group1->getUserHelpEnabled() ? '1' : '0',
+            $group->getUserHelpEnabled() ? '1' : '0',
             (string) $xml->Parameters->Group->UserHelpEnabled
         );
         self::assertContains('UserHelpEmail', $groupTags);
         self::assertEquals(
-            implode(',', $this->group1->getUserHelpEmail()),
+            implode(',', $group->getUserHelpEmail()),
             $xml->Parameters->Group->UserHelpEmail
         );
         self::assertContains('UserHelpText', $groupTags);
         self::assertEquals(
-            $this->group1->getUserHelpText(),
+            $group->getUserHelpText(),
             $xml->Parameters->Group->UserHelpText
         );
         self::assertContains('Tags2', $groupTags);
@@ -375,24 +364,24 @@ class CreateGroupXMLTest extends TestCase {
         self::assertArrayHasKey('TagID', $tags[0]);
         self::assertEquals(
             $tags[0]['TagID'],
-            $this->group1->getTags()[0]->getTagId()
+            $group->getTags()[0]->getTagId()
         );
         self::assertArrayHasKey('TagValues', $tags[0]);
         self::assertEquals(
             $tags[0]['TagValues'],
-            $this->group1->getTags()[0]->getTagValues()
+            $group->getTags()[0]->getTagValues()
         );
         self::assertIsArray($tags[1]);
         self::assertCount(2, $tags[1]);
         self::assertArrayHasKey('TagName', $tags[1]);
         self::assertEquals(
             $tags[1]['TagName'],
-            $this->group1->getTags()[1]->getTagName()
+            $group->getTags()[1]->getTagName()
         );
         self::assertArrayHasKey('TagValues', $tags[1]);
         self::assertEquals(
             $tags[1]['TagValues'],
-            $this->group1->getTags()[1]->getTagValues()
+            $group->getTags()[1]->getTagValues()
         );
         self::assertContains('UserLimit', $groupTags);
         $limitTags = [];
@@ -402,12 +391,12 @@ class CreateGroupXMLTest extends TestCase {
         self::assertCount(2, $limitTags);
         self::assertContains('Enabled', $limitTags);
         self::assertEquals(
-            $this->group1->getUserLimitEnabled() ? '1' : '0',
+            $group->getUserLimitEnabled() ? '1' : '0',
             (string) $xml->Parameters->Group->UserLimit->Enabled
         );
         self::assertContains('Amount', $limitTags);
         self::assertEquals(
-            $this->group1->getUserLimitAmount(),
+            $group->getUserLimitAmount(),
             (int) $xml->Parameters->Group->UserLimit->Amount
         );
         self::assertCount(0, $xml->Parameters->Group->Users->children());
@@ -420,7 +409,7 @@ class CreateGroupXMLTest extends TestCase {
 
         self::assertEquals(
             count($modules),
-            count($this->group1->getLearningModules())
+            count($group->getLearningModules())
         );
         foreach ($modules as $module) {
             self::assertIsArray($module);
@@ -431,27 +420,27 @@ class CreateGroupXMLTest extends TestCase {
         }
         self::assertEquals(
             $modules[0]['ID'],
-            $this->group1->getLearningModules()[0]->getId()
+            $group->getLearningModules()[0]->getId()
         );
         self::assertEquals(
             $modules[0]['AllowSelfEnroll'],
-            $this->group1->getLearningModules()[0]->getAllowSelfEnroll() ? '1' : '0'
+            $group->getLearningModules()[0]->getAllowSelfEnroll() ? '1' : '0'
         );
         self::assertEquals(
             $modules[0]['AutoEnroll'],
-            $this->group1->getLearningModules()[0]->getAutoEnroll() ? '1' : '0'
+            $group->getLearningModules()[0]->getAutoEnroll() ? '1' : '0'
         );
         self::assertEquals(
             $modules[1]['ID'],
-            $this->group1->getLearningModules()[1]->getId()
+            $group->getLearningModules()[1]->getId()
         );
         self::assertEquals(
             $modules[1]['AllowSelfEnroll'],
-            $this->group1->getLearningModules()[1]->getAllowSelfEnroll() ? '1' : '0'
+            $group->getLearningModules()[1]->getAllowSelfEnroll() ? '1' : '0'
         );
         self::assertEquals(
             $modules[1]['AutoEnroll'],
-            $this->group1->getLearningModules()[1]->getAutoEnroll() ? '1' : '0'
+            $group->getLearningModules()[1]->getAutoEnroll() ? '1' : '0'
         );
 
         self::assertContains('SubscriptionVariants', $groupTags);
@@ -460,7 +449,7 @@ class CreateGroupXMLTest extends TestCase {
             $variants[] = (array) $variant;
         }
 
-        self::assertEquals(count($variants), count($this->group1->getSubscriptionVariants()));
+        self::assertEquals(count($variants), count($group->getSubscriptionVariants()));
         foreach ($variants as $variant) {
             self::assertIsArray($variant);
             self::assertCount(2, $variant);
@@ -469,24 +458,24 @@ class CreateGroupXMLTest extends TestCase {
         }
         self::assertEquals(
             $variants[0]['ID'],
-            $this->group1->getSubscriptionVariants()[0]->getId()
+            $group->getSubscriptionVariants()[0]->getId()
         );
         self::assertEquals(
             $variants[0]['RequiresCredits'],
-            $this->group1->getSubscriptionVariants()[0]->getRequiresCredits() ? '1' : '0'
+            $group->getSubscriptionVariants()[0]->getRequiresCredits() ? '1' : '0'
         );
         self::assertEquals(
             $variants[1]['ID'],
-            $this->group1->getSubscriptionVariants()[1]->getId()
+            $group->getSubscriptionVariants()[1]->getId()
         );
         self::assertEquals(
             $variants[1]['RequiresCredits'],
-            $this->group1->getSubscriptionVariants()[1]->getRequiresCredits() ? '1' : '0'
+            $group->getSubscriptionVariants()[1]->getRequiresCredits() ? '1' : '0'
         );
         self::assertContains('DashboardSetID', $groupTags);
         self::assertEquals(
             $xml->Parameters->Group->DashboardSetID,
-            $this->group1->getDashboardSetId()
+            $group->getDashboardSetId()
         );
     }
 }
