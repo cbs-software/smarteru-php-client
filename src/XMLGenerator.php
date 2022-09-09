@@ -16,6 +16,7 @@ namespace CBS\SmarterU;
 
 use CBS\SmarterU\DataTypes\Group;
 use CBS\SmarterU\DataTypes\User;
+use CBS\SmarterU\Exceptions\InvalidArgumentException;
 use CBS\SmarterU\Exceptions\MissingValueException;
 use CBS\SmarterU\Queries\GetGroupQuery;
 use CBS\SmarterU\Queries\GetUserQuery;
@@ -862,7 +863,8 @@ class XMLGenerator {
 
     /**
      * Generate the XML body for an addUsersToGroup or removeUsersFromGroup
-     * query. Functionally, this is just a specific type of updateGroup query.
+     * query. Functionally, this is just an updateGroup query with most values
+     * hardcoded to be left blank.
      *
      * @param string $accountApi The SmarterU API key identifying the account
      *      making the request.
@@ -898,7 +900,15 @@ class XMLGenerator {
         $xml->addChild('Method', 'updateGroup');
         $parameters = $xml->addChild('Parameters');
         $identifier = $parameters->addChild('Identifier');
-        $identifier->addChild('Name', $group->getName());
+        if (!empty($group->getName())) {
+            $identifier->addChild('Name', $group->getName());
+        } else if (!empty($group->getGroupId())) {
+            $identifier->addChild('GroupID', $group->getGroupId());
+        } else {
+            throw new MissingValueException(
+                'Cannot add or remove users from a Group without a group name or ID.'
+            );
+        }
         $groupTag = $parameters->addChild('Group');
         $usersTag = $groupTag->addChild('Users');
         foreach ($users as $user) {
@@ -925,8 +935,12 @@ class XMLGenerator {
             $currentUser->addChild('Permissions');
         }
 
+        // The SmarterU API requires that these tags be present when making an
+        // updateGroup request. If they are left empty, no changes will be made
+        // to the Group's Learning Modules or Subscription Variants.
         $learningModules = $groupTag->addChild('LearningModules');
         $subscriptionVariants = $groupTag->addChild('SubscriptionVariants');
+
         return $xml->asXML();
     }
 
