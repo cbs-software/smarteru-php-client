@@ -779,9 +779,10 @@ class Client {
 
     /**
      * Make an addUsersToGroup query to the SmarterU API. This query will add
-     * any specified Users to the Group, but will not grant them any
+     * any specified User(s) to the Group, but will not grant them any
      * permissions within the Group. If you would like the Users to have any
-     * additional permissions, you must call Client::grantPermissions().
+     * additional permissions, you must call Client::grantPermissions() after
+     * assigning the User to the Group.
      *
      * @param array $users An array containing one or more Users to add to the
      *      Group.
@@ -918,6 +919,74 @@ class Client {
             $group,
             $permissions,
             'Grant'
+        );
+
+        $response = $this
+            ->getHttpClient()
+            ->request('POST', self::POST_URL, ['form_params' => [
+                'Package' => $xml]
+        ]);
+
+        $bodyAsXml = simplexml_load_string((string) $response->getBody());
+
+        if ((string) $bodyAsXml->Result === 'Failed') {
+            throw new SmarterUException($this->readErrors($bodyAsXml->Errors));
+        }
+
+        $email = (string) $bodyAsXml->Info->Email;
+        $employeeId = (string) $bodyAsXml->Info->EmployeeID;
+
+        return (new User())
+            ->setEmail($email)
+            ->setEmployeeId($employeeId);
+    }
+
+    /**
+     * Make a RevokePermissions request to the SmarterU API.
+     *
+     * @param User $user The User to revoke permissions from.
+     * @param Group $group The Group in which the User will have the specified
+     *      permissions revoked.
+     * @param array $permissions The permissions to be revoked from the
+     *      specified User within the specified Group.
+     * @return array The User as updated by the SmarterU API.
+     * @throws InvalidArgumentException If any value in the "$permissions"
+     *      array is not a string or is not one of the permissions accepted
+     *      by the SmarterU API.
+     * @throws MissingValueException If the user whose permissions are being
+     *      modified doesn't have an email address or an employee ID, or if the
+     *      Group in which the permissions are being modified does not have a
+     *      name or an ID.
+     * @throws ClientException If the HTTP response includes a status code
+     *      indicating that an HTTP error has prevented the request from
+     *      being made.
+     * @throws SmarterUException If the response from the SmarterU API
+     *      reports a fatal error that prevents the request from executing.
+     */
+    public function revokePermissions(
+        User $user,
+        Group $group,
+        array $permissions
+    ): User {
+        foreach ($permissions as $permission) {
+            if (!is_string($permission)) {
+                throw new InvalidArgumentException(
+                    '"$permissions" must be an array of strings.'
+                );
+            }
+            if (!in_array($permission, self::VALID_PERMISSIONS)) {
+                throw new InvalidArgumentException(
+                    '"' . $permission . '" is not one of the valid permissions.'
+                );
+            }
+        }
+        $xml = $this->getXMLGenerator()->changePermissions(
+            $this->getAccountApi(),
+            $this->getUserApi(),
+            $user,
+            $group,
+            $permissions,
+            'Deny'
         );
 
         $response = $this
