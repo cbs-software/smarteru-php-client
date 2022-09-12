@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Contains Tests\CBS\SmarterU\AddUsersToGroupClientTest.php
+ * Contains Tests\CBS\SmarterU\RemoveUsersFromGroupClientTest.php
  *
  * @author      Will Santanen <will.santanen@thecoresolution.com>
  * @copyright   $year$ Core Business Solutions
@@ -29,14 +29,14 @@ use GuzzleHttp\Exception\ClientException;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Tests CBS\SmarterU\Client::addUsersToGroup().
+ * Tests CBS\SmarterU\Client::removeUsersFromGroup().
  */
-class AddUsersToGroupClientTest extends TestCase {
+class RemoveUsersFromGroupClientTest extends TestCase {
     /**
-     * Test that Client::addUsersToGroup() throws the expected exception when
-     * the Group does not have a name or an ID.
+     * Test that Client::removeUsersFromGroup() throws the expected exception
+     * when the Group does not have a name or an ID.
      */
-    public function testAddUsersToGroupThrowsExceptionWhenNoGroupIdentifier() {
+    public function testRemoveUsersFromGroupThrowsExceptionWhenNoGroupIdentifier() {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
@@ -46,14 +46,14 @@ class AddUsersToGroupClientTest extends TestCase {
         self::expectExceptionMessage(
             'Cannot add or remove users from a Group without a group name or ID.'
         );
-        $client->addUsersToGroup([$user], $group);
+        $client->removeUsersFromGroup([$user], $group);
     }
 
     /**
-     * Test that Client::addUsersToGroup() throws the expected exception when
+     * Test that Client::removeUsersFromGroup() throws the expected exception when
      * the "$users" array contains a value that is not an instace of User.
      */
-    public function testAddUsersToGroupThrowsExceptionWhenUsersNotInstanceOfUser() {
+    public function testRemoveUsersFromGroupThrowsExceptionWhenUsersNotInstanceOfUser() {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
@@ -64,15 +64,15 @@ class AddUsersToGroupClientTest extends TestCase {
         self::expectExceptionMessage(
             '"$users" must be an array of CBS\SmarterU\DataTypes\User instances'
         );
-        $client->addUsersToGroup($users, $group);
+        $client->removeUsersFromGroup($users, $group);
     }
 
     /**
-     * Test that Client::addUsersToGroup() throws the expected exception when
+     * Test that Client::removeUsersFromGroup() throws the expected exception when
      * one of the provided Users does not have an email address or an employee
      * ID.
      */
-    public function testAddUsersToGroupThrowsExceptionWhenNoUserIdentifier() {
+    public function testRemoveUsersFromGroupThrowsExceptionWhenNoUserIdentifier() {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
@@ -83,15 +83,15 @@ class AddUsersToGroupClientTest extends TestCase {
         self::expectExceptionMessage(
             'All Users being added to or removed from a Group must have an email address or employee ID.'
         );
-        $client->addUsersToGroup([$user], $group);
+        $client->removeUsersFromGroup([$user], $group);
     }
 
     /**
-     * Test that Client::addUsersToGroup() sends the correct input into the
+     * Test that Client::removeUsersFromGroup() sends the correct input into the
      * SmarterU API when all required information is present and only one
      * User is being added to the Group.
      */
-    public function testAddUsersToGroupProducesCorrectInputSingleUser() {
+    public function testRemoveUsersFromGroupProducesCorrectInputSingleUser() {
         $email = 'test@test.com';
         $name = 'My Group';
         $user = (new User())
@@ -125,7 +125,7 @@ class AddUsersToGroupClientTest extends TestCase {
         $client->setHttpClient($httpClient);
 
         // Make the request.
-        $client->addUsersToGroup([$user], $group);
+        $client->removeUsersFromGroup([$user], $group);
 
         // Make sure there is only 1 request, then translate it to XML.
         self::assertCount(1, $container);
@@ -136,17 +136,17 @@ class AddUsersToGroupClientTest extends TestCase {
             $userApi,
             [$user],
             $group,
-            'Add'
+            'Remove'
         );
         self::assertEquals($decodedBody, $expectedBody);
     }
 
     /**
-     * Test that Client::addUsersToGroup() sends the correct input into the
+     * Test that Client::removeUsersFromGroup() sends the correct input into the
      * SmarterU API when all required information is present and multiple
      * Users are being added to the Group.
      */
-    public function testAddUsersToGroupProducesCorrectInputMultipleUsers() {
+    public function testRemoveUsersFromGroupProducesCorrectInputMultipleUsers() {
         $name = 'My Group';
         $user = (new User())
             ->setEmail('test@test.com');
@@ -183,7 +183,7 @@ class AddUsersToGroupClientTest extends TestCase {
         $client->setHttpClient($httpClient);
 
         // Make the request.
-        $result = $client->addUsersToGroup([$user, $user2, $user3], $group);
+        $result = $client->removeUsersFromGroup([$user, $user2, $user3], $group);
 
         // Make sure there is only 1 request, then translate it to XML.
         self::assertCount(1, $container);
@@ -194,7 +194,7 @@ class AddUsersToGroupClientTest extends TestCase {
             $userApi,
             [$user, $user2, $user3],
             $group,
-            'Add'
+            'Remove'
         );
         self::assertEquals($decodedBody, $expectedBody);
 
