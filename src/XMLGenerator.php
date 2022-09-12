@@ -899,7 +899,8 @@ class XMLGenerator {
         $xml->addChild('UserAPI', $userApi);
         $xml->addChild('Method', 'updateGroup');
         $parameters = $xml->addChild('Parameters');
-        $identifier = $parameters->addChild('Identifier');
+        $groupTag = $parameters->addChild('Group');
+        $identifier = $groupTag->addChild('Identifier');
         if (!empty($group->getName())) {
             $identifier->addChild('Name', $group->getName());
         } else if (!empty($group->getGroupId())) {
@@ -909,7 +910,6 @@ class XMLGenerator {
                 'Cannot add or remove users from a Group without a group name or ID.'
             );
         }
-        $groupTag = $parameters->addChild('Group');
         $usersTag = $groupTag->addChild('Users');
         foreach ($users as $user) {
             if (!($user instanceof User)) {
@@ -990,7 +990,7 @@ class XMLGenerator {
             $identifier->addChild('EmployeeID', $user->getEmployeeId());
         } else {
             throw new MissingValueException(
-                'A User cannot be updated without either an email address or an employee ID.'
+                'A User\'s permissions cannot be updated without either an email address or an employee ID.'
             );
         }
         $info = $userTag->addChild('Info');
