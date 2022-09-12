@@ -19,6 +19,7 @@ use CBS\SmarterU\DataTypes\GroupPermissions;
 use CBS\SmarterU\DataTypes\Permission;
 use CBS\SmarterU\DataTypes\Tag;
 use CBS\SmarterU\DataTypes\User;
+use CBS\SmarterU\Exceptions\InvalidArgumentException;
 use CBS\SmarterU\Exceptions\SmarterUException;
 use CBS\SmarterU\Queries\BaseQuery;
 use CBS\SmarterU\Queries\GetGroupQuery;

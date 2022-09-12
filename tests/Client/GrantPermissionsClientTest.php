@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Contains Tests\CBS\SmarterU\AddUsersToGroupClientTest.php
+ * Contains Tests\CBS\SmarterU\GrantPermissionsClientTest.php
  *
  * @author      Will Santanen <will.santanen@thecoresolution.com>
  * @copyright   $year$ Core Business Solutions
@@ -30,74 +30,102 @@ use GuzzleHttp\Exception\ClientException;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Tests CBS\SmarterU\Client::addUsersToGroup().
+ * Tests CBS\SmarterU\Client::grantPermissions().
  */
-class AddUsersToGroupClientTest extends TestCase {
+class GrantPermissionsClientTest extends TestCase {
     /**
-     * Test that Client::addUsersToGroup() throws the expected exception when
-     * the Group does not have a name or an ID.
+     * Test that Client::grantPermissions() throws the expected exception when
+     * the "$permissions" array contains a value that is not a string.
      */
-    public function testAddUsersToGroupThrowsExceptionWhenNoGroupIdentifier() {
+    public function testGrantPermissionsThrowsExceptionWhenPermissionIsNotString() {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
         $user = new User();
         $group = new Group();
-        self::expectException(MissingValueException::class);
-        self::expectExceptionMessage(
-            'Cannot add or remove users from a Group without a group name or ID.'
-        );
-        $client->addUsersToGroup([$user], $group);
-    }
-
-    /**
-     * Test that Client::addUsersToGroup() throws the expected exception when
-     * the "$users" array contains a value that is not an instace of User.
-     */
-    public function testAddUsersToGroupThrowsExceptionWhenUsersNotInstanceOfUser() {
-        $accountApi = 'account';
-        $userApi = 'user';
-        $client = new Client($accountApi, $userApi);
-        $users = [1, 2, 3];
-        $group = (new Group())
-            ->setName('My Group');
+        $permission = 1;
         self::expectException(InvalidArgumentException::class);
         self::expectExceptionMessage(
-            '"$users" must be an array of CBS\SmarterU\DataTypes\User instances'
+            '"$permissions" must be an array of strings.'
         );
-        $client->addUsersToGroup($users, $group);
+        $client->grantPermissions($user, $group, [$permission]);
     }
 
     /**
-     * Test that Client::addUsersToGroup() throws the expected exception when
-     * one of the provided Users does not have an email address or an employee
-     * ID.
+     * Test that Client::grantPermissions() throws the expected exception when
+     * the "$permissions" array contains a string that is not one of the valid
+     * permissions defined by the SmarterU API.
      */
-    public function testAddUsersToGroupThrowsExceptionWhenNoUserIdentifier() {
+    public function testGrantPermissionsThrowsExceptionWhenPermissionIsInvalid() {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
         $user = new User();
-        $group = (new Group())
-            ->setName('My Group');
+        $group = new Group();
+        $permission = 'invalid';
+        self::expectException(InvalidArgumentException::class);
+        self::expectExceptionMessage(
+            '"' . $permission . '" is not one of the valid permissions.'
+        );
+        $client->grantPermissions($user, $group, [$permission]);
+    }
+
+    /**
+     * Test that Client::grantPermissions() throws the expected exception when
+     * the User who is being granted permissions does not have an email address
+     * or an employee ID.
+     */
+    public function testGrantPermissionsThrowsExceptionWhenNoUserIdentifier() {
+        $accountApi = 'account';
+        $userApi = 'user';
+        $client = new Client($accountApi, $userApi);
+        $user = new User();
+        $group = new Group();
+        $permission = 'MANAGE_USERS';
         self::expectException(MissingValueException::class);
         self::expectExceptionMessage(
-            'All Users being added to or removed from a Group must have an email address or employee ID.'
+            'A User\'s permissions cannot be updated without either an email address or an employee ID.'
         );
-        $client->addUsersToGroup([$user], $group);
+        $client->grantPermissions($user, $group, [$permission]);
     }
 
     /**
-     * Test that Client::addUsersToGroup() sends the correct input into the
+     * Test that Client::grantPermissions() throws the expected exception when
+     * the Group in which the User is being granted permissions does not have a
+     * name or an ID.
+     */
+    public function testGrantPermissionsThrowsExceptionWhenNoGroupIdentifier() {
+        $accountApi = 'account';
+        $userApi = 'user';
+        $client = new Client($accountApi, $userApi);
+        $user = (new User())
+            ->setEmail('test@test.com')
+            ->setLearnerNotifications(true)
+            ->setSupervisorNotifications(true);
+        $group = new Group();
+        $permission = 'MANAGE_USERS';
+        self::expectException(MissingValueException::class);
+        self::expectExceptionMessage(
+            'Cannot assign permissions in a Group that has no name or ID.'
+        );
+        $client->grantPermissions($user, $group, [$permission]);
+    }
+
+    /**
+     * Test that Client::grantPermissions() sends the expected input into the
      * SmarterU API when all required information is present and only one
-     * User is being added to the Group.
+     * permission is being granted.
      */
-    public function testAddUsersToGroupProducesCorrectInputSingleUser() {
-        $name = 'My Group';
+    public function testGrantPermissionsProducesCorrectInputSinglePermission() {
+        $email = 'test@test.com';
         $user = (new User())
-            ->setEmail('test@test.com');
+            ->setEmail($email)
+            ->setLearnerNotifications(true)
+            ->setSupervisorNotifications(true);
         $group = (new Group())
-            ->setName($name);
+            ->setName('My Group');
+
+        $permission = 'MANAGE_USERS';
 
         $accountApi = 'account';
         $userApi = 'user';
@@ -107,7 +135,7 @@ class AddUsersToGroupClientTest extends TestCase {
         <SmarterU>
             <Result>Success</Result>
             <Info>
-                <Group>$name</Group>
+                <Email>$email</Email>
             </Info>
             <Errors>
             </Errors>
@@ -125,37 +153,44 @@ class AddUsersToGroupClientTest extends TestCase {
         $client->setHttpClient($httpClient);
 
         // Make the request.
-        $client->addUsersToGroup([$user], $group);
+        $response = $client->grantPermissions($user, $group, [$permission]);
 
         // Make sure there is only 1 request, then translate it to XML.
         self::assertCount(1, $container);
         $request = $container[0]['request'];
         $decodedBody = urldecode((string) $request->getBody());
-        $expectedBody = 'Package=' . $client->getXMLGenerator()->changeGroupMembers(
+        $expectedBody = 'Package=' . $client->getXMLGenerator()->changePermissions(
             $accountApi,
             $userApi,
-            [$user],
+            $user,
             $group,
-            'Add'
+            [$permission],
+            'Grant'
         );
         self::assertEquals($decodedBody, $expectedBody);
+
+        self::assertInstanceOf(User::class, $response);
+        self::assertEquals($response->getEmail(), $user->getEmail());
     }
 
     /**
-     * Test that Client::addUsersToGroup() sends the correct input into the
+     * Test that Client::grantPermissions() sends the expected input into the
      * SmarterU API when all required information is present and multiple
-     * Users are being added to the Group.
+     * permissions are being granted.
      */
-    public function testAddUsersToGroupProducesCorrectInputMultipleUsers() {
-        $name = 'My Group';
+    public function testGrantPermissionsProducesCorrectInputMultiplePermissions() {
+        $email = 'test@test.com';
         $user = (new User())
-            ->setEmail('test@test.com');
-        $user2 = (new User())
-            ->setEmail('test2@test.com');
-        $user3 = (new User())
-            ->setEmail('test3@test.com');
+            ->setEmail($email)
+            ->setLearnerNotifications(true)
+            ->setSupervisorNotifications(true);
         $group = (new Group())
-            ->setName($name);
+            ->setName('My Group');
+
+        $permission = 'MANAGE_USERS';
+        $permission2 = 'INSTRUCTOR';
+        $permission3 = 'PROCTOR';
+        $permission4 = 'MARKER';
 
         $accountApi = 'account';
         $userApi = 'user';
@@ -165,7 +200,7 @@ class AddUsersToGroupClientTest extends TestCase {
         <SmarterU>
             <Result>Success</Result>
             <Info>
-                <Group>$name</Group>
+                <Email>$email</Email>
             </Info>
             <Errors>
             </Errors>
@@ -183,31 +218,35 @@ class AddUsersToGroupClientTest extends TestCase {
         $client->setHttpClient($httpClient);
 
         // Make the request.
-        $result = $client->addUsersToGroup([$user, $user2, $user3], $group);
+        $response = $client->grantPermissions(
+            $user,
+            $group,
+            [$permission, $permission2, $permission3, $permission4]
+        );
 
         // Make sure there is only 1 request, then translate it to XML.
         self::assertCount(1, $container);
         $request = $container[0]['request'];
         $decodedBody = urldecode((string) $request->getBody());
-        $expectedBody = 'Package=' . $client->getXMLGenerator()->changeGroupMembers(
+        $expectedBody = 'Package=' . $client->getXMLGenerator()->changePermissions(
             $accountApi,
             $userApi,
-            [$user, $user2, $user3],
+            $user,
             $group,
-            'Add'
+            [$permission, $permission2, $permission3, $permission4],
+            'Grant'
         );
         self::assertEquals($decodedBody, $expectedBody);
 
-        // Make sure the expected value is returned.
-        self::assertInstanceOf(Group::class, $result);
-        self::assertEquals($result->getName(), $group->getName());
+        self::assertInstanceOf(User::class, $response);
+        self::assertEquals($response->getEmail(), $user->getEmail());
     }
 
     /**
-     * Test that Client::addUsersToGroup() throws the expected exception
+     * Test that Client::grantPermissions() throws the expected exception
      * when an HTTP error occurs and prevents the request from being made.
      */
-    public function testAddUsersToGroupThrowsExceptionWhenHttpErrorOccurs() {
+    public function testGrantPermissionsThrowsExceptionWhenHttpErrorOccurs() {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
@@ -215,9 +254,13 @@ class AddUsersToGroupClientTest extends TestCase {
         $email = 'test@test.com';
         $name = 'My Group';
         $user = (new User())
-            ->setEmail($email);
+            ->setEmail($email)
+            ->setLearnerNotifications(true)
+            ->setSupervisorNotifications(true);
         $group = (new Group())
             ->setName($name);
+
+        $permission = 'MANAGE_GROUP';
 
         $response = new Response(404);
 
@@ -236,20 +279,24 @@ class AddUsersToGroupClientTest extends TestCase {
 
         self::expectException(ClientException::class);
         self::expectExceptionMessage('Client error: ');
-        $client->addUsersToGroup([$user], $group);
+        $client->grantPermissions($user, $group, [$permission]);
     }
 
     /**
-     * Test that Client::addUsersToGroup() throws the expected exception
+     * Test that Client::grantPermissions() throws the expected exception
      * when the SmarterU API returns a fatal error.
      */
-    public function testAddUsersToGroupThrowsExceptionWhenFatalErrorReturned() {
+    public function testGrantPermissionsThrowsExceptionWhenFatalErrorReturned() {
         $email = 'test@test.com';
         $name = 'My Group';
         $user = (new User())
-            ->setEmail($email);
+            ->setEmail($email)
+            ->setLearnerNotifications(true)
+            ->setSupervisorNotifications(true);
         $group = (new Group())
             ->setName($name);
+
+        $permission = 'MANAGE_GROUP';
 
         $accountApi = 'account';
         $userApi = 'user';
@@ -284,6 +331,6 @@ class AddUsersToGroupClientTest extends TestCase {
         self::expectExceptionMessage(
             'SmarterU rejected the request due to the following error(s): 1: An error has occurred'
         );
-        $client->AddUsersToGroup([$user], $group);
+        $client->grantPermissions($user, $group, [$permission]);
     }
 }
