@@ -18,6 +18,7 @@ use CBS\SmarterU\DataTypes\Group;
 use CBS\SmarterU\DataTypes\User;
 use CBS\SmarterU\Exceptions\InvalidArgumentException;
 use CBS\SmarterU\Exceptions\MissingValueException;
+use CBS\SmarterU\Exceptions\SmarterUException;
 use CBS\SmarterU\Client;
 use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Handler\MockHandler;
@@ -201,5 +202,89 @@ class AddUsersToGroupClientTest extends TestCase {
         // Make sure the expected value is returned.
         self::assertInstanceOf(Group::class, $result);
         self::assertEquals($result->getName(), $group->getName());
+    }
+
+    /**
+     * Test that Client::addUsersToGroup() throws the expected exception
+     * when an HTTP error occurs and prevents the request from being made.
+     */
+    public function testAddUsersToGroupThrowsExceptionWhenHttpErrorOccurs() {
+        $accountApi = 'account';
+        $userApi = 'user';
+        $client = new Client($accountApi, $userApi);
+
+        $email = 'test@test.com';
+        $name = 'My Group';
+        $user = (new User())
+            ->setEmail($email);
+        $group = (new Group())
+            ->setName($name);
+
+        $response = new Response(404);
+
+        $container = [];
+        $history = Middleware::history($container);
+
+        $mock = (new MockHandler([$response]));
+
+        $handlerStack = HandlerStack::create($mock);
+
+        $handlerStack->push($history);
+
+        $httpClient = new HttpClient(['handler' => $handlerStack]);
+
+        $client->setHttpClient($httpClient);
+
+        self::expectException(ClientException::class);
+        self::expectExceptionMessage('Client error: ');
+        $client->addUsersToGroup([$user], $group);
+    }
+
+    /**
+     * Test that Client::addUsersToGroup() throws the expected exception
+     * when the SmarterU API returns a fatal error.
+     */
+    public function testAddUsersToGroupThrowsExceptionWhenFatalErrorReturned() {
+        $email = 'test@test.com';
+        $name = 'My Group';
+        $user = (new User())
+            ->setEmail($email);
+        $group = (new Group())
+            ->setName($name);
+
+        $accountApi = 'account';
+        $userApi = 'user';
+        $client = new Client($accountApi, $userApi);
+
+        $xmlString = <<<XML
+        <SmarterU>
+            <Result>Failed</Result>
+            <Info>
+            </Info>
+            <Errors>
+                <Error>
+                    <ErrorID>1</ErrorID>
+                    <ErrorMessage>An error has occurred.</ErrorMessage>
+                </Error>
+            </Errors>
+        </SmarterU>
+        XML;
+
+        // Set up the container to capture the request.
+        $response = new Response(200, [], $xmlString);
+        $container = [];
+        $history = Middleware::history($container);
+        $mock = (new MockHandler([$response]));
+        $handlerStack = HandlerStack::create($mock);
+        $handlerStack->push($history);
+        $httpClient = new HttpClient(['handler' => $handlerStack]);
+        $client->setHttpClient($httpClient);
+
+        // Make the request.
+        self::expectException(SmarterUException::class);
+        self::expectExceptionMessage(
+            'SmarterU rejected the request due to the following error(s): 1: An error has occurred'
+        );
+        $client->AddUsersToGroup([$user], $group);
     }
 }
