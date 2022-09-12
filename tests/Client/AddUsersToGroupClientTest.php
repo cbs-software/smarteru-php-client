@@ -1,0 +1,206 @@
+<?php
+
+/**
+ * Contains Tests\CBS\SmarterU\AddUsersToGroupClientTest.php
+ *
+ * @author      Will Santanen <will.santanen@thecoresolution.com>
+ * @copyright   $year$ Core Business Solutions
+ * @license     MIT
+ * @version     $version$
+ * @since       2022/09/12
+ */
+
+declare(strict_types=1);
+
+namespace Tests\CBS\SmarterU\Client;
+
+use CBS\SmarterU\DataTypes\Group;
+use CBS\SmarterU\DataTypes\User;
+use CBS\SmarterU\Exceptions\InvalidArgumentException;
+use CBS\SmarterU\Exceptions\MissingValueException;
+use CBS\SmarterU\Client;
+use DateTime;
+use GuzzleHttp\Client as HttpClient;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Middleware;
+use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Exception\ClientException;
+use PHPUnit\Framework\TestCase;
+
+/**
+ * Tests CBS\SmarterU\Client::addUsersToGroup().
+ */
+class AddUsersToGroupClientTest extends TestCase {
+    /**
+     * Test that Client::addUsersToGroup() throws the expected exception when
+     * the Group does not have a name or an ID.
+     */
+    public function testAddUsersToGroupThrowsExceptionWhenNoGroupIdentifier() {
+        $accountApi = 'account';
+        $userApi = 'user';
+        $client = new Client($accountApi, $userApi);
+        $user = new User();
+        $group = new Group();
+        self::expectException(MissingValueException::class);
+        self::expectExceptionMessage(
+            'Cannot add or remove users from a Group without a group name or ID.'
+        );
+        $client->addUsersToGroup([$user], $group);
+    }
+
+    /**
+     * Test that Client::addUsersToGroup() throws the expected exception when
+     * the "$users" array contains a value that is not an instace of User.
+     */
+    public function testAddUsersToGroupThrowsExceptionWhenUsersNotInstanceOfUser() {
+        $accountApi = 'account';
+        $userApi = 'user';
+        $client = new Client($accountApi, $userApi);
+        $users = [1, 2, 3];
+        $group = (new Group())
+            ->setName('My Group');
+        self::expectException(InvalidArgumentException::class);
+        self::expectExceptionMessage(
+            '"$users" must be an array of CBS\SmarterU\DataTypes\User instances'
+        );
+        $client->addUsersToGroup($users, $group);
+    }
+
+    /**
+     * Test that Client::addUsersToGroup() throws the expected exception when
+     * one of the provided Users does not have an email address or an employee
+     * ID.
+     */
+    public function testAddUsersToGroupThrowsExceptionWhenNoUserIdentifier() {
+        $accountApi = 'account';
+        $userApi = 'user';
+        $client = new Client($accountApi, $userApi);
+        $user = new User();
+        $group = (new Group())
+            ->setName('My Group');
+        self::expectException(MissingValueException::class);
+        self::expectExceptionMessage(
+            'All Users being added to or removed from a Group must have an email address or employee ID.'
+        );
+        $client->addUsersToGroup([$user], $group);
+    }
+
+    /**
+     * Test that Client::addUsersToGroup() sends the correct input into the
+     * SmarterU API when all required information is present and only one
+     * User is being added to the Group.
+     */
+    public function testAddUsersToGroupProducesCorrectInputSingleUser() {
+        $email = 'test@test.com';
+        $name = 'My Group';
+        $user = (new User())
+            ->setEmail($email);
+        $group = (new Group())
+            ->setName($name);
+
+        $accountApi = 'account';
+        $userApi = 'user';
+        $client = new Client($accountApi, $userApi);
+
+        $xmlString = <<<XML
+        <SmarterU>
+            <Result>Success</Result>
+            <Info>
+                <Group>$name</Group>
+            </Info>
+            <Errors>
+            </Errors>
+        </SmarterU>
+        XML;
+
+        // Set up the container to capture the request.
+        $response = new Response(200, [], $xmlString);
+        $container = [];
+        $history = Middleware::history($container);
+        $mock = (new MockHandler([$response]));
+        $handlerStack = HandlerStack::create($mock);
+        $handlerStack->push($history);
+        $httpClient = new HttpClient(['handler' => $handlerStack]);
+        $client->setHttpClient($httpClient);
+
+        // Make the request.
+        $client->addUsersToGroup([$user], $group);
+
+        // Make sure there is only 1 request, then translate it to XML.
+        self::assertCount(1, $container);
+        $request = $container[0]['request'];
+        $decodedBody = urldecode((string) $request->getBody());
+        $expectedBody = 'Package=' . $client->getXMLGenerator()->changeGroupMembers(
+            $accountApi,
+            $userApi,
+            [$user],
+            $group,
+            'Add'
+        );
+        self::assertEquals($decodedBody, $expectedBody);
+    }
+
+    /**
+     * Test that Client::addUsersToGroup() sends the correct input into the
+     * SmarterU API when all required information is present and multiple
+     * Users are being added to the Group.
+     */
+    public function testAddUsersToGroupProducesCorrectInputMultipleUsers() {
+        $name = 'My Group';
+        $user = (new User())
+            ->setEmail('test@test.com');
+        $user2 = (new User())
+            ->setEmail('test2@test.com');
+        $user3 = (new User())
+            ->setEmail('test3@test.com');
+        $group = (new Group())
+            ->setName($name);
+
+        $accountApi = 'account';
+        $userApi = 'user';
+        $client = new Client($accountApi, $userApi);
+
+        $xmlString = <<<XML
+        <SmarterU>
+            <Result>Success</Result>
+            <Info>
+                <Group>$name</Group>
+            </Info>
+            <Errors>
+            </Errors>
+        </SmarterU>
+        XML;
+
+        // Set up the container to capture the request.
+        $response = new Response(200, [], $xmlString);
+        $container = [];
+        $history = Middleware::history($container);
+        $mock = (new MockHandler([$response]));
+        $handlerStack = HandlerStack::create($mock);
+        $handlerStack->push($history);
+        $httpClient = new HttpClient(['handler' => $handlerStack]);
+        $client->setHttpClient($httpClient);
+
+        // Make the request.
+        $result = $client->addUsersToGroup([$user, $user2, $user3], $group);
+
+        // Make sure there is only 1 request, then translate it to XML.
+        self::assertCount(1, $container);
+        $request = $container[0]['request'];
+        $decodedBody = urldecode((string) $request->getBody());
+        $expectedBody = 'Package=' . $client->getXMLGenerator()->changeGroupMembers(
+            $accountApi,
+            $userApi,
+            [$user, $user2, $user3],
+            $group,
+            'Add'
+        );
+        self::assertEquals($decodedBody, $expectedBody);
+
+        // Make sure the expected value is returned.
+        self::assertInstanceOf(Group::class, $result);
+        self::assertEquals($result->getName(), $group->getName());
+    }
+}
