@@ -743,6 +743,50 @@ class Client {
     }
 
     /**
+     * Read the Group whose ID matches the one provided.
+     *
+     * @param string $id The ID of the Group to return
+     * @return ?Group The Group as read by the API, or null if no Group
+     *      matching the provided ID exists within your SmarterU account.
+     * @throws MissingValueException If the Account API Key and/or the User
+     *      API Key are unset in both this instance of the Client and in the
+     *      query passed in as a parameter.
+     * @throws ClientException If the HTTP response includes a status code
+     *      indicating that an HTTP error has prevented the request from
+     *      being made.
+     * @throws SmarterUException If the response from the SmarterU API
+     *      reports a fatal error that prevents the request from executing.
+     */
+    public function readGroupById(string $id): ?Group {
+        $query = (new GetGroupQuery())
+            ->setGroupId($id);
+
+        return $this->getGroup($query);
+    }
+
+    /**
+     * Read the Group whose name matches the one provided.
+     *
+     * @param string $name The name of the Group to return
+     * @return ?Group The Group as read by the API, or null if no Group
+     *      matching the provided name exists within your SmarterU account.
+     * @throws MissingValueException If the Account API Key and/or the User
+     *      API Key are unset in both this instance of the Client and in the
+     *      query passed in as a parameter.
+     * @throws ClientException If the HTTP response includes a status code
+     *      indicating that an HTTP error has prevented the request from
+     *      being made.
+     * @throws SmarterUException If the response from the SmarterU API
+     *      reports a fatal error that prevents the request from executing.
+     */
+    public function readGroupByName(string $name): ?Group {
+        $query = (new GetGroupQuery())
+            ->setName($name);
+
+        return $this->getGroup($query);
+    }
+
+    /**
      * Make a GetGroup query to the SmarterU API.
      *
      * @param GetGroupQuery $query The query representing the Group to return
@@ -757,7 +801,7 @@ class Client {
      * @throws SmarterUException If the response from the SmarterU API
      *      reports a fatal error that prevents the request from executing.
      */
-    public function getGroup(GetGroupQuery $query): ?Group {
+    protected function getGroup(GetGroupQuery $query): ?Group {
         $xml = $this->getXMLGenerator()->getGroup(
             $this->getAccountApi(),
             $this->getUserApi(),
