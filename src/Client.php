@@ -274,6 +274,72 @@ class Client {
     }
 
     /**
+     * Read the User whose ID matches the one provided.
+     *
+     * @param string $employeeId The ID of the User to return.
+     * @return ?User The User whose ID matches the provided ID,
+     *      or null if no such User exists within your SmarterU Account.
+     * @throws MissingValueException If the Account API Key and/or the User
+     *      API Key are unset in both this instance of the Client and in the
+     *      query passed in as a parameter.
+     * @throws ClientException If the HTTP response includes a status code
+     *      indicating that an HTTP error has prevented the request from
+     *      being made.
+     * @throws SmarterUException If the response from the SmarterU API
+     *      reports a fatal error that prevents the request from executing.
+     */
+    public function readUserById(string $id): ?User {
+        $query = (new GetUserQuery())
+            ->setId($id);
+        
+        return $this->getUser($query);
+    }
+
+    /**
+     * Read the User whose email address matches the one provided.
+     *
+     * @param string $employeeId The email address of the User to return.
+     * @return ?User The User whose email address matches the one provided,
+     *      or null if no such User exists within your SmarterU Account.
+     * @throws MissingValueException If the Account API Key and/or the User
+     *      API Key are unset in both this instance of the Client and in the
+     *      query passed in as a parameter.
+     * @throws ClientException If the HTTP response includes a status code
+     *      indicating that an HTTP error has prevented the request from
+     *      being made.
+     * @throws SmarterUException If the response from the SmarterU API
+     *      reports a fatal error that prevents the request from executing.
+     */
+    public function readUserByEmail(string $email): ?User {
+        $query = (new GetUserQuery())
+            ->setEmail($email);
+        
+        return $this->getUser($query);
+    }
+
+    /**
+     * Read the User whose employee ID matches the one provided.
+     *
+     * @param string $employeeId The employee ID of the User to return.
+     * @return ?User The User whose employee ID matches the provided ID,
+     *      or null if no such User exists within your SmarterU Account.
+     * @throws MissingValueException If the Account API Key and/or the User
+     *      API Key are unset in both this instance of the Client and in the
+     *      query passed in as a parameter.
+     * @throws ClientException If the HTTP response includes a status code
+     *      indicating that an HTTP error has prevented the request from
+     *      being made.
+     * @throws SmarterUException If the response from the SmarterU API
+     *      reports a fatal error that prevents the request from executing.
+     */
+    public function readUserByEmployeeId(string $employeeId): ?User {
+        $query = (new GetUserQuery())
+            ->setEmployeeId($employeeId);
+        
+        return $this->getUser($query);
+    }
+
+    /**
      * Make a GetUser query to the SmarterU API.
      *
      * @param GetUserQuery $query The query representing the User to return
@@ -288,7 +354,7 @@ class Client {
      * @throws SmarterUException If the response from the SmarterU API
      *      reports a fatal error that prevents the request from executing.
      */
-    public function getUser(GetUserQuery $query): ?User {
+    protected function getUser(GetUserQuery $query): ?User {
         $query->setMethod(self::SMARTERU_API_GET_USER_QUERY_METHOD);
 
         $xml = $this->getXMLGenerator()->getUser(
