@@ -289,7 +289,8 @@ class ChangeGroupMembersXMLTest extends TestCase {
             // employee ID to identify the User being added to the Group.
             // Exactly one of these values will be present, and this assertion
             // only requires one of them.
-            self::assertThat(implode(',', $tags),
+            self::assertThat(
+                implode(',', $tags),
                 self::logicalOr(
                     self::stringContains('Email'),
                     self::stringContains('EmployeeID')
