@@ -176,24 +176,24 @@ class UpdateGroupXMLTest extends TestCase {
         foreach ($xml->Parameters->children() as $parameter) {
             $parameters[] = $parameter->getName();
         }
-        self::assertCount(2, $parameters);
-        self::assertContains('Identifier', $parameters);
+        self::assertCount(1, $parameters);
+        self::assertContains('Group', $parameters);
+        $groupTags = [];
+        foreach ($xml->Parameters->Group->children() as $tag) {
+            $groupTags[] = $tag->getName();
+        }
+        self::assertCount(5, $groupTags);
+        self::assertContains('Identifier', $groupTags);
         $identifierTag = [];
-        foreach ($xml->Parameters->Identifier->children() as $identifier) {
+        foreach ($xml->Parameters->Group->Identifier->children() as $identifier) {
             $identifierTag[] = $identifier->getName();
         }
         self::assertCount(1, $identifierTag);
         self::assertContains('Name', $identifierTag);
         self::assertEquals(
             'Old Name',
-            $xml->Parameters->Identifier->Name
+            $xml->Parameters->Group->Identifier->Name
         );
-        self::assertContains('Group', $parameters);
-        $groupTags = [];
-        foreach ($xml->Parameters->Group->children() as $tag) {
-            $groupTags[] = $tag->getName();
-        }
-        self::assertCount(4, $groupTags);
         self::assertContains('Name', $groupTags);
         self::assertEquals(
             $this->group2->getName(),
@@ -248,24 +248,24 @@ class UpdateGroupXMLTest extends TestCase {
         foreach ($xml->Parameters->children() as $parameter) {
             $parameters[] = $parameter->getName();
         }
-        self::assertCount(2, $parameters);
+        self::assertCount(1, $parameters);
+        $groupTags = [];
+        foreach ($xml->Parameters->Group->children() as $tag) {
+            $groupTags[] = $tag->getName();
+        }
+        self::assertCount(15, $groupTags);
+        self::assertContains('Identifier', $groupTags);
         $identifierTag = [];
-        foreach ($xml->Parameters->Identifier->children() as $identifier) {
+        foreach ($xml->Parameters->Group->Identifier->children() as $identifier) {
             $identifierTag[] = $identifier->getName();
         }
         self::assertCount(1, $identifierTag);
         self::assertContains('Name', $identifierTag);
         self::assertEquals(
             $this->group1->getName(),
-            $xml->Parameters->Identifier->Name
+            $xml->Parameters->Group->Identifier->Name
         );
-        self::assertEquals($this->group1->getName(), $xml->Parameters->Identifier->Name);
         self::assertContains('Group', $parameters);
-        $groupTags = [];
-        foreach ($xml->Parameters->Group->children() as $tag) {
-            $groupTags[] = $tag->getName();
-        }
-        self::assertCount(14, $groupTags);
         self::assertContains('Status', $groupTags);
         self::assertEquals(
             $this->group1->getStatus(),

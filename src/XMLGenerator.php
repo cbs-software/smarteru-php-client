@@ -734,7 +734,8 @@ class XMLGenerator {
         $xml->addChild('UserAPI', $userApi);
         $xml->addChild('Method', 'updateGroup');
         $parameters = $xml->addChild('Parameters');
-        $identifier = $parameters->addChild('Identifier');
+        $groupTag = $parameters->addChild('Group');
+        $identifier = $groupTag->addChild('Identifier');
         if (!empty($group->getOldName())) {
             $identifier->addChild('Name', $group->getOldName());
         } else if (!empty($group->getOldGroupId())) {
@@ -745,7 +746,6 @@ class XMLGenerator {
             // value can still be used to identify the group.
             $identifier->addChild('Name', $group->getName());
         }
-        $groupTag = $parameters->addChild('Group');
         if (!empty($group->getOldName())) {
             $groupTag->addChild('Name', $group->getName());
         }
