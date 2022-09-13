@@ -45,9 +45,6 @@ class GetUserGroupsClientTest extends TestCase {
         $id = '1';
         $client = new Client($accountApi, $userApi);
 
-        $query = (new GetUserQuery())
-            ->setId($id);
-
         $createdDate = '2022-07-29';
         $modifiedDate = '2022-07-30';
 
@@ -88,7 +85,7 @@ class GetUserGroupsClientTest extends TestCase {
         $client->setHttpClient($httpClient);
 
         // Make the request.
-        $client->getUserGroups($query);
+        $client->readGroupsForUserById($id);
 
         // Make sure there is only 1 request, then translate it to XML.
         self::assertCount(1, $container);
@@ -97,7 +94,9 @@ class GetUserGroupsClientTest extends TestCase {
         $expectedBody = 'Package=' . $client->getXMLGenerator()->getUser(
             $accountApi,
             $userApi,
-            $query
+            (new GetUserQuery())
+                ->setId($id)
+                ->setMethod('getUserGroups')
         );
         self::assertEquals($decodedBody, $expectedBody);
     }
@@ -156,7 +155,7 @@ class GetUserGroupsClientTest extends TestCase {
         $client->setHttpClient($httpClient);
 
         // Make the request.
-        $client->getUserGroups($query);
+        $client->readGroupsForUserByEmail($email);
 
         // Make sure there is only 1 request, then translate it to XML.
         self::assertCount(1, $container);
@@ -165,7 +164,9 @@ class GetUserGroupsClientTest extends TestCase {
         $expectedBody = 'Package=' . $client->getXMLGenerator()->getUser(
             $accountApi,
             $userApi,
-            $query
+            (new GetUserQuery())
+                ->setEmail($email)
+                ->setMethod('getUserGroups')
         );
         self::assertEquals($decodedBody, $expectedBody);
     }
@@ -180,9 +181,6 @@ class GetUserGroupsClientTest extends TestCase {
         $userApi = 'user';
         $employeeId = '1';
         $client = new Client($accountApi, $userApi);
-
-        $query = (new GetUserQuery())
-            ->setEmployeeId($employeeId);
 
         $createdDate = '2022-07-29';
         $modifiedDate = '2022-07-30';
@@ -223,7 +221,7 @@ class GetUserGroupsClientTest extends TestCase {
         $client->setHttpClient($httpClient);
 
         // Make the request.
-        $client->getUserGroups($query);
+        $client->readGroupsForUserByEmployeeId($employeeId);
 
         // Make sure there is only 1 request, then translate it to XML.
         self::assertCount(1, $container);
@@ -232,7 +230,9 @@ class GetUserGroupsClientTest extends TestCase {
         $expectedBody = 'Package=' . $client->getXMLGenerator()->getUser(
             $accountApi,
             $userApi,
-            $query
+            (new GetUserQuery())
+                ->setEmployeeId($employeeId)
+                ->setMethod('getUserGroups')
         );
         self::assertEquals($decodedBody, $expectedBody);
     }
@@ -245,9 +245,6 @@ class GetUserGroupsClientTest extends TestCase {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
-
-        $query = (new GetUserQuery())
-            ->setId('1');
 
         $response = new Response(404);
 
@@ -266,7 +263,7 @@ class GetUserGroupsClientTest extends TestCase {
 
         self::expectException(ClientException::class);
         self::expectExceptionMessage('Client error: ');
-        $client->getUserGroups($query);
+        $client->readGroupsForUserByEmail('test@test.com');
     }
 
     /**
@@ -277,9 +274,6 @@ class GetUserGroupsClientTest extends TestCase {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
-
-        $query = (new GetUserQuery())
-            ->setId('1');
 
         $xmlString = <<<XML
         <SmarterU>
@@ -319,7 +313,7 @@ class GetUserGroupsClientTest extends TestCase {
         self::expectExceptionMessage(
             'SmarterU rejected the request due to the following error(s): Error1: Testing, Error2: 123'
         );
-        $client->getUserGroups($query);
+        $client->readGroupsForUserById('1');
     }
 
     /**
@@ -330,9 +324,6 @@ class GetUserGroupsClientTest extends TestCase {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
-
-        $query = (new GetUserQuery())
-            ->setId('1');
         
         $name1 = 'My Group';
         $identifier1 = '1';
@@ -371,7 +362,7 @@ class GetUserGroupsClientTest extends TestCase {
         $client->setHttpClient($httpClient);
             
         // Make the request.
-        $result = $client->getUserGroups($query);
+        $result = $client->readGroupsForUserByEmployeeId('5');
         
         self::assertIsArray($result);
         self::assertCount(1, $result);
@@ -397,9 +388,6 @@ class GetUserGroupsClientTest extends TestCase {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
-
-        $query = (new GetUserQuery())
-            ->setId('1');
         
         $name1 = 'My Group';
         $identifier1 = '1';
@@ -462,7 +450,7 @@ class GetUserGroupsClientTest extends TestCase {
         $client->setHttpClient($httpClient);
             
         // Make the request.
-        $result = $client->getUserGroups($query);
+        $result = $client->readGroupsForUserById('1');
 
         self::assertIsArray($result);
         self::assertCount(3, $result);
