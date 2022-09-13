@@ -18,7 +18,6 @@ use CBS\SmarterU\DataTypes\Group;
 use CBS\SmarterU\DataTypes\LearningModule;
 use CBS\SmarterU\DataTypes\SubscriptionVariant;
 use CBS\SmarterU\DataTypes\Tag;
-use CBS\SmarterU\DataTypes\Permission;
 use CBS\SmarterU\Exceptions\MissingValueException;
 use CBS\SmarterU\Exceptions\SmarterUException;
 use CBS\SmarterU\Queries\GetUserGroupsQuery;
@@ -71,10 +70,6 @@ class CreateGroupClientTest extends TestCase {
         $userLimitEnabled = true;
         $userLimitAmount = 50;
         $status = 'Active';
-        $permission1 = (new Permission())
-            ->setCode('MANAGE_USERS');
-        $permission2 = (new Permission())
-            ->setCode('MANAGE_COURSES');
         $module1 = (new LearningModule())
             ->setId('4')
             ->setAllowSelfEnroll(true)
