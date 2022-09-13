@@ -584,10 +584,10 @@ class Client {
      *      reports a fatal error that prevents the request from executing.
      */
     public function createGroup(Group $group): Group {
-        $xml = $group->toXml(
+        $xml = $this->getXMLGenerator()->createGroup(
             $this->getAccountApi(),
             $this->getUserApi(),
-            self::SMARTERU_API_CREATE_GROUP_QUERY_METHOD
+            $group
         );
 
         $response = $this
@@ -626,7 +626,11 @@ class Client {
      *      reports a fatal error that prevents the request from executing.
      */
     public function getGroup(GetGroupQuery $query): ?Group {
-        $xml = $query->toXml($this->getAccountApi(), $this->getUserApi());
+        $xml = $this->getXMLGenerator()->getGroup(
+            $this->getAccountApi(),
+            $this->getUserApi(),
+            $query
+        );
 
         $response = $this
             ->getHttpClient()
@@ -701,7 +705,11 @@ class Client {
      *      reports a fatal error that prevents the request from executing.
      */
     public function listGroups(ListGroupsQuery $query): array {
-        $xml = $query->toXml($this->getAccountApi(), $this->getUserApi());
+        $xml = $this->getXMLGenerator()->listGroups(
+            $this->getAccountApi(),
+            $this->getUserApi(),
+            $query
+        );
 
         $response = $this
             ->getHttpClient()
@@ -727,7 +735,12 @@ class Client {
     }
 
     /**
-     * Make an UpdateGroup query to the SmarterU API.
+     * Make an UpdateGroup query to the SmarterU API. In the event that the
+     * Group's name and/or ID are being updated, the fields used to keep track
+     * of the old values in the Group object will be erased while making the
+     * request. This prevents outdated information from mistakenly being passed
+     * into the SmarterU API when making an additional updateGroup query after
+     * updating a Group's name and/or ID.
      *
      * @param Group $group The Group to update
      * @return array The Group as updated by the SmarterU API.
@@ -740,11 +753,23 @@ class Client {
      *      reports a fatal error that prevents the request from executing.
      */
     public function updateGroup(Group $group): Group {
-        $xml = $group->toXml(
+        $xml = $this->getXMLGenerator()->updateGroup(
             $this->getAccountApi(),
             $this->getUserApi(),
-            self::SMARTERU_API_UPDATE_GROUP_QUERY_METHOD
+            $group
         );
+
+        // If the Group's name and/or ID are being updated, reset the old
+        // values to null after generating the XML. This prevents any future
+        // updateGroup requests on the same Group object from mistakenly
+        // attempting to identify the Group using old information that was
+        // changed by a previous updateGroup request.
+        if (!empty($group->getOldName())) {
+            $group->setOldName(null);
+        }
+        if (!empty($group->getOldGroupId())) {
+            $group->setOldGroupId(null);
+        }
 
         $response = $this
             ->getHttpClient()
