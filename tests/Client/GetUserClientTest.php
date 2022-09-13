@@ -110,9 +110,6 @@ class GetUserClientTest extends TestCase {
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
 
-        $query = (new GetUserQuery())
-            ->setId($this->user1->getId());
-
         $createdDate = '2022-07-29';
         $modifiedDate = '2022-07-30';
 
@@ -204,7 +201,7 @@ class GetUserClientTest extends TestCase {
         self::assertIsString($body);
 
         // Make the request.
-        $client->getUser($query);
+        $client->readUserById($this->user1->getId());
 
         // Make sure there is only 1 request, then translate it to XML.
         self::assertCount(1, $container);
@@ -213,7 +210,9 @@ class GetUserClientTest extends TestCase {
         $expectedBody = 'Package=' . $client->getXMLGenerator()->getUser(
             $accountApi,
             $userApi,
-            $query
+            (new GetUserQuery())
+                ->setId($this->user1->getId())
+                ->setMethod('getUser')
         );
         self::assertEquals($decodedBody, $expectedBody);
     }
@@ -228,9 +227,6 @@ class GetUserClientTest extends TestCase {
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
 
-        $query = (new GetUserQuery())
-            ->setEmail($this->user1->getEmail());
-
         $createdDate = '2022-07-29';
         $modifiedDate = '2022-07-30';
 
@@ -322,7 +318,7 @@ class GetUserClientTest extends TestCase {
         self::assertIsString($body);
 
         // Make the request.
-        $client->getUser($query);
+        $client->readUserByEmail($this->user1->getEmail());
 
         // Make sure there is only 1 request, then translate it to XML.
         self::assertCount(1, $container);
@@ -331,7 +327,9 @@ class GetUserClientTest extends TestCase {
         $expectedBody = 'Package=' . $client->getXMLGenerator()->getUser(
             $accountApi,
             $userApi,
-            $query
+            (new GetUserQuery())
+                ->setEmail($this->user1->getEmail())
+                ->setMethod('getUser')
         );
         self::assertEquals($decodedBody, $expectedBody);
     }
@@ -346,9 +344,6 @@ class GetUserClientTest extends TestCase {
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
 
-        $query = (new GetUserQuery())
-            ->setEmployeeId($this->user1->getEmployeeId());
-
         $createdDate = '2022-07-29';
         $modifiedDate = '2022-07-30';
 
@@ -440,7 +435,7 @@ class GetUserClientTest extends TestCase {
         self::assertIsString($body);
 
         // Make the request.
-        $client->getUser($query);
+        $client->readUserByEmployeeId($this->user1->getEmployeeId());
 
         // Make sure there is only 1 request, then translate it to XML.
         self::assertCount(1, $container);
@@ -449,7 +444,9 @@ class GetUserClientTest extends TestCase {
         $expectedBody = 'Package=' . $client->getXMLGenerator()->getUser(
             $accountApi,
             $userApi,
-            $query
+            (new GetUserQuery())
+                ->setEmployeeId($this->user1->getEmployeeId())
+                ->setMethod('getUser')
         );
         self::assertEquals($decodedBody, $expectedBody);
     }
@@ -462,9 +459,6 @@ class GetUserClientTest extends TestCase {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
-
-        $query = (new GetUserQuery())
-            ->setId($this->user1->getId());
 
         $response = new Response(404);
 
@@ -483,7 +477,7 @@ class GetUserClientTest extends TestCase {
 
         self::expectException(ClientException::class);
         self::expectExceptionMessage('Client error: ');
-        $client->getUser($query);
+        $client->readUserByEmail($this->user1->getEmail());
     }
 
     /**
@@ -494,9 +488,6 @@ class GetUserClientTest extends TestCase {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
-
-        $query = (new GetUserQuery())
-            ->setId($this->user1->getId());
 
         $xmlString = <<<XML
         <SmarterU>
@@ -534,7 +525,7 @@ class GetUserClientTest extends TestCase {
         self::expectExceptionMessage(
             'SmarterU rejected the request due to the following error(s): Error1: Testing, Error2: 123'
         );
-        $client->getUser($query);
+        $client->readUserById($this->user1->getId());
     }
 
     /**
@@ -545,9 +536,6 @@ class GetUserClientTest extends TestCase {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
-
-        $query = (new GetUserQuery())
-            ->setId($this->user1->getId());
 
         $xmlString = <<<XML
         <SmarterU>
@@ -573,7 +561,7 @@ class GetUserClientTest extends TestCase {
         $client->setHttpClient($httpClient);
             
         // Make the request.
-        $result = $client->getUser($query);
+        $result = $client->readUserByEmployeeId($this->user1->getEmployeeId());
         
         self::assertNull($result);
     }
@@ -586,9 +574,6 @@ class GetUserClientTest extends TestCase {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
-
-        $query = (new GetUserQuery())
-            ->setId($this->user1->getId());
         
         $createdDate = '2022-07-29';
         $modifiedDate = '2022-07-30';
@@ -670,7 +655,7 @@ class GetUserClientTest extends TestCase {
         $client->setHttpClient($httpClient);
             
         // Make the request.
-        $result = $client->getUser($query);
+        $result = $client->readUserById($this->user1->getId());
         
         self::assertInstanceOf(User::class, $result);
         self::assertEquals($this->user1->getId(), $result->getId());
