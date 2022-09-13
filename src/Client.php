@@ -577,6 +577,72 @@ class Client {
     }
 
     /**
+     * Read the Groups that have the specified User as a member. The User will
+     * be identified by their ID.
+     *
+     * @param string $id The ID of the User to search for.
+     * @return array All Groups that User is a member of.
+     * @throws MissingValueException If the Account API Key and/or the User
+     *      API Key are unset in both this instance of the Client and in the
+     *      query passed in as a parameter.
+     * @throws ClientException If the HTTP response includes a status code
+     *      indicating that an HTTP error has prevented the request from
+     *      being made.
+     * @throws SmarterUException If the response from the SmarterU API
+     *      reports a fatal error that prevents the request from executing.
+     */
+    public function readGroupsForUserById(string $id): array {
+        $query = (new GetUserQuery())
+            ->setId($id);
+
+        return $this->getUserGroups($query);
+    }
+
+    /**
+     * Read the Groups that have the specified User as a member. The User will
+     * be identified by their email address.
+     *
+     * @param string $email The email address of the User to search for.
+     * @return array All Groups that User is a member of.
+     * @throws MissingValueException If the Account API Key and/or the User
+     *      API Key are unset in both this instance of the Client and in the
+     *      query passed in as a parameter.
+     * @throws ClientException If the HTTP response includes a status code
+     *      indicating that an HTTP error has prevented the request from
+     *      being made.
+     * @throws SmarterUException If the response from the SmarterU API
+     *      reports a fatal error that prevents the request from executing.
+     */
+    public function readGroupsForUserByEmail(string $email): array {
+        $query = (new GetUserQuery())
+            ->setEmail($email);
+
+        return $this->getUserGroups($query);
+    }
+
+    /**
+     * Read the Groups that have the specified User as a member. The User will
+     * be identified by their employee ID.
+     *
+     * @param string $employeeId The employee ID of the User to search for.
+     * @return array All Groups that User is a member of.
+     * @throws MissingValueException If the Account API Key and/or the User
+     *      API Key are unset in both this instance of the Client and in the
+     *      query passed in as a parameter.
+     * @throws ClientException If the HTTP response includes a status code
+     *      indicating that an HTTP error has prevented the request from
+     *      being made.
+     * @throws SmarterUException If the response from the SmarterU API
+     *      reports a fatal error that prevents the request from executing.
+     */
+    public function readGroupsForUserByEmployeeId(string $employeeId): array {
+        $query = (new GetUserQuery())
+            ->setEmployeeId($employeeId);
+
+        return $this->getUserGroups($query);
+    }
+
+    /**
      * Make a GetUserGroups query to the SmarterU API.
      *
      * @param GetUserQuery $query The query representing the User whose Groups
@@ -593,7 +659,7 @@ class Client {
      * @throws SmarterUException If the response from the SmarterU API
      *      reports a fatal error that prevents the request from executing.
      */
-    public function getUserGroups(GetUserQuery $query): array {
+    protected function getUserGroups(GetUserQuery $query): array {
         $query->setMethod(self::SMARTERU_API_GET_USER_GROUPS_QUERY_METHOD);
 
         $xml = $this->getXMLGenerator()->getUser(
