@@ -340,118 +340,6 @@ class Client {
     }
 
     /**
-     * Make a GetUser query to the SmarterU API.
-     *
-     * @param GetUserQuery $query The query representing the User to return
-     * @return ?User The User matching the identifier specified in the query,
-     *      or null if no such User exists within your SmarterU account.
-     * @throws MissingValueException If the Account API Key and/or the User
-     *      API Key are unset in both this instance of the Client and in the
-     *      query passed in as a parameter.
-     * @throws ClientException If the HTTP response includes a status code
-     *      indicating that an HTTP error has prevented the request from
-     *      being made.
-     * @throws SmarterUException If the response from the SmarterU API
-     *      reports a fatal error that prevents the request from executing.
-     */
-    protected function getUser(GetUserQuery $query): ?User {
-        $query->setMethod(self::SMARTERU_API_GET_USER_QUERY_METHOD);
-
-        $xml = $this->getXMLGenerator()->getUser(
-            $this->getAccountApi(),
-            $this->getUserApi(),
-            $query
-        );
-
-        $response = $this
-            ->getHttpClient()
-            ->request('POST', self::POST_URL, ['form_params' => [
-                'Package' => $xml]
-        ]);
-
-        $bodyAsXml = simplexml_load_string((string) $response->getBody());
-
-        if ((string) $bodyAsXml->Result === 'Failed') {
-            $errors = $this->readErrors($bodyAsXml->Errors);
-            // The SmarterU API treats "User not found" as a fatal error.
-            // If the API returns this error, this if statement will catch it
-            // before it becomes an exception and return null.
-            if (str_contains($errors, 'GU:03: The user requested does not exist.')) {
-                return null;
-            }
-            throw new SmarterUException($errors);
-        }
-
-        $user = $bodyAsXml->Info->User;
-        if (count($user->children()) === 0) {
-            return null;
-        }
-        $teams = [];
-
-        /**
-         * Not casting this to an array causes the teams to be placed in a
-         * SimpleXMLElement of <[arrayIndex]> teamName </[arrayIndex]>, which
-         * renders the team names inaccessible because [#] is invalid syntax
-         * for a node name.
-         */
-        foreach ((array) $user->Teams->Team as $team) {
-            $teams[] = $team;
-        }
-
-        return (new User())
-            ->setId((string) $user->ID)
-            ->setEmail((string) $user->Email)
-            ->setEmployeeId((string) $user->EmployeeID)
-            ->setCreatedDate(new DateTime((string) $user->CreatedDate))
-            ->setModifiedDate(new DateTime((string) $user->ModifiedDate))
-            ->setGivenName((string) $user->GivenName)
-            ->setSurname((string) $user->Surname)
-            ->setLanguage((string) $user->Language)
-            ->setAllowFeedback(filter_var(
-                (string) $user->AllowFeedback,
-                FILTER_VALIDATE_BOOLEAN
-            ))
-            ->setStatus((string) $user->Status)
-            ->setAuthenticationType((string) $user->AuthenticationType)
-            ->setTimezone((string) $user->Timezone)
-            ->setAlternateEmail((string) $user->AlternateEmail)
-            ->setHomeGroup((string) $user->HomeGroup)
-            ->setOrganization((string) $user->Organization)
-            ->setTitle((string) $user->Title)
-            ->setDivision((string) $user->Division)
-            // TODO implement supervisors. For iteration 1, we can assume it's blank
-            ->setPhonePrimary((string) $user->PhonePrimary)
-            ->setPhoneAlternate((string) $user->PhoneAlternate)
-            ->setPhoneMobile((string) $user->PhoneMobile)
-            ->setSendMailTo((string) $user->SendMailTo)
-            ->setSendEmailTo((string) $user->SendEmailTo)
-            ->setFax((string) $user->Fax)
-            ->setAddress1((string) $user->Address1)
-            ->setAddress2((string) $user->Address2)
-            ->setCity((string) $user->City)
-            ->setPostalCode((string) $user->PostalCode)
-            ->setProvince((string) $user->Province)
-            ->setCountry((string) $user->Country)
-            ->setLearnerNotifications(filter_var(
-                (string) $user->SendWeeklyTaskReminder,
-                FILTER_VALIDATE_BOOLEAN
-            ))
-            ->setSupervisorNotifications(filter_var(
-                (string) $user->SendWeeklyProgressSummary,
-                FILTER_VALIDATE_BOOLEAN
-            ))
-            ->setTeams($teams)
-            // TODO implement roles. For iteration 1, we can assume it's blank.
-            // TODO implement custom fields. For iteration 1, we can assume it's blank.
-            // TODO implement venues. For iteration 1, we can assume it's blank.
-            // TODO implement wages. For iteration 1, we can assume it's blank.
-            ->setReceiveNotifications(filter_var(
-                (string) $user->ReceiveNotifications,
-                FILTER_VALIDATE_BOOLEAN
-            ));
-    }
-
-    /**
      * Make a ListUsers query to the SmarterU API.
      *
      * @param ListUsersQuery $query The query representing the Users to return
@@ -643,66 +531,6 @@ class Client {
     }
 
     /**
-     * Make a GetUserGroups query to the SmarterU API.
-     *
-     * @param GetUserQuery $query The query representing the User whose Groups
-     *      are to be read.
-     * @return array An array of GroupPermissions instances representing the
-     *      specified User's membership in the Group(s) he or she is a member
-     *      of.
-     * @throws MissingValueException If the Account API Key and/or the User
-     *      API Key are unset in both this instance of the Client and in the
-     *      query passed in as a parameter.
-     * @throws ClientException If the HTTP response includes a status code
-     *      indicating that an HTTP error has prevented the request from
-     *      being made.
-     * @throws SmarterUException If the response from the SmarterU API
-     *      reports a fatal error that prevents the request from executing.
-     */
-    protected function getUserGroups(GetUserQuery $query): array {
-        $query->setMethod(self::SMARTERU_API_GET_USER_GROUPS_QUERY_METHOD);
-
-        $xml = $this->getXMLGenerator()->getUser(
-            $this->getAccountApi(),
-            $this->getUserApi(),
-            $query
-        );
-
-        $response = $this
-            ->getHttpClient()
-            ->request('POST', self::POST_URL, ['form_params' => [
-                'Package' => $xml]
-        ]);
-
-        $bodyAsXml = simplexml_load_string((string) $response->getBody());
-
-        if ((string) $bodyAsXml->Result === 'Failed') {
-            throw new SmarterUException($this->readErrors($bodyAsXml->Errors));
-        }
-
-        $groups = [];
-        foreach ($bodyAsXml->Info->UserGroups->children() as $group) {
-            $permissions = [];
-            foreach ($group->Permissions->children() as $code) {
-                $permission = (new Permission())
-                    ->setCode((string) $code);
-                $permissions[] = $permission;
-            }
-            $currentGroup = (new GroupPermissions())
-                ->setGroupName((string) $group->Name)
-                ->setGroupId((string) $group->Identifier)
-                ->setHomeGroup(filter_var(
-                    (string) $group->IsHomeGroup,
-                    FILTER_VALIDATE_BOOLEAN
-                ))
-                ->setPermissions($permissions);
-            $groups[] = $currentGroup;
-        }
-
-        return $groups;
-    }
-
-    /**
      * Make a CreateGroup query to the SmarterU API.
      *
      * @param Group $group The Group to create
@@ -784,86 +612,6 @@ class Client {
             ->setName($name);
 
         return $this->getGroup($query);
-    }
-
-    /**
-     * Make a GetGroup query to the SmarterU API.
-     *
-     * @param GetGroupQuery $query The query representing the Group to return
-     * @return ?Group The Group as read by the API, or null if no Group
-     *      matching the query exists within your SmarterU account.
-     * @throws MissingValueException If the Account API Key and/or the User
-     *      API Key are unset in both this instance of the Client and in the
-     *      query passed in as a parameter.
-     * @throws ClientException If the HTTP response includes a status code
-     *      indicating that an HTTP error has prevented the request from
-     *      being made.
-     * @throws SmarterUException If the response from the SmarterU API
-     *      reports a fatal error that prevents the request from executing.
-     */
-    protected function getGroup(GetGroupQuery $query): ?Group {
-        $xml = $this->getXMLGenerator()->getGroup(
-            $this->getAccountApi(),
-            $this->getUserApi(),
-            $query
-        );
-
-        $response = $this
-            ->getHttpClient()
-            ->request('POST', self::POST_URL, ['form_params' => [
-                'Package' => $xml]
-        ]);
-
-        $bodyAsXml = simplexml_load_string((string) $response->getBody());
-
-        if ((string) $bodyAsXml->Result === 'Failed') {
-            $errors = $this->readErrors($bodyAsXml->Errors);
-            /**
-             * The SmarterU API treats "Group not found" as a fatal error.
-             * If the API returns this error, this if statement will catch it
-             * before it becomes an exception and return null.
-             */
-            if (str_contains($errors, 'GG:03: The requested group does not exist.')) {
-                return null;
-            }
-            throw new SmarterUException($errors);
-        }
-
-        $group = $bodyAsXml->Info->Group;
-
-        $notificationEmails = [];
-        $tags = [];
-
-        /**
-         * Not casting this to an array causes the emails to be placed in a
-         * SimpleXMLElement of <[arrayIndex]> email </[arrayIndex]>, which
-         * renders the emails inaccessible because [#] is invalid syntax
-         * for a node name.
-         */
-        foreach ((array) $group->NotificationEmails->NotificationEmail as $email) {
-            $notificationEmails[] = $email;
-        }
-
-        foreach ($group->Tags2->children() as $tag) {
-            $currentTag = (new Tag())
-                ->setTagId((string) $tag->TagID)
-                ->setTagName((string) $tag->TagName)
-                ->setTagValues((string) $tag->TagValues);
-            $tags[] = $currentTag;
-        }
-
-        return (new Group())
-            ->setName((string) $group->Name)
-            ->setGroupId((string) $group->GroupID)
-            ->setCreatedDate(new DateTime((string) $group->CreatedDate))
-            ->setModifiedDate(new DateTime((string) $group->ModifiedDate))
-            ->setDescription((string) $group->Description)
-            ->setHomeGroupMessage((string) $group->HomeGroupMessage)
-            ->setNotificationEmails($notificationEmails)
-            ->setUserCount((int) $group->UserCount)
-            ->setLearningModuleCount((int) $group->LearningModuleCount)
-            ->setTags($tags)
-            ->setStatus((string) $group->Status);
     }
 
     /**
@@ -965,6 +713,258 @@ class Client {
         return (new Group())
             ->setName($groupName)
             ->setGroupId($groupId);
+    }
+
+    /**
+     * Make a GetUser query to the SmarterU API.
+     *
+     * @param GetUserQuery $query The query representing the User to return
+     * @return ?User The User matching the identifier specified in the query,
+     *      or null if no such User exists within your SmarterU account.
+     * @throws MissingValueException If the Account API Key and/or the User
+     *      API Key are unset in both this instance of the Client and in the
+     *      query passed in as a parameter.
+     * @throws ClientException If the HTTP response includes a status code
+     *      indicating that an HTTP error has prevented the request from
+     *      being made.
+     * @throws SmarterUException If the response from the SmarterU API
+     *      reports a fatal error that prevents the request from executing.
+     */
+    protected function getUser(GetUserQuery $query): ?User {
+        $query->setMethod(self::SMARTERU_API_GET_USER_QUERY_METHOD);
+
+        $xml = $this->getXMLGenerator()->getUser(
+            $this->getAccountApi(),
+            $this->getUserApi(),
+            $query
+        );
+
+        $response = $this
+            ->getHttpClient()
+            ->request('POST', self::POST_URL, ['form_params' => [
+                'Package' => $xml]
+        ]);
+
+        $bodyAsXml = simplexml_load_string((string) $response->getBody());
+
+        if ((string) $bodyAsXml->Result === 'Failed') {
+            $errors = $this->readErrors($bodyAsXml->Errors);
+            // The SmarterU API treats "User not found" as a fatal error.
+            // If the API returns this error, this if statement will catch it
+            // before it becomes an exception and return null.
+            if (str_contains($errors, 'GU:03: The user requested does not exist.')) {
+                return null;
+            }
+            throw new SmarterUException($errors);
+        }
+
+        $user = $bodyAsXml->Info->User;
+        if (count($user->children()) === 0) {
+            return null;
+        }
+        $teams = [];
+
+        /**
+         * Not casting this to an array causes the teams to be placed in a
+         * SimpleXMLElement of <[arrayIndex]> teamName </[arrayIndex]>, which
+         * renders the team names inaccessible because [#] is invalid syntax
+         * for a node name.
+         */
+        foreach ((array) $user->Teams->Team as $team) {
+            $teams[] = $team;
+        }
+
+        return (new User())
+            ->setId((string) $user->ID)
+            ->setEmail((string) $user->Email)
+            ->setEmployeeId((string) $user->EmployeeID)
+            ->setCreatedDate(new DateTime((string) $user->CreatedDate))
+            ->setModifiedDate(new DateTime((string) $user->ModifiedDate))
+            ->setGivenName((string) $user->GivenName)
+            ->setSurname((string) $user->Surname)
+            ->setLanguage((string) $user->Language)
+            ->setAllowFeedback(filter_var(
+                (string) $user->AllowFeedback,
+                FILTER_VALIDATE_BOOLEAN
+            ))
+            ->setStatus((string) $user->Status)
+            ->setAuthenticationType((string) $user->AuthenticationType)
+            ->setTimezone((string) $user->Timezone)
+            ->setAlternateEmail((string) $user->AlternateEmail)
+            ->setHomeGroup((string) $user->HomeGroup)
+            ->setOrganization((string) $user->Organization)
+            ->setTitle((string) $user->Title)
+            ->setDivision((string) $user->Division)
+            // TODO implement supervisors. For iteration 1, we can assume it's blank
+            ->setPhonePrimary((string) $user->PhonePrimary)
+            ->setPhoneAlternate((string) $user->PhoneAlternate)
+            ->setPhoneMobile((string) $user->PhoneMobile)
+            ->setSendMailTo((string) $user->SendMailTo)
+            ->setSendEmailTo((string) $user->SendEmailTo)
+            ->setFax((string) $user->Fax)
+            ->setAddress1((string) $user->Address1)
+            ->setAddress2((string) $user->Address2)
+            ->setCity((string) $user->City)
+            ->setPostalCode((string) $user->PostalCode)
+            ->setProvince((string) $user->Province)
+            ->setCountry((string) $user->Country)
+            ->setLearnerNotifications(filter_var(
+                (string) $user->SendWeeklyTaskReminder,
+                FILTER_VALIDATE_BOOLEAN
+            ))
+            ->setSupervisorNotifications(filter_var(
+                (string) $user->SendWeeklyProgressSummary,
+                FILTER_VALIDATE_BOOLEAN
+            ))
+            ->setTeams($teams)
+            // TODO implement roles. For iteration 1, we can assume it's blank.
+            // TODO implement custom fields. For iteration 1, we can assume it's blank.
+            // TODO implement venues. For iteration 1, we can assume it's blank.
+            // TODO implement wages. For iteration 1, we can assume it's blank.
+            ->setReceiveNotifications(filter_var(
+                (string) $user->ReceiveNotifications,
+                FILTER_VALIDATE_BOOLEAN
+            ));
+    }
+
+    /**
+     * Make a GetUserGroups query to the SmarterU API.
+     *
+     * @param GetUserQuery $query The query representing the User whose Groups
+     *      are to be read.
+     * @return array An array of GroupPermissions instances representing the
+     *      specified User's membership in the Group(s) he or she is a member
+     *      of.
+     * @throws MissingValueException If the Account API Key and/or the User
+     *      API Key are unset in both this instance of the Client and in the
+     *      query passed in as a parameter.
+     * @throws ClientException If the HTTP response includes a status code
+     *      indicating that an HTTP error has prevented the request from
+     *      being made.
+     * @throws SmarterUException If the response from the SmarterU API
+     *      reports a fatal error that prevents the request from executing.
+     */
+    protected function getUserGroups(GetUserQuery $query): array {
+        $query->setMethod(self::SMARTERU_API_GET_USER_GROUPS_QUERY_METHOD);
+
+        $xml = $this->getXMLGenerator()->getUser(
+            $this->getAccountApi(),
+            $this->getUserApi(),
+            $query
+        );
+
+        $response = $this
+            ->getHttpClient()
+            ->request('POST', self::POST_URL, ['form_params' => [
+                'Package' => $xml]
+        ]);
+
+        $bodyAsXml = simplexml_load_string((string) $response->getBody());
+
+        if ((string) $bodyAsXml->Result === 'Failed') {
+            throw new SmarterUException($this->readErrors($bodyAsXml->Errors));
+        }
+
+        $groups = [];
+        foreach ($bodyAsXml->Info->UserGroups->children() as $group) {
+            $permissions = [];
+            foreach ($group->Permissions->children() as $code) {
+                $permission = (new Permission())
+                    ->setCode((string) $code);
+                $permissions[] = $permission;
+            }
+            $currentGroup = (new GroupPermissions())
+                ->setGroupName((string) $group->Name)
+                ->setGroupId((string) $group->Identifier)
+                ->setHomeGroup(filter_var(
+                    (string) $group->IsHomeGroup,
+                    FILTER_VALIDATE_BOOLEAN
+                ))
+                ->setPermissions($permissions);
+            $groups[] = $currentGroup;
+        }
+
+        return $groups;
+    }
+
+    /**
+     * Make a GetGroup query to the SmarterU API.
+     *
+     * @param GetGroupQuery $query The query representing the Group to return
+     * @return ?Group The Group as read by the API, or null if no Group
+     *      matching the query exists within your SmarterU account.
+     * @throws MissingValueException If the Account API Key and/or the User
+     *      API Key are unset in both this instance of the Client and in the
+     *      query passed in as a parameter.
+     * @throws ClientException If the HTTP response includes a status code
+     *      indicating that an HTTP error has prevented the request from
+     *      being made.
+     * @throws SmarterUException If the response from the SmarterU API
+     *      reports a fatal error that prevents the request from executing.
+     */
+    protected function getGroup(GetGroupQuery $query): ?Group {
+        $xml = $this->getXMLGenerator()->getGroup(
+            $this->getAccountApi(),
+            $this->getUserApi(),
+            $query
+        );
+
+        $response = $this
+            ->getHttpClient()
+            ->request('POST', self::POST_URL, ['form_params' => [
+                'Package' => $xml]
+        ]);
+
+        $bodyAsXml = simplexml_load_string((string) $response->getBody());
+
+        if ((string) $bodyAsXml->Result === 'Failed') {
+            $errors = $this->readErrors($bodyAsXml->Errors);
+            /**
+             * The SmarterU API treats "Group not found" as a fatal error.
+             * If the API returns this error, this if statement will catch it
+             * before it becomes an exception and return null.
+             */
+            if (str_contains($errors, 'GG:03: The requested group does not exist.')) {
+                return null;
+            }
+            throw new SmarterUException($errors);
+        }
+
+        $group = $bodyAsXml->Info->Group;
+
+        $notificationEmails = [];
+        $tags = [];
+
+        /**
+         * Not casting this to an array causes the emails to be placed in a
+         * SimpleXMLElement of <[arrayIndex]> email </[arrayIndex]>, which
+         * renders the emails inaccessible because [#] is invalid syntax
+         * for a node name.
+         */
+        foreach ((array) $group->NotificationEmails->NotificationEmail as $email) {
+            $notificationEmails[] = $email;
+        }
+
+        foreach ($group->Tags2->children() as $tag) {
+            $currentTag = (new Tag())
+                ->setTagId((string) $tag->TagID)
+                ->setTagName((string) $tag->TagName)
+                ->setTagValues((string) $tag->TagValues);
+            $tags[] = $currentTag;
+        }
+
+        return (new Group())
+            ->setName((string) $group->Name)
+            ->setGroupId((string) $group->GroupID)
+            ->setCreatedDate(new DateTime((string) $group->CreatedDate))
+            ->setModifiedDate(new DateTime((string) $group->ModifiedDate))
+            ->setDescription((string) $group->Description)
+            ->setHomeGroupMessage((string) $group->HomeGroupMessage)
+            ->setNotificationEmails($notificationEmails)
+            ->setUserCount((int) $group->UserCount)
+            ->setLearningModuleCount((int) $group->LearningModuleCount)
+            ->setTags($tags)
+            ->setStatus((string) $group->Status);
     }
 
     /**
