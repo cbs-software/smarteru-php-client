@@ -21,35 +21,6 @@ use DateTimeInterface;
  */
 class LearnerReport {
     /**
-     * All valid Columns that can be included in a LearnerReport, as defined
-     * here: https://support.smarteru.com/v1/docs/api-getlearnerreport
-     */
-    protected const VALID_COLUMNS = [
-        'ALTERNATE_EMAIL',
-        'COMPLETED_DATE',
-        'COURSE_DURATION',
-        'DIVISION',
-        'DUE_DATE',
-        'EMPLOYEE_ID',
-        'ENROLLED_DATE',
-        'GRADE',
-        'GRADE_PERCENTAGE',
-        'GROUP_ID',
-        'GROUP_NAME',
-        'LAST_ACCESSED_DATE',
-        'POINTS',
-        'PROGRESS',
-        'ROLE_ID',
-        'STARTED_DATE',
-        'SUBSCRIPTION_NAME',
-        'TITLE',
-        'USER_EMAIL',
-        'VARIANT_END_DATE',
-        'VARIANT_NAME',
-        'VARIANT_START_DATE'
-    ];
-
-    /**
      * The system-generated identifier for the user's course enrollment.
      */
     protected string $id;
@@ -79,6 +50,24 @@ class LearnerReport {
      */
     protected string $userId;
 
+    protected ?string $userEmail;
+
+    protected ?string $alternateEmail;
+
+    protected ?string $employeeId;
+
+    protected ?string $division;
+
+    protected ?string $title;
+
+    protected ?string $groupId;
+    
+    protected ?string $groupName;
+
+    protected ?string $courseDuration;
+
+    protected ?string $courseSessionId;
+
     /**
      * The UTC date the enrollment was created.
      */
@@ -89,12 +78,33 @@ class LearnerReport {
      */
     protected DateTimeInterface $modifiedDate;
 
-    /**
-     * Any Columns specified by the SmarterU API. Data will be stored in an
-     * array of [columnName => columnValue], and the VALID_COLUMNS constant
-     * defined above contains a list of all valid column names.
-     */
-    protected array $columns;
+    protected ?DateTimeInterface $enrolledDate;
+
+    protected ?DateTimeInterface $dueDate;
+
+    protected ?DateTimeInterface $startedDate;
+
+    protected ?DateTimeInterface $lastAccessedDate;
+
+    protected ?DateTimeInterface $completedDate;
+
+    protected ?string $grade;
+
+    protected ?double $gradePercentage;
+
+    protected ?string $points;
+
+    protected ?string $progress;
+
+    protected ?string $subscriptionName;
+
+    protected ?string $variantName;
+
+    protected ?DateTimeInterface $variantStartDate;
+
+    protected ?DateTimeInterface $variantEndDate;
+
+    protected ?string $roleId;
 
     /**
      * Any CustomFields specified by the SmarterU API.
@@ -277,17 +287,8 @@ class LearnerReport {
      *
      * @param array $columns The columns specified by the SmarterU API.
      * @return self
-     * @throws InvalidArgumentException If one of the provided column names
-     *      is not one of the valid columns recognized by the SmarterU API.
      */
     public function setColumns(array $columns): self {
-        foreach ($columns as $column) {
-            if (!in_array($column, self::VALID_COLUMNS)) {
-                throw new InvalidArgumentException(
-                    '"' . $column . '" is not one of the valid columns.'
-                );
-            }
-        }
         $this->columns = $columns;
         return $this;
     }
