@@ -46,27 +46,54 @@ class LearnerReport {
     protected string $learningModuleId;
 
     /**
-     * The user's system-generated identifier.
+     * The User's system-generated identifier.
      */
     protected string $userId;
 
-    protected ?string $userEmail;
+    /**
+     * The User's email address.
+     */
+    protected ?string $userEmail = null;
 
-    protected ?string $alternateEmail;
+    /**
+     * The User's alternate email address.
+     */
+    protected ?string $alternateEmail = null;
 
-    protected ?string $employeeId;
+    /**
+     * The User's employee ID.
+     */
+    protected ?string $employeeId = null;
 
-    protected ?string $division;
+    /** 
+     * The User's division.
+     */
+    protected ?string $division = null;
 
-    protected ?string $title;
+    /**
+     * The User's title.
+     */
+    protected ?string $title = null;
 
-    protected ?string $groupId;
+    /**
+     * The ID of the Group containing this training assignment.
+     */
+    protected ?string $groupId = null;
     
-    protected ?string $groupName;
+    /**
+     * The name of the Group containing this training assignment.
+     */
+    protected ?string $groupName = null;
 
-    protected ?string $courseDuration;
+    /**
+     * The duration of the course.
+     */
+    protected ?string $courseDuration = null;
 
-    protected ?string $courseSessionId;
+    /**
+     * The course's session ID.
+     */
+    protected ?string $courseSessionId = null;
 
     /**
      * The UTC date the enrollment was created.
@@ -78,33 +105,75 @@ class LearnerReport {
      */
     protected DateTimeInterface $modifiedDate;
 
-    protected ?DateTimeInterface $enrolledDate;
+    /**
+     * The UTC date the User was enrolled in the Course.
+     */
+    protected ?DateTimeInterface $enrolledDate = null;
 
-    protected ?DateTimeInterface $dueDate;
+    /**
+     * The UTC date the Course is due.
+     */
+    protected ?DateTimeInterface $dueDate = null;
 
-    protected ?DateTimeInterface $startedDate;
+    /**
+     * The UTC date the User started working on the Course.
+     */
+    protected ?DateTimeInterface $startedDate = null;
 
-    protected ?DateTimeInterface $lastAccessedDate;
+    /**
+     * The UTC date the User last accessed the Course.
+     */
+    protected ?DateTimeInterface $lastAccessedDate = null;
 
-    protected ?DateTimeInterface $completedDate;
+    /**
+     * The UTC date the User completed the Course.
+     */
+    protected ?DateTimeInterface $completedDate = null;
 
-    protected ?string $grade;
+    /**
+     * The grade the User got in the Course.
+     */
+    protected ?string $grade = null;
 
-    protected ?double $gradePercentage;
+    /**
+     * The grade expressed as a percentage.
+     */
+    protected ?double $gradePercentage = null;
 
-    protected ?string $points;
+    /**
+     * The points scored by the User in the Course.
+     */
+    protected ?int $points = null;
 
-    protected ?string $progress;
+    /**
+     * The User's progress in the Course.
+     */
+    protected ?string $progress = null;
 
-    protected ?string $subscriptionName;
+    /**
+     * The name of the subscription the Course is part of.
+     */
+    protected ?string $subscriptionName = null;
 
-    protected ?string $variantName;
+    /**
+     * The name of the variant of that subscription.
+     */
+    protected ?string $variantName = null;
 
-    protected ?DateTimeInterface $variantStartDate;
+    /**
+     * The UTC date the subscription variant started.
+     */
+    protected ?DateTimeInterface $variantStartDate = null;
 
-    protected ?DateTimeInterface $variantEndDate;
+    /**
+     * The UTC date the subscription variant ends.
+     */
+    protected ?DateTimeInterface $variantEndDate = null;
 
-    protected ?string $roleId;
+    /**
+     * The role ID.
+     */
+    protected ?string $roleId = null;
 
     /**
      * Any CustomFields specified by the SmarterU API.
@@ -232,6 +301,186 @@ class LearnerReport {
     }
 
     /**
+     * Get the User's email address.
+     *
+     * @return ?string The User's email address.
+     */
+    public function getUserEmail(): ?string {
+        return $this->userEmail;
+    }
+
+    /**
+     * Set the User's email address.
+     *
+     * @param string $userEmail The User's email address.
+     * @return self
+     */
+    public function setUserEmail(string $userEmail): self {
+        $this->userEmail = $userEmail;
+        return $this;
+    }
+
+    /**
+     * Get the User's alternate email address.
+     *
+     * @return ?string The User's alternate email address.
+     */
+    public function getAlternateEmail(): ?string {
+        return $this->alternateEmail;
+    }
+
+    /**
+     * Set the User's alternate email address.
+     *
+     * @param string $alternateEmail The User's alternate email address.
+     * @return self
+     */
+    public function setAlternateEmail(string $alternateEmail): self {
+        $this->alternateEmail = $alternateEmail;
+        return $this;
+    }
+
+    /**
+     * Get the User's employee ID.
+     *
+     * @return ?string The User's employee ID.
+     */
+    public function getEmployeeId(): ?string {
+        return $this->employeeId;
+    }
+
+    /**
+     * Set the User's employee ID.
+     *
+     * @param string $employeeId The User's employee ID.
+     * @return self
+     */
+    public function setEmployeeId(string $employeeId): self {
+        $this->employeeId = $employeeId;
+        return $this;
+    }
+
+    /**
+     * Get the User's division.
+     *
+     * @return ?string The User's division.
+     */
+    public function getDivision(): ?string {
+        return $this->division;
+    }
+
+    /**
+     * Set the User's division.
+     *
+     * @param string $division The User's division.
+     * @return self
+     */
+    public function setDivision(string $division): self {
+        $this->division = $division;
+        return $this;
+    }
+
+    /**
+     * Get the User's title.
+     *
+     * @return ?string The User's title.
+     */
+    public function getTitle(): ?string {
+        return $this->title;
+    }
+
+    /**
+     * Set the User's title.
+     *
+     * @param string $title The User's title.
+     * @return self
+     */
+    public function setTitle(string $title): self {
+        $this->title = $title;
+        return $this;
+    }
+
+    /**
+     * Get the ID of the Group containing this training assignment.
+     *
+     * @return ?string The ID of the Group
+     */
+    public function getGroupId(): ?string {
+        return $this->groupId;
+    }
+
+    /**
+     * Set the ID of the Group containing this training assignment.
+     *
+     * @param string $groupId The ID of the Group
+     * @return self
+     */
+    public function setGroupId(string $groupId): self {
+        $this->groupId = $groupId;
+        return $this;
+    }
+
+    /**
+     * Get the name of the Group containing this training assignment.
+     *
+     * @return ?string The name of the Group.
+     */
+    public function getGroupName(): ?string {
+        return $this->groupName;
+    }
+
+    /**
+     * Set the name of the Group containing this training assignment.
+     *
+     * @param string $groupName The name of the Group.
+     * @return self
+     */
+    public function setGroupName(string $groupName): self {
+        $this->groupName = $groupName;
+        return $this;
+    }
+
+    /**
+     * Get the duration of the course.
+     *
+     * @return ?string The duration of the course.
+     */
+    public function getCourseDuration(): ?string {
+        return $this->courseDuration;
+    }
+
+    /**
+     * Set the duration of the course.
+     *
+     * @param string $courseDuration The duration of the course.
+     * @return self
+     */
+    public function setCourseDuration(string $courseDuration): self {
+        $this->courseDuration = $courseDuration;
+        return $this;
+    }
+
+    /**
+     * Get the course's session ID.
+     *
+     * @return ?string The course's session ID.
+     */
+    public function getCourseSessionId(): ?string {
+        return $this->courseSessionId;
+    }
+
+    /**
+     * Set the course's session ID.
+     *
+     * @param string $courseSessionId The course's session ID.
+     * @return self
+     */
+    public function setCourseSessionId(string $courseSessionId): self {
+        $this->courseSessionId = $courseSessionId;
+        return $this;
+    }
+
+    /**
      * Get the UTC date the enrollment was created.
      *
      * @return DateTimeInterface The UTC date the enrollment was created.
@@ -310,6 +559,290 @@ class LearnerReport {
      */
     public function setCustomFields(array $customFields): self {
         $this->customFields = $customFields;
+        return $this;
+    }
+
+    /**
+     * Get the UTC date the User was enrolled in the Course.
+     *
+     * @return ?DateTimeInterface The UTC date the User was enrolled.
+     */
+    public function getEnrolledDate(): ?DateTimeInterface {
+        return $this->enrolledDate;
+    }
+
+    /**
+     * Set the UTC date the User was enrolled in the Course.
+     *
+     * @param DateTimeInterface $enrolledDate The UTC date the User was enrolled.
+     * @return self
+     */
+    public function setEnrolledDate(DateTimeInterface $enrolledDate): self {
+        $this->enrolledDate = $enrolledDate;
+        return $this;
+    }
+
+    /**
+     * Get the UTC date the Course is due.
+     *
+     * @return ?DateTimeInterface The UTC date the Course is due.
+     */
+    public function getDueDate(): ?DateTimeInterface {
+        return $this->dueDate;
+    }
+
+    /**
+     * Set the UTC date the Course is due.
+     *
+     * @param DateTimeInterface $dueDate The UTC date the Course is due.
+     * @return self
+     */
+    public function setDueDate(DateTimeInterface $dueDate): self {
+        $this->dueDate = $dueDate;
+        return $this;
+    }
+
+    /**
+     * Get the UTC date the User started the Course.
+     *
+     * @return ?DateTimeInterface The UTC date the User started the Course.
+     */
+    public function getStartedDate(): ?DateTimeInterface {
+        return $this->startedDate;
+    }
+
+    /**
+     * Set the UTC date the User started the Course.
+     *
+     * @param DateTimeInterface $startedDate The UTC date the User started the Course.
+     * @return self
+     */
+    public function setStartedDate(DateTimeInterface $startedDate): self {
+        $this->startedDate = $startedDate;
+        return $this;
+    }
+
+    /**
+     * Get the UTC date the User last accessed the Course.
+     *
+     * @return ?DateTimeInterface The UTC date the User last accessed the Course.
+     */
+    public function getLastAccessedDate(): ?DateTimeInterface {
+        return $this->lastAccessedDate;
+    }
+
+    /**
+     * Set the UTC date the User last accessed the Course.
+     *
+     * @param DateTimeInterface $lastAccessedDate The UTC date the User last
+     *      accessed the Course.
+     * @return self
+     */
+    public function setLastAccessedDate(DateTimeInterface $lastAccessedDate): self {
+        $this->lastAccessedDate = $lastAccessedDate;
+        return $this;
+    }
+
+    /**
+     * Get the UTC date the User completed the Course.
+     *
+     * @return ?DateTimeInterface The UTC date the User completed the Course.
+     */
+    public function getCompletedDate(): ?DateTimeInterface {
+        return $this->completedDate;
+    }
+
+    /**
+     * Set the UTC date the User completed the Course.
+     *
+     * @param DateTimeInterface $completedDate The UTC date the User completed
+     *      the Course.
+     * @return self
+     */
+    public function setCompletedDate(DateTimeInterface $completedDate): self {
+        $this->completedDate = $completedDate;
+        return $this;
+    }
+
+    /**
+     * Get the grade the User got in the Course.
+     *
+     * @return ?string The grade the User got in the Course
+     */
+    public function getGrade(): ?string {
+        return $this->grade;
+    }
+
+    /**
+     * Set the grade the User got in the Course.
+     *
+     * @param string $grade The grade the User got in the Course
+     * @return self
+     */
+    public function setGrade(string $grade): self {
+        $this->grade = $grade;
+        return $this;
+    }
+
+    /**
+     * Get the User's grade expressed as a percentage.
+     *
+     * @return ?double the User's grade expressed as a percentage.
+     */
+    public function getGradePercentage(): ?double {
+        return $this->gradePercentage;
+    }
+
+    /**
+     * Set the User's grade expressed as a percentage.
+     *
+     * @param double $gradePercentage The User's grade expressed as a percentage.
+     * @return self
+     */
+    public function setGradePercentage(double $gradePercentage): self {
+        $this->gradePercentage = $gradePercentage;
+        return $this;
+    }
+
+    /**
+     * Get the points scored by the User in the Course.
+     *
+     * @return ?int The points scored by the User in the Course.
+     */
+    public function getPoints(): ?int {
+        return $this->points;
+    }
+
+    /**
+     * Set the points scored by the User in the Course.
+     *
+     * @param int $points The points scored by the User in the Course.
+     * @return self
+     */
+    public function setPoints(int $points): self {
+        $this->points = $points;
+        return $this;
+    }
+
+    /**
+     * Get the User's progress in the Course.
+     *
+     * @return ?string The User's progress in the Course.
+     */
+    public function getProgress(): ?string {
+        return $this->progress;
+    }
+
+    /**
+     * Set the User's progress in the Course.
+     *
+     * @param string $progress The User's progress in the Course.
+     * @return self
+     */
+    public function setProgress(string $progress): self {
+        $this->progress = $progress;
+        return $this;
+    }
+
+    /**
+     * Get the name of the subscription the Course is part of.
+     *
+     * @return ?string The name of the subscription.
+     */
+    public function getSubscriptionName(): ?string {
+        return $this->subscriptionName();
+    }
+
+    /**
+     * Set the name of the subscription the Course is part of.
+     *
+     * @param string $subscriptionName The name of the subscription.
+     * @return self
+     */
+    public function setSubscriptionName(string $subscriptionName): self {
+        $this->subscriptionName = $subscriptionName;
+        return $this;
+    }
+
+    /**
+     * Get the name of the subscription variant.
+     *
+     * @return ?string The name of the subscription variant.
+     */
+    public function getVariantName(): ?string {
+        return $this->variantName;
+    }
+
+    /**
+     * Set the name of the subscription variant.
+     *
+     * @param string $variantName The name of the subscription variant.
+     * @return self
+     */
+    public function setVariantName(string $variantName): self {
+        $this->variantName = $variantName;
+        return $this;
+    }
+
+    /**
+     * Get the UTC date the subscription variant started.
+     *
+     * @return ?DateTimeInterface The UTC date the subscription variant started.
+     */
+    public function getVariantStartDate(): ?DateTimeInterface {
+        return $this->variantStartDate;
+    }
+
+    /**
+     * Set the UTC date the subscription variant started.
+     *
+     * @param DateTimeInterface $variantStartDate THe UTC date the subscription
+     *      variant started.
+     * @return self
+     */
+    public function setVariantStartDate(DateTimeInterface $variantStartDate): self {
+        $this->variantStartDate = $variantStartDate;
+        return $this;
+    }
+
+    /**
+     * Get the UTC date the subscription variant ends.
+     *
+     * @return ?DateTimeInterface The UTC date the subscription variant ends.
+     */
+    public function getVariantEndDate(): ?DateTimeInterface {
+        return $this->variantEndDate;
+    }
+
+    /**
+     * Set the UTC date the subscription variant ends.
+     *
+     * @param DateTimeInterface $variantEndDate THe UTC date the subscription
+     *      variant ends.
+     * @return self
+     */
+    public function setVariantEndDate(DateTimeInterface $variantEndDate): self {
+        $this->variantEndDate = $variantEndDate;
+        return $this;
+    }
+
+    /**
+     * Get the role ID.
+     *
+     * @return ?string The role ID.
+     */
+    public function getRoleId(): ?string {
+        return $this->roleId;
+    }
+
+    /**
+     * Set the role ID.
+     *
+     * @param string $roleId The role ID.
+     * @return self
+     */
+    public function setRoleId(string $roleId): self {
+        $this->roleId = $roleId;
         return $this;
     }
 }
