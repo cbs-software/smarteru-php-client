@@ -66,7 +66,7 @@ class LearnerReport {
      */
     protected ?string $employeeId = null;
 
-    /** 
+    /**
      * The User's division.
      */
     protected ?string $division = null;
