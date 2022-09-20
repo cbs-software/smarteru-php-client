@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace CBS\SmarterU\DataTypes;
 
+use CBS\SmarterU\Exceptions\InvalidArgumentException;
 use DateTimeInterface;
 
 /**
@@ -138,7 +139,7 @@ class LearnerReport {
     /**
      * The grade expressed as a percentage.
      */
-    protected ?double $gradePercentage = null;
+    protected ?float $gradePercentage = null;
 
     /**
      * The points scored by the User in the Course.
@@ -226,7 +227,7 @@ class LearnerReport {
      * @return string The user's surname.
      */
     public function getSurname(): string {
-        return $this->Surname;
+        return $this->surname;
     }
 
     /**
@@ -558,6 +559,13 @@ class LearnerReport {
      * @return self
      */
     public function setCustomFields(array $customFields): self {
+        foreach ($customFields as $field) {
+            if (!($field instanceof CustomField)) {
+                throw new InvalidArgumentException(
+                    '"$customFields" must be an array of CBS\SmarterU\DataTypes\CustomField instances.'
+                );
+            }
+        }
         $this->customFields = $customFields;
         return $this;
     }
@@ -687,19 +695,19 @@ class LearnerReport {
     /**
      * Get the User's grade expressed as a percentage.
      *
-     * @return ?double the User's grade expressed as a percentage.
+     * @return ?float the User's grade expressed as a percentage.
      */
-    public function getGradePercentage(): ?double {
+    public function getGradePercentage(): ?float {
         return $this->gradePercentage;
     }
 
     /**
      * Set the User's grade expressed as a percentage.
      *
-     * @param double $gradePercentage The User's grade expressed as a percentage.
+     * @param float $gradePercentage The User's grade expressed as a percentage.
      * @return self
      */
-    public function setGradePercentage(double $gradePercentage): self {
+    public function setGradePercentage(float $gradePercentage): self {
         $this->gradePercentage = $gradePercentage;
         return $this;
     }
@@ -750,7 +758,7 @@ class LearnerReport {
      * @return ?string The name of the subscription.
      */
     public function getSubscriptionName(): ?string {
-        return $this->subscriptionName();
+        return $this->subscriptionName;
     }
 
     /**
