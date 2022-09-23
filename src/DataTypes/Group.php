@@ -166,6 +166,14 @@ class Group {
      */
     protected ?string $dashboardSetId = null;
 
+    /**
+     * An array containing the permissions a User has within this Group. When
+     * making a GetUserGroups request to the SmarterU API, this will be used to
+     * keep track of the User's permissions in each group returned by the API.
+     * This is not used in any other context.
+     */
+    protected array $permissions = [];
+
     #endregion Properties
 
     #region Getters and Setters
@@ -687,6 +695,26 @@ class Group {
      */
     public function getName(): ?string {
         return $this->name;
+    }
+
+    /**
+     * Get the User's permissions within the Group.
+     *
+     * @return string[] The User's permissions within the Group.
+     */
+    public function getPermissions(): array {
+        return $this->permissions;
+    }
+
+    /**
+     * Set the User's permissions within the Group.
+     *
+     * @param string[] $permissions The User's permissions within the Group
+     * @return self
+     */
+    public function setPermissions(array $permissions): self {
+        $this->permissions = $permissions;
+        return $this;
     }
 
     #endregion Getters and Setters
