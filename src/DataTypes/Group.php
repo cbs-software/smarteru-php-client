@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace CBS\SmarterU\DataTypes;
 
-use CBS\SmarterU\DataTypes\GroupPermissions;
+use CBS\SmarterU\DataTypes\User;
 use CBS\SmarterU\DataTypes\LearningModule;
 use CBS\SmarterU\DataTypes\SubscriptionVariant;
 use CBS\SmarterU\DataTypes\Tag;
@@ -133,12 +133,8 @@ class Group {
     protected ?string $status = null;
 
     /**
-     * A container for the Users who are assigned to the group and the
-     * permissions that each User has within the group. Each element
-     * must be an instance of CBS\SmarterU\DataTypes\GroupPermissions.
-     * GroupPermissions::$groupName, GroupPermissions::$groupId, and either
-     * GroupPermissions::$email or GroupPermissions::$employeeId may be
-     * left unset.
+     * A container for the Users who are assigned to the group. Each element
+     * must be an instance of CBS\SmarterU\DataTypes\User.
      */
     protected array $users = [];
 
@@ -305,9 +301,7 @@ class Group {
      *
      * @param array $users A container for assigning Users to the group.
      *      Each element must be an instance of CBS\SmarterU\DataTypes\
-     *      GroupPermissions. GroupPermissions::$homeGroup, and either
-     *      GroupPermissions::$email or GroupPermissions::$employeeId must be
-     *      set.
+     *      User.
      * @return self
      */
     public function setUsers(array $users): self {
