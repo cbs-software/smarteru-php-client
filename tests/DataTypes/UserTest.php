@@ -14,8 +14,7 @@ declare(strict_types=1);
 
 namespace Tests\SmarterU\DataTypes;
 
-use CBS\SmarterU\DataTypes\GroupPermissions;
-use CBS\SmarterU\DataTypes\Permission;
+use CBS\SmarterU\DataTypes\Group;
 use CBS\SmarterU\DataTypes\User;
 use CBS\SmarterU\Exceptions\InvalidArgumentException;
 use DateTime;
@@ -65,15 +64,10 @@ class UserTest extends TestCase {
         $sendMailTo = 'Personal';
         // TODO implement roles. For iteration 1, we can assume it's empty.
         $homeGroup = 'Group B';
-        $permission = [(new Permission())
-            ->setAction('Grant')
-            ->setCode('MANAGE_USERS')];
-        $group1 = (new GroupPermissions())
-            ->setGroupName('Group A')
-            ->setPermissions($permission);
-        $group2 = (new GroupPermissions())
-            ->setGroupName('Group B')
-            ->setPermissions($permission);
+        $group1 = (new Group())
+            ->setName('Group A');
+        $group2 = (new Group())
+            ->setName('Group B');
         $groups = [$group1, $group2];
         // TODO implement venues. For iteration 1, we can assume it's empty.
         // TODO implement wages. For iteration 1, we can assume it's empty.
