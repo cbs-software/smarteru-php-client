@@ -16,6 +16,7 @@ namespace CBS\SmarterU;
 
 use CBS\SmarterU\DataTypes\Group;
 use CBS\SmarterU\DataTypes\User;
+use CBS\SmarterU\Exceptions\InvalidArgumentException;
 use CBS\SmarterU\Exceptions\MissingValueException;
 use CBS\SmarterU\Queries\GetGroupQuery;
 use CBS\SmarterU\Queries\GetUserQuery;
@@ -859,6 +860,175 @@ class XMLGenerator {
 
         return $xml->asXML();
     }
+
+    /**
+     * Generate the XML body for an addUsersToGroup or removeUsersFromGroup
+     * query. Functionally, this is just an updateGroup query with most values
+     * hardcoded to be left blank.
+     *
+     * @param string $accountApi The SmarterU API key identifying the account
+     *      making the request.
+     * @param string $userApi The SmarterU API key identifying the user within
+     *      that account who is making the request.
+     * @param array $users The Users who are being added to or removed from the
+     *      Group.
+     * @param Group $group The Group to which the Users are being added or
+     *      removed.
+     * @param string $action Whether the Users are being added to or removed
+     *      from the Group.
+     * @return string an XML representation of the query.
+     * @throws InvalidArgumentException If the "$users" array contains a value
+     *      that is not a User.
+     * @throws MissingValueException If the "$users" array contains a User that
+     *      does not have an email address or an employee ID.
+     */
+    public function changeGroupMembers(
+        string $accountApi,
+        string $userApi,
+        array $users,
+        Group $group,
+        string $action
+    ): string {
+        $xmlString = <<<XML
+        <SmarterU>
+        </SmarterU>
+        XML;
+
+        $xml = simplexml_load_string($xmlString);
+        $xml->addChild('AccountAPI', $accountApi);
+        $xml->addChild('UserAPI', $userApi);
+        $xml->addChild('Method', 'updateGroup');
+        $parameters = $xml->addChild('Parameters');
+        $groupTag = $parameters->addChild('Group');
+        $identifier = $groupTag->addChild('Identifier');
+        if (!empty($group->getName())) {
+            $identifier->addChild('Name', $group->getName());
+        } else if (!empty($group->getGroupId())) {
+            $identifier->addChild('GroupID', $group->getGroupId());
+        } else {
+            throw new MissingValueException(
+                'Cannot add or remove users from a Group without a group name or ID.'
+            );
+        }
+        $usersTag = $groupTag->addChild('Users');
+        foreach ($users as $user) {
+            if (!($user instanceof User)) {
+                throw new InvalidArgumentException(
+                    '"$users" must be an array of CBS\SmarterU\DataTypes\User instances'
+                );
+            }
+            $currentUser = $usersTag->addChild('User');
+            if (!empty($user->getEmail())) {
+                $currentUser->addChild('Email', $user->getEmail());
+            } else if (!empty($user->getEmployeeId())) {
+                $currentUser->addChild('EmployeeID', $user->getEmployeeId());
+            } else {
+                throw new MissingValueException(
+                    'All Users being added to or removed from a Group must have an email address or employee ID.'
+                );
+            }
+            $currentUser->addChild('UserAction', $action);
+            $currentUser->addChild(
+                'HomeGroup',
+                $user->getHomeGroup() === $group->getName() ? '1' : '0'
+            );
+            $currentUser->addChild('Permissions');
+        }
+
+        // The SmarterU API requires that these tags be present when making an
+        // updateGroup request. If they are left empty, no changes will be made
+        // to the Group's Learning Modules or Subscription Variants.
+        $learningModules = $groupTag->addChild('LearningModules');
+        $subscriptionVariants = $groupTag->addChild('SubscriptionVariants');
+
+        return $xml->asXML();
+    }
+
+    /**
+     * Generate the XML body for a grantPermission or revokePermission query.
+     * Functionally, this is just a specific type of updateGroup query.
+     *
+     * @param string $accountApi The SmarterU API key identifying the account
+     *      making the request.
+     * @param string $userApi The SmarterU API key identifying the user within
+     *      that account who is making the request.
+     * @param User $user The User whose permissions within the Group are being
+     *      updated.
+     * @param Group $group The Group in which the User's permissions are being
+     *      updated.
+     * @param array $permissions The permissions to be granted or revoked.
+     * @param string $action Whether the permissions are being granted or revoked.
+     * @return string an XML representation of the query.
+     * @throws MissingValueException If the user whose permissions are being
+     *      modified doesn't have an email address or an employee ID, or if the
+     *      Group in which the permissions are being modified does not have a
+     *      name or an ID.
+     */
+    public function changePermissions(
+        string $accountApi,
+        string $userApi,
+        User $user,
+        Group $group,
+        array $permissions,
+        string $action
+    ): string {
+        $xmlString = <<<XML
+        <SmarterU>
+        </SmarterU>
+        XML;
+
+        $xml = simplexml_load_string($xmlString);
+        $xml->addChild('AccountAPI', $accountApi);
+        $xml->addChild('UserAPI', $userApi);
+        $xml->addChild('Method', 'updateUser');
+        $parameters = $xml->addChild('Parameters');
+        $userTag = $parameters->addChild('User');
+        $identifier = $userTag->addChild('Identifier');
+        if (!empty($user->getEmail())) {
+            $identifier->addChild('Email', $user->getEmail());
+        } else if (!empty($user->getEmployeeId())) {
+            $identifier->addChild('EmployeeID', $user->getEmployeeId());
+        } else {
+            throw new MissingValueException(
+                'A User\'s permissions cannot be updated without either an email address or an employee ID.'
+            );
+        }
+        $info = $userTag->addChild('Info');
+        $info->addChild(
+            'LearnerNotifications',
+            $user->getLearnerNotifications() ? '1' : '0'
+        );
+        $info->addChild(
+            'SupervisorNotifications',
+            $user->getSupervisorNotifications() ? '1' : '0'
+        );
+        $profile = $userTag->addChild('Profile');
+        
+        $groups = $userTag->addChild('Groups');
+        $groupTag = $groups->addChild('Group');
+        if (!empty($group->getName())) {
+            $groupTag->addChild('GroupName', $group->getName());
+        } else if (!empty($group->getGroupId())) {
+            $groupTag->addChild('GroupID', $group->getGroupId());
+        } else {
+            throw new MissingValueException(
+                'Cannot assign permissions in a Group that has no name or ID.'
+            );
+        }
+        $groupTag->addChild('GroupAction', 'Add');
+        $groupPermissions = $groupTag->addChild('GroupPermissions');
+        foreach ($permissions as $permission) {
+            $permissionTag = $groupPermissions->addChild('Permission');
+            $permissionTag->addChild('Action', $action);
+            $permissionTag->addChild('Code', $permission);
+        }
+
+        $venues = $userTag->addChild('Venues');
+        $wages = $userTag->addChild('Wages');
+        return $xml->asXML();
+    }
+
+
 
     /**
      * Determine whether or not to filter listUsers results based on the user's
