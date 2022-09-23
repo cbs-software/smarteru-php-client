@@ -101,10 +101,6 @@ class GetLearnerReportQuery {
     ];
 
     /**
-     * Represents 
-     */
-
-    /**
      * The page number to return. Defaults to 1.
      */
     protected int $page = 1;
