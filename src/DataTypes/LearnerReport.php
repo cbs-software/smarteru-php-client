@@ -18,7 +18,12 @@ use CBS\SmarterU\Exceptions\InvalidArgumentException;
 use DateTimeInterface;
 
 /**
- * Represents a LearnerReport within SmarterU.
+ * Represents a LearnerReport within SmarterU. 
+ * 
+ * A Learner Report, also known as an Enrollment Report, enables course
+ * managers to view the progress of Users who have been assigned to the
+ * course. Please refer to the SmarterU documentation for further information:
+ * https://support.smarteru.com/v1/docs/enrollment-report
  */
 class LearnerReport {
     /**
