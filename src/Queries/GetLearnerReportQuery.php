@@ -14,6 +14,9 @@ declare(strict_types=1);
 
 namespace CBS\SmarterU\Queries;
 
+use CBS\SmarterU\DataTypes\CustomField;
+use CBS\SmarterU\DataTypes\Tag;
+use CBS\SmarterU\Exceptions\InvalidArgumentException;
 use CBS\SmarterU\Queries\Tags\DateRangeTag;
 
 /**
@@ -282,6 +285,7 @@ class GetLearnerReportQuery {
      */
     public function setPageSize(int $pageSize): self {
         $this->pageSize = min($pageSize, self::MAX_PAGE_SIZE);
+        return $this;
     }
 
     /**
@@ -301,6 +305,7 @@ class GetLearnerReportQuery {
      */
     public function setEnrollmentId(string $enrollmentId): self {
         $this->enrollmentId = $enrollmentId;
+        return $this;
     }
 
     /**
@@ -503,7 +508,7 @@ class GetLearnerReportQuery {
      *
      * @return DateRangeTag[] The completion date range.
      */
-    public function getCompletedDates(): self {
+    public function getCompletedDates(): array {
         return $this->completedDates;
     }
 
@@ -533,7 +538,7 @@ class GetLearnerReportQuery {
      *
      * @return DateRangeTag[] The due date range.
      */
-    public function getDueDates(): self {
+    public function getDueDates(): array {
         return $this->dueDates;
     }
 
@@ -562,7 +567,7 @@ class GetLearnerReportQuery {
      *
      * @return DateRangeTag[] The enrolled date range.
      */
-    public function getEnrolledDates(): self {
+    public function getEnrolledDates(): array {
         return $this->enrolledDates;
     }
 
@@ -591,7 +596,7 @@ class GetLearnerReportQuery {
      *
      * @return DateRangeTag[] The grace period date range.
      */
-    public function getGracePeriodDates(): self {
+    public function getGracePeriodDates(): array {
         return $this->gracePeriodDates;
     }
 
@@ -620,7 +625,7 @@ class GetLearnerReportQuery {
      *
      * @return DateRangeTag[] The last accessed date range.
      */
-    public function getLastAccessedDates(): self {
+    public function getLastAccessedDates(): array {
         return $this->lastAccessedDates;
     }
 
@@ -649,7 +654,7 @@ class GetLearnerReportQuery {
      *
      * @return DateRangeTag[] The started date range.
      */
-    public function getStartedDates(): self {
+    public function getStartedDates(): array {
         return $this->startedDates;
     }
 
@@ -779,6 +784,7 @@ class GetLearnerReportQuery {
         }
         $this->userEmailAddresses = $userEmailAddresses;
         $this->userStatus = null;
+        return $this;
     }
 
     /**
@@ -800,7 +806,7 @@ class GetLearnerReportQuery {
      * @throws InvalidArgumentException If "$userEmployeeIds" contains a value
      *      that is not a string.
      */
-    public function setEmployeeIds(array $employeeIds): self {
+    public function setUserEmployeeIds(array $userEmployeeIds): self {
         foreach ($userEmployeeIds as $id) {
             if (!is_string($id)) {
                 throw new InvalidArgumentException(
