@@ -14,8 +14,6 @@ declare(strict_types=1);
 
 namespace Tests\CBS\SmarterU\Client;
 
-use CBS\SmarterU\DataTypes\GroupPermissions;
-use CBS\SmarterU\DataTypes\Permission;
 use CBS\SmarterU\DataTypes\User;
 use CBS\SmarterU\Exceptions\MissingValueException;
 use CBS\SmarterU\Exceptions\SmarterUException;
@@ -57,19 +55,6 @@ class ListUsersClientTest extends TestCase {
      * Set up the test Users.
      */
     public function setUp(): void {
-        $permission1 = (new Permission())
-            ->setAction('Grant')
-            ->setCode('MANAGE_USERS');
-        $permission2 = (new Permission())
-            ->setAction('Grant')
-            ->setCode('MANAGE_GROUP');
-        $groupPermissions = (new GroupPermissions())
-            ->setGroupName('Group1')
-            ->setPermissions([$permission1, $permission2]);
-        $groupPermission2 = (new GroupPermissions())
-            ->setGroupName('Group2')
-            ->setPermissions([$permission1, $permission2]);
-        
         $this->user1 = (new User())
             ->setId('1')
             ->setEmail('phpunit@test.com')
@@ -106,8 +91,7 @@ class ListUsersClientTest extends TestCase {
             ->setReceiveNotifications(true)
             ->setHomeGroup('My Home Group')
             ->setCreatedDate(new DateTime('2022-07-20'))
-            ->setModifiedDate(new DateTime('2022-07-29'))
-            ->setGroups([$groupPermissions, $groupPermission2]);
+            ->setModifiedDate(new DateTime('2022-07-29'));
 
         $this->user2 = (new User())
             ->setId('2')
@@ -145,8 +129,7 @@ class ListUsersClientTest extends TestCase {
             ->setReceiveNotifications(true)
             ->setHomeGroup('My Home Group')
             ->setCreatedDate(new DateTime('2022-07-21'))
-            ->setModifiedDate(new DateTime('2022-07-30'))
-            ->setGroups([$groupPermissions, $groupPermission2]);
+            ->setModifiedDate(new DateTime('2022-07-30'));
 
         $this->user3 = (new User())
             ->setId('3')
@@ -184,8 +167,7 @@ class ListUsersClientTest extends TestCase {
             ->setReceiveNotifications(true)
             ->setHomeGroup('My Home Group')
             ->setCreatedDate(new DateTime('2022-07-22'))
-            ->setModifiedDate(new DateTime('2022-07-28'))
-            ->setGroups([$groupPermissions, $groupPermission2]);
+            ->setModifiedDate(new DateTime('2022-07-28'));
     }
 
     /**

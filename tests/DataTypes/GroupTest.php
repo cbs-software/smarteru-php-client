@@ -15,11 +15,10 @@ declare(strict_types=1);
 namespace Tests\CBS\SmarterU\DataTypes;
 
 use CBS\SmarterU\DataTypes\Group;
-use CBS\SmarterU\DataTypes\GroupPermissions;
 use CBS\SmarterU\DataTypes\LearningModule;
-use CBS\SmarterU\DataTypes\Permission;
 use CBS\SmarterU\DataTypes\SubscriptionVariant;
 use CBS\SmarterU\DataTypes\Tag;
+use CBS\SmarterU\DataTypes\User;
 use CBS\SmarterU\Exceptions\InvalidArgumentException;
 use CBS\SmarterU\Exceptions\MissingValueException;
 use DateTime;
@@ -29,93 +28,6 @@ use PHPUnit\Framework\TestCase;
  * Tests CBS\SmarterU\DataTypes\Group.
  */
 class GroupTest extends TestCase {
-    /**
-     * A Group fixture for testing.
-     */
-    protected Group $group;
-    
-    /**
-     * Set up test fixtures.
-     */
-    public function setUp(): void {
-        $name = 'My Group';
-        $groupId = '12';
-        $createdDate = new DateTime('2022/08/02');
-        $modifiedDate = new DateTime();
-        $description = 'This is a group created for testing.';
-        $homeGroupMessage = 'Home Group';
-        $email1 = 'phpunit@test.com';
-        $email2 = 'test@phpunit.com';
-        $notificationEmails = [$email1, $email2];
-        $userHelpOverrideDefault = false;
-        $userHelpEnabled = true;
-        $helpEmail1 = 'phpunit2@test.com';
-        $helpEmail2 = 'test2@phpunit.com';
-        $userHelpEmail = [$helpEmail1, $helpEmail2];
-        $userHelpText = 'Help Message';
-        $tag1 = (new Tag())
-            ->setTagId('1')
-            ->setTagValues('Tag1 values');
-        $tag2 = (new Tag())
-            ->setTagId('2')
-            ->setTagValues('Tag2 values');
-        $tags = [$tag1, $tag2];
-        $userLimitEnabled = true;
-        $userLimitAmount = 50;
-        $status = 'Active';
-        $permission1 = (new Permission())
-            ->setCode('MANAGE_USERS');
-        $permission2 = (new Permission())
-            ->setCode('MANAGE_COURSES');
-        $user1 = (new GroupPermissions())
-            ->setEmployeeId('2')
-            ->setHomeGroup(true)
-            ->setPermissions([$permission1, $permission2]);
-        $user2 = (new GroupPermissions())
-            ->setEmployeeId('3')
-            ->setHomeGroup(false)
-            ->setPermissions([]);
-        $users = [$user1, $user2];
-        $module1 = (new LearningModule())
-            ->setId('4')
-            ->setAllowSelfEnroll(true)
-            ->setAutoEnroll(false);
-        $module2 = (new LearningModule())
-            ->setId('5')
-            ->setAllowSelfEnroll(false)
-            ->setAutoEnroll(true);
-        $learningModules = [$module1, $module2];
-        $variant1 = (new SubscriptionVariant())
-            ->setId('6')
-            ->setRequiresCredits(true);
-        $variant2 = (new SubscriptionVariant())
-            ->setId('7')
-            ->setRequiresCredits(false);
-        $subscriptionVariants = [$variant1, $variant2];
-        $dashboardSetId = '8';
-
-        $this->group = (new Group())
-            ->setName($name)
-            ->setGroupId($groupId)
-            ->setCreatedDate($createdDate)
-            ->setModifiedDate($modifiedDate)
-            ->setDescription($description)
-            ->setHomeGroupMessage($homeGroupMessage)
-            ->setNotificationEmails($notificationEmails)
-            ->setUserHelpOverrideDefault($userHelpOverrideDefault)
-            ->setUserHelpEnabled($userHelpEnabled)
-            ->setUserHelpEmail($userHelpEmail)
-            ->setUserHelpText($userHelpText)
-            ->setTags($tags)
-            ->setUserLimitEnabled($userLimitEnabled)
-            ->setUserLimitAmount($userLimitAmount)
-            ->setStatus($status)
-            ->setUsers($users)
-            ->setLearningModules($learningModules)
-            ->setSubscriptionVariants($subscriptionVariants)
-            ->setDashboardSetId($dashboardSetId);
-    }
-
     /**
      * Tests agreement between getters and setters.
      */
@@ -145,16 +57,12 @@ class GroupTest extends TestCase {
         $userLimitEnabled = true;
         $userLimitAmount = 50;
         $status = 'Active';
-        $permission1 = (new Permission())
-            ->setCode('MANAGE_USERS');
-        $user1 = (new GroupPermissions())
+        $user1 = (new User())
             ->setEmployeeId('2')
-            ->setHomeGroup(true)
-            ->setPermissions([$permission1]);
-        $user2 = (new GroupPermissions())
+            ->setHomeGroup($name);
+        $user2 = (new User())
             ->setEmployeeId('3')
-            ->setHomeGroup(false)
-            ->setPermissions([]);
+            ->setHomeGroup('Other Group');
         $users = [$user1, $user2];
         $module1 = (new LearningModule())
             ->setId('4')

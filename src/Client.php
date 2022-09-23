@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace CBS\SmarterU;
 
 use CBS\SmarterU\DataTypes\Group;
-use CBS\SmarterU\DataTypes\GroupPermissions;
 use CBS\SmarterU\DataTypes\Permission;
 use CBS\SmarterU\DataTypes\Tag;
 use CBS\SmarterU\DataTypes\User;
@@ -510,9 +509,7 @@ class Client {
      *
      * @param GetUserQuery $query The query representing the User whose Groups
      *      are to be read.
-     * @return array An array of GroupPermissions instances representing the
-     *      specified User's membership in the Group(s) he or she is a member
-     *      of.
+     * @return array An array of Groups the User is a member of.
      * @throws MissingValueException If the Account API Key and/or the User
      *      API Key are unset in both this instance of the Client and in the
      *      query passed in as a parameter.
@@ -549,17 +546,11 @@ class Client {
         foreach ($bodyAsXml->Info->UserGroups->children() as $group) {
             $permissions = [];
             foreach ($group->Permissions->children() as $code) {
-                $permission = (new Permission())
-                    ->setCode((string) $code);
-                $permissions[] = $permission;
+                $permissions[] = (string) $code;
             }
-            $currentGroup = (new GroupPermissions())
-                ->setGroupName((string) $group->Name)
+            $currentGroup = (new Group())
+                ->setName((string) $group->Name)
                 ->setGroupId((string) $group->Identifier)
-                ->setHomeGroup(filter_var(
-                    (string) $group->IsHomeGroup,
-                    FILTER_VALIDATE_BOOLEAN
-                ))
                 ->setPermissions($permissions);
             $groups[] = $currentGroup;
         }
