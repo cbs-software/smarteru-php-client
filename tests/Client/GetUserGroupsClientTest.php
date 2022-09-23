@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace Tests\CBS\SmarterU;
 
-use CBS\SmarterU\DataTypes\GroupPermissions;
+use CBS\SmarterU\DataTypes\Group;
 use CBS\SmarterU\DataTypes\Permission;
 use CBS\SmarterU\Exceptions\MissingValueException;
 use CBS\SmarterU\Exceptions\SmarterUException;
@@ -366,17 +366,17 @@ class GetUserGroupsClientTest extends TestCase {
         
         self::assertIsArray($result);
         self::assertCount(1, $result);
-        self::assertInstanceOf(GroupPermissions::class, $result[0]);
-        self::assertEquals($name1, $result[0]->getGroupName());
+        self::assertInstanceOf(Group::class, $result[0]);
+        self::assertEquals($name1, $result[0]->getName());
         self::assertEquals($identifier1, $result[0]->getGroupId());
         self::assertCount(2, $result[0]->getPermissions());
-        self::assertEquals(
+        self::assertContains(
             $permission1,
-            $result[0]->getPermissions()[0]->getCode()
+            $result[0]->getPermissions()
         );
-        self::assertEquals(
+        self::assertContains(
             $permission2,
-            $result[0]->getPermissions()[1]->getCode()
+            $result[0]->getPermissions()
         );
     }
 
@@ -454,29 +454,29 @@ class GetUserGroupsClientTest extends TestCase {
 
         self::assertIsArray($result);
         self::assertCount(3, $result);
-        self::assertInstanceOf(GroupPermissions::class, $result[0]);
-        self::assertEquals($name1, $result[0]->getGroupName());
+        self::assertInstanceOf(Group::class, $result[0]);
+        self::assertEquals($name1, $result[0]->getName());
         self::assertEquals($identifier1, $result[0]->getGroupId());
         self::assertCount(2, $result[0]->getPermissions());
-        self::assertEquals(
+        self::assertContains(
             $permission1,
-            $result[0]->getPermissions()[0]->getCode()
+            $result[0]->getPermissions()
         );
-        self::assertEquals(
+        self::assertContains(
             $permission2,
-            $result[0]->getPermissions()[1]->getCode()
+            $result[0]->getPermissions()
         );
-        self::assertInstanceOf(GroupPermissions::class, $result[1]);
-        self::assertEquals($name2, $result[1]->getGroupName());
+        self::assertInstanceOf(Group::class, $result[1]);
+        self::assertEquals($name2, $result[1]->getName());
         self::assertEquals($identifier2, $result[1]->getGroupId());
         self::assertCount(0, $result[1]->getPermissions());
-        self::assertInstanceOf(GroupPermissions::class, $result[2]);
-        self::assertEquals($name3, $result[2]->getGroupName());
+        self::assertInstanceOf(Group::class, $result[2]);
+        self::assertEquals($name3, $result[2]->getName());
         self::assertEquals($identifier3, $result[2]->getGroupId());
         self::assertCount(1, $result[2]->getPermissions());
-        self::assertEquals(
+        self::assertContains(
             $permission1,
-            $result[2]->getPermissions()[0]->getCode()
+            $result[2]->getPermissions()
         );
     }
 }

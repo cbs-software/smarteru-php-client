@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace CBS\SmarterU;
 
 use CBS\SmarterU\DataTypes\Group;
-use CBS\SmarterU\DataTypes\GroupPermissions;
 use CBS\SmarterU\DataTypes\Permission;
 use CBS\SmarterU\DataTypes\Tag;
 use CBS\SmarterU\DataTypes\User;
@@ -1108,17 +1107,11 @@ class Client {
         foreach ($bodyAsXml->Info->UserGroups->children() as $group) {
             $permissions = [];
             foreach ($group->Permissions->children() as $code) {
-                $permission = (new Permission())
-                    ->setCode((string) $code);
-                $permissions[] = $permission;
+                $permissions[] = (string) $code;
             }
-            $currentGroup = (new GroupPermissions())
-                ->setGroupName((string) $group->Name)
+            $currentGroup = (new Group())
+                ->setName((string) $group->Name)
                 ->setGroupId((string) $group->Identifier)
-                ->setHomeGroup(filter_var(
-                    (string) $group->IsHomeGroup,
-                    FILTER_VALIDATE_BOOLEAN
-                ))
                 ->setPermissions($permissions);
             $groups[] = $currentGroup;
         }

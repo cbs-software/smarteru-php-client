@@ -15,11 +15,9 @@ declare(strict_types=1);
 namespace Tests\CBS\SmarterU\Client;
 
 use CBS\SmarterU\DataTypes\Group;
-use CBS\SmarterU\DataTypes\GroupPermissions;
 use CBS\SmarterU\DataTypes\LearningModule;
 use CBS\SmarterU\DataTypes\SubscriptionVariant;
 use CBS\SmarterU\DataTypes\Tag;
-use CBS\SmarterU\DataTypes\Permission;
 use CBS\SmarterU\Exceptions\MissingValueException;
 use CBS\SmarterU\Exceptions\SmarterUException;
 use CBS\SmarterU\Queries\GetUserGroupsQuery;
@@ -72,19 +70,6 @@ class CreateGroupClientTest extends TestCase {
         $userLimitEnabled = true;
         $userLimitAmount = 50;
         $status = 'Active';
-        $permission1 = (new Permission())
-            ->setCode('MANAGE_USERS');
-        $permission2 = (new Permission())
-            ->setCode('MANAGE_COURSES');
-        $user1 = (new GroupPermissions())
-            ->setEmployeeId('2')
-            ->setHomeGroup(true)
-            ->setPermissions([$permission1, $permission2]);
-        $user2 = (new GroupPermissions())
-            ->setEmployeeId('3')
-            ->setHomeGroup(false)
-            ->setPermissions([]);
-        $users = [$user1, $user2];
         $module1 = (new LearningModule())
             ->setId('4')
             ->setAllowSelfEnroll(true)
@@ -119,7 +104,6 @@ class CreateGroupClientTest extends TestCase {
             ->setUserLimitEnabled($userLimitEnabled)
             ->setUserLimitAmount($userLimitAmount)
             ->setStatus($status)
-            ->setUsers($users)
             ->setLearningModules($learningModules)
             ->setSubscriptionVariants($subscriptionVariants)
             ->setDashboardSetId($dashboardSetId);
