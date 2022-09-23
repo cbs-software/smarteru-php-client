@@ -89,8 +89,8 @@ class AddUsersToGroupClientTest extends TestCase {
 
     /**
      * Test that Client::addUsersToGroup() sends the correct input into the
-     * SmarterU API when all required information is present and only one
-     * User is being added to the Group.
+     * SmarterU API and returns the correct output when all required information
+     * is present and only one User is being added to the Group.
      */
     public function testAddUsersToGroupProducesCorrectInputSingleUser() {
         $name = 'My Group';
@@ -125,7 +125,7 @@ class AddUsersToGroupClientTest extends TestCase {
         $client->setHttpClient($httpClient);
 
         // Make the request.
-        $client->addUsersToGroup([$user], $group);
+        $result = $client->addUsersToGroup([$user], $group);
 
         // Make sure there is only 1 request, then translate it to XML.
         self::assertCount(1, $container);
@@ -139,12 +139,16 @@ class AddUsersToGroupClientTest extends TestCase {
             'Add'
         );
         self::assertEquals($decodedBody, $expectedBody);
+
+        // Make sure the expected value is returned.
+        self::assertInstanceOf(Group::class, $result);
+        self::assertEquals($result->getName(), $group->getName());
     }
 
     /**
      * Test that Client::addUsersToGroup() sends the correct input into the
-     * SmarterU API when all required information is present and multiple
-     * Users are being added to the Group.
+     * SmarterU API and returns the correct output when all required information
+     * is present and multiple Users are being added to the Group.
      */
     public function testAddUsersToGroupProducesCorrectInputMultipleUsers() {
         $name = 'My Group';

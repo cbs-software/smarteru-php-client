@@ -952,7 +952,7 @@ class XMLGenerator {
      *      making the request.
      * @param string $userApi The SmarterU API key identifying the user within
      *      that account who is making the request.
-     * @param array $user The User whose permissions within the Group are being
+     * @param User $user The User whose permissions within the Group are being
      *      updated.
      * @param Group $group The Group in which the User's permissions are being
      *      updated.

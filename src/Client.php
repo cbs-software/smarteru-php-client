@@ -241,9 +241,11 @@ class Client {
 
         $response = $this
             ->getHttpClient()
-            ->request('POST', self::POST_URL, ['form_params' => [
-                'Package' => $xml]
-        ]);
+            ->request(
+                'POST',
+                self::POST_URL, 
+                ['form_params' => ['Package' => $xml]]
+        );
 
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
@@ -285,9 +287,11 @@ class Client {
 
         $response = $this
             ->getHttpClient()
-            ->request('POST', self::POST_URL, ['form_params' => [
-                'Package' => $xml]
-        ]);
+            ->request(
+                'POST',
+                self::POST_URL, 
+                ['form_params' => ['Package' => $xml]]
+        );
 
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
@@ -395,9 +399,11 @@ class Client {
 
         $response = $this
             ->getHttpClient()
-            ->request('POST', self::POST_URL, ['form_params' => [
-                'Package' => $xml]
-        ]);
+            ->request(
+                'POST',
+                self::POST_URL, 
+                ['form_params' => ['Package' => $xml]]
+        );
 
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
@@ -478,9 +484,11 @@ class Client {
 
         $response = $this
             ->getHttpClient()
-            ->request('POST', self::POST_URL, ['form_params' => [
-                'Package' => $xml]
-        ]);
+            ->request(
+                'POST',
+                self::POST_URL, 
+                ['form_params' => ['Package' => $xml]]
+        );
 
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
@@ -522,9 +530,11 @@ class Client {
 
         $response = $this
             ->getHttpClient()
-            ->request('POST', self::POST_URL, ['form_params' => [
-                'Package' => $xml]
-        ]);
+            ->request(
+                'POST',
+                self::POST_URL, 
+                ['form_params' => ['Package' => $xml]]
+        );
 
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
@@ -570,9 +580,11 @@ class Client {
 
         $response = $this
             ->getHttpClient()
-            ->request('POST', self::POST_URL, ['form_params' => [
-                'Package' => $xml]
-        ]);
+            ->request(
+                'POST',
+                self::POST_URL, 
+                ['form_params' => ['Package' => $xml]]
+        );
 
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
@@ -612,9 +624,11 @@ class Client {
 
         $response = $this
             ->getHttpClient()
-            ->request('POST', self::POST_URL, ['form_params' => [
-                'Package' => $xml]
-        ]);
+            ->request(
+                'POST',
+                self::POST_URL, 
+                ['form_params' => ['Package' => $xml]]
+        );
 
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
@@ -691,9 +705,11 @@ class Client {
 
         $response = $this
             ->getHttpClient()
-            ->request('POST', self::POST_URL, ['form_params' => [
-                'Package' => $xml]
-        ]);
+            ->request(
+                'POST',
+                self::POST_URL, 
+                ['form_params' => ['Package' => $xml]]
+        );
 
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
@@ -751,9 +767,11 @@ class Client {
 
         $response = $this
             ->getHttpClient()
-            ->request('POST', self::POST_URL, ['form_params' => [
-                'Package' => $xml]
-        ]);
+            ->request(
+                'POST',
+                self::POST_URL, 
+                ['form_params' => ['Package' => $xml]]
+        );
 
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
@@ -776,9 +794,9 @@ class Client {
      * additional permissions, you must call Client::grantPermissions() after
      * assigning the User to the Group.
      *
-     * @param array $users An array containing one or more Users to add to the
+     * @param User[] $users An array containing one or more Users to add to the
      *      Group.
-     * @param Group $group The Group to which the Users will be added.
+     * @param Group $group The Group to which the User(s) will be added.
      * @return Group The Group as updated by the SmarterU API.
      * @throws InvalidArgumentException If the "$users" array contains a value
      *      that is not a User.
@@ -801,9 +819,11 @@ class Client {
 
         $response = $this
             ->getHttpClient()
-            ->request('POST', self::POST_URL, ['form_params' => [
-                'Package' => $xml]
-        ]);
+            ->request(
+                'POST',
+                self::POST_URL, 
+                ['form_params' => ['Package' => $xml]]
+        );
 
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
@@ -822,9 +842,9 @@ class Client {
     /**
      * Make a removeUsersFromGroup query to the SmarterU API.
      *
-     * @param array $users An array containing one or more Users to remove from
-     *      the Group.
-     * @param Group $group The Group from which the Users will be removed.
+     * @param User[] $users An array containing one or more Users to remove
+     *      from the Group.
+     * @param Group $group The Group from which the User(s) will be removed.
      * @return Group The Group as updated by the SmarterU API.
      * @throws InvalidArgumentException If the "$users" array contains a value
      *      that is not a User.
@@ -847,9 +867,11 @@ class Client {
 
         $response = $this
             ->getHttpClient()
-            ->request('POST', self::POST_URL, ['form_params' => [
-                'Package' => $xml]
-        ]);
+            ->request(
+                'POST',
+                self::POST_URL, 
+                ['form_params' => ['Package' => $xml]]
+        );
 
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
@@ -871,8 +893,8 @@ class Client {
      * @param User $user The User to grant permissions to.
      * @param Group $group The Group in which the User will be granted
      *      the specified permissions.
-     * @param array $permissions The permissions to be granted to the specified
-     *      User within the specified Group.
+     * @param string[] $permissions The permissions to be granted to the
+     *      specified User within the specified Group.
      * @return array The User as updated by the SmarterU API.
      * @throws InvalidArgumentException If any value in the "$permissions"
      *      array is not a string or is not one of the permissions accepted
@@ -915,9 +937,11 @@ class Client {
 
         $response = $this
             ->getHttpClient()
-            ->request('POST', self::POST_URL, ['form_params' => [
-                'Package' => $xml]
-        ]);
+            ->request(
+                'POST',
+                self::POST_URL, 
+                ['form_params' => ['Package' => $xml]]
+        );
 
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
@@ -939,7 +963,7 @@ class Client {
      * @param User $user The User to revoke permissions from.
      * @param Group $group The Group in which the User will have the specified
      *      permissions revoked.
-     * @param array $permissions The permissions to be revoked from the
+     * @param string[] $permissions The permissions to be revoked from the
      *      specified User within the specified Group.
      * @return array The User as updated by the SmarterU API.
      * @throws InvalidArgumentException If any value in the "$permissions"
@@ -983,9 +1007,11 @@ class Client {
 
         $response = $this
             ->getHttpClient()
-            ->request('POST', self::POST_URL, ['form_params' => [
-                'Package' => $xml]
-        ]);
+            ->request(
+                'POST',
+                self::POST_URL, 
+                ['form_params' => ['Package' => $xml]]
+        );
 
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 

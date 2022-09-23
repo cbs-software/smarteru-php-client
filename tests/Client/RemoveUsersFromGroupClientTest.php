@@ -126,7 +126,7 @@ class RemoveUsersFromGroupClientTest extends TestCase {
         $client->setHttpClient($httpClient);
 
         // Make the request.
-        $client->removeUsersFromGroup([$user], $group);
+        $result = $client->removeUsersFromGroup([$user], $group);
 
         // Make sure there is only 1 request, then translate it to XML.
         self::assertCount(1, $container);
@@ -140,6 +140,10 @@ class RemoveUsersFromGroupClientTest extends TestCase {
             'Remove'
         );
         self::assertEquals($decodedBody, $expectedBody);
+
+        // Make sure the expected value is returned.
+        self::assertInstanceOf(Group::class, $result);
+        self::assertEquals($result->getName(), $group->getName());
     }
 
     /**
