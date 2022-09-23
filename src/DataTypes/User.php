@@ -297,7 +297,7 @@ class User {
     /**
      * A container for assigning groups to the user and specifying group
      * permissions to be granted to this user. Each element must be an instance
-     * of CBS\SmarterU\DataTypes\GroupPermissions.
+     * of CBS\SmarterU\DataTypes\Group.
      */
     protected array $groups;
 
@@ -1106,18 +1106,16 @@ class User {
     }
 
     /**
-     * Get the container for assigning groups to the user and specifying the
-     * user's permissions within those groups.
+     * Get the container representing the Groups the User is a member of.
      *
-     * @return array the container for assigning groups to the user
+     * @return array the container for the User's groups
      */
     public function getGroups(): array {
         return $this->groups;
     }
 
     /**
-     * Set the container for assigning groups to the user and specifying the
-     * user's permissions within those groups.
+     * Set the container representing the Groups the User is a member of.
      *
      * @param array $groups the container for the user's group assignments
      * @return self
