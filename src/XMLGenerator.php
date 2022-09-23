@@ -1038,6 +1038,9 @@ class XMLGenerator {
      * @param GetLearnerReportQuery $query The query containing the parameters
      *      by which to filter the results.
      * @return string an XML representation of the query.
+     * @throws MissingValueException If the Group(s) or User(s) to include in
+     *      the report are not identified, or if Groups are filtered by tags
+     *      that are not identified.
      */
     public function getLearnerReport(
         string $accountApi,
