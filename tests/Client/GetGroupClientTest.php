@@ -44,9 +44,6 @@ class GetGroupClientTest extends TestCase {
         $name = 'My Group';
         $client = new Client($accountApi, $userApi);
 
-        $query = (new GetGroupQuery())
-            ->setName($name);
-
         $groupId = '1';
         $createdDate = '2022-07-29';
         $modifiedDate = '2022-07-30';
@@ -119,7 +116,7 @@ class GetGroupClientTest extends TestCase {
         $client->setHttpClient($httpClient);
 
         // Make the request.
-        $client->getGroup($query);
+        $client->readGroupByName($name);
 
         // Make sure there is only 1 request, then translate it to XML.
         self::assertCount(1, $container);
@@ -128,7 +125,8 @@ class GetGroupClientTest extends TestCase {
         $expectedBody = 'Package=' . $client->getXMLGenerator()->getGroup(
             $accountApi,
             $userApi,
-            $query
+            (new GetGroupQuery())
+                ->setName($name)
         );
         self::assertEquals($decodedBody, $expectedBody);
     }
@@ -143,9 +141,6 @@ class GetGroupClientTest extends TestCase {
         $userApi = 'user';
         $groupId = '1';
         $client = new Client($accountApi, $userApi);
-
-        $query = (new GetGroupQuery())
-            ->setGroupId($groupId);
 
         $name = 'My Group';
         $createdDate = '2022-07-29';
@@ -219,7 +214,7 @@ class GetGroupClientTest extends TestCase {
         $client->setHttpClient($httpClient);
 
         // Make the request.
-        $client->getGroup($query);
+        $client->readGroupById($groupId);
 
         // Make sure there is only 1 request, then translate it to XML.
         self::assertCount(1, $container);
@@ -228,7 +223,8 @@ class GetGroupClientTest extends TestCase {
         $expectedBody = 'Package=' . $client->getXMLGenerator()->getGroup(
             $accountApi,
             $userApi,
-            $query
+            (new GetGroupQuery())
+                ->setGroupId($groupId)
         );
         self::assertEquals($decodedBody, $expectedBody);
     }
@@ -241,9 +237,6 @@ class GetGroupClientTest extends TestCase {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
-
-        $query = (new GetGroupQuery())
-            ->setGroupId('1');
 
         $response = new Response(404);
 
@@ -262,7 +255,7 @@ class GetGroupClientTest extends TestCase {
 
         self::expectException(ClientException::class);
         self::expectExceptionMessage('Client error: ');
-        $client->getGroup($query);
+        $client->readGroupById('1');
     }
 
     /**
@@ -273,9 +266,6 @@ class GetGroupClientTest extends TestCase {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
-
-        $query = (new GetGroupQuery())
-            ->setGroupId('1');
 
         $xmlString = <<<XML
         <SmarterU>
@@ -316,7 +306,7 @@ class GetGroupClientTest extends TestCase {
         self::expectExceptionMessage(
             'SmarterU rejected the request due to the following error(s): Error1: Testing, Error2: 123'
         );
-        $client->getGroup($query);
+        $client->readGroupByName('My Group');
     }
 
     /**
@@ -328,9 +318,6 @@ class GetGroupClientTest extends TestCase {
         $userApi = 'user';
         $groupId = '1';
         $client = new Client($accountApi, $userApi);
-
-        $query = (new GetGroupQuery())
-            ->setGroupId($groupId);
 
         $name = 'My Group';
         $createdDate = '2022-07-29';
@@ -375,7 +362,7 @@ class GetGroupClientTest extends TestCase {
         $client->setHttpClient($httpClient);
             
         // Make the request.
-        $result = $client->getGroup($query);
+        $result = $client->readGroupById($groupId);
         
         self::assertNull($result);
     }
@@ -389,9 +376,6 @@ class GetGroupClientTest extends TestCase {
         $userApi = 'user';
         $groupId = '1';
         $client = new Client($accountApi, $userApi);
-
-        $query = (new GetGroupQuery())
-            ->setGroupId($groupId);
 
         $name = 'My Group';
         $createdDate = '2022-07-29';
@@ -457,7 +441,7 @@ class GetGroupClientTest extends TestCase {
         $client->setHttpClient($httpClient);
             
         // Make the request.
-        $result = $client->getGroup($query);
+        $result = $client->readGroupById($groupId);
         
         self::assertInstanceOf(Group::class, $result);
         self::assertEquals($name, $result->getName());
