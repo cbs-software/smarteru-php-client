@@ -19,6 +19,7 @@ use CBS\SmarterU\DataTypes\User;
 use CBS\SmarterU\Exceptions\InvalidArgumentException;
 use CBS\SmarterU\Exceptions\MissingValueException;
 use CBS\SmarterU\Queries\GetGroupQuery;
+use CBS\SmarterU\Queries\GetLearnerReportQuery;
 use CBS\SmarterU\Queries\GetUserQuery;
 use CBS\SmarterU\Queries\ListGroupsQuery;
 use CBS\SmarterU\Queries\ListUsersQuery;
@@ -1058,8 +1059,8 @@ class XMLGenerator {
         $xml->addChild('Method', 'getLearnerReport');
         $parameters = $xml->addChild('Parameters');
         $report = $parameters->addChild('Report');
-        $report->addChild('Page', $query->getPage());
-        $report->addChild('PageSize', $query->getPageSize());
+        $report->addChild('Page', (string) $query->getPage());
+        $report->addChild('PageSize', (string) $query->getPageSize());
         $filters = $report->addChild('Filters');
         $filters->addChild('EnrollmentID', $query->getEnrollmentId());
         $groups = $filters->addChild('Groups');
@@ -1100,12 +1101,12 @@ class XMLGenerator {
                 if (!empty($query->getLearningModuleStatus())) {
                     $learningModule->addChild(
                         'LearningModuleStatus',
-                        $query->getLearningModuleStatus
+                        $query->getLearningModuleStatus()
                     );
                 }
                 if (!empty($query->getLearningModuleNames())) {
                     $names = $learningModule->addChild('LearningModuleNames');
-                    foreach ($query->getLearningModuleNames as $name) {
+                    foreach ($query->getLearningModuleNames() as $name) {
                         $names->addChild('LearningModuleName', $name);
                     }
                 }
@@ -1126,11 +1127,11 @@ class XMLGenerator {
                     );
                     $completedDate->addChild(
                         'CompletedDateFrom',
-                        $date->getDateFrom()->format('d/M/y')
+                        $date->getDateFrom()->format('d-M-y')
                     );
                     $completedDate->addChild(
                         'CompletedDateTo',
-                        $date->getDateTo()->format('d/M/y')
+                        $date->getDateTo()->format('d-M-y')
                     );
                 }
             }
@@ -1140,11 +1141,11 @@ class XMLGenerator {
                     $dueDate = $dueDates->addChild('DueDate');
                     $dueDate->addChild(
                         'DueDateFrom',
-                        $date->getDateFrom()->format('d/M/y')
+                        $date->getDateFrom()->format('d-M-y')
                     );
                     $dueDate->addChild(
                         'DueDateTo',
-                        $date->getDateTo()->format('d/M/y')
+                        $date->getDateTo()->format('d-M-y')
                     );
                 }
             }
@@ -1156,11 +1157,11 @@ class XMLGenerator {
                     );
                     $enrolledDate->addChild(
                         'EnrolledDateFrom',
-                        $date->getDateFrom()->format('d/M/y')
+                        $date->getDateFrom()->format('d-M-y')
                     );
                     $enrolledDate->addChild(
                         'EnrolledDateTo',
-                        $date->getDateTo()->format('d/M/y')
+                        $date->getDateTo()->format('d-M-y')
                     );
                 }
             }
@@ -1174,11 +1175,11 @@ class XMLGenerator {
                     );
                     $gracePeriodDate->addChild(
                         'GracePeriodDateFrom',
-                        $date->getDateFrom()->format('d/M/y')
+                        $date->getDateFrom()->format('d-M-y')
                     );
                     $gracePeriodDate->addChild(
                         'GracePeriodDateTo',
-                        $date->getDateTo()->format('d/M/y')
+                        $date->getDateTo()->format('d-M-y')
                     );
                 }
             }
@@ -1192,11 +1193,11 @@ class XMLGenerator {
                     );
                     $lastAccessedDate->addChild(
                         'LastAccessedDateFrom',
-                        $date->getDateFrom()->format('d/M/y')
+                        $date->getDateFrom()->format('d-M-y')
                     );
                     $lastAccessedDate->addChild(
                         'LastAccessedDateTo',
-                        $date->getDateTo()->format('d/M/y')
+                        $date->getDateTo()->format('d-M-y')
                     );
                 }
             }
@@ -1208,11 +1209,11 @@ class XMLGenerator {
                     );
                     $startedDate->addChild(
                         'StartedDateFrom',
-                        $date->getDateFrom()->format('d/M/y')
+                        $date->getDateFrom()->format('d-M-y')
                     );
                     $startedDate->addChild(
                         'StartedDateTo',
-                        $date->getDateTo()->format('d/M/y')
+                        $date->getDateTo()->format('d-M-y')
                     );
                 }
             }
@@ -1222,22 +1223,22 @@ class XMLGenerator {
             $createdDate = $enrollments->addChild('CreatedDate');
             $createdDate->addChild(
                 'CreatedDateFrom',
-                $query->getCreatedDate()->getDateFrom()->format('d/M/y')
+                $query->getCreatedDate()->getDateFrom()->format('d-M-y')
             );
             $createdDate->addChild(
                 'CreatedDateTo',
-                $query->getCreatedDate()->getDateTo()->format('d/M/y')
+                $query->getCreatedDate()->getDateTo()->format('d-M-y')
             );
         }
         if (!empty($query->getModifiedDate())) {
             $modifiedDate = $enrollments->addChild('ModifiedDate');
             $modifiedDate->addChild(
                 'ModifiedDateFrom',
-                $query->getModifiedDate()->getDateFrom()->format('d/M/y')
+                $query->getModifiedDate()->getDateFrom()->format('d-M-y')
             );
             $modifiedDate->addChild(
                 'ModifiedDateTo',
-                $query->getModifiedDate()->getDateTo()->format('d/M/y')
+                $query->getModifiedDate()->getDateTo()->format('d-M-y')
             );
         }
         $users = $filters->addChild('Users');
