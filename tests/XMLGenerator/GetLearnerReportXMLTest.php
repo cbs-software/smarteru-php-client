@@ -412,7 +412,7 @@ class GetLearnerReportXMLTest extends TestCase {
         self::assertCount(2, $dates);
         self::assertArrayHasKey('DueDateFrom', $dates);
         self::assertEquals(
-            $dates['DueDateFrom'], 
+            $dates['DueDateFrom'],
             $dueDate1->getDateFrom()->format('d-M-y')
         );
         self::assertArrayHasKey('DueDateTo', $dates);
@@ -426,7 +426,7 @@ class GetLearnerReportXMLTest extends TestCase {
         self::assertCount(2, $dates);
         self::assertArrayHasKey('EnrolledDateFrom', $dates);
         self::assertEquals(
-            $dates['EnrolledDateFrom'], 
+            $dates['EnrolledDateFrom'],
             $enrolledDate1->getDateFrom()->format('d-M-y')
         );
         self::assertArrayHasKey('EnrolledDateTo', $dates);
@@ -440,7 +440,7 @@ class GetLearnerReportXMLTest extends TestCase {
         self::assertCount(2, $dates);
         self::assertArrayHasKey('GracePeriodDateFrom', $dates);
         self::assertEquals(
-            $dates['GracePeriodDateFrom'], 
+            $dates['GracePeriodDateFrom'],
             $gracePeriodDate1->getDateFrom()->format('d-M-y')
         );
         self::assertArrayHasKey('GracePeriodDateTo', $dates);
@@ -454,7 +454,7 @@ class GetLearnerReportXMLTest extends TestCase {
         self::assertCount(2, $dates);
         self::assertArrayHasKey('LastAccessedDateFrom', $dates);
         self::assertEquals(
-            $dates['LastAccessedDateFrom'], 
+            $dates['LastAccessedDateFrom'],
             $lastAccessedDate1->getDateFrom()->format('d-M-y')
         );
         self::assertArrayHasKey('LastAccessedDateTo', $dates);
@@ -468,7 +468,7 @@ class GetLearnerReportXMLTest extends TestCase {
         self::assertCount(2, $dates);
         self::assertArrayHasKey('StartedDateFrom', $dates);
         self::assertEquals(
-            $dates['StartedDateFrom'], 
+            $dates['StartedDateFrom'],
             $startedDate1->getDateFrom()->format('d-M-y')
         );
         self::assertArrayHasKey('StartedDateTo', $dates);
