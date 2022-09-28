@@ -14,14 +14,16 @@ declare(strict_types=1);
 
 namespace CBS\SmarterU;
 
+use CBS\SmarterU\DataTypes\CustomField;
 use CBS\SmarterU\DataTypes\Group;
+use CBS\SmarterU\DataTypes\LearnerReport;
 use CBS\SmarterU\DataTypes\Permission;
 use CBS\SmarterU\DataTypes\Tag;
 use CBS\SmarterU\DataTypes\User;
 use CBS\SmarterU\Exceptions\InvalidArgumentException;
 use CBS\SmarterU\Exceptions\SmarterUException;
-use CBS\SmarterU\Queries\BaseQuery;
 use CBS\SmarterU\Queries\GetGroupQuery;
+use CBS\SmarterU\Queries\GetLearnerReportQuery;
 use CBS\SmarterU\Queries\GetUserQuery;
 use CBS\SmarterU\Queries\ListGroupsQuery;
 use CBS\SmarterU\Queries\ListUsersQuery;
@@ -991,15 +993,18 @@ class Client {
 
         $learnerReports = [];
         foreach ($bodyAsXml->Info->LearnerReport->children() as $report) {
+            // Some values will always be returned by SmarterU.
             $currentReport = (new LearnerReport())
                 ->setId((string) $report->ID)
                 ->setCourseName((string) $report->CourseName)
-                ->setLastName((string) $report->LastName)
-                ->setFirstName((string) $report->FirstName)
+                ->setSurname((string) $report->LastName)
+                ->setGivenName((string) $report->FirstName)
                 ->setLearningModuleId((string) $report->LearningModuleID)
                 ->setUserId((string) $report->UserID)
-                ->setCreatedDate(new DateTime($report->CreatedDate))
-                ->setModifiedDate(new DateTime($report->ModifiedDate));
+                ->setCreatedDate(new DateTime((string) $report->CreatedDate))
+                ->setModifiedDate(new DateTime((string)$report->ModifiedDate));
+
+            // Other values may or may not be returned, depending on the input.
             if (isset($report->AlternateEmail)) {
                 $currentReport->setAlternateEmail(
                     (string) $report->AlternateEmail
@@ -1058,7 +1063,7 @@ class Client {
                 );
             }
             if (isset($report->Points)) {
-                $currentReport->setPoints((string) $report->Points);
+                $currentReport->setPoints((int) $report->Points);
             }
             if (isset($report->Progress)) {
                 $currentReport->setProgress((string) $report->Progress);
