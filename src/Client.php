@@ -14,14 +14,16 @@ declare(strict_types=1);
 
 namespace CBS\SmarterU;
 
+use CBS\SmarterU\DataTypes\CustomField;
 use CBS\SmarterU\DataTypes\Group;
+use CBS\SmarterU\DataTypes\LearnerReport;
 use CBS\SmarterU\DataTypes\Permission;
 use CBS\SmarterU\DataTypes\Tag;
 use CBS\SmarterU\DataTypes\User;
 use CBS\SmarterU\Exceptions\InvalidArgumentException;
 use CBS\SmarterU\Exceptions\SmarterUException;
-use CBS\SmarterU\Queries\BaseQuery;
 use CBS\SmarterU\Queries\GetGroupQuery;
+use CBS\SmarterU\Queries\GetLearnerReportQuery;
 use CBS\SmarterU\Queries\GetUserQuery;
 use CBS\SmarterU\Queries\ListGroupsQuery;
 use CBS\SmarterU\Queries\ListUsersQuery;
@@ -952,6 +954,158 @@ class Client {
             ->setEmail($email)
             ->setEmployeeId($employeeId);
     }
+
+    /**
+     * Make a GetLearnerReport query to the SmarterU API.
+     *
+     * @param GetLearnerReportQuery $query The query by which to filter the
+     *      results of the Learner Report.
+     * @return LearnerReport[] A list of all LearnerReports matching the query.
+     * @throws MissingValueException If the Group(s) or User(s) to include in
+     *      the report are not identified, or if Groups are filtered by tags
+     *      that are not identified.
+     * @throws ClientException If the HTTP response includes a status code
+     *      indicating that an HTTP error has prevented the request from
+     *      being made.
+     * @throws SmarterUException If the response from the SmarterU API
+     *      reports a fatal error that prevents the request from executing.
+     */
+    public function getLearnerReport(GetLearnerReportQuery $query): array {
+        $xml = $this->getXMLGenerator()->getLearnerReport(
+            $this->getAccountApi(),
+            $this->getUserApi(),
+            $query
+        );
+
+        $response = $this
+            ->getHttpClient()
+            ->request(
+                'POST',
+                self::POST_URL, 
+                ['form_params' => ['Package' => $xml]]
+        );
+
+        $bodyAsXml = simplexml_load_string((string) $response->getBody());
+
+        if ((string) $bodyAsXml->Result === 'Failed') {
+            throw new SmarterUException($this->readErrors($bodyAsXml->Errors));
+        }
+
+        $learnerReports = [];
+        foreach ($bodyAsXml->Info->LearnerReport->children() as $report) {
+            // Some values will always be returned by SmarterU.
+            $currentReport = (new LearnerReport())
+                ->setId((string) $report->ID)
+                ->setCourseName((string) $report->CourseName)
+                ->setSurname((string) $report->LastName)
+                ->setGivenName((string) $report->FirstName)
+                ->setLearningModuleId((string) $report->LearningModuleID)
+                ->setUserId((string) $report->UserID)
+                ->setCreatedDate(new DateTime((string) $report->CreatedDate))
+                ->setModifiedDate(new DateTime((string)$report->ModifiedDate));
+
+            // Other values may or may not be returned, depending on the input.
+            if (isset($report->AlternateEmail)) {
+                $currentReport->setAlternateEmail(
+                    (string) $report->AlternateEmail
+                );
+            }
+            if (isset($report->CompletedDate)) {
+                $currentReport->setCompletedDate(
+                    new DateTime((string) $report->CompletedDate)
+                );
+            }
+            if (isset($report->CourseDuration)) {
+                $currentReport->setCourseDuration(
+                    (string) $report->CourseDuration
+                );
+            }
+            if (isset($report->CourseSessionID)) {
+                $currentReport->setCourseSessionId(
+                    (string) $report->CourseSessionID
+                );
+            }
+            if (isset($report->Division)) {
+                $currentReport->setDivision((string) $report->Division);
+            }
+            if (isset($report->DueDate)) {
+                $currentReport->setDueDate(
+                    new DateTime((string) $report->DueDate)
+                );
+            }
+            if (isset($report->EmployeeID)) {
+                $currentReport->setEmployeeId(
+                    (string) $report->EmployeeID
+                );
+            }
+            if (isset($report->EnrolledDate)) {
+                $currentReport->setEnrolledDate(
+                    new DateTime((string) $report->EnrolledDate)
+                );
+            }
+            if (isset($report->Grade)) {
+                $currentReport->setGrade((string) $report->Grade);
+            }
+            if (isset($report->GradePercentage)) {
+                $currentReport->setGradePercentage(
+                    (float) $report->GradePercentage
+                );
+            }
+            if (isset($report->GroupID)) {
+                $currentReport->setGroupId((string) $report->GroupID);
+            }
+            if (isset($report->GroupName)) {
+                $currentReport->setGroupName((string) $report->GroupName);
+            }
+            if (isset($report->LastAccessedDate)) {
+                $currentReport->setLastAccessedDate(
+                    new DateTime((string) $report->LastAccessedDate)
+                );
+            }
+            if (isset($report->Points)) {
+                $currentReport->setPoints((int) $report->Points);
+            }
+            if (isset($report->Progress)) {
+                $currentReport->setProgress((string) $report->Progress);
+            }
+            if (isset($report->RoleID)) {
+                $currentReport->setRoleId((string) $report->RoleID);
+            }
+            if (isset($report->StartedDate)) {
+                $currentReport->setStartedDate(
+                    new DateTime((string) $report->StartedDate)
+                );
+            }
+            if (isset($report->SubscriptionName)) {
+                $currentReport->setSubscriptionName(
+                    (string) $report->SubscriptionName
+                );
+            }
+            if (isset($report->Title)) {
+                $currentReport->setTitle((string) $report->Title);
+            }
+            if (isset($report->UserEmail)) {
+                $currentReport->setUserEmail((string) $report->UserEmail);
+            }
+            if (isset($report->VariantEndDate)) {
+                $currentReport->setVariantEndDate(
+                    new DateTime((string) $report->VariantEndDate)
+                );
+            }
+            if (isset($report->VariantName)) {
+                $currentReport->setVariantName((string) $report->VariantName);
+            }
+            if (isset($report->VariantStartDate)) {
+                $currentReport->setVariantStartDate(
+                    new DateTime((string) $report->VariantStartDate)
+                );
+            }
+            $learnerReports[] = $currentReport;
+        }
+
+        return $learnerReports;        
+    }
+
 
     /**
      * Make a GetUser query to the SmarterU API.
