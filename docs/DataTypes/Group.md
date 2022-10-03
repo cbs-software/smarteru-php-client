@@ -25,16 +25,11 @@ training.
 |[getStatus](#groupgetstatus)|Returns the group's status.|
 |[getSubscriptionVariants](#groupgetsubscriptionvariants)|Get the container for assigning subscription variants to the group.|
 |[getTags](#groupgettags)|Returns the group's tags.|
-|[getUserHelpEmail](#groupgetuserhelpemail)|Get the email addresses to which help requests will be sent. If no email
-addresses are specified, the help requests will be sent to all
-administrators.|
-|[getUserHelpEnabled](#groupgetuserhelpenabled)|Get whether a link displays in the header of the learner interface that
-enables users who have the group as their home group to request help.|
+|[getUserHelpEmail](#groupgetuserhelpemail)|Get the email addresses to which help requests will be sent. If no email addresses are specified, the help requests will be sent to all administrators.|
+|[getUserHelpEnabled](#groupgetuserhelpenabled)|Get whether a link displays in the header of the learner interface that enables users who have the group as their home group to request help.|
 |[getUserHelpOverrideDefault](#groupgetuserhelpoverridedefault)|Get whether the Enable User Help setting is overriden by the group.|
-|[getUserHelpText](#groupgetuserhelptext)|Get the text to display for the help link in the learner interface's
-header.|
-|[getUserLimitAmount](#groupgetuserlimitamount)|Get the maximum number of users that can be added to the group. Null if
-there is no limit.|
+|[getUserHelpText](#groupgetuserhelptext)|Get the text to display for the help link in the learner interface's header.|
+|[getUserLimitAmount](#groupgetuserlimitamount)|Get the maximum number of users that can be added to the group. Null if there is no limit.|
 |[getUserLimitEnabled](#groupgetuserlimitenabled)|Get whether or not the group has a user limit enabled.|
 |[getUsers](#groupgetusers)|Get the container for assigning Users to the group.|
 |[setCreatedDate](#groupsetcreateddate)|Sets the date and time when the group was created.|
@@ -49,20 +44,14 @@ there is no limit.|
 |[setStatus](#groupsetstatus)|Sets the group's status.|
 |[setSubscriptionVariants](#groupsetsubscriptionvariants)|Set the container for assigning subscription variants to the group.|
 |[setTags](#groupsettags)|Sets the group's tags.|
-|[setUserHelpEmail](#groupsetuserhelpemail)|Set the email addresses to which help requests will be sent. If no email
-addresses are specified, the help requests will be sent to all
-administrators.|
-|[setUserHelpEnabled](#groupsetuserhelpenabled)|Set whether a link displays in the header of the learner interface that
-enables users who have the group as their home group to request help.|
+|[setUserHelpEmail](#groupsetuserhelpemail)|Set the email addresses to which help requests will be sent. If no email addresses are specified, the help requests will be sent to all administrators.|
+|[setUserHelpEnabled](#groupsetuserhelpenabled)|Set whether a link displays in the header of the learner interface that enables users who have the group as their home group to request help.|
 |[setUserHelpOverrideDefault](#groupsetuserhelpoverridedefault)|Set whether the Enable User Help setting is overriden by the group.|
-|[setUserHelpText](#groupsetuserhelptext)|Set the text to display for the help link in the learner interface's
-header.|
-|[setUserLimitAmount](#groupsetuserlimitamount)|Set the maximum number of users that can be added to the group. Set this
-to null to remove the limit.|
+|[setUserHelpText](#groupsetuserhelptext)|Set the text to display for the help link in the learner interface's header.|
+|[setUserLimitAmount](#groupsetuserlimitamount)|Set the maximum number of users that can be added to the group. Set this to null to remove the limit.|
 |[setUserLimitEnabled](#groupsetuserlimitenabled)|Set whether or not the group has a user limit enabled.|
 |[setUsers](#groupsetusers)|Set the container for assigning Users to the group.|
-|[toXML](#grouptoxml)|Return an XML representation of the Group to be passed into the SmarterU
-API as a parameter for group-related queries.|
+|[toXML](#grouptoxml)|Return an XML representation of the Group to be passed into the SmarterU API as a parameter for group-related queries.|
 
 
 
