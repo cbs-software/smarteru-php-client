@@ -1086,9 +1086,7 @@ Set the container for assigning Users to the group.
 * `(array) $users`
 : A container for assigning Users to the group.  
 Each element must be an instance of CBS\SmarterU\DataTypes\  
-GroupPermissions. GroupPermissions::$homeGroup, and either  
-GroupPermissions::$email or GroupPermissions::$employeeId must be  
-set.  
+User.
 
 **Return Values**
 

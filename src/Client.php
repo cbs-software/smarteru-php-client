@@ -1043,9 +1043,7 @@ class Client {
      *
      * @param GetUserQuery $query The query representing the User whose Groups
      *      are to be read.
-     * @return array An array of GroupPermissions instances representing the
-     *      specified User's membership in the Group(s) he or she is a member
-     *      of.
+     * @return array An array of the Groups the specified User is a member of.
      * @throws ClientException If the HTTP response includes a status code
      *      indicating that an HTTP error has prevented the request from
      *      being made.
