@@ -67,7 +67,7 @@ $client = new Client($accountAPIkey, $userAPIkey);
 
 ```
 
-The following is a list of methods in Client.php that interact with the SmarterU API:
+The following is a list of public methods in Client.php that interact with the SmarterU API:
     
 1. [createUser](https://support.smarteru.com/v1/docs/api-createuser)
 2. readUserById

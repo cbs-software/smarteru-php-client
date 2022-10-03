@@ -1052,8 +1052,7 @@ Make an UpdateUser query to the SmarterU API.
 
 
 `\MissingValueException`
-> If the Account API Key and/or the User  
-API Key are unset.
+> If the User being updated does not have an email address or an employee ID.
 
 `\ClientException`
 > If the HTTP response includes a status code  

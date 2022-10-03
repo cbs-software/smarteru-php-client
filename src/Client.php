@@ -200,6 +200,8 @@ class Client {
     /**
      * Get the XML Generator. If one has not already been provided, a new
      * default XMLGenerator instance will be created and returned.
+     *
+     * @return XMLGenerator The XML Generator.
      */
     public function getXMLGenerator(): XMLGenerator {
         if (!isset($this->xmlGenerator)) {
@@ -224,8 +226,8 @@ class Client {
      *
      * @param User $user the user to create
      * @return User The user as created by the API.
-     * @throws MissingValueException If the Account API Key and/or the User
-     *      API Key are unset.
+     * @throws MissingValueException If the User to be created does not have
+     *      an email address or an employee ID, or does not have a home Group.
      * @throws ClientException If the HTTP response includes a status code
      *      indicating that an HTTP error has prevented the request from
      *      being made.
@@ -267,9 +269,6 @@ class Client {
      * @param string $employeeId The ID of the User to return.
      * @return ?User The User whose ID matches the provided ID,
      *      or null if no such User exists within your SmarterU Account.
-     * @throws MissingValueException If the Account API Key and/or the User
-     *      API Key are unset in both this instance of the Client and in the
-     *      query passed in as a parameter.
      * @throws ClientException If the HTTP response includes a status code
      *      indicating that an HTTP error has prevented the request from
      *      being made.
@@ -289,9 +288,6 @@ class Client {
      * @param string $employeeId The email address of the User to return.
      * @return ?User The User whose email address matches the one provided,
      *      or null if no such User exists within your SmarterU Account.
-     * @throws MissingValueException If the Account API Key and/or the User
-     *      API Key are unset in both this instance of the Client and in the
-     *      query passed in as a parameter.
      * @throws ClientException If the HTTP response includes a status code
      *      indicating that an HTTP error has prevented the request from
      *      being made.
@@ -311,9 +307,6 @@ class Client {
      * @param string $employeeId The employee ID of the User to return.
      * @return ?User The User whose employee ID matches the provided ID,
      *      or null if no such User exists within your SmarterU Account.
-     * @throws MissingValueException If the Account API Key and/or the User
-     *      API Key are unset in both this instance of the Client and in the
-     *      query passed in as a parameter.
      * @throws ClientException If the HTTP response includes a status code
      *      indicating that an HTTP error has prevented the request from
      *      being made.
@@ -333,9 +326,6 @@ class Client {
      * @param ListUsersQuery $query The query representing the Users to return
      * @return array An array of all Users matching the parameters specified by
      *      the query passed into the SmarterU API.
-     * @throws MissingValueException If the Account API Key and/or the User
-     *      API Key are unset in both this instance of the Client and in the
-     *      query passed in as a parameter.
      * @throws ClientException If the HTTP response includes a status code
      *      indicating that an HTTP error has prevented the request from
      *      being made.
@@ -405,9 +395,9 @@ class Client {
      * updateUser query after updating a User's email address and/or employee ID.
      *
      * @param User $user The User to update
-     * @return array The User as updated by the SmarterU API.
-     * @throws MissingValueException If the Account API Key and/or the User
-     *      API Key are unset.
+     * @return User The User as updated by the SmarterU API.
+     * @throws MissingValueException If the User being updated does not have an
+     *      email address or an employee ID.
      * @throws ClientException If the HTTP response includes a status code
      *      indicating that an HTTP error has prevented the request from
      *      being made.
@@ -462,9 +452,6 @@ class Client {
      *
      * @param string $id The ID of the User to search for.
      * @return array All Groups that User is a member of.
-     * @throws MissingValueException If the Account API Key and/or the User
-     *      API Key are unset in both this instance of the Client and in the
-     *      query passed in as a parameter.
      * @throws ClientException If the HTTP response includes a status code
      *      indicating that an HTTP error has prevented the request from
      *      being made.
@@ -484,9 +471,6 @@ class Client {
      *
      * @param string $email The email address of the User to search for.
      * @return array All Groups that User is a member of.
-     * @throws MissingValueException If the Account API Key and/or the User
-     *      API Key are unset in both this instance of the Client and in the
-     *      query passed in as a parameter.
      * @throws ClientException If the HTTP response includes a status code
      *      indicating that an HTTP error has prevented the request from
      *      being made.
@@ -506,9 +490,6 @@ class Client {
      *
      * @param string $employeeId The employee ID of the User to search for.
      * @return array All Groups that User is a member of.
-     * @throws MissingValueException If the Account API Key and/or the User
-     *      API Key are unset in both this instance of the Client and in the
-     *      query passed in as a parameter.
      * @throws ClientException If the HTTP response includes a status code
      *      indicating that an HTTP error has prevented the request from
      *      being made.
@@ -527,8 +508,8 @@ class Client {
      *
      * @param Group $group The Group to create
      * @return Group The group as created by the SmarterU API.
-     * @throws MissingValueException If the Account API Key and/or the User
-     *      API Key are unset.
+     * @throws MissingValueException If one of the Tags is missing both its
+     *      name and its ID.
      * @throws ClientException If the HTTP response includes a status code
      *      indicating that an HTTP error has prevented the request from
      *      being made.
@@ -570,9 +551,6 @@ class Client {
      * @param string $id The ID of the Group to return
      * @return ?Group The Group as read by the API, or null if no Group
      *      matching the provided ID exists within your SmarterU account.
-     * @throws MissingValueException If the Account API Key and/or the User
-     *      API Key are unset in both this instance of the Client and in the
-     *      query passed in as a parameter.
      * @throws ClientException If the HTTP response includes a status code
      *      indicating that an HTTP error has prevented the request from
      *      being made.
@@ -592,9 +570,6 @@ class Client {
      * @param string $name The name of the Group to return
      * @return ?Group The Group as read by the API, or null if no Group
      *      matching the provided name exists within your SmarterU account.
-     * @throws MissingValueException If the Account API Key and/or the User
-     *      API Key are unset in both this instance of the Client and in the
-     *      query passed in as a parameter.
      * @throws ClientException If the HTTP response includes a status code
      *      indicating that an HTTP error has prevented the request from
      *      being made.
@@ -613,9 +588,8 @@ class Client {
      *
      * @param ListGroupsQuery $query The query representing the Groups to return
      * @return array An array of any Groups returned by the SmarterU API.
-     * @throws MissingValueException If the Account API Key and/or the User
-     *      API Key are unset in both this instance of the Client and in the
-     *      query passed in as a parameter.
+     * @throws MissingValueException If one of the Tags by which to filter the
+     *      Groups is missing both its name and its ID.
      * @throws ClientException If the HTTP response includes a status code
      *      indicating that an HTTP error has prevented the request from
      *      being made.
@@ -664,8 +638,8 @@ class Client {
      *
      * @param Group $group The Group to update
      * @return Group The Group as updated by the SmarterU API.
-     * @throws MissingValueException If the Account API Key and/or the User
-     *      API Key are unset.
+     * @throws MissingValueException If one of the Tags is missing both its
+     *      name and its ID.
      * @throws ClientException If the HTTP response includes a status code
      *      indicating that an HTTP error has prevented the request from
      *      being made.
@@ -727,7 +701,8 @@ class Client {
      * @throws InvalidArgumentException If the "$users" array contains a value
      *      that is not a User.
      * @throws MissingValueException If the "$users" array contains a User that
-     *      does not have an email address or an employee ID.
+     *      does not have an email address or an employee ID, or if the Group
+     *      does not have a name or an ID.
      * @throws ClientException If the HTTP response includes a status code
      *      indicating that an HTTP error has prevented the request from
      *      being made.
@@ -775,7 +750,8 @@ class Client {
      * @throws InvalidArgumentException If the "$users" array contains a value
      *      that is not a User.
      * @throws MissingValueException If the "$users" array contains a User that
-     *      does not have an email address or an employee ID.
+     *      does not have an email address or an employee ID, or if the Group
+     *      does not have a name or an ID.
      * @throws ClientException If the HTTP response includes a status code
      *      indicating that an HTTP error has prevented the request from
      *      being made.
@@ -821,7 +797,7 @@ class Client {
      *      the specified permissions.
      * @param string[] $permissions The permissions to be granted to the
      *      specified User within the specified Group.
-     * @return array The User as updated by the SmarterU API.
+     * @return User The User as updated by the SmarterU API.
      * @throws InvalidArgumentException If any value in the "$permissions"
      *      array is not a string or is not one of the permissions accepted
      *      by the SmarterU API.
@@ -959,9 +935,6 @@ class Client {
      * @param GetUserQuery $query The query representing the User to return
      * @return ?User The User matching the identifier specified in the query,
      *      or null if no such User exists within your SmarterU account.
-     * @throws MissingValueException If the Account API Key and/or the User
-     *      API Key are unset in both this instance of the Client and in the
-     *      query passed in as a parameter.
      * @throws ClientException If the HTTP response includes a status code
      *      indicating that an HTTP error has prevented the request from
      *      being made.
@@ -1073,9 +1046,6 @@ class Client {
      * @return array An array of GroupPermissions instances representing the
      *      specified User's membership in the Group(s) he or she is a member
      *      of.
-     * @throws MissingValueException If the Account API Key and/or the User
-     *      API Key are unset in both this instance of the Client and in the
-     *      query passed in as a parameter.
      * @throws ClientException If the HTTP response includes a status code
      *      indicating that an HTTP error has prevented the request from
      *      being made.
@@ -1125,9 +1095,6 @@ class Client {
      * @param GetGroupQuery $query The query representing the Group to return
      * @return ?Group The Group as read by the API, or null if no Group
      *      matching the query exists within your SmarterU account.
-     * @throws MissingValueException If the Account API Key and/or the User
-     *      API Key are unset in both this instance of the Client and in the
-     *      query passed in as a parameter.
      * @throws ClientException If the HTTP response includes a status code
      *      indicating that an HTTP error has prevented the request from
      *      being made.

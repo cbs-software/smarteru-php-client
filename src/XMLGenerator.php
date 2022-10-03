@@ -38,6 +38,8 @@ class XMLGenerator {
      *      that account who is making the request.
      * @param User $user The User to translate to XML
      * @return string an XML representation of the User
+     * @throws MissingValueException If the User to be created does not have
+     *      an email address or an employee ID, or does not have a home Group.
      */
     public function createUser(
         string $accountApi,
@@ -57,7 +59,7 @@ class XMLGenerator {
         $userTag = $parameters->addChild('User');
         $info = $userTag->addChild('Info');
         if (empty($user->getEmail()) && empty($user->getEmployeeId())) {
-            throw new missingValueException(
+            throw new MissingValueException(
                 'Cannot create a User without either an email or employee ID.'
             );
         }
@@ -316,6 +318,8 @@ class XMLGenerator {
      *      that account who is making the request.
      * @param User $user The User to translate to XML
      * @return string an XML representation of the User
+     * @throws MissingValueException If the User being updated does not have an
+     *      email address or an employee ID.
      */
     public function updateUser(
         string $accountApi,
@@ -659,8 +663,8 @@ class XMLGenerator {
      *      that account who is making the request.
      * @param ListGroupsQuery $query The query to translate to XML
      * @return string an XML representation of the query
-     * @throws MissingValueException If one of the Tags is missing both its
-     *      name and its ID.
+     * @throws MissingValueException If one of the Tags by which to filter the
+     *      Groups is missing both its name and its ID.
      */
     public function listGroups(
         string $accountApi,
@@ -880,7 +884,8 @@ class XMLGenerator {
      * @throws InvalidArgumentException If the "$users" array contains a value
      *      that is not a User.
      * @throws MissingValueException If the "$users" array contains a User that
-     *      does not have an email address or an employee ID.
+     *      does not have an email address or an employee ID, or if the Group
+     *      does not have a name or an ID.
      */
     public function changeGroupMembers(
         string $accountApi,
