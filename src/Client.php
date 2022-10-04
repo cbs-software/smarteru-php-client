@@ -235,6 +235,7 @@ class Client {
      *      being made.
      * @throws SmarterUException If the response from the SmarterU API
      *      reports a fatal error that prevents the request from executing.
+     * @see https://support.smarteru.com/v1/docs/api-createuser
      */
     public function createUser(User $user): User {
         $xml = $this->getXMLGenerator()->createUser(
@@ -247,9 +248,9 @@ class Client {
             ->getHttpClient()
             ->request(
                 'POST',
-                self::POST_URL, 
+                self::POST_URL,
                 ['form_params' => ['Package' => $xml]]
-        );
+            );
 
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
@@ -345,9 +346,9 @@ class Client {
             ->getHttpClient()
             ->request(
                 'POST',
-                self::POST_URL, 
+                self::POST_URL,
                 ['form_params' => ['Package' => $xml]]
-        );
+            );
 
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
@@ -430,9 +431,9 @@ class Client {
             ->getHttpClient()
             ->request(
                 'POST',
-                self::POST_URL, 
+                self::POST_URL,
                 ['form_params' => ['Package' => $xml]]
-        );
+            );
 
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
@@ -529,9 +530,9 @@ class Client {
             ->getHttpClient()
             ->request(
                 'POST',
-                self::POST_URL, 
+                self::POST_URL,
                 ['form_params' => ['Package' => $xml]]
-        );
+            );
 
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
@@ -609,9 +610,9 @@ class Client {
             ->getHttpClient()
             ->request(
                 'POST',
-                self::POST_URL, 
+                self::POST_URL,
                 ['form_params' => ['Package' => $xml]]
-        );
+            );
 
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
@@ -671,9 +672,9 @@ class Client {
             ->getHttpClient()
             ->request(
                 'POST',
-                self::POST_URL, 
+                self::POST_URL,
                 ['form_params' => ['Package' => $xml]]
-        );
+            );
 
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
@@ -724,9 +725,9 @@ class Client {
             ->getHttpClient()
             ->request(
                 'POST',
-                self::POST_URL, 
+                self::POST_URL,
                 ['form_params' => ['Package' => $xml]]
-        );
+            );
 
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
@@ -773,9 +774,9 @@ class Client {
             ->getHttpClient()
             ->request(
                 'POST',
-                self::POST_URL, 
+                self::POST_URL,
                 ['form_params' => ['Package' => $xml]]
-        );
+            );
 
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
@@ -843,9 +844,9 @@ class Client {
             ->getHttpClient()
             ->request(
                 'POST',
-                self::POST_URL, 
+                self::POST_URL,
                 ['form_params' => ['Package' => $xml]]
-        );
+            );
 
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
@@ -913,9 +914,9 @@ class Client {
             ->getHttpClient()
             ->request(
                 'POST',
-                self::POST_URL, 
+                self::POST_URL,
                 ['form_params' => ['Package' => $xml]]
-        );
+            );
 
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
@@ -957,9 +958,9 @@ class Client {
             ->getHttpClient()
             ->request(
                 'POST',
-                self::POST_URL, 
+                self::POST_URL,
                 ['form_params' => ['Package' => $xml]]
-        );
+            );
 
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
@@ -1079,7 +1080,7 @@ class Client {
             $learnerReports[] = $currentReport;
         }
 
-        return $learnerReports;        
+        return $learnerReports;
     }
 
 

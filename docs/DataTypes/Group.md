@@ -18,13 +18,18 @@ training.
 |[getDescription](#groupgetdescription)|Returns the group's description.|
 |[getGroupId](#groupgetgroupid)|Returns the unique id of the group.|
 |[getHomeGroupMessage](#groupgethomegroupmessage)|Returns the group's home message.|
+|[getLearningModuleCount](#groupgetlearningmodulecount)|Get the number of LearningModules assigned to the Group.|
 |[getLearningModules](#groupgetlearningmodules)|Get the container for assigning Learning Modules to the group.|
 |[getModifiedDate](#groupgetmodifieddate)|Returns the date and time the group was last modified.|
 |[getName](#groupgetname)|Returns the name of the group.|
 |[getNotificationEmails](#groupgetnotificationemails)|Returns the group's notification email addresses.|
+|[getOldGroupId](#groupgetoldgroupid)|Get the group's old ID.|
+|[getOldName](#groupgetoldname)|Get the group's old name.|
+|[getPermissions](#groupgetpermissions)|Get the User's permissions within the Group.|
 |[getStatus](#groupgetstatus)|Returns the group's status.|
 |[getSubscriptionVariants](#groupgetsubscriptionvariants)|Get the container for assigning subscription variants to the group.|
 |[getTags](#groupgettags)|Returns the group's tags.|
+|[getUserCount](#groupgetusercount)|Get the number of Users assigned to the Group.|
 |[getUserHelpEmail](#groupgetuserhelpemail)|Get the email addresses to which help requests will be sent. If no email addresses are specified, the help requests will be sent to all administrators.|
 |[getUserHelpEnabled](#groupgetuserhelpenabled)|Get whether a link displays in the header of the learner interface that enables users who have the group as their home group to request help.|
 |[getUserHelpOverrideDefault](#groupgetuserhelpoverridedefault)|Get whether the Enable User Help setting is overriden by the group.|
@@ -37,13 +42,18 @@ training.
 |[setDescription](#groupsetdescription)|Sets the group's description.|
 |[setGroupId](#groupsetgroupid)|Sets the unique id of the group.|
 |[setHomeGroupMessage](#groupsethomegroupmessage)|Sets the group's home message.|
+|[setLearningModuleCount](#groupsetlearningmodulecount)|Set the number of LearningModules assigned to the Group.|
 |[setLearningModules](#groupsetlearningmodules)|Set the container for assigning Learning Modules to the group.|
 |[setModifiedDate](#groupsetmodifieddate)|Sets the date and time the group was last modified.|
 |[setName](#groupsetname)|Sets the name of the group.|
 |[setNotificationEmails](#groupsetnotificationemails)|Sets the group's notification email addresses.|
+|[setOldGroupId](#groupsetoldgroupid)|Set the group's old ID.|
+|[setOldName](#groupsetoldname)|Set the group's old name.|
+|[setPermissions](#groupsetpermissions)|Set the User's permissions within the Group.|
 |[setStatus](#groupsetstatus)|Sets the group's status.|
 |[setSubscriptionVariants](#groupsetsubscriptionvariants)|Set the container for assigning subscription variants to the group.|
 |[setTags](#groupsettags)|Sets the group's tags.|
+|[setUserCount](#groupsetusercount)|Set the number of Users assigned to the Group.|
 |[setUserHelpEmail](#groupsetuserhelpemail)|Set the email addresses to which help requests will be sent. If no email addresses are specified, the help requests will be sent to all administrators.|
 |[setUserHelpEnabled](#groupsetuserhelpenabled)|Set whether a link displays in the header of the learner interface that enables users who have the group as their home group to request help.|
 |[setUserHelpOverrideDefault](#groupsetuserhelpoverridedefault)|Set whether the Enable User Help setting is overriden by the group.|
@@ -51,7 +61,6 @@ training.
 |[setUserLimitAmount](#groupsetuserlimitamount)|Set the maximum number of users that can be added to the group. Set this to null to remove the limit.|
 |[setUserLimitEnabled](#groupsetuserlimitenabled)|Set whether or not the group has a user limit enabled.|
 |[setUsers](#groupsetusers)|Set the container for assigning Users to the group.|
-|[toXML](#grouptoxml)|Return an XML representation of the Group to be passed into the SmarterU API as a parameter for group-related queries.|
 
 
 
@@ -126,7 +135,7 @@ Returns the group's description.
 
 **Return Values**
 
-`string`
+`?string`
 
 > the group's description.
 
@@ -178,9 +187,35 @@ Returns the group's home message.
 
 **Return Values**
 
-`string`
+`?string`
 
 > the group's home message.
+
+
+<hr />
+
+
+### Group::getLearningModuleCount  
+
+**Description**
+
+```php
+public getLearningModuleCount (void)
+```
+
+Get the number of LearningModules assigned to the Group. 
+
+ 
+
+**Parameters**
+
+`This function has no parameters.`
+
+**Return Values**
+
+`int`
+
+> the number of LearningModules.
 
 
 <hr />
@@ -256,7 +291,7 @@ Returns the name of the group.
 
 **Return Values**
 
-`string`
+`?string`
 
 > the name of the group.
 
@@ -290,6 +325,84 @@ Returns the group's notification email addresses.
 <hr />
 
 
+### Group::getOldGroupId  
+
+**Description**
+
+```php
+public getOldGroupId (void)
+```
+
+Get the group's old ID. 
+
+ 
+
+**Parameters**
+
+`This function has no parameters.`
+
+**Return Values**
+
+`?string`
+
+> the old ID
+
+
+<hr />
+
+
+### Group::getOldName  
+
+**Description**
+
+```php
+public getOldName (void)
+```
+
+Get the group's old name. 
+
+ 
+
+**Parameters**
+
+`This function has no parameters.`
+
+**Return Values**
+
+`?string`
+
+> the old name
+
+
+<hr />
+
+
+### Group::getPermissions  
+
+**Description**
+
+```php
+public getPermissions (void)
+```
+
+Get the User's permissions within the Group. 
+
+ 
+
+**Parameters**
+
+`This function has no parameters.`
+
+**Return Values**
+
+`string[]`
+
+> The User's permissions within the Group.
+
+
+<hr />
+
+
 ### Group::getStatus  
 
 **Description**
@@ -308,7 +421,7 @@ Returns the group's status.
 
 **Return Values**
 
-`string`
+`?string`
 
 > Returns the group's status.
 
@@ -368,6 +481,32 @@ Returns the group's tags.
 <hr />
 
 
+### Group::getUserCount  
+
+**Description**
+
+```php
+public getUserCount (void)
+```
+
+Get the number of Users assigned to the Group. 
+
+ 
+
+**Parameters**
+
+`This function has no parameters.`
+
+**Return Values**
+
+`int`
+
+> the number of Users.
+
+
+<hr />
+
+
 ### Group::getUserHelpEmail  
 
 **Description**
@@ -376,9 +515,7 @@ Returns the group's tags.
 public getUserHelpEmail (void)
 ```
 
-Get the email addresses to which help requests will be sent. If no email
-addresses are specified, the help requests will be sent to all
-administrators. 
+Get the email addresses to which help requests will be sent. If no email addresses are specified, the help requests will be sent to all administrators. 
 
  
 
@@ -404,8 +541,7 @@ administrators.
 public getUserHelpEnabled (void)
 ```
 
-Get whether a link displays in the header of the learner interface that
-enables users who have the group as their home group to request help. 
+Get whether a link displays in the header of the learner interface that enables users who have the group as their home group to request help. 
 
  
 
@@ -458,8 +594,7 @@ overriden by the group
 public getUserHelpText (void)
 ```
 
-Get the text to display for the help link in the learner interface's
-header. 
+Get the text to display for the help link in the learner interface's header. 
 
  
 
@@ -485,8 +620,7 @@ header.
 public getUserLimitAmount (void)
 ```
 
-Get the maximum number of users that can be added to the group. Null if
-there is no limit. 
+Get the maximum number of users that can be added to the group. Null if there is no limit. 
 
  
 
@@ -692,6 +826,33 @@ Sets the group's home message.
 <hr />
 
 
+### Group::setLearningModuleCount  
+
+**Description**
+
+```php
+public setLearningModuleCount (int $learningModuleCount)
+```
+
+Set the number of LearningModules assigned to the Group. 
+
+ 
+
+**Parameters**
+
+* `(int) $learningModuleCount`
+: the number of LearningModules  
+
+**Return Values**
+
+`self`
+
+
+
+
+<hr />
+
+
 ### Group::setLearningModules  
 
 **Description**
@@ -807,6 +968,87 @@ InvalidArgumentException is thrown.
 <hr />
 
 
+### Group::setOldGroupId  
+
+**Description**
+
+```php
+public setOldGroupId (?string $oldName)
+```
+
+Set the group's old ID. 
+
+ 
+
+**Parameters**
+
+* `(?string) $oldName`
+: the old ID  
+
+**Return Values**
+
+`self`
+
+
+
+
+<hr />
+
+
+### Group::setOldName  
+
+**Description**
+
+```php
+public setOldName (?string $oldName)
+```
+
+Set the group's old name. 
+
+ 
+
+**Parameters**
+
+* `(?string) $oldName`
+: the old name  
+
+**Return Values**
+
+`self`
+
+
+
+
+<hr />
+
+
+### Group::setPermissions  
+
+**Description**
+
+```php
+public setPermissions (string[] $permissions)
+```
+
+Set the User's permissions within the Group. 
+
+ 
+
+**Parameters**
+
+* `(string[]) $permissions`
+: The User's permissions within the Group  
+
+**Return Values**
+
+`self`
+
+
+
+
+<hr />
+
+
 ### Group::setStatus  
 
 **Description**
@@ -901,6 +1143,33 @@ Sets the group's tags.
 <hr />
 
 
+### Group::setUserCount  
+
+**Description**
+
+```php
+public setUserCount (int $userCount)
+```
+
+Set the number of Users assigned to the Group. 
+
+ 
+
+**Parameters**
+
+* `(int) $userCount`
+: the number of Users  
+
+**Return Values**
+
+`self`
+
+
+
+
+<hr />
+
+
 ### Group::setUserHelpEmail  
 
 **Description**
@@ -909,9 +1178,7 @@ Sets the group's tags.
 public setUserHelpEmail (array $userHelpEmail)
 ```
 
-Set the email addresses to which help requests will be sent. If no email
-addresses are specified, the help requests will be sent to all
-administrators. 
+Set the email addresses to which help requests will be sent. If no email addresses are specified, the help requests will be sent to all administrators. 
 
  
 
@@ -938,8 +1205,7 @@ administrators.
 public setUserHelpEnabled (bool $)
 ```
 
-Set whether a link displays in the header of the learner interface that
-enables users who have the group as their home group to request help. 
+Set whether a link displays in the header of the learner interface that enables users who have the group as their home group to request help. 
 
  
 
@@ -992,8 +1258,7 @@ User Help setting is overriden by the group
 public setUserHelpText (string $userHelpText)
 ```
 
-Set the text to display for the help link in the learner interface's
-header. 
+Set the text to display for the help link in the learner interface's header. 
 
  
 
@@ -1020,8 +1285,7 @@ header.
 public setUserLimitAmount (?int $userLimitAmount)
 ```
 
-Set the maximum number of users that can be added to the group. Set this
-to null to remove the limit. 
+Set the maximum number of users that can be added to the group. Set this to null to remove the limit. 
 
  
 
@@ -1086,45 +1350,13 @@ Set the container for assigning Users to the group.
 * `(array) $users`
 : A container for assigning Users to the group.  
 Each element must be an instance of CBS\SmarterU\DataTypes\  
-User.
+User.  
 
 **Return Values**
 
 `self`
 
 
-
-
-<hr />
-
-
-### Group::toXML  
-
-**Description**
-
-```php
-public toXML (?string $accountApi, ?string $userApi, string $methodName)
-```
-
-Return an XML representation of the Group to be passed into the SmarterU
-API as a parameter for group-related queries. 
-
- 
-
-**Parameters**
-
-* `(?string) $accountApi`
-: the account API key of the user making the request  
-* `(?string) $userApi`
-: the user API key of the user making the request  
-* `(string) $methodName`
-: the name of the method being called  
-
-**Return Values**
-
-`string`
-
-> an XML representation of the group
 
 
 <hr />

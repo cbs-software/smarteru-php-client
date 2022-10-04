@@ -17,18 +17,21 @@ A User in SmarterU.
 |[getAuthenticationType](#usergetauthenticationtype)|Returns the User's authentication type.|
 |[getCity](#usergetcity)|Get the city of the user's address.|
 |[getCountry](#usergetcountry)|Get the country of the user's address.|
+|[getCreatedDate](#usergetcreateddate)|Get the date the User was created.|
 |[getCustomFields](#usergetcustomfields)|Get the container for the custom fields in your account.|
 |[getDivision](#usergetdivision)|Get the user's division.|
 |[getEmail](#usergetemail)|Get the email address for the user|
 |[getEmployeeId](#usergetemployeeid)|Get provided for the Email tag.|
 |[getFax](#usergetfax)|Get the user's fax number.|
 |[getGivenName](#usergetgivenname)|Get the given name of the user, also known as their first name.|
-|[getGroups](#usergetgroups)|Get the container for assigning groups to the user and specifying the
-user's permissions within those groups.|
+|[getGroups](#usergetgroups)|Get the container representing the Groups the User is a member of.|
 |[getHomeGroup](#usergethomegroup)|Get the name of the user's home group.|
 |[getId](#usergetid)|Gets the user's ID.|
 |[getLanguage](#usergetlanguage)|Get the language the user's account uses.|
 |[getLearnerNotifications](#usergetlearnernotifications)|Get pending or outstanding courses in SmarterU.|
+|[getModifiedDate](#usergetmodifieddate)|Get the date the User was last modified.|
+|[getOldEmail](#usergetoldemail)|Get the old email address of the user.|
+|[getOldEmployeeId](#usergetoldemployeeid)|Get the old employee ID of the user.|
 |[getOrganization](#usergetorganization)|Get the name of the organization to assign to the user.|
 |[getPassword](#usergetpassword)|Returns the password to assign to the user.|
 |[getPhoneAlternate](#usergetphonealternate)|Get the user's alternate phone number.|
@@ -38,8 +41,7 @@ user's permissions within those groups.|
 |[getProvince](#usergetprovince)|Get the province or state of the user's address.|
 |[getReceiveNotifications](#usergetreceivenotifications)|Get whether or not the user will receive email notifications.|
 |[getRoles](#usergetroles)|Get the container for the learning plans assigned to the user.|
-|[getSendEmailTo](#usergetsendemailto)|Returns where the user's email should be sent (Supervisor, Self,
-or Alternate).|
+|[getSendEmailTo](#usergetsendemailto)|Returns where the user's email should be sent (Supervisor, Self, or Alternate).|
 |[getSendMailTo](#usergetsendmailto)|Get the location where the user's physical mail should be sent.|
 |[getStatus](#usergetstatus)|Return the status of the user.|
 |[getSupervisorNotifications](#usergetsupervisornotifications)|Get of any users they are responsible for.|
@@ -57,23 +59,23 @@ or Alternate).|
 |[setAlternateEmail](#usersetalternateemail)|Sets the user's alternate email address.|
 |[setAuthenticationType](#usersetauthenticationtype)|Sets the user's authentication type.|
 |[setCity](#usersetcity)|Set the city of the user's address.|
-|[setCountry](#usersetcountry)|Set the country of the user's address. Acceptable values are "Canada",
-"United States", or "International".|
-|[setCustomFields](#usersetcustomfields)|Set the container for the custom fields in your account. The custom
-fields must already exist within your SmarterU account.|
+|[setCountry](#usersetcountry)|Set the country of the user's address. Acceptable values are "Canada", "United States", or "International".|
+|[setCreatedDate](#usersetcreateddate)|Set the date the User was created.|
+|[setCustomFields](#usersetcustomfields)|Set the container for the custom fields in your account. The custom fields must already exist within your SmarterU account.|
 |[setDivision](#usersetdivision)|Set the user's division.|
 |[setEmail](#usersetemail)|Set the email address for the user|
-|[setEmployeeId](#usersetemployeeid)|Set provided for the Email tag.|
+|[setEmployeeId](#usersetemployeeid)|Set provided for the employee ID tag.|
 |[setFax](#usersetfax)|Set the user's fax number.|
 |[setGivenName](#usersetgivenname)|Set the given name of the user, also known as their first name.|
-|[setGroups](#usersetgroups)|Set the container for assigning groups to the user and specifying the
-user's permissions within those groups.|
+|[setGroups](#usersetgroups)|Set the container representing the Groups the User is a member of.|
 |[setHomeGroup](#usersethomegroup)|Set the name of the user's home group.|
 |[setId](#usersetid)|Sets the user's ID.|
 |[setLanguage](#usersetlanguage)|Set the language the user's account uses.|
 |[setLearnerNotifications](#usersetlearnernotifications)|Set pending or outstanding courses in SmarterU.|
-|[setOrganization](#usersetorganization)|Set the name of the organization to assign to the user. The organization
-must already exist within your SmarterU account.|
+|[setModifiedDate](#usersetmodifieddate)|Set the date the User was last modified.|
+|[setOldEmail](#usersetoldemail)|Set the old email address of the user.|
+|[setOldEmployeeId](#usersetoldemployeeid)|Set the old employee ID of the user.|
+|[setOrganization](#usersetorganization)|Set the name of the organization to assign to the user. The organization must already exist within your SmarterU account.|
 |[setPassword](#usersetpassword)|Sets the password to assign to the user|
 |[setPhoneAlternate](#usersetphonealternate)|Set the user's alternate phone number.|
 |[setPhoneMobile](#usersetphonemobile)|Set the user's mobile phone number.|
@@ -81,25 +83,19 @@ must already exist within your SmarterU account.|
 |[setPostalCode](#usersetpostalcode)|Set the user's postal code.|
 |[setProvince](#usersetprovince)|Set the province or state of the user's address.|
 |[setReceiveNotifications](#usersetreceivenotifications)|Set whether or not the user will receive email notifications.|
-|[setRoles](#usersetroles)|Set the container for the learning plans assigned to the user. The
-learning plans must already exist within your SmarterU account.|
-|[setSendEmailTo](#usersetsendemailto)|Sets where the user's email should be sent (Supervisor, Self, or
-Alternate).|
+|[setRoles](#usersetroles)|Set the container for the learning plans assigned to the user. The learning plans must already exist within your SmarterU account.|
+|[setSendEmailTo](#usersetsendemailto)|Sets where the user's email should be sent (Supervisor, Self, or Alternate).|
 |[setSendMailTo](#usersetsendmailto)|Set the location where the user's physical mail should be sent.|
 |[setStatus](#usersetstatus)|Set the status of the user.|
 |[setSupervisorNotifications](#usersetsupervisornotifications)|Set of any users they are responsible for.|
-|[setSupervisors](#usersetsupervisors)|Set the container for the user's supervisors. Each supervisor must
-already exist in SmarterU.|
+|[setSupervisors](#usersetsupervisors)|Set the container for the user's supervisors. Each supervisor must already exist in SmarterU.|
 |[setSurname](#usersetsurname)|Set the surname of the user, also known as their last name.|
-|[setTeams](#usersetteams)|Set the container for the teams to assign to the user. The team names
-provided must already exist in your SmarterU account.|
+|[setTeams](#usersetteams)|Set the container for the teams to assign to the user. The team names provided must already exist in your SmarterU account.|
 |[setTimezone](#usersettimezone)|Sets the user's timezone.|
 |[setTitle](#usersettitle)|Set the user's title.|
 |[setVenues](#usersetvenues)|Set the container for assigning venues to the user.|
 |[setWages](#usersetwages)|Set the container for adding the user's wages.|
 |[setWebsite](#usersetwebsite)|Set the user's website.|
-|[toXML](#usertoxml)|Generate an XML representation of the user, to be passed into the API
-for a CreateUser or UpdateUser query.|
 
 
 
@@ -286,6 +282,32 @@ Get the country of the user's address.
 <hr />
 
 
+### User::getCreatedDate  
+
+**Description**
+
+```php
+public getCreatedDate (void)
+```
+
+Get the date the User was created. 
+
+ 
+
+**Parameters**
+
+`This function has no parameters.`
+
+**Return Values**
+
+`?\DateTimeInterface`
+
+> the date the User was created
+
+
+<hr />
+
+
 ### User::getCustomFields  
 
 **Description**
@@ -450,8 +472,7 @@ Get the given name of the user, also known as their first name.
 public getGroups (void)
 ```
 
-Get the container for assigning groups to the user and specifying the
-user's permissions within those groups. 
+Get the container representing the Groups the User is a member of. 
 
  
 
@@ -463,7 +484,7 @@ user's permissions within those groups.
 
 `array`
 
-> the container for assigning groups to the user
+> the container for the User's groups
 
 
 <hr />
@@ -568,6 +589,84 @@ Get pending or outstanding courses in SmarterU.
 `bool`
 
 
+
+
+<hr />
+
+
+### User::getModifiedDate  
+
+**Description**
+
+```php
+public getModifiedDate (void)
+```
+
+Get the date the User was last modified. 
+
+ 
+
+**Parameters**
+
+`This function has no parameters.`
+
+**Return Values**
+
+`?\DateTimeInterface`
+
+> the date the User was last modified
+
+
+<hr />
+
+
+### User::getOldEmail  
+
+**Description**
+
+```php
+public getOldEmail (void)
+```
+
+Get the old email address of the user. 
+
+ 
+
+**Parameters**
+
+`This function has no parameters.`
+
+**Return Values**
+
+`?string`
+
+> the old email address
+
+
+<hr />
+
+
+### User::getOldEmployeeId  
+
+**Description**
+
+```php
+public getOldEmployeeId (void)
+```
+
+Get the old employee ID of the user. 
+
+ 
+
+**Parameters**
+
+`This function has no parameters.`
+
+**Return Values**
+
+`?string`
+
+> the old employee ID
 
 
 <hr />
@@ -815,8 +914,7 @@ Get the container for the learning plans assigned to the user.
 public getSendEmailTo (void)
 ```
 
-Returns where the user's email should be sent (Supervisor, Self,
-or Alternate). 
+Returns where the user's email should be sent (Supervisor, Self, or Alternate). 
 
  
 
@@ -1290,8 +1388,7 @@ Set the city of the user's address.
 public setCountry (?string $country)
 ```
 
-Set the country of the user's address. Acceptable values are "Canada",
-"United States", or "International". 
+Set the country of the user's address. Acceptable values are "Canada", "United States", or "International". 
 
  
 
@@ -1299,6 +1396,33 @@ Set the country of the user's address. Acceptable values are "Canada",
 
 * `(?string) $country`
 : the country of the user's address  
+
+**Return Values**
+
+`self`
+
+
+
+
+<hr />
+
+
+### User::setCreatedDate  
+
+**Description**
+
+```php
+public setCreatedDate (\DateTimeInterface $createdDate)
+```
+
+Set the date the User was created. 
+
+ 
+
+**Parameters**
+
+* `(\DateTimeInterface) $createdDate`
+: The date the User was created  
 
 **Return Values**
 
@@ -1318,8 +1442,7 @@ Set the country of the user's address. Acceptable values are "Canada",
 public setCustomFields (array $customFields)
 ```
 
-Set the container for the custom fields in your account. The custom
-fields must already exist within your SmarterU account. 
+Set the container for the custom fields in your account. The custom fields must already exist within your SmarterU account. 
 
  
 
@@ -1400,14 +1523,14 @@ Set the email address for the user
 public setEmployeeId (string $employeeId)
 ```
 
-Set provided for the Email tag. 
+Set provided for the employee ID tag. 
 
  
 
 **Parameters**
 
 * `(string) $employeeId`
-: provided for the Email tag.  
+: provided for the employee ID tag.  
 
 **Return Values**
 
@@ -1481,8 +1604,7 @@ Set the given name of the user, also known as their first name.
 public setGroups (array $groups)
 ```
 
-Set the container for assigning groups to the user and specifying the
-user's permissions within those groups. 
+Set the container representing the Groups the User is a member of. 
 
  
 
@@ -1609,6 +1731,87 @@ Set pending or outstanding courses in SmarterU.
 <hr />
 
 
+### User::setModifiedDate  
+
+**Description**
+
+```php
+public setModifiedDate (\DateTimeInterface $modifiedDate)
+```
+
+Set the date the User was last modified. 
+
+ 
+
+**Parameters**
+
+* `(\DateTimeInterface) $modifiedDate`
+: The date the User was last modified  
+
+**Return Values**
+
+`self`
+
+
+
+
+<hr />
+
+
+### User::setOldEmail  
+
+**Description**
+
+```php
+public setOldEmail (?string $oldEmail)
+```
+
+Set the old email address of the user. 
+
+ 
+
+**Parameters**
+
+* `(?string) $oldEmail`
+: the old email address  
+
+**Return Values**
+
+`self`
+
+
+
+
+<hr />
+
+
+### User::setOldEmployeeId  
+
+**Description**
+
+```php
+public setOldEmployeeId (?string $oldEmployeeId)
+```
+
+Set the old employee ID of the user. 
+
+ 
+
+**Parameters**
+
+* `(?string) $oldEmployeeId`
+: the old employee ID  
+
+**Return Values**
+
+`self`
+
+
+
+
+<hr />
+
+
 ### User::setOrganization  
 
 **Description**
@@ -1617,8 +1820,7 @@ Set pending or outstanding courses in SmarterU.
 public setOrganization (?string $organization)
 ```
 
-Set the name of the organization to assign to the user. The organization
-must already exist within your SmarterU account. 
+Set the name of the organization to assign to the user. The organization must already exist within your SmarterU account. 
 
  
 
@@ -1835,8 +2037,7 @@ receive email notifications
 public setRoles (array $)
 ```
 
-Set the container for the learning plans assigned to the user. The
-learning plans must already exist within your SmarterU account. 
+Set the container for the learning plans assigned to the user. The learning plans must already exist within your SmarterU account. 
 
  
 
@@ -1863,8 +2064,7 @@ learning plans must already exist within your SmarterU account.
 public setSendEmailTo (string $sendEmailTo)
 ```
 
-Sets where the user's email should be sent (Supervisor, Self, or
-Alternate). 
+Sets where the user's email should be sent (Supervisor, Self, or Alternate). 
 
  
 
@@ -1972,8 +2172,7 @@ Set of any users they are responsible for.
 public setSupervisors (array $supervisors)
 ```
 
-Set the container for the user's supervisors. Each supervisor must
-already exist in SmarterU. 
+Set the container for the user's supervisors. Each supervisor must already exist in SmarterU. 
 
  
 
@@ -2028,8 +2227,7 @@ last name.
 public setTeams (array $)
 ```
 
-Set the container for the teams to assign to the user. The team names
-provided must already exist in your SmarterU account. 
+Set the container for the teams to assign to the user. The team names provided must already exist in your SmarterU account. 
 
  
 
@@ -2178,38 +2376,6 @@ Set the user's website.
 `self`
 
 
-
-
-<hr />
-
-
-### User::toXML  
-
-**Description**
-
-```php
-public toXML (?string $accountApi, ?string $userApi, string $methodName)
-```
-
-Generate an XML representation of the user, to be passed into the API
-for a CreateUser or UpdateUser query. 
-
- 
-
-**Parameters**
-
-* `(?string) $accountApi`
-: the account API key of the user making the request  
-* `(?string) $userApi`
-: the user API key of the user making the request  
-* `(string) $methodName`
-: the name of the method being called  
-
-**Return Values**
-
-`string`
-
-> an XML representation of the user
 
 
 <hr />

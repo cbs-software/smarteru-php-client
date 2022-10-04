@@ -10,7 +10,6 @@ return (object)[
         '\CBS\SmarterU\DataTypes\Group',
         '\CBS\SmarterU\DataTypes\LearnerReport',
         '\CBS\SmarterU\DataTypes\LearningModule',
-        '\CBS\SmarterU\DataTypes\Permission',
         '\CBS\SmarterU\DataTypes\SubscriptionVariant',
         '\CBS\SmarterU\DataTypes\Tag',
         '\CBS\SmarterU\DataTypes\User',
