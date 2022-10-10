@@ -1113,8 +1113,8 @@ class Client {
      *
      * @param string $email The email address of the user requesting external
      *      authorization.
-     * @return ExternalAuthorization The information returned by the SmarterU
-     *      API.
+     * @return ExternalAuthorization A container for the authorization keys and
+     *      URL returned by the SmarterU API.
      * @throws ClientException If the HTTP response includes a status code
      *      indicating that an HTTP error has prevented the request from
      *      being made.
@@ -1133,8 +1133,8 @@ class Client {
      *
      * @param string $employeeId The employee ID of the user requesting
      *      external authorization.
-     * @return ExternalAuthorization The information returned by the SmarterU
-     *      API.
+     * @return ExternalAuthorization A container for the authorization keys and
+     *      URL returned by the SmarterU API.
      * @throws ClientException If the HTTP response includes a status code
      *      indicating that an HTTP error has prevented the request from
      *      being made.
@@ -1400,8 +1400,8 @@ class Client {
      *      which the key identifies whether the value is an email address or
      *      an employee ID, and the value identifies the User who is requesting
      *      external authorization.
-     * @return ExternalAuthorization The information returned by the SmarterU
-     *      API.
+     * @return ExternalAuthorization A container for the authorization keys and
+     *      URL returned by the SmarterU API.
      * @throws MissingValueException If the "identifier" array does not contain
      *      an email address or an employee ID.
      * @throws ClientException If the HTTP response includes a status code
