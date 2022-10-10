@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace CBS\SmarterU;
 
 use CBS\SmarterU\DataTypes\CustomField;
+use CBS\SmarterU\DataTypes\ExternalAuthorization;
 use CBS\SmarterU\DataTypes\Group;
 use CBS\SmarterU\DataTypes\LearnerReport;
 use CBS\SmarterU\DataTypes\Permission;
@@ -1106,6 +1107,45 @@ class Client {
         return $learnerReports;        
     }
 
+    /**
+     * Make a RequestExternalAuthorization query to the SmarterU API using the
+     * email address to identify the user requesting authorization.
+     *
+     * @param string $email The email address of the user requesting external
+     *      authorization.
+     * @return ExternalAuthorization The information returned by the SmarterU
+     *      API.
+     * @throws ClientException If the HTTP response includes a status code
+     *      indicating that an HTTP error has prevented the request from
+     *      being made.
+     * @throws SmarterUException If the response from the SmarterU API
+     *      reports a fatal error that prevents the request from executing.
+     */
+    public function requestExternalAuthorizationByEmail(
+        string $email
+    ): ExternalAuthorization {
+        return $this->requestExternalAuthorization(['Email' => $email]);
+    }
+
+    /**
+     * Make a RequestExternalAuthorization query to the SmarterU API using the
+     * employee ID to identify the user requesting authorization.
+     *
+     * @param string $employeeId The employee ID of the user requesting
+     *      external authorization.
+     * @return ExternalAuthorization The information returned by the SmarterU
+     *      API.
+     * @throws ClientException If the HTTP response includes a status code
+     *      indicating that an HTTP error has prevented the request from
+     *      being made.
+     * @throws SmarterUException If the response from the SmarterU API
+     *      reports a fatal error that prevents the request from executing.
+     */
+    public function requestExternalAuthorizationByEmployeeId(
+        string $employeeId
+    ): ExternalAuthorization {
+        return $this->requestExternalAuthorization(['EmployeeID' => $employeeId]);
+    }
 
     /**
      * Make a GetUser query to the SmarterU API.
@@ -1351,6 +1391,52 @@ class Client {
             ->setLearningModuleCount((int) $group->LearningModuleCount)
             ->setTags($tags)
             ->setStatus((string) $group->Status);
+    }
+
+    /**
+     * Make a RequestExternalAuthorization query to the SmarterU API.
+     *
+     * @param array $identifier An array containing a single key=>value pair in
+     *      which the key identifies whether the value is an email address or
+     *      an employee ID, and the value identifies the User who is requesting
+     *      external authorization.
+     * @return ExternalAuthorization The information returned by the SmarterU
+     *      API.
+     * @throws MissingValueException If the "identifier" array does not contain
+     *      an email address or an employee ID.
+     * @throws ClientException If the HTTP response includes a status code
+     *      indicating that an HTTP error has prevented the request from
+     *      being made.
+     * @throws SmarterUException If the response from the SmarterU API
+     *      reports a fatal error that prevents the request from executing.
+     */
+    protected function requestExternalAuthorization(
+        array $identifier
+    ): ExternalAuthorization {
+        $xml = $this->getXMLGenerator()->requestExternalAuthorization(
+            $this->getAccountApi(),
+            $this->getUserApi(),
+            $identifier
+        );
+
+        $response = $this
+            ->getHttpClient()
+            ->request(
+                'POST',
+                self::POST_URL, 
+                ['form_params' => ['Package' => $xml]]
+        );
+
+        $bodyAsXml = simplexml_load_string((string) $response->getBody());
+
+        if ((string) $bodyAsXml->Result === 'Failed') {
+            throw new SmarterUException($this->readErrors($bodyAsXml->Errors));
+        }
+
+        return (new ExternalAuthorization())
+            ->setAuthKey((string) $bodyAsXml->Info->AuthKey)
+            ->setRequestKey((string) $bodyAsXml->Info->RequestKey)
+            ->setRedirectPath((string) $bodyAsXml->Info->RedirectPath);
     }
 
     /**
