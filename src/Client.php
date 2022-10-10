@@ -222,7 +222,7 @@ class Client {
     }
 
     /**
-     * * Make a CreateUser query to the SmarterU API.
+     * Make a CreateUser query to the SmarterU API.
      *
      * @param User $user the user to create
      * @return User The user as created by the API.
