@@ -88,6 +88,8 @@ The following is a list of public methods in Client.php that interact with the S
 17. [grantPermissions](docs/Client.md#clientgrantpermissions)
 18. [revokePermissions](docs/Client.md#clientrevokepermissions)
 19. [getLearnerReport](docs/Client.md#clientgetlearnerreport)
+20. [requestExternalAuthorizationByEmail](docs/Client.md#clientrequestexternalauthorizationbyemail)
+21. [requestExternalAuthorizationByEmployeeId](docs/Client.md#clientrequestexternalauthorizationbyemployeeid)
 
 For usage details on each method, please see [docs/Client.md](docs/Client.md).
 
@@ -97,8 +99,14 @@ A CustomField is a way to assign extra values to a User or a LearningReport in
 addition to the values that are built-in to the data type. More information can
 be found in [docs/DataTypes/CustomField.md](docs/DataTypes/CustomField.md).
 
+ExternalAuthorization is a container for the information returned by SmarterU
+when a user is authenticated via single sign-on from an external website.
+More information can be found in
+[docs/DataTypes/ExternalAuthorization.md](docs/DataTypes/ExternalAuthorization.md).
+
 A Group is a collection of Users within SmarterU that can all be assigned to
-the same training courses. More information can be found in [docs/DataTypes/Group.md](docs/DataTypes/Group.md).
+the same training courses. More information can be found in
+[docs/DataTypes/Group.md](docs/DataTypes/Group.md).
 
 A LearnerReport, also known as an Enrollment Report, enables training managers
 to view the progress of Users who have been assigned to the course, and to see
@@ -106,13 +114,16 @@ the Users' results once the course has been completed. More information can be
 found in [docs/DataTypes/LearnerReport.md](docs/DataTypes/LearningModule.md).
 
 A LearningModule, also known as a Course, is a training assignment that can be
-given to a Group. More information can be found in [docs/DataTypes/LearningModule.md](docs/DataTypes/LearningModule.md).
+given to a Group. More information can be found in
+[docs/DataTypes/LearningModule.md](docs/DataTypes/LearningModule.md).
  
 A SubscriptionVariant is a record of a subscription that is assigned to a Group.
-More information can be found in [docs/DataTypes/SubscriptionVariant.md](docs/DataTypes/SubscriptionVariant.md).
+More information can be found in
+[docs/DataTypes/SubscriptionVariant.md](docs/DataTypes/SubscriptionVariant.md).
 
 A Tag is a way to assign extra values to a Group in addition to the values that
-come built-in to the data type. More information can be found in [docs/DataTypes/Tag.md](docs/DataTypes/Tag.md).
+come built-in to the data type. More information can be found in
+[docs/DataTypes/Tag.md](docs/DataTypes/Tag.md).
 
 A User is a record of a user account within SmarterU. More information can be found
 in [docs/DataTypes/User.md](docs/DataTypes/User.md).
