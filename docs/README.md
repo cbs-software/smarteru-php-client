@@ -2,7 +2,6 @@
 
 * [Client](Client.md) 
 * [DataTypes\Group](DataTypes/Group.md) 
-* [DataTypes\GroupPermissions](DataTypes/GroupPermissions.md) 
 * [DataTypes\LearningModule](DataTypes/LearningModule.md) 
 * [DataTypes\Permission](DataTypes/Permission.md) 
 * [DataTypes\SubscriptionVariant](DataTypes/SubscriptionVariant.md) 
