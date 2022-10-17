@@ -1277,6 +1277,50 @@ class XMLGenerator {
     }
 
     /**
+     * Generate the XML body for a RequestExternalAuthorization query to the
+     * SmarterU API.
+     *
+     * @param string $accountApi The SmarterU API key identifying the account
+     *      making the request.
+     * @param string $userApi The SmarterU API key identifying the user within
+     *      that account who is making the request.
+     * @param array $identifier An array containing a single key=>value pair in
+     *      which the key identifies whether the value is an email address or
+     *      an employee ID, and the value identifies the User who is requesting
+     *      external authorization.
+     * @return string an XML representation of the query.
+     * @throws MissingValueException If the "identifier" array does not contain
+     *      an email address or an employee ID.
+     */
+    public function requestExternalAuthorization(
+        string $accountApi,
+        string $userApi,
+        array $identifier
+    ): string {
+        $xmlString = <<<XML
+        <SmarterU>
+        </SmarterU>
+        XML;
+
+        $xml = simplexml_load_string($xmlString);
+        $xml->addChild('AccountAPI', $accountApi);
+        $xml->addChild('UserAPI', $userApi);
+        $xml->addChild('Method', 'requestExternalAuthorization');
+        $parameters = $xml->addChild('Parameters');
+        $security = $parameters->addChild('Security');
+        if (array_key_exists('Email', $identifier)) {
+            $security->addChild('Email', $identifier['Email']);
+        } else if (array_key_exists('EmployeeID', $identifier)) {
+            $security->addChild('EmployeeID', $identifier['EmployeeID']);
+        } else {
+            throw new MissingValueException(
+                'Cannot request external authorization without an email address or employee ID'
+            );
+        }
+        return $xml->asXML();
+    }
+
+    /**
      * Determine whether or not to filter listUsers results based on the user's
      * identifying information.
      *

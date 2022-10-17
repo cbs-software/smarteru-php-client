@@ -33,6 +33,8 @@ appropriate object.
 |[readUserById](#clientreaduserbyid)|Read the User whose ID matches the one provided.|
 |[removeUsersFromGroup](#clientremoveusersfromgroup)|Make a removeUsersFromGroup query to the SmarterU API.|
 |[revokePermissions](#clientrevokepermissions)|Make a RevokePermissions request to the SmarterU API.|
+|[requestExternalAuthorizationByEmail](#clientrequestexternalauthorizationbyemail)|Make a RequestExternalAuthorization query to the SmarterU API using the email address to identify the user requesting authorization.|
+|[requestExternalAuthorizationByEmployeeId](#clientrequestexternalauthorizationbyemployeeid)|Make a RequestExternalAuthorization query to the SmarterU API using the employee ID to identify the user requesting authorization.|
 |[setAccountApi](#clientsetaccountapi)|Set the account API key.|
 |[setHttpClient](#clientsethttpclient)|Set the HTTP Client.|
 |[setUserApi](#clientsetuserapi)|Set the user API key.|
@@ -869,6 +871,74 @@ has prevented the request from being made.
 > If the response from the SmarterU API reports a fatal error that prevents
 the request from executing.
 
+
+<hr />
+
+### Client::requestExternalAuthorizationByEmail
+
+**Description**
+
+```php
+public requestExternalAuthorizationByEmail (string $email)
+```
+
+Make a RequestExternalAuthorization query to the SmarterU API using the email
+address to identify the user requesting authorization.
+
+**Parameters**
+
+* `(string) $email`
+: The email address of the user requesting external authorization.
+
+**Return Values**
+
+`\ExternalAuthorization`
+
+> A container for the authorization keys and URL returned by the SmarterU API.
+
+**Throws Exceptions**
+
+`\ClientException`
+> If the HTTP response includes a status code indicating that an HTTP error has
+prevented the request from being made.
+
+`\SmarterUException`
+> If the response from the SmarterU API reports a fatal error that prevents the
+request from executing.
+
+<hr />
+
+### Client::requestExternalAuthorizationByEmployeeId
+
+**Description**
+
+```php
+public requestExternalAuthorizationByEmployeeId (string $employeeId)
+```
+
+Make a RequestExternalAuthorization query to the SmarterU API using the employee
+ID to identify the user requesting authorization.
+
+**Parameters**
+
+* `(string) $employeeId`
+: The employee ID of the user requesting external authorization.
+
+**Return Values**
+
+`\ExternalAuthorization`
+
+> A container for the authorization keys and URL returned by the SmarterU API.
+
+**Throws Exceptions**
+
+`\ClientException`
+> If the HTTP response includes a status code indicating that an HTTP error has
+prevented the request from being made.
+
+`\SmarterUException`
+> If the response from the SmarterU API reports a fatal error that prevents the
+request from executing.
 
 <hr />
 
