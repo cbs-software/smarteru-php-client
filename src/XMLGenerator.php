@@ -373,14 +373,18 @@ class XMLGenerator {
         if (!empty($user->getTimezone())) {
             $info->addChild('TimeZone', $user->getTimezone());
         }
-        $info->addChild(
-            'LearnerNotifications',
-            $user->getLearnerNotifications() ? '1' : '0'
-        );
-        $info->addChild(
-            'SupervisorNotifications',
-            $user->getSupervisorNotifications() ? '1' : '0'
-        );
+        if ($user->getLearnerNotifications() !== null) {
+            $info->addChild(
+                'LearnerNotifications',
+                $user->getLearnerNotifications() ? '1' : '0'
+            );
+        }
+        if ($user->getSupervisorNotifications() !== null) {
+            $info->addChild(
+                'SupervisorNotifications',
+                $user->getSupervisorNotifications() ? '1' : '0'
+            );
+        }
         if (!empty($user->getSendEmailTo())) {
             $info->addChild('SendEmailTo', $user->getSendEmailTo());
         }
@@ -1000,14 +1004,6 @@ class XMLGenerator {
             );
         }
         $info = $userTag->addChild('Info');
-        $info->addChild(
-            'LearnerNotifications',
-            $user->getLearnerNotifications() ? '1' : '0'
-        );
-        $info->addChild(
-            'SupervisorNotifications',
-            $user->getSupervisorNotifications() ? '1' : '0'
-        );
         $profile = $userTag->addChild('Profile');
         
         $groups = $userTag->addChild('Groups');
