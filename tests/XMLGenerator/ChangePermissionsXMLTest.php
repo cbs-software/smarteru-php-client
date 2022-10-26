@@ -59,9 +59,7 @@ class ChangePermissionsXMLTest extends TestCase {
         $accountApi = 'account';
         $userApi = 'user';
         $user = (new User())
-            ->setEmail('test@test.com')
-            ->setLearnerNotifications(true)
-            ->setSupervisorNotifications(true);
+            ->setEmail('test@test.com');
         $group = new Group();
         $xmlGenerator = new XMLGenerator();
         self::expectException(MissingValueException::class);
@@ -87,9 +85,7 @@ class ChangePermissionsXMLTest extends TestCase {
         $accountApi = 'account';
         $userApi = 'user';
         $user = (new User())
-            ->setEmail('test@test.com')
-            ->setLearnerNotifications(true)
-            ->setSupervisorNotifications(true);
+            ->setEmail('test@test.com');
         $group = (new Group())
             ->setName('My Group');
         $permission = 'MANAGE_USERS';
@@ -148,17 +144,7 @@ class ChangePermissionsXMLTest extends TestCase {
         foreach ($xml->Parameters->User->Info->children() as $tag) {
             $infoTag[] = $tag->getName();
         }
-        self::assertCount(2, $infoTag);
-        self::assertContains('LearnerNotifications', $infoTag);
-        self::assertEquals(
-            $user->getLearnerNotifications() ? '1' : '0',
-            $xml->Parameters->User->Info->LearnerNotifications
-        );
-        self::assertContains('SupervisorNotifications', $infoTag);
-        self::assertEquals(
-            $user->getSupervisorNotifications() ? '1' : '0',
-            $xml->Parameters->User->Info->SupervisorNotifications
-        );
+        self::assertCount(0, $infoTag);
         self::assertContains('Profile', $userTag);
         self::assertCount(0, $xml->Parameters->User->Profile->children());
         self::assertContains('Groups', $userTag);
@@ -283,17 +269,7 @@ class ChangePermissionsXMLTest extends TestCase {
         foreach ($xml->Parameters->User->Info->children() as $tag) {
             $infoTag[] = $tag->getName();
         }
-        self::assertCount(2, $infoTag);
-        self::assertContains('LearnerNotifications', $infoTag);
-        self::assertEquals(
-            $user->getLearnerNotifications() ? '1' : '0',
-            $xml->Parameters->User->Info->LearnerNotifications
-        );
-        self::assertContains('SupervisorNotifications', $infoTag);
-        self::assertEquals(
-            $user->getSupervisorNotifications() ? '1' : '0',
-            $xml->Parameters->User->Info->SupervisorNotifications
-        );
+        self::assertCount(0, $infoTag);
         self::assertContains('Profile', $userTag);
         self::assertCount(0, $xml->Parameters->User->Profile->children());
         self::assertContains('Groups', $userTag);
