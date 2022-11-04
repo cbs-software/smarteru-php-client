@@ -1,5 +1,5 @@
 {
-    "name": "cbssoftware/smarteru-client",
+    "name": "cbs-software/smarteru-php-client",
     "description": "PHP 8 Client for SmarterU API",
     "type": "library",
     "license": "MIT",
