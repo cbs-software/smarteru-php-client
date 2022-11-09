@@ -115,7 +115,7 @@ class User {
      *
      * @var bool
      */
-    protected bool $learnerNotifications;
+    protected ?bool $learnerNotifications = null;
 
     /**
      * Specifies whether the user should receive weekly reports on the status
@@ -123,7 +123,7 @@ class User {
      *
      * @var bool
      */
-    protected bool $supervisorNotifications;
+    protected ?bool $supervisorNotifications = null;
 
     /**
      * Specifies where the user's emails should be sent. Acceptable values are:
@@ -577,7 +577,7 @@ class User {
     /**
      * Get of any users they are responsible for.
      *
-     * @return  bool
+     * @return ?bool
      */
     public function getSupervisorNotifications() {
         return $this->supervisorNotifications;
@@ -599,7 +599,7 @@ class User {
     /**
      * Get pending or outstanding courses in SmarterU.
      *
-     * @return  bool
+     * @return ?bool
      */
     public function getLearnerNotifications() {
         return $this->learnerNotifications;

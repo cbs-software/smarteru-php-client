@@ -55,9 +55,6 @@ class UpdateUserXMLTest extends TestCase {
             ->setOldEmail('old@email.com')
             ->setGivenName('Test')
             ->setSurname('User')
-            ->setPassword('myPassword1')
-            ->setLearnerNotifications(false)
-            ->setSupervisorNotifications(false)
             ->setSendEmailTo('Self')
             ->setAuthenticationType('SmarterU')
             ->setHomeGroup('HomeGroup');
@@ -121,7 +118,7 @@ class UpdateUserXMLTest extends TestCase {
         foreach ($xml->Parameters->User->Info->children() as $info) {
             $infoTag[] = $info->getName();
         }
-        self::assertCount(7, $infoTag);
+        self::assertCount(5, $infoTag);
         self::assertContains('Email', $infoTag);
         self::assertEquals(
             $user->getEmail(),
@@ -136,16 +133,6 @@ class UpdateUserXMLTest extends TestCase {
         self::assertEquals(
             $user->getSurname(),
             $xml->Parameters->User->Info->Surname
-        );
-        self::assertContains('LearnerNotifications', $infoTag);
-        self::assertEquals(
-            $user->getLearnerNotifications() ? '1' : '0',
-            $xml->Parameters->User->Info->LearnerNotifications
-        );
-        self::assertContains('SupervisorNotifications', $infoTag);
-        self::assertEquals(
-            $user->getSupervisorNotifications() ? '1' : '0',
-            $xml->Parameters->User->Info->SupervisorNotifications
         );
         self::assertContains('SendEmailTo', $infoTag);
         self::assertEquals(
@@ -205,7 +192,6 @@ class UpdateUserXMLTest extends TestCase {
             ->setEmployeeId('1')
             ->setGivenName('PHP')
             ->setSurname('Unit')
-            ->setPassword('password')
             ->setTimezone('EST')
             ->setLearnerNotifications(true)
             ->setSupervisorNotifications(true)
