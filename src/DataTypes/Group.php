@@ -53,22 +53,34 @@ class Group {
      */
     protected ?string $oldGroupId = null;
 
-    /** The name of the group. */
+    /**
+     * The name of the group.
+     */
     protected ?string $name = null;
 
-    /** The unique id of the Group. */
+    /**
+     * The unique id of the Group.
+     */
     protected ?string $groupId = null;
 
-    /** The data and time when the group was created. */
+    /**
+     * The date and time when the group was created.
+     */
     protected DateTimeInterface $createdDate;
 
-    /** The date and time when the group was last modified */
+    /**
+     * The date and time when the group was last modified.
+     */
     protected DateTimeInterface $modifiedDate;
 
-    /** The group's description. */
+    /**
+     * The group's description.
+     */
     protected ?string $description = null;
 
-    /** The home message displayed for the group. */
+    /**
+     * The home message displayed for the group.
+     */
     protected ?string $homeGroupMessage = null;
 
     /**

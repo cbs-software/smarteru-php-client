@@ -413,6 +413,7 @@ class Client {
             $this->getUserApi(),
             $user
         );
+        print_r($xml);
 
         // If the User's email address and/or employee ID are being updated,
         // reset the old values to null after generating the XML. This prevents
@@ -1388,7 +1389,7 @@ class Client {
             ->getHttpClient()
             ->request(
                 'POST',
-                self::POST_URL, 
+                self::POST_URL,
                 ['form_params' => ['Package' => $xml]]
         );
 
