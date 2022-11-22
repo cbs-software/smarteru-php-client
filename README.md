@@ -96,9 +96,11 @@ For usage details on each method, please see [docs/Client.md](docs/Client.md).
 
 ## Data Types
 
-A CustomField is a way to assign extra values to a User or a LearningReport in
-addition to the values that are built-in to the data type. More information can
-be found in [docs/DataTypes/CustomField.md](docs/DataTypes/CustomField.md).
+A CustomField is a way to assign extra values to a User or a LearnerReport in
+addition to the values that are built-in to the data type. All attributes are
+required when assigning a CustomField to a User or a LearnerReport. More
+information can be found in
+[docs/DataTypes/CustomField.md](docs/DataTypes/CustomField.md).
 
 ExternalAuthorization is a container for the information returned by SmarterU
 when a user is authenticated via single sign-on from an external website.
@@ -106,28 +108,138 @@ More information can be found in
 [docs/DataTypes/ExternalAuthorization.md](docs/DataTypes/ExternalAuthorization.md).
 
 A Group is a collection of Users within SmarterU that can all be assigned to
-the same training courses. More information can be found in
+the same training courses. When creating a Group, the "groupId",
+"userHelpOverrideDefault", "userHelpEnabled", "userHelpEmail", "userHelpText",
+"tags", "userLimitEnabled", "userLimitAmount", "subscriptionVariants", and
+"dashboardSetId" attributes are optional. The "users", "permissions",
+"oldName", and "oldGroupId" attributes will not be used.  All other attributes
+are required.If you would like to add Users to your new Group, you may do so
+using the `addUsersToGroup` method in Client. If you would like these users to
+have elevated permissions within the Group, you may grant these permissions
+using the `grantPermissions` method in Client. When updating a Group
+without changing its name or ID, either the "name" or "groupId" attribute must
+be set in order to identify the Group to be updated, and the only other
+attributes that must be set are the ones you wish to update. Group membership
+(i.e. "users" and "permissions") cannot be updated using the "updateGroup"
+method in Client, and instead rely on their own dedicated methods. When changing
+the Group's name or ID, you must set the "oldName" or "oldGroupId" attributes to
+identify the Group to be updated, and the corresponding "name" or "groupId"
+attributes to identify the new value. Making the request to SmarterU will clear
+out any values from the "oldName" and "oldGroupId" fields in order to prevent
+mistakenly using outdated information when using the same Group instance for
+future requests to the API. More information can be found in
 [docs/DataTypes/Group.md](docs/DataTypes/Group.md).
 
 A LearnerReport, also known as an Enrollment Report, enables training managers
 to view the progress of Users who have been assigned to the course, and to see
-the Users' results once the course has been completed. More information can be
-found in [docs/DataTypes/LearnerReport.md](docs/DataTypes/LearningModule.md).
+the Users' results once the course has been completed. LearnerReports are read
+from the API using the `getLearnerReport` method in Client, which takes an
+instance of `CBS\SmarterU\Queries\GetLearnerReportQuery` as a parameter. All
+attributes that are marked as nullable are optional, and all attributes that
+are not marked as nullable are required. More information can be found in
+[docs/DataTypes/LearnerReport.md](docs/DataTypes/LearningModule.md).
 
 A LearningModule, also known as a Course, is a training assignment that can be
-given to a Group. More information can be found in
+given to a Group. When adding or removing a LearningModule from a Group via the
+`updateGroup` method, all attributes are required. When adding a LearningModule
+to a Group via the `createGroup` method, "action" is not used, while all other
+attributes are required. More information can be found in
 [docs/DataTypes/LearningModule.md](docs/DataTypes/LearningModule.md).
  
 A SubscriptionVariant is a record of a subscription that is assigned to a Group.
-More information can be found in
+When adding or removing a SubscriptionVariant from a Group via the `updateGroup`
+method, all attributes are required. When adding a SubscriptionVariant to a
+Group via the `createGroup` method, "action" is not used, while all other
+attributes are required. More information can be found in
 [docs/DataTypes/SubscriptionVariant.md](docs/DataTypes/SubscriptionVariant.md).
 
 A Tag is a way to assign extra values to a Group in addition to the values that
-come built-in to the data type. More information can be found in
+come built-in to the data type. The "tagValues" attribute is always required,
+but the "tagName" and "tagId" attributes are mutually exclusive. **Exactly one
+out of those two** is required. Attempting to set both of these attributes in the
+same instance of Tag will result in only the most recently updated one being
+saved, while the less recently updated one will be automatically set to null.
+More information can be found in
 [docs/DataTypes/Tag.md](docs/DataTypes/Tag.md).
 
-A User is a record of a user account within SmarterU. More information can be found
-in [docs/DataTypes/User.md](docs/DataTypes/User.md).
+A User is a record of a user account within SmarterU. Two values will be set by
+default: "status" will be active and "receiveNotifications" will be true. If
+you would like to set a User to inactive or to not receive notifications, you
+must explicitly specify that. When creating a User, at least one of either the
+"email" field or the "employeeId" field must be specified. You may set both if
+you wish to. The "givenName", "surname", "password", "learnerNotifications",
+"supervisorNotifications", "sendEmailTo", "authenticationType", and "homeGroup"
+fields are required. If the "sendEmailTo" attribute is set to "Alternate", then
+the User's "alternateEmail" field must also be set. The "Groups" field is not
+used. By default, the User will be a regular user with no administrative
+permissions in their home Group and will not be a member of any other Groups.
+If you would like to assign the User to any additional Groups, you may do so
+using the `addUsersToGroup` method in Client. If you would like the User to
+have any administrative permissions in any of their Groups, you may grant those
+permissions using the `grantPermissions` method in Client. All other values are
+optional. When updating a User, you must set either the "email" or "employeeId"
+field to identify the User being updated. The only required values other than
+those fields are the values you wish to update. The `updateUser` method cannot be
+used to change a User's Group memberships, or to change the User's password.
+The User's home Group can only be changed if the User is a member of multiple
+Groups. If you would like to update the User's email address or employee ID,
+you may do so by setting the "oldEmail" or "oldEmployeeId" fields to the
+current value, then setting the "email" or "employeeId" fields to the new
+value. The "oldEmail" and "oldEmployeeId" fields will be set to null when
+making the request to SmarterU in order to prevent mistakenly passing outdated
+information to SmarterU when making a future request on the same User object.
+More information can be found in
+[docs/DataTypes/User.md](docs/DataTypes/User.md).
+
+## Queries
+
+Three Client methods, `listUsers`, `listGroups`, and `getLearnerReport`, take
+an instance of their respective `CBS\SmarterU\Queries\` objects as a parameter.
+`GetUserQuery` and `GetGroupQuery` are only used internally by a private helper
+method in Client, while the other Query classes must be handled by the user.
+When constructing a query to pass into the Client, any value that is not marked
+as nullable and does not have a default value is required, while any value that
+is marked as nullable or has a default value is optional. The SmarterU API
+will return an array of every User, Group, or LearnerReport that matches the
+criteria provided by the query.
+
+### Tags
+
+The classes contained in the `CBS\SmarterU\Queries\Tags` directory are query
+segments that are used when filling in certain attributes in the query classes.
+The `DateRangeTag` uses two DateTimeInterface objects to filter the results of
+your query by a specific time period, for example returning only the 
+LearnerReports for courses that were completed between the provided dates. The
+`MatchTag` is used to filter the results of a ListGroups request by the Group's
+name, or to filter the results of a ListUsers request by the User's email
+address, employee ID, or name. The following example would only return Users
+whose name is John Smith: 
+
+```php
+use CBS\SmarterU\Queries\ListUsersQuery;
+use CBS\SmarterU\Queries\Tags\MatchTag;
+
+$matchTag = (new MatchTag())
+    ->setMatchType('EXACT')
+    ->setValue('John Smith');
+
+$query = (new ListUsersQuery())
+    ->setName($matchTag);
+```
+
+And this example would return any User who has an example.com email address:
+
+```php
+use CBS\SmarterU\Queries\ListUsersQuery;
+use CBS\SmarterU\Queries\Tags\MatchTag;
+
+$matchTag = (new MatchTag())
+    ->setMatchType('CONTAINS')
+    ->setValue('@example.com');
+
+$query = (new ListUsersQuery())
+    ->setEmail($matchTag);
+```
 
 
 ## Output

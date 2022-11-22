@@ -1388,7 +1388,7 @@ class Client {
             ->getHttpClient()
             ->request(
                 'POST',
-                self::POST_URL, 
+                self::POST_URL,
                 ['form_params' => ['Package' => $xml]]
         );
 

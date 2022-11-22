@@ -23,13 +23,21 @@ namespace CBS\SmarterU\DataTypes;
 class Tag {
     #region Properties
 
-    /** The ID of the tag. */
+    /**
+     * The ID of the tag. Either the ID or the name must be set when addding
+     * a tag to a Group.
+     */
     protected ?string $tagId = null;
 
-    /** The name of the tag. */
+    /**
+     * The name of the tag. Either the ID or the name must be set when adding
+     * a tag to a Group.
+     */
     protected ?string $tagName = null;
 
-    /** The tag's values. */
+    /**
+     * A comma-separated list of the tag's values.
+     */
     protected string $tagValues;
 
     #endregion Properties

@@ -59,8 +59,6 @@ class User {
     /**
      * The email address of the user. This tag can be empty if an EmployeeID
      * value is provided.
-     *
-     * @var string|null;
      */
     protected ?string $email = null;
 
@@ -69,22 +67,16 @@ class User {
      * users in your SmarterU account. If a blank value is provided, an employee
      * ID is not assigned to the user. A value must be provided if no value is
      * provided for the Email tag.
-     *
-     * @var string
      */
     protected ?string $employeeId = null;
 
     /**
      * The given name of the user, also known as their first name.
-     *
-     * @var string|null
      */
     protected ?string $givenName = null;
 
     /**
      * The surname of the user, also known as their last name.
-     *
-     * @var string|null
      */
     protected ?string $surname = null;
 
@@ -94,8 +86,6 @@ class User {
      * generated for the user. Regardless of whether a random password is
      * generated or one is provided, a user must change their password the
      * first time they log in (if Single Sign On is not used).
-     *
-     * @var string|null
      */
     protected ?string $password;
 
@@ -105,23 +95,19 @@ class User {
      * is not provided, the user’s time zone will default to the account’s
      * time zone.
      *
-     * @var string
+     * @see https://support.smarteru.com/v1/docs/time-zones
      */
     protected ?string $timezone = null;
 
     /**
-     * Specifies whether the user should receive weekly reminders of their
+     * True if and only if the user should receive weekly reminders of their
      * pending or outstanding courses in SmarterU.
-     *
-     * @var bool
      */
     protected ?bool $learnerNotifications = null;
 
     /**
-     * Specifies whether the user should receive weekly reports on the status
+     * True if and only if the user should receive weekly reports on the status
      * of any users they are responsible for.
-     *
-     * @var bool
      */
     protected ?bool $supervisorNotifications = null;
 
@@ -137,16 +123,12 @@ class User {
      *   Alternate - Emails to the user will be sent to the email address
      *     specified in the AlternateEmail tag. For this option to be allowed, a
      *     valid email address must be provided in the AlternateEmail tag.
-     *
-     * @var string
      */
     protected ?string $sendEmailTo = null;
 
     /**
-     * An alternate email address for the user. This value is required if the
+     * An alternate email address for the user. This value is only required if the
      * SendEmailTo tag is set to Alternate.
-     *
-     * @var string|null
      */
     protected ?string $alternateEmail = null;
 
@@ -159,8 +141,6 @@ class User {
      *     single-sign on.
      *   Both - The user will log into SmarterU via the SmarterU interface or an
      *     external system.
-     *
-     * @var string
      */
     protected ?string $authenticationType = null;
 
@@ -194,7 +174,7 @@ class User {
     protected ?string $language = null;
 
     /**
-     * The user's status.
+     * The user's status. Defaults to active.
      */
     protected string $status = self::STATUS_ACTIVE;
 
@@ -209,7 +189,7 @@ class User {
     protected ?string $division = null;
 
     /**
-     * Specifies whether the user can provide feedback on online courses.
+     * True if and only if the user can provide feedback on online courses.
      */
     protected bool $allowFeedback = false;
 
@@ -388,19 +368,19 @@ class User {
     /**
      * Returns the User's authentication type.
      *
-     * @return string Returns the User's authentication type.
+     * @return ?string The User's authentication type.
      */
-    public function getAuthenticationType() {
+    public function getAuthenticationType(): ?string {
         return $this->authenticationType;
     }
 
     /**
      * Sets the user's authentication type.
      *
-     * @param string $authenticationType The user's authentication type.
+     * @param ?string $authenticationType The user's authentication type.
      * @return self
      */
-    public function setAuthenticationType(string $authenticationType) {
+    public function setAuthenticationType(?string $authenticationType): self {
         $this->authenticationType = $authenticationType;
         return $this;
     }
@@ -408,19 +388,19 @@ class User {
     /**
      * Returns the User's alternate email address.
      *
-     * @return string|null Returns the user's alternate email address.
+     * @return ?string The user's alternate email address.
      */
-    public function getAlternateEmail() {
+    public function getAlternateEmail(): ?string {
         return $this->alternateEmail;
     }
 
     /**
      * Sets the user's alternate email address.
      *
-     * @param string|null $alternateEmail The user's alternate email address.
+     * @param ?string $alternateEmail The user's alternate email address.
      * @return self
      */
-    public function setAlternateEmail($alternateEmail) {
+    public function setAlternateEmail(?string $alternateEmail): self {
         $this->alternateEmail = $alternateEmail;
         return $this;
     }
@@ -429,9 +409,9 @@ class User {
      * Returns where the user's email should be sent (Supervisor, Self,
      * or Alternate).
      *
-     * @return string Returns where the user's email should be sent.
+     * @return ?string Returns where the user's email should be sent.
      */
-    public function getSendEmailTo() {
+    public function getSendEmailTo(): ?string {
         return $this->sendEmailTo;
     }
 
@@ -439,10 +419,10 @@ class User {
      * Sets where the user's email should be sent (Supervisor, Self, or
      * Alternate).
      *
-     * @param string $sendEmailTo Sets where the user's email should be sent.
+     * @param ?string $sendEmailTo Sets where the user's email should be sent.
      * @return self
      */
-    public function setSendEmailTo(string $sendEmailTo) {
+    public function setSendEmailTo(?string $sendEmailTo): self {
         $this->sendEmailTo = $sendEmailTo;
         return $this;
     }
@@ -450,19 +430,19 @@ class User {
     /**
      * Returns the user's timezone.
      *
-     * @return string Returns the user's timezone.
+     * @return ?string Returns the user's timezone.
      */
-    public function getTimezone() {
+    public function getTimezone(): ?string {
         return $this->timezone;
     }
 
     /**
      * Sets the user's timezone.
      *
-     * @param string $timezone Sets the user's timezone.
+     * @param ?string $timezone Sets the user's timezone.
      * @return self
      */
-    public function setTimezone(string $timezone) {
+    public function setTimezone(?string $timezone): self {
         $this->timezone = $timezone;
         return $this;
     }
@@ -470,19 +450,19 @@ class User {
     /**
      * Returns the password to assign to the user.
      *
-     * @return string|null Returns the password to assign to the user.
+     * @return ?string Returns the password to assign to the user.
      */
-    public function getPassword() {
+    public function getPassword(): ?string {
         return $this->password;
     }
 
     /**
      * Sets the password to assign to the user
      *
-     * @param string|null $password The password to assign to the user
+     * @param ?string $password The password to assign to the user
      * @return self
      */
-    public function setPassword($password) {
+    public function setPassword(?string $password): self {
         $this->password = $password;
         return $this;
     }
@@ -490,20 +470,20 @@ class User {
     /**
      * Returns the surname of the user, also known as their last name.
      *
-     * @return string|null The surname of the user, also known as their last name.
+     * @return ?string The surname of the user, also known as their last name.
      */
-    public function getSurname() {
+    public function getSurname(): ?string {
         return $this->surname;
     }
 
     /**
      * Set the surname of the user, also known as their last name.
      *
-     * @param string|null $surname The surname of the user, also known as their
+     * @param ?string $surname The surname of the user, also known as their
      *  last name.
      * @return self
      */
-    public function setSurname($surname) {
+    public function setSurname(?string $surname): self {
         $this->surname = $surname;
 
         return $this;
@@ -512,59 +492,58 @@ class User {
     /**
      * Get the given name of the user, also known as their first name.
      *
-     * @return string|null The given name of the user, also known as their first name.
+     * @return ?string The given name of the user, also known as their first name.
      */
-    public function getGivenName() {
+    public function getGivenName(): ?string {
         return $this->givenName;
     }
 
     /**
      * Set the given name of the user, also known as their first name.
      *
-     * @param  string|null  $givenName  The given name of the user, also known as their first name.
+     * @param ?string $givenName The given name of the user, also known as their first name.
      *
-     * @return  self
+     * @return self
      */
-    public function setGivenName($givenName) {
+    public function setGivenName(?string $givenName): self {
         $this->givenName = $givenName;
 
         return $this;
     }
 
     /**
-     * Get provided for the Email tag.
+     * Get the user's employee ID.
      *
-     * @return  string
+     * @return ?string The user's employee ID.
      */
-    public function getEmployeeId() {
+    public function getEmployeeId(): ?string {
         return $this->employeeId;
     }
 
     /**
-     * Set provided for the employee ID tag.
+     * Set the user's the employee ID.
      *
-     * @param  string  $employeeId  provided for the employee ID tag.
-     *
-     * @return  self
+     * @param ?string $employeeId The user's employee ID.
+     * @return self
      */
-    public function setEmployeeId(string $employeeId) {
+    public function setEmployeeId(?string $employeeId): self {
         $this->employeeId = $employeeId;
         return $this;
     }
 
     /**
-     * Get the email address for the user
+     * Get the user's email address.
      *
-     * @return string|null  the email address for the user
+     * @return ?string The user's email address.
      */
     public function getEmail(): ?string {
         return $this->email;
     }
 
     /**
-     * Set the email address for the user
+     * Set the user's email address.
      *
-     * @param string|null $email  the email address for the user
+     * @param ?string $email The user's email address.
      * @return self
      */
     public function setEmail(?string $email): self {
@@ -572,49 +551,54 @@ class User {
         return $this;
     }
 
-     #endregion Getters and Setters
-
     /**
-     * Get of any users they are responsible for.
+     * Get whether or not the user should receive weekly reports on the status
+     * of any users they are responsible for.
      *
-     * @return ?bool
+     * @return ?bool True if and only if the user should receive weekly reports
+     *      on the status of any users they are responsible for.
      */
-    public function getSupervisorNotifications() {
+    public function getSupervisorNotifications(): ?bool {
         return $this->supervisorNotifications;
     }
 
     /**
-     * Set of any users they are responsible for.
+     * Set whether or not the user should receive weekly reports on the status
+     * of any users they are responsible for.
      *
-     * @param  bool  $supervisorNotifications  of any users they are responsible for.
+     * @param ?bool $supervisorNotifications True if and only if the user
+     *      should receive weekly reports on the status of any users they are
+     *      responsible for.
      *
-     * @return  self
+     * @return self
      */
-    public function setSupervisorNotifications(bool $supervisorNotifications) {
+    public function setSupervisorNotifications(?bool $supervisorNotifications): self {
         $this->supervisorNotifications = $supervisorNotifications;
-
         return $this;
     }
 
     /**
-     * Get pending or outstanding courses in SmarterU.
+     * Get whether or not the user should receive weekly reminders of their
+     * pending or outstanding courses in SmarterU.
      *
-     * @return ?bool
+     * @return ?bool True if and only if the user should receive weekly
+     *      reminders of their pending or outstanding courses in SmarterU.
      */
-    public function getLearnerNotifications() {
+    public function getLearnerNotifications(): ?bool {
         return $this->learnerNotifications;
     }
 
     /**
-     * Set pending or outstanding courses in SmarterU.
+     * Set whether or not the user should receive weekly reminders of their
+     * pending or outstanding courses in SmarterU.
      *
-     * @param  bool  $learnerNotifications  pending or outstanding courses in SmarterU.
-     *
-     * @return  self
+     * @param ?bool $learnerNotifications True if and only if the user should
+     *      receive weekly reminders of their pending or outstanding courses
+     *      in SmarterU.
+     * @return self
      */
-    public function setLearnerNotifications(bool $learnerNotifications) {
+    public function setLearnerNotifications(?bool $learnerNotifications): self {
         $this->learnerNotifications = $learnerNotifications;
-
         return $this;
     }
 
@@ -1204,4 +1188,6 @@ class User {
         $this->modifiedDate = $modifiedDate;
         return $this;
     }
+
+     #endregion Getters and Setters
 }
