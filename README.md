@@ -112,11 +112,11 @@ the same training courses. When creating a Group, the "groupId",
 "userHelpOverrideDefault", "userHelpEnabled", "userHelpEmail", "userHelpText",
 "tags", "userLimitEnabled", "userLimitAmount", "subscriptionVariants", and
 "dashboardSetId" attributes are optional. The "users", "permissions",
-"oldName", and "oldGroupId" attributes will not be used. If you would like
-to add Users to your new Group, you may do so using the `addUsersToGroup`
-method in Client. If you would like these users to have elevated permissions
-within the Group, you may grant these permissions using the `grantPermissions`
-method in Client. All other attributes are required. When updating a Group
+"oldName", and "oldGroupId" attributes will not be used.  All other attributes
+are required.If you would like to add Users to your new Group, you may do so
+using the `addUsersToGroup` method in Client. If you would like these users to
+have elevated permissions within the Group, you may grant these permissions
+using the `grantPermissions` method in Client. When updating a Group
 without changing its name or ID, either the "name" or "groupId" attribute must
 be set in order to identify the Group to be updated, and the only other
 attributes that must be set are the ones you wish to update. Group membership
@@ -133,23 +133,23 @@ future requests to the API. More information can be found in
 A LearnerReport, also known as an Enrollment Report, enables training managers
 to view the progress of Users who have been assigned to the course, and to see
 the Users' results once the course has been completed. LearnerReports are read
-from the API using the getLearnerReport method in Client, which takes an
-instance of CBS\SmarterU\Queries\GetLearnerReportQuery as a parameter. All
+from the API using the `getLearnerReport` method in Client, which takes an
+instance of `CBS\SmarterU\Queries\GetLearnerReportQuery` as a parameter. All
 attributes that are marked as nullable are optional, and all attributes that
 are not marked as nullable are required. More information can be found in
 [docs/DataTypes/LearnerReport.md](docs/DataTypes/LearningModule.md).
 
 A LearningModule, also known as a Course, is a training assignment that can be
 given to a Group. When adding or removing a LearningModule from a Group via the
-updateGroup method, all attributes are required. When adding a LearningModule
-to a Group via the createGroup method, "action" is not used, while all other
+`updateGroup` method, all attributes are required. When adding a LearningModule
+to a Group via the `createGroup` method, "action" is not used, while all other
 attributes are required. More information can be found in
 [docs/DataTypes/LearningModule.md](docs/DataTypes/LearningModule.md).
  
 A SubscriptionVariant is a record of a subscription that is assigned to a Group.
-When adding or removing a SubscriptionVariant from a Group via the updateGroup
+When adding or removing a SubscriptionVariant from a Group via the `updateGroup`
 method, all attributes are required. When adding a SubscriptionVariant to a
-Group via the createGroup method, "action" is not used, while all other
+Group via the `createGroup` method, "action" is not used, while all other
 attributes are required. More information can be found in
 [docs/DataTypes/SubscriptionVariant.md](docs/DataTypes/SubscriptionVariant.md).
 
@@ -179,7 +179,7 @@ have any administrative permissions in any of their Groups, you may grant those
 permissions using the `grantPermissions` method in Client. All other values are
 optional. When updating a User, you must set either the "email" or "employeeId"
 field to identify the User being updated. The only required values other than
-those fields are the values you wish to update. The updateUser method cannot be
+those fields are the values you wish to update. The `updateUser` method cannot be
 used to change a User's Group memberships, or to change the User's password.
 The User's home Group can only be changed if the User is a member of multiple
 Groups. If you would like to update the User's email address or employee ID,
@@ -195,7 +195,7 @@ More information can be found in
 
 Three Client methods, `listUsers`, `listGroups`, and `getLearnerReport`, take
 an instance of their respective `CBS\SmarterU\Queries\` objects as a parameter.
-`getUserQuery` and `getGroupQuery` are only used internally by a private helper
+`GetUserQuery` and `GetGroupQuery` are only used internally by a private helper
 method in Client, while the other Query classes must be handled by the user.
 When constructing a query to pass into the Client, any value that is not marked
 as nullable and does not have a default value is required, while any value that
