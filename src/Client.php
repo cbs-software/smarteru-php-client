@@ -1157,7 +1157,7 @@ class Client {
             // The SmarterU API treats "User not found" as a fatal error.
             // If the API returns this error, this if statement will catch it
             // before it becomes an exception and return null.
-            if (str_contains($errors, 'GU:03: The user requested does not exist.')) {
+            if (str_contains($errors, 'GU:03')) {
                 return null;
             }
             throw new SmarterUException($errors);
@@ -1315,7 +1315,7 @@ class Client {
              * If the API returns this error, this if statement will catch it
              * before it becomes an exception and return null.
              */
-            if (str_contains($errors, 'GG:03: The requested group does not exist.')) {
+            if (str_contains($errors, 'GG:03')) {
                 return null;
             }
             throw new SmarterUException($errors);
