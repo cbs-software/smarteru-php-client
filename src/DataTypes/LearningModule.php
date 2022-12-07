@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Contains CBS\SmarterU\DataTypes\LearningModule.
+ * Contains CBS\SmarterU\DataTypes\LearningModule
  *
  * @author      Will Santanen <will.santanen@thecoresolution.com>
  * @copyright   $year$ Core Business Solutions

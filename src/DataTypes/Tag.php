@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file contains the class CBS\SmarterU\DataTypes\Tag.
+ * Contains CBS\SmarterU\DataTypes\Tag
  *
  * @author Brian Reich <brian.reich@thecoresolution.com>
  * @copyright $year$ Core Business Solutions
