@@ -36,3 +36,60 @@ $user = (new User())
 $client = new Client($accountKey, $userKey);
 
 print_r($client->updateUser($user));
+
+/*
+Output:
+CBS\SmarterU\DataTypes\User Object
+(
+    [oldEmail:protected] =>
+    [oldEmployeeId:protected] =>
+    [id] =>
+    [email:protected] => user 0's email
+    [employeeId:protected] => user 0's employee ID
+    [givenName:protected] =>
+    [surname:protected] =>
+    [timezone:protected] =>
+    [learnerNotifications:protected] =>
+    [supervisorNotifications:protected] =>
+    [sendEmailTo:protected] =>
+    [alternateEmail:protected] =>
+    [authenticationType:protected] =>
+    [supervisors:protected] => Array
+        (
+        )
+
+    [organization:protected] =>
+    [teams:protected] => Array
+        (
+        )
+
+    [customFields:protected] => Array
+        (
+        )
+
+    [language:protected] =>
+    [status:protected] =>
+    [title:protected] =>
+    [division:protected] =>
+    [allowFeedback:protected] =>
+    [phonePrimary:protected] =>
+    [phoneAlternate:protected] =>
+    [phoneMobile:protected] =>
+    [fax:protected] =>
+    [website:protected] =>
+    [address1:protected] =>
+    [address2:protected] =>
+    [city:protected] =>
+    [province:protected] =>
+    [country:protected] =>
+    [postalCode:protected] =>
+    [sendMailTo:protected] =>
+    [roles:protected] =>
+    [receiveNotifications:protected] =>
+    [homeGroup:protected] =>
+    [venues:protected] =>
+    [wages:protected] =>
+    [createdDate:protected] =>
+    [modifiedDate:protected] =>
+)
+*/
