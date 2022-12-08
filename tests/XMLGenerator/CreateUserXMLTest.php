@@ -137,12 +137,14 @@ class CreateUserXMLTest extends TestCase {
         foreach ($xml->Parameters->User->Info->children() as $info) {
             $infoTag[] = $info->getName();
         }
-        self::assertCount(8, $infoTag);
+        self::assertCount(9, $infoTag);
         self::assertContains('Email', $infoTag);
         self::assertEquals(
             $user->getEmail(),
             $xml->Parameters->User->Info->Email
         );
+        self::assertContains('EmployeeID', $infoTag);
+        self::assertEquals('', $xml->Parameters->User->Info->EmployeeID);
         self::assertContains('GivenName', $infoTag);
         self::assertEquals(
             $user->getGivenName(),
