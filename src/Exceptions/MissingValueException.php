@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Contains SmarterU\Exceptions\MissingValueException
+ * Contains CBS\SmarterU\Exceptions\MissingValueException
  *
  * @author     Will Santanen <will.santanen@thecoresolution.com>
  * @copyright  $year$ Core Business Solutions

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Contains CBS\SmarterU\DataTypes\CustomField.
+ * Contains CBS\SmarterU\DataTypes\CustomField
  *
  * @author      Will Santanen <will.santanen@thecoresolution.com>
  * @copyright   $year$ Core Business Solutions
