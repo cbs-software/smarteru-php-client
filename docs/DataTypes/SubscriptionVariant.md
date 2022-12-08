@@ -11,12 +11,40 @@ a group.
 
 | Name | Description |
 |------|-------------|
+|[getAction](#subscriptionvariantgetaction)|Get whether the variant is to be assigned to or removed from the group.|
 |[getId](#subscriptionvariantgetid)|Get the system-generated identifier for the subscription variant.|
 |[getRequiresCredits](#subscriptionvariantgetrequirescredits)|Get whether enrollments in the subscription require credits.|
+|[setAction](#subscriptionvariantsetaction)|Set whether the variant is to be assigned to or removed from the group.|
 |[setId](#subscriptionvariantsetid)|Set the system-generated identifier for the subscription variant.|
 |[setRequiresCredits](#subscriptionvariantsetrequirescredits)|Set whether enrollments in the subscription require credits.|
 
 
+
+
+### SubscriptionVariant::getAction  
+
+**Description**
+
+```php
+public getAction (void)
+```
+
+Get whether the variant is to be assigned to or removed from the group. 
+
+ 
+
+**Parameters**
+
+`This function has no parameters.`
+
+**Return Values**
+
+`?string`
+
+> whether the variant is to be assigned or removed
+
+
+<hr />
 
 
 ### SubscriptionVariant::getId  
@@ -66,6 +94,34 @@ Get whether enrollments in the subscription require credits.
 `bool`
 
 > True if and only if the subscription requires credits.
+
+
+<hr />
+
+
+### SubscriptionVariant::setAction  
+
+**Description**
+
+```php
+public setAction (string $action)
+```
+
+Set whether the variant is to be assigned to or removed from the group. 
+
+ 
+
+**Parameters**
+
+* `(string) $action`
+: 'Add' to add the variant to the  
+group, 'Remove' to remove it.  
+
+**Return Values**
+
+`self`
+
+
 
 
 <hr />

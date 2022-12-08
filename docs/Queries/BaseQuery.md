@@ -11,8 +11,7 @@ SmarterU API query.
 
 | Name | Description |
 |------|-------------|
-|[createBaseXml](#basequerycreatebasexml)|Create the base XML element containing the features that are common to
-all queries.|
+|[createBaseXml](#basequerycreatebasexml)|Create the base XML element containing the features that are common to all queries.|
 |[getAccountApi](#basequerygetaccountapi)|Return the account API key.|
 |[getUserApi](#basequerygetuserapi)|Return the user API key.|
 |[setAccountApi](#basequerysetaccountapi)|Set the account API key.|
@@ -29,8 +28,7 @@ all queries.|
 public createBaseXml (void)
 ```
 
-Create the base XML element containing the features that are common to
-all queries. 
+Create the base XML element containing the features that are common to all queries. 
 
  
 
@@ -44,13 +42,6 @@ all queries.
 
 > The base XML element from which to build the query
 
-
-**Throws Exceptions**
-
-
-`\MissingValueException`
-> if the Account API Key and/or the User API  
-Key are not set.
 
 <hr />
 
@@ -73,7 +64,7 @@ Return the account API key.
 
 **Return Values**
 
-`?string`
+`string`
 
 > the account API key
 
@@ -99,7 +90,7 @@ Return the user API key.
 
 **Return Values**
 
-`?string`
+`string`
 
 > the user API key
 
@@ -112,7 +103,7 @@ Return the user API key.
 **Description**
 
 ```php
-public setAccountApi (?string $accountApi)
+public setAccountApi (string $accountApi)
 ```
 
 Set the account API key. 
@@ -121,7 +112,7 @@ Set the account API key.
 
 **Parameters**
 
-* `(?string) $accountApi`
+* `(string) $accountApi`
 : the account API key  
 
 **Return Values**
@@ -139,7 +130,7 @@ Set the account API key.
 **Description**
 
 ```php
-public setUserApi (?string $userApi)
+public setUserApi (string $userApi)
 ```
 
 Set the user API key. 
@@ -148,7 +139,7 @@ Set the user API key.
 
 **Parameters**
 
-* `(?string) $userApi`
+* `(string) $userApi`
 : the user API key  
 
 **Return Values**

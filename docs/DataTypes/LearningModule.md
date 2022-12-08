@@ -11,20 +11,42 @@ a Group.
 
 | Name | Description |
 |------|-------------|
-|[getAllowSelfEnroll](#learningmodulegetallowselfenroll)|Get whether or not users in the group are able to self-enroll in the
-course.|
-|[getAutoEnroll](#learningmodulegetautoenroll)|Get whether or not users in the group will be automatically enrolled
-in the course.|
-|[getId](#learningmodulegetid)|Get the system-generated identifier of the course to be assigned to
-the group.|
-|[setAllowSelfEnroll](#learningmodulesetallowselfenroll)|Set whether or not users in the group are able to self-enroll in the
-course.|
-|[setAutoEnroll](#learningmodulesetautoenroll)|Set whether or not users in the group will be automatically enrolled
-in the course.|
-|[setId](#learningmodulesetid)|Set the system-generated identifier of the course to be assigned to
-the group.|
+|[getAction](#learningmodulegetaction)|Get whether the course is to be assigned to or removed from the group.|
+|[getAllowSelfEnroll](#learningmodulegetallowselfenroll)|Get whether or not users in the group are able to self-enroll in the course.|
+|[getAutoEnroll](#learningmodulegetautoenroll)|Get whether or not users in the group will be automatically enrolled in the course.|
+|[getId](#learningmodulegetid)|Get the system-generated identifier of the course to be assigned to the group.|
+|[setAction](#learningmodulesetaction)|Set whether the course is to be assigned to or removed from the group.|
+|[setAllowSelfEnroll](#learningmodulesetallowselfenroll)|Set whether or not users in the group are able to self-enroll in the course.|
+|[setAutoEnroll](#learningmodulesetautoenroll)|Set whether or not users in the group will be automatically enrolled in the course.|
+|[setId](#learningmodulesetid)|Set the system-generated identifier of the course to be assigned to the group.|
 
 
+
+
+### LearningModule::getAction  
+
+**Description**
+
+```php
+public getAction (void)
+```
+
+Get whether the course is to be assigned to or removed from the group. 
+
+ 
+
+**Parameters**
+
+`This function has no parameters.`
+
+**Return Values**
+
+`?string`
+
+> whether the course is to be assigned or removed
+
+
+<hr />
 
 
 ### LearningModule::getAllowSelfEnroll  
@@ -35,8 +57,7 @@ the group.|
 public getAllowSelfEnroll (void)
 ```
 
-Get whether or not users in the group are able to self-enroll in the
-course. 
+Get whether or not users in the group are able to self-enroll in the course. 
 
  
 
@@ -62,8 +83,7 @@ course.
 public getAutoEnroll (void)
 ```
 
-Get whether or not users in the group will be automatically enrolled
-in the course. 
+Get whether or not users in the group will be automatically enrolled in the course. 
 
  
 
@@ -90,8 +110,7 @@ automatically enrolled in the course.
 public getId (void)
 ```
 
-Get the system-generated identifier of the course to be assigned to
-the group. 
+Get the system-generated identifier of the course to be assigned to the group. 
 
  
 
@@ -109,6 +128,34 @@ the group.
 <hr />
 
 
+### LearningModule::setAction  
+
+**Description**
+
+```php
+public setAction (string $action)
+```
+
+Set whether the course is to be assigned to or removed from the group. 
+
+ 
+
+**Parameters**
+
+* `(string) $action`
+: 'Add' to assign the course, 'Remove'  
+to remove the course.  
+
+**Return Values**
+
+`self`
+
+
+
+
+<hr />
+
+
 ### LearningModule::setAllowSelfEnroll  
 
 **Description**
@@ -117,8 +164,7 @@ the group.
 public setAllowSelfEnroll (bool $allowSelfEnroll)
 ```
 
-Set whether or not users in the group are able to self-enroll in the
-course. 
+Set whether or not users in the group are able to self-enroll in the course. 
 
  
 
@@ -146,8 +192,7 @@ self-enroll
 public setAutoEnroll (bool $autoEnroll)
 ```
 
-Set whether or not users in the group will be automatically enrolled
-in the course. 
+Set whether or not users in the group will be automatically enrolled in the course. 
 
  
 
@@ -173,8 +218,7 @@ automatically enrolled in the course.
 public setId (string $id)
 ```
 
-Set the system-generated identifier of the course to be assigned to
-the group. 
+Set the system-generated identifier of the course to be assigned to the group. 
 
  
 

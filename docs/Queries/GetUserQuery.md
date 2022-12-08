@@ -20,8 +20,6 @@ CBS\SmarterU\Queries\BaseQuery
 |[setEmployeeId](#getuserquerysetemployeeid)|Set the employee ID for the user.|
 |[setId](#getuserquerysetid)|Set the system-generated identifier for the user.|
 |[setMethod](#getuserquerysetmethod)|Set the SmarterU API method the query is to be used for.|
-|[toXml](#getuserquerytoxml)|Generate an XML representation of the query, to be passed into the
-SmarterU API.|
 
 ## Inherited methods
 
@@ -244,40 +242,6 @@ Set the SmarterU API method the query is to be used for.
 
 
 
-
-<hr />
-
-
-### GetUserQuery::toXml  
-
-**Description**
-
-```php
-public toXml (void)
-```
-
-Generate an XML representation of the query, to be passed into the
-SmarterU API. 
-
- 
-
-**Parameters**
-
-`This function has no parameters.`
-
-**Return Values**
-
-`string`
-
-> the XML representation of the query
-
-
-**Throws Exceptions**
-
-
-`\MissingValueException`
-> if the Account API key, User API key,  
-and/or user identifier are not set.
 
 <hr />
 
