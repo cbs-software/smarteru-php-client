@@ -163,7 +163,7 @@ class CreateGroupXMLTest extends TestCase {
                 $group->getNotificationEmails()
             );
         }
-        
+
         self::assertCount(0, $xml->Parameters->Group->Users->children());
 
         self::assertContains('LearningModules', $groupTags);

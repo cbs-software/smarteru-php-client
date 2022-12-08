@@ -41,7 +41,7 @@ class ListGroupsQueryTest extends TestCase {
             ->setTagName('My Tag')
             ->setTagValues('Tag 2 values');
         $tags = [$tag1, $tag2];
-        
+
         $query = (new ListGroupsQuery())
             ->setAccountApi($accountApi)
             ->setUserApi($userApi)

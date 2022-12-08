@@ -151,7 +151,7 @@ class UpdateUserClientTest extends TestCase {
         $handlerStack->push($history);
         $httpClient = new HttpClient(['handler' => $handlerStack]);
         $client->setHttpClient($httpClient);
-        
+
         // Make the request.
         $client->updateUser($user);
 
@@ -214,7 +214,7 @@ class UpdateUserClientTest extends TestCase {
         $handlerStack->push($history);
         $httpClient = new HttpClient(['handler' => $handlerStack]);
         $client->setHttpClient($httpClient);
-        
+
         // Make the request.
         $client->updateUser($user);
 
@@ -253,11 +253,11 @@ class UpdateUserClientTest extends TestCase {
         $history = Middleware::history($container);
 
         $mock = (new MockHandler([$response]));
-            
+
         $handlerStack = HandlerStack::create($mock);
 
         $handlerStack->push($history);
-            
+
         $httpClient = new HttpClient(['handler' => $handlerStack]);
 
         $client->setHttpClient($httpClient);
@@ -281,7 +281,7 @@ class UpdateUserClientTest extends TestCase {
         <SmarterU>
         </SmarterU>
         XML;
-    
+
         $xml = simplexml_load_string($xmlString);
         $xml->addChild('Result', 'Failed');
         $xml->addChild('Info');
@@ -295,16 +295,16 @@ class UpdateUserClientTest extends TestCase {
         $body = $xml->asXML();
 
         $response = new Response(200, [], $body);
-    
+
         $container = [];
         $history = Middleware::history($container);
 
         $mock = (new MockHandler([$response]));
-            
+
         $handlerStack = HandlerStack::create($mock);
 
         $handlerStack->push($history);
-            
+
         $httpClient = new HttpClient(['handler' => $handlerStack]);
 
         $client->setHttpClient($httpClient);
@@ -336,7 +336,7 @@ class UpdateUserClientTest extends TestCase {
         $info->addChild('EmployeeID', $this->user1->getEmployeeId());
         $xml->addChild('Errors');
         $body = $xml->asXML();
-    
+
         $response = new Response(200, [], $body);
         $container = [];
         $history = Middleware::history($container);
@@ -345,10 +345,10 @@ class UpdateUserClientTest extends TestCase {
         $handlerStack->push($history);
         $httpClient = new HttpClient(['handler' => $handlerStack]);
         $client->setHttpClient($httpClient);
-            
+
         // Make the request.
         $result = $client->updateUser($this->user1);
-        
+
         self::assertInstanceOf(User::class, $result);
         self::assertEquals($result->getEmail(), $this->user1->getEmail());
         self::assertEquals(

@@ -120,7 +120,7 @@ class CreateGroupClientTest extends TestCase {
 
         $name = $this->group->getName();
         $groupId = $this->group->getGroupId();
-        
+
         $xmlString = <<<XML
         <SmarterU>
             <Result>Success</Result>
@@ -132,7 +132,7 @@ class CreateGroupClientTest extends TestCase {
             </Errors>
         </SmarterU>
         XML;
-    
+
         // Set up the container to capture the request.
         $response = new Response(200, [], $xmlString);
         $container = [];
@@ -142,10 +142,10 @@ class CreateGroupClientTest extends TestCase {
         $handlerStack->push($history);
         $httpClient = new HttpClient(['handler' => $handlerStack]);
         $client->setHttpClient($httpClient);
-    
+
         // Make the request.
         $client->createGroup($this->group);
-    
+
         // Make sure there is only 1 request, then translate it to XML.
         self::assertCount(1, $container);
         $request = $container[0]['request'];
@@ -190,7 +190,7 @@ class CreateGroupClientTest extends TestCase {
         $client = new Client($accountApi, $userApi);
 
         $groupId = $this->group->getGroupId();
-        
+
         $xmlString = <<<XML
         <SmarterU>
             <Result>Success</Result>
@@ -201,7 +201,7 @@ class CreateGroupClientTest extends TestCase {
             </Errors>
         </SmarterU>
         XML;
-    
+
         // Set up the container to capture the request.
         $response = new Response(200, [], $xmlString);
         $container = [];
@@ -211,10 +211,10 @@ class CreateGroupClientTest extends TestCase {
         $handlerStack->push($history);
         $httpClient = new HttpClient(['handler' => $handlerStack]);
         $client->setHttpClient($httpClient);
-    
+
         // Make the request.
         $client->createGroup($group);
-    
+
         // Make sure there is only 1 request, then translate it to XML.
         self::assertCount(1, $container);
         $request = $container[0]['request'];
@@ -242,11 +242,11 @@ class CreateGroupClientTest extends TestCase {
         $history = Middleware::history($container);
 
         $mock = (new MockHandler([$response]));
-            
+
         $handlerStack = HandlerStack::create($mock);
 
         $handlerStack->push($history);
-            
+
         $httpClient = new HttpClient(['handler' => $handlerStack]);
 
         $client->setHttpClient($httpClient);
@@ -280,21 +280,21 @@ class CreateGroupClientTest extends TestCase {
             </Errors>
         </SmarterU>
         XML;
-    
+
         $xml = simplexml_load_string($xmlString);
         $body = $xml->asXML();
 
         $response = new Response(200, [], $body);
-    
+
         $container = [];
         $history = Middleware::history($container);
 
         $mock = (new MockHandler([$response]));
-            
+
         $handlerStack = HandlerStack::create($mock);
 
         $handlerStack->push($history);
-            
+
         $httpClient = new HttpClient(['handler' => $handlerStack]);
 
         $client->setHttpClient($httpClient);
@@ -327,7 +327,7 @@ class CreateGroupClientTest extends TestCase {
             </Errors>
         </SmarterU>
         XML;
-    
+
         $response = new Response(200, [], $xmlString);
         $container = [];
         $history = Middleware::history($container);
@@ -336,10 +336,10 @@ class CreateGroupClientTest extends TestCase {
         $handlerStack->push($history);
         $httpClient = new HttpClient(['handler' => $handlerStack]);
         $client->setHttpClient($httpClient);
-            
+
         // Make the request.
         $result = $client->createGroup($this->group);
-        
+
         self::assertInstanceOf(Group::class, $result);
         self::assertEquals($this->group->getName(), $result->getName());
         self::assertEquals($this->group->getGroupId(), $result->getGroupId());

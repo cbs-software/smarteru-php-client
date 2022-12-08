@@ -252,11 +252,11 @@ class GetUserGroupsClientTest extends TestCase {
         $history = Middleware::history($container);
 
         $mock = (new MockHandler([$response]));
-            
+
         $handlerStack = HandlerStack::create($mock);
 
         $handlerStack->push($history);
-            
+
         $httpClient = new HttpClient(['handler' => $handlerStack]);
 
         $client->setHttpClient($httpClient);
@@ -290,21 +290,21 @@ class GetUserGroupsClientTest extends TestCase {
             </Errors>
         </SmarterU>
         XML;
-    
+
         $xml = simplexml_load_string($xmlString);
         $body = $xml->asXML();
 
         $response = new Response(200, [], $body);
-    
+
         $container = [];
         $history = Middleware::history($container);
 
         $mock = (new MockHandler([$response]));
-            
+
         $handlerStack = HandlerStack::create($mock);
 
         $handlerStack->push($history);
-            
+
         $httpClient = new HttpClient(['handler' => $handlerStack]);
 
         $client->setHttpClient($httpClient);
@@ -324,7 +324,7 @@ class GetUserGroupsClientTest extends TestCase {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
-        
+
         $name1 = 'My Group';
         $identifier1 = '1';
         $isHomeGroup1 = '0';
@@ -351,7 +351,7 @@ class GetUserGroupsClientTest extends TestCase {
             </Errors>
         </SmarterU>
         XML;
-    
+
         $response = new Response(200, [], $xmlString);
         $container = [];
         $history = Middleware::history($container);
@@ -360,10 +360,10 @@ class GetUserGroupsClientTest extends TestCase {
         $handlerStack->push($history);
         $httpClient = new HttpClient(['handler' => $handlerStack]);
         $client->setHttpClient($httpClient);
-            
+
         // Make the request.
         $result = $client->readGroupsForUserByEmployeeId('5');
-        
+
         self::assertIsArray($result);
         self::assertCount(1, $result);
         self::assertInstanceOf(Group::class, $result[0]);
@@ -388,7 +388,7 @@ class GetUserGroupsClientTest extends TestCase {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
-        
+
         $name1 = 'My Group';
         $identifier1 = '1';
         $isHomeGroup1 = '0';
@@ -400,7 +400,7 @@ class GetUserGroupsClientTest extends TestCase {
         $name3 = 'Third Group';
         $identifier3 = '3';
         $isHomeGroup3 = '0';
-        
+
         $createdDate = '2022-07-29';
         $modifiedDate = '2022-07-30';
 
@@ -439,7 +439,7 @@ class GetUserGroupsClientTest extends TestCase {
             </Errors>
         </SmarterU>
         XML;
-    
+
         $response = new Response(200, [], $xmlString);
         $container = [];
         $history = Middleware::history($container);
@@ -448,7 +448,7 @@ class GetUserGroupsClientTest extends TestCase {
         $handlerStack->push($history);
         $httpClient = new HttpClient(['handler' => $handlerStack]);
         $client->setHttpClient($httpClient);
-            
+
         // Make the request.
         $result = $client->readGroupsForUserById('1');
 

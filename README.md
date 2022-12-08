@@ -69,7 +69,7 @@ $client = new Client($accountAPIkey, $userAPIkey);
 ```
 
 The following is a list of public methods in Client.php that interact with the SmarterU API:
-    
+
 1. [createUser](docs/Client.md#clientcreateuser)
 2. [readUserById](docs/Client.md#clientreaduserbyid)
 3. [readUserByEmail](docs/Client.md#clientreaduserbyemail)
@@ -145,7 +145,7 @@ given to a Group. When adding or removing a LearningModule from a Group via the
 to a Group via the `createGroup` method, "action" is not used, while all other
 attributes are required. More information can be found in
 [docs/DataTypes/LearningModule.md](docs/DataTypes/LearningModule.md).
- 
+
 A SubscriptionVariant is a record of a subscription that is assigned to a Group.
 When adding or removing a SubscriptionVariant from a Group via the `updateGroup`
 method, all attributes are required. When adding a SubscriptionVariant to a

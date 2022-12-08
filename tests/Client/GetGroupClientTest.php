@@ -244,11 +244,11 @@ class GetGroupClientTest extends TestCase {
         $history = Middleware::history($container);
 
         $mock = (new MockHandler([$response]));
-            
+
         $handlerStack = HandlerStack::create($mock);
 
         $handlerStack->push($history);
-            
+
         $httpClient = new HttpClient(['handler' => $handlerStack]);
 
         $client->setHttpClient($httpClient);
@@ -283,21 +283,21 @@ class GetGroupClientTest extends TestCase {
             </Errors>
         </SmarterU>
         XML;
-    
+
         $xml = simplexml_load_string($xmlString);
         $body = $xml->asXML();
 
         $response = new Response(200, [], $body);
-    
+
         $container = [];
         $history = Middleware::history($container);
 
         $mock = (new MockHandler([$response]));
-            
+
         $handlerStack = HandlerStack::create($mock);
 
         $handlerStack->push($history);
-            
+
         $httpClient = new HttpClient(['handler' => $handlerStack]);
 
         $client->setHttpClient($httpClient);
@@ -351,7 +351,7 @@ class GetGroupClientTest extends TestCase {
             </Errors>
         </SmarterU>
         XML;
-    
+
         $response = new Response(200, [], $xmlString);
         $container = [];
         $history = Middleware::history($container);
@@ -360,10 +360,10 @@ class GetGroupClientTest extends TestCase {
         $handlerStack->push($history);
         $httpClient = new HttpClient(['handler' => $handlerStack]);
         $client->setHttpClient($httpClient);
-            
+
         // Make the request.
         $result = $client->readGroupById($groupId);
-        
+
         self::assertNull($result);
     }
 
@@ -430,7 +430,7 @@ class GetGroupClientTest extends TestCase {
             </Errors>
         </SmarterU>
         XML;
-    
+
         $response = new Response(200, [], $xmlString);
         $container = [];
         $history = Middleware::history($container);
@@ -439,10 +439,10 @@ class GetGroupClientTest extends TestCase {
         $handlerStack->push($history);
         $httpClient = new HttpClient(['handler' => $handlerStack]);
         $client->setHttpClient($httpClient);
-            
+
         // Make the request.
         $result = $client->readGroupById($groupId);
-        
+
         self::assertInstanceOf(Group::class, $result);
         self::assertEquals($name, $result->getName());
         self::assertEquals(new DateTime($createdDate), $result->getCreatedDate());

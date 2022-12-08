@@ -182,7 +182,7 @@ class GetLearnerReportQueryTest extends TestCase {
         );
         $query->setGroupStatus('Invalid');
     }
-    
+
     /**
      * Test that GetLearnerReportQuery::setGroupNames() throws an exception
      * when the provided name is not a string.
