@@ -34,7 +34,7 @@ class GetGroupXMLTest extends TestCase {
         $query = (new GetGroupQuery())
             ->setAccountApi($accountApi)
             ->setUserApi($userApi);
-        
+
         self::expectException(MissingValueException::class);
         self::expectExceptionMessage(
             'Group identifier must be specified when creating a GetGroupQuery.'

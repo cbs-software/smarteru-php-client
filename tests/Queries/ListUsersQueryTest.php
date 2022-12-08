@@ -77,7 +77,7 @@ class ListUsersQueryTest extends TestCase {
             ->setCreatedDate($createdDate)
             ->setModifiedDate($modifiedDate)
             ->setTeams($teams);
-        
+
         self::assertEquals($accountApi, $query->getAccountApi());
         self::assertEquals($userApi, $query->getUserApi());
         self::assertEquals($page, $query->getPage());

@@ -520,7 +520,7 @@ class Group {
         $this->userHelpOverrideDefault = $userHelpOverrideDefault;
         return $this;
     }
-    
+
     /**
      * Get whether a link displays in the header of the learner interface that
      * enables users who have the group as their home group to request help.

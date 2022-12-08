@@ -85,7 +85,7 @@ class LearnerReport {
      * The ID of the Group containing this training assignment.
      */
     protected ?string $groupId = null;
-    
+
     /**
      * The name of the Group containing this training assignment.
      */

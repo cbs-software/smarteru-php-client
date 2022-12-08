@@ -75,7 +75,7 @@ class ChangePermissionsXMLTest extends TestCase {
             'Add'
         );
     }
-    
+
     /**
      * Test that XMLGenerator::changePermissions() produces the correct output
      * when all required values are present and only one permission is being

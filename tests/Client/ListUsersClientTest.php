@@ -305,11 +305,11 @@ class ListUsersClientTest extends TestCase {
         $history = Middleware::history($container);
 
         $mock = (new MockHandler([$response]));
-            
+
         $handlerStack = HandlerStack::create($mock);
 
         $handlerStack->push($history);
-            
+
         $httpClient = new HttpClient(['handler' => $handlerStack]);
 
         $client->setHttpClient($httpClient);
@@ -335,7 +335,7 @@ class ListUsersClientTest extends TestCase {
         <SmarterU>
         </SmarterU>
         XML;
-    
+
         $xml = simplexml_load_string($xmlString);
         $xml->addChild('Result', 'Failed');
         $xml->addChild('Info');
@@ -349,16 +349,16 @@ class ListUsersClientTest extends TestCase {
         $body = $xml->asXML();
 
         $response = new Response(200, [], $body);
-    
+
         $container = [];
         $history = Middleware::history($container);
 
         $mock = (new MockHandler([$response]));
-            
+
         $handlerStack = HandlerStack::create($mock);
 
         $handlerStack->push($history);
-            
+
         $httpClient = new HttpClient(['handler' => $handlerStack]);
 
         $client->setHttpClient($httpClient);
@@ -433,7 +433,7 @@ class ListUsersClientTest extends TestCase {
         $info->addChild('TotalRecords', '0');
         $errors = $xml->addChild('Errors');
         $body = $xml->asXML();
-    
+
         $response = new Response(200, [], $body);
         $container = [];
         $history = Middleware::history($container);
@@ -442,10 +442,10 @@ class ListUsersClientTest extends TestCase {
         $handlerStack->push($history);
         $httpClient = new HttpClient(['handler' => $handlerStack]);
         $client->setHttpClient($httpClient);
-            
+
         // Make the request.
         $result = $client->listUsers($query);
-        
+
         self::assertIsArray($result);
         self::assertCount(0, $result);
     }
@@ -536,7 +536,7 @@ class ListUsersClientTest extends TestCase {
         $info->addChild('TotalRecords', '1');
         $errors = $xml->addChild('Errors');
         $body = $xml->asXML();
-    
+
         $response = new Response(200, [], $body);
         $container = [];
         $history = Middleware::history($container);
@@ -545,10 +545,10 @@ class ListUsersClientTest extends TestCase {
         $handlerStack->push($history);
         $httpClient = new HttpClient(['handler' => $handlerStack]);
         $client->setHttpClient($httpClient);
-            
+
         // Make the request.
         $result = $client->listUsers($query);
-        
+
         self::assertIsArray($result);
         self::assertCount(1, $result);
         self::assertInstanceOf(User::class, $result[0]);
@@ -740,7 +740,7 @@ class ListUsersClientTest extends TestCase {
         $info->addChild('TotalRecords', '3');
         $errors = $xml->addChild('Errors');
         $body = $xml->asXML();
-    
+
         $response = new Response(200, [], $body);
         $container = [];
         $history = Middleware::history($container);
@@ -749,10 +749,10 @@ class ListUsersClientTest extends TestCase {
         $handlerStack->push($history);
         $httpClient = new HttpClient(['handler' => $handlerStack]);
         $client->setHttpClient($httpClient);
-            
+
         // Make the request.
         $result = $client->listUsers($query);
-        
+
         self::assertIsArray($result);
         self::assertCount(3, $result);
         self::assertInstanceOf(User::class, $result[0]);
