@@ -14,34 +14,12 @@ This project is not affiliated with Neovation.
 
 ## Installation
 
-1. Add the repository to the `repositories` in your composer.json
+1. Add the repository to the `require` section in your composer.json.
 
 ```json
-"repositories": [
-    {
-        "type": "package",
-        "package": {
-            "name": "cbssoftware/smarteru-client",
-            "version": "0.1",
-            "type": "library",
-            "source": {
-                "url": "https://github.com/cbs-software/smarteru-php-client.git",
-                "type": "git",
-                "reference": "main"
-            },
-            "require": {
-                "guzzlehttp/guzzle": "^7.0",
-                "ext-SimpleXML": "*"
-            },
-            "autoload": {
-                "psr-4": {
-                    "CBS\\SmarterU\\": "src/"
-                }
-            }
-        }
-    },
-    ...
-],
+"require": {
+        "cbssoftware/smarteru-php-client": "*"
+    }
 ```
 
 2. Let `composer` install the library
