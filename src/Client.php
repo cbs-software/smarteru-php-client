@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace CBS\SmarterU;
 
 use CBS\SmarterU\DataTypes\CustomField;
+use CBS\SmarterU\DataTypes\ErrorCode;
 use CBS\SmarterU\DataTypes\ExternalAuthorization;
 use CBS\SmarterU\DataTypes\Group;
 use CBS\SmarterU\DataTypes\LearnerReport;
@@ -75,10 +76,10 @@ class Client {
     ];
 
     /**
-     * The beginning of the message to use to throw an exception when the
-     * SmarterU API returns a fatal error.
+     * The message to use when throwing an exception because the SmarterU API
+     * responded with a fatal error.
      */
-    protected const SMARTERU_EXCEPTION_PREAMBLE = 'SmarterU rejected the request due to the following error(s): ';
+    public const SMARTERU_EXCEPTION_MESSAGE = 'SmarterU rejected the request.';
 
     #endregion constants
 
@@ -255,7 +256,10 @@ class Client {
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
         if ((string) $bodyAsXml->Result === 'Failed') {
-            throw new SmarterUException($this->readErrors($bodyAsXml->Errors));
+            throw new SmarterUException(
+                self::SMARTERU_EXCEPTION_MESSAGE,
+                $this->getErrorCodesFromXmlElement($bodyAsXml->Errors)
+            );
         }
 
         $email = (string) $bodyAsXml->Info->Email;
@@ -353,7 +357,10 @@ class Client {
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
         if ((string) $bodyAsXml->Result === 'Failed') {
-            throw new SmarterUException($this->readErrors($bodyAsXml->Errors));
+            throw new SmarterUException(
+                self::SMARTERU_EXCEPTION_MESSAGE,
+                $this->getErrorCodesFromXmlElement($bodyAsXml->Errors)
+            );
         }
 
         $users = [];
@@ -438,7 +445,10 @@ class Client {
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
         if ((string) $bodyAsXml->Result === 'Failed') {
-            throw new SmarterUException($this->readErrors($bodyAsXml->Errors));
+            throw new SmarterUException(
+                self::SMARTERU_EXCEPTION_MESSAGE,
+                $this->getErrorCodesFromXmlElement($bodyAsXml->Errors)
+            );
         }
 
         $email = (string) $bodyAsXml->Info->Email;
@@ -537,7 +547,10 @@ class Client {
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
         if ((string) $bodyAsXml->Result === 'Failed') {
-            throw new SmarterUException($this->readErrors($bodyAsXml->Errors));
+            throw new SmarterUException(
+                self::SMARTERU_EXCEPTION_MESSAGE,
+                $this->getErrorCodesFromXmlElement($bodyAsXml->Errors)
+            );
         }
 
         $groupName = (string) $bodyAsXml->Info->Group;
@@ -617,7 +630,10 @@ class Client {
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
         if ((string) $bodyAsXml->Result === 'Failed') {
-            throw new SmarterUException($this->readErrors($bodyAsXml->Errors));
+            throw new SmarterUException(
+                self::SMARTERU_EXCEPTION_MESSAGE,
+                $this->getErrorCodesFromXmlElement($bodyAsXml->Errors)
+            );
         }
 
         $groups = [];
@@ -679,7 +695,10 @@ class Client {
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
         if ((string) $bodyAsXml->Result === 'Failed') {
-            throw new SmarterUException($this->readErrors($bodyAsXml->Errors));
+            throw new SmarterUException(
+                self::SMARTERU_EXCEPTION_MESSAGE,
+                $this->getErrorCodesFromXmlElement($bodyAsXml->Errors)
+            );
         }
 
         $groupName = (string) $bodyAsXml->Info->Group;
@@ -732,7 +751,10 @@ class Client {
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
         if ((string) $bodyAsXml->Result === 'Failed') {
-            throw new SmarterUException($this->readErrors($bodyAsXml->Errors));
+            throw new SmarterUException(
+                self::SMARTERU_EXCEPTION_MESSAGE,
+                $this->getErrorCodesFromXmlElement($bodyAsXml->Errors)
+            );
         }
 
         $groupName = (string) $bodyAsXml->Info->Group;
@@ -781,7 +803,10 @@ class Client {
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
         if ((string) $bodyAsXml->Result === 'Failed') {
-            throw new SmarterUException($this->readErrors($bodyAsXml->Errors));
+            throw new SmarterUException(
+                self::SMARTERU_EXCEPTION_MESSAGE,
+                $this->getErrorCodesFromXmlElement($bodyAsXml->Errors)
+            );
         }
 
         $groupName = (string) $bodyAsXml->Info->Group;
@@ -851,7 +876,10 @@ class Client {
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
         if ((string) $bodyAsXml->Result === 'Failed') {
-            throw new SmarterUException($this->readErrors($bodyAsXml->Errors));
+            throw new SmarterUException(
+                self::SMARTERU_EXCEPTION_MESSAGE,
+                $this->getErrorCodesFromXmlElement($bodyAsXml->Errors)
+            );
         }
 
         $email = (string) $bodyAsXml->Info->Email;
@@ -921,7 +949,10 @@ class Client {
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
         if ((string) $bodyAsXml->Result === 'Failed') {
-            throw new SmarterUException($this->readErrors($bodyAsXml->Errors));
+            throw new SmarterUException(
+                self::SMARTERU_EXCEPTION_MESSAGE,
+                $this->getErrorCodesFromXmlElement($bodyAsXml->Errors)
+            );
         }
 
         $email = (string) $bodyAsXml->Info->Email;
@@ -965,7 +996,10 @@ class Client {
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
         if ((string) $bodyAsXml->Result === 'Failed') {
-            throw new SmarterUException($this->readErrors($bodyAsXml->Errors));
+            throw new SmarterUException(
+                self::SMARTERU_EXCEPTION_MESSAGE,
+                $this->getErrorCodesFromXmlElement($bodyAsXml->Errors)
+            );
         }
 
         $learnerReports = [];
@@ -1153,14 +1187,22 @@ class Client {
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
         if ((string) $bodyAsXml->Result === 'Failed') {
-            $errors = $this->readErrors($bodyAsXml->Errors);
-            // The SmarterU API treats "User not found" as a fatal error.
-            // If the API returns this error, this if statement will catch it
-            // before it becomes an exception and return null.
-            if (str_contains($errors, 'GU:03')) {
-                return null;
+            $errors = $this->getErrorCodesFromXmlElement($bodyAsXml->Errors);
+            foreach ($errors as $error) {
+                /**
+                 * The SmarterU API treats "User not found" as a fatal error.
+                 * If the API returns this error, this if statement will catch
+                 * it before it becomes an exception and return null.
+                 */
+                if ($error->getErrorCode() === ErrorCode::USER_NOT_FOUND) {
+                    return null;
+                }
             }
-            throw new SmarterUException($errors);
+
+            throw new SmarterUException(
+                self::SMARTERU_EXCEPTION_MESSAGE,
+                $errors
+            );
         }
 
         $user = $bodyAsXml->Info->User;
@@ -1262,7 +1304,10 @@ class Client {
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
         if ((string) $bodyAsXml->Result === 'Failed') {
-            throw new SmarterUException($this->readErrors($bodyAsXml->Errors));
+            throw new SmarterUException(
+                self::SMARTERU_EXCEPTION_MESSAGE,
+                $this->getErrorCodesFromXmlElement($bodyAsXml->Errors)
+            );
         }
 
         $groups = [];
@@ -1309,16 +1354,22 @@ class Client {
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
         if ((string) $bodyAsXml->Result === 'Failed') {
-            $errors = $this->readErrors($bodyAsXml->Errors);
-            /**
-             * The SmarterU API treats "Group not found" as a fatal error.
-             * If the API returns this error, this if statement will catch it
-             * before it becomes an exception and return null.
-             */
-            if (str_contains($errors, 'GG:03')) {
-                return null;
+            $errors = $this->getErrorCodesFromXmlElement($bodyAsXml->Errors);
+            foreach ($errors as $error) {
+                /**
+                 * The SmarterU API treats "Group not found" as a fatal error.
+                 * If the API returns this error, this if statement will catch
+                 * it before it becomes an exception and return null.
+                 */
+                if ($error->getErrorCode() === ErrorCode::GROUP_NOT_FOUND) {
+                    return null;
+                }
             }
-            throw new SmarterUException($errors);
+
+            throw new SmarterUException(
+                self::SMARTERU_EXCEPTION_MESSAGE,
+                $errors
+            );
         }
 
         $group = $bodyAsXml->Info->Group;
@@ -1395,7 +1446,10 @@ class Client {
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
         if ((string) $bodyAsXml->Result === 'Failed') {
-            throw new SmarterUException($this->readErrors($bodyAsXml->Errors));
+            throw new SmarterUException(
+                self::SMARTERU_EXCEPTION_MESSAGE,
+                $this->getErrorCodesFromXmlElement($bodyAsXml->Errors)
+            );
         }
 
         return (new ExternalAuthorization())
@@ -1405,20 +1459,20 @@ class Client {
     }
 
     /**
-     * Translate the error message(s) returned by the SmarterU API to a string
-     * representing the message to use for an exception.
+     * Get a list of ErrorCodes from a SimpleXMLElement
      *
-     * @param SimpleXMLElement $errors the <errors> portion of the response
-     * @return string a string representation of these errors
+     * @param SimpleXMLElement $errors  the <errors> portion of a response from
+     *      the SmarterU API
+     * @return ErrorCode[]  the list of error codes encoded in the XML element
      */
-    private function readErrors(SimpleXMLElement $errors): string {
-        $errorsAsString = self::SMARTERU_EXCEPTION_PREAMBLE;
+    private function getErrorCodesFromXmlElement(SimpleXMLElement $errors): array {
+        $errorCodes = [];
         foreach ($errors->children() as $error) {
-            $errorsAsString .= (string) $error->ErrorID;
-            $errorsAsString .= ': ';
-            $errorsAsString .= (string) $error->ErrorMessage;
-            $errorsAsString .= ', ';
+            $errorCodes[] = new ErrorCode(
+                (string) $error->ErrorID,
+                (string) $error->ErrorMessage
+            );
         }
-        return substr($errorsAsString, 0, -2);
+        return $errorCodes;
     }
 }
