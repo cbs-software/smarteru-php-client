@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Contains CBS\SmarterU\Queries\GetLearnerReportQuery.php.
+ * Contains CBS\SmarterU\Queries\GetLearnerReportQuery
  *
  * @author      Will Santanen <will.santanen@thecoresolution.com>
  * @copyright   $year$ Core Business Solutions

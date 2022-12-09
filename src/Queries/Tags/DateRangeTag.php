@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Contains SmarterU\Queries\Tags\DateRangeTag.
+ * Contains CBS\SmarterU\Queries\Tags\DateRangeTag
  *
  * @author      Will Santanen <will.santanen@thecoresolution.com>
  * @copyright   $year$ Core Business Solutions
