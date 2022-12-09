@@ -252,6 +252,20 @@ will be thrown, and any error(s) returned by the SmarterU API will be listed in
 the exception message. A list of all possible SmarterU errors can be found
 [here](https://support.smarteru.com/docs/api-error-codes).
 
+## Contributing
+
+If you would like to make a contribution to this library, you may do so using
+the following process:
+
+1. Clone the project to your own machine.
+2. Create a new branch based on 'main' with a name that summarizes what you're
+changing.
+3. Commit your changes to your branch. Make sure to update any unit tests that
+are affected by your changes, and to provide tests for any new classes and/or
+methods introduced.
+4. Submit a Pull Request targeting the 'main' branch so that we can review
+your changes.
+
 ## Tests
 
 This library comes with a set of unit tests for use with
