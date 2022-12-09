@@ -14,15 +14,7 @@ This project is not affiliated with Neovation.
 
 ## Installation
 
-1. Add the repository to the `require` section in your composer.json.
-
-```json
-"require": {
-        "cbssoftware/smarteru-php-client": "*"
-    }
-```
-
-2. Let `composer` install the library
+Use `composer` to add the library to your project.
 
 ```sh
 composer require cbssoftware/smarteru-client
@@ -257,13 +249,15 @@ the exception message. A list of all possible SmarterU errors can be found
 If you would like to make a contribution to this library, you may do so using
 the following process:
 
-1. Clone the project to your own machine.
-2. Create a new branch based on 'main' with a name that summarizes what you're
+1. Fork the GitHub repository.
+2. Clone the project to your own machine.
+3. Create a new branch based on 'main' with a name that summarizes what you're
 changing.
-3. Commit your changes to your branch. Make sure to update any unit tests that
+4. Commit your changes to your branch. Make sure to update any unit tests that
 are affected by your changes, and to provide tests for any new classes and/or
 methods introduced.
-4. Submit a Pull Request targeting the 'main' branch so that we can review
+5. Push your branch back up to the fork.
+6. Submit a Pull Request targeting the 'main' branch so that we can review
 your changes.
 
 ## Tests
