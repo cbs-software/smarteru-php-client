@@ -208,12 +208,12 @@ criteria provided by the query.
 The classes contained in the `CBS\SmarterU\Queries\Tags` directory are query
 segments that are used when filling in certain attributes in the query classes.
 The `DateRangeTag` uses two DateTimeInterface objects to filter the results of
-your query by a specific time period, for example returning only the 
+your query by a specific time period, for example returning only the
 LearnerReports for courses that were completed between the provided dates. The
 `MatchTag` is used to filter the results of a ListGroups request by the Group's
 name, or to filter the results of a ListUsers request by the User's email
 address, employee ID, or name. The following example would only return Users
-whose name is John Smith: 
+whose name is John Smith:
 
 ```php
 use CBS\SmarterU\Queries\ListUsersQuery;
