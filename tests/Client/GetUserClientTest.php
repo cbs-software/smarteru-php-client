@@ -450,11 +450,11 @@ class GetUserClientTest extends TestCase {
         $history = Middleware::history($container);
 
         $mock = (new MockHandler([$response]));
-            
+
         $handlerStack = HandlerStack::create($mock);
 
         $handlerStack->push($history);
-            
+
         $httpClient = new HttpClient(['handler' => $handlerStack]);
 
         $client->setHttpClient($httpClient);
@@ -477,7 +477,7 @@ class GetUserClientTest extends TestCase {
         <SmarterU>
         </SmarterU>
         XML;
-    
+
         $xml = simplexml_load_string($xmlString);
         $xml->addChild('Result', 'Failed');
         $xml->addChild('Info');
@@ -491,16 +491,16 @@ class GetUserClientTest extends TestCase {
         $body = $xml->asXML();
 
         $response = new Response(200, [], $body);
-    
+
         $container = [];
         $history = Middleware::history($container);
 
         $mock = (new MockHandler([$response]));
-            
+
         $handlerStack = HandlerStack::create($mock);
 
         $handlerStack->push($history);
-            
+
         $httpClient = new HttpClient(['handler' => $handlerStack]);
 
         $client->setHttpClient($httpClient);
@@ -534,7 +534,7 @@ class GetUserClientTest extends TestCase {
         $error->addChild('ErrorID', 'GU:03');
         $error->addChild('ErrorMessage', 'The user requested does not exist.');
         $body = $xml->asXML();
-    
+
         $response = new Response(200, [], $body);
         $container = [];
         $history = Middleware::history($container);
@@ -543,10 +543,10 @@ class GetUserClientTest extends TestCase {
         $handlerStack->push($history);
         $httpClient = new HttpClient(['handler' => $handlerStack]);
         $client->setHttpClient($httpClient);
-            
+
         // Make the request.
         $result = $client->readUserByEmployeeId($this->user1->getEmployeeId());
-        
+
         self::assertNull($result);
     }
 
@@ -558,7 +558,7 @@ class GetUserClientTest extends TestCase {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
-        
+
         $createdDate = '2022-07-29';
         $modifiedDate = '2022-07-30';
 
@@ -628,7 +628,7 @@ class GetUserClientTest extends TestCase {
         );
         $errors = $xml->addChild('Errors');
         $body = $xml->asXML();
-    
+
         $response = new Response(200, [], $body);
         $container = [];
         $history = Middleware::history($container);
@@ -637,10 +637,10 @@ class GetUserClientTest extends TestCase {
         $handlerStack->push($history);
         $httpClient = new HttpClient(['handler' => $handlerStack]);
         $client->setHttpClient($httpClient);
-            
+
         // Make the request.
         $result = $client->readUserById($this->user1->getId());
-        
+
         self::assertInstanceOf(User::class, $result);
         self::assertEquals($this->user1->getId(), $result->getId());
         self::assertEquals(

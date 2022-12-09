@@ -33,7 +33,7 @@ class GetUserXMLTest extends TestCase {
         $userApi = 'user';
         $query = (new GetUserQuery())
             ->setMethod('getUser');
-        
+
         self::expectException(MissingValueException::class);
         self::expectExceptionMessage(
             'User identifier must be specified when creating a GetUserQuery.'

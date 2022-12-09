@@ -129,7 +129,7 @@ class ListGroupsClientTest extends TestCase {
             ->setTagName('My Tag')
             ->setTagValues('Tag 2 values');
         $tags = [$tag1, $tag2];
-        
+
         $query = (new ListGroupsQuery())
             ->setAccountApi($accountApi)
             ->setUserApi($userApi)
@@ -217,11 +217,11 @@ class ListGroupsClientTest extends TestCase {
         $history = Middleware::history($container);
 
         $mock = (new MockHandler([$response]));
-            
+
         $handlerStack = HandlerStack::create($mock);
 
         $handlerStack->push($history);
-            
+
         $httpClient = new HttpClient(['handler' => $handlerStack]);
 
         $client->setHttpClient($httpClient);
@@ -257,21 +257,21 @@ class ListGroupsClientTest extends TestCase {
             </Errors>
         </SmarterU>
         XML;
-    
+
         $xml = simplexml_load_string($xmlString);
         $body = $xml->asXML();
 
         $response = new Response(200, [], $body);
-    
+
         $container = [];
         $history = Middleware::history($container);
 
         $mock = (new MockHandler([$response]));
-            
+
         $handlerStack = HandlerStack::create($mock);
 
         $handlerStack->push($history);
-            
+
         $httpClient = new HttpClient(['handler' => $handlerStack]);
 
         $client->setHttpClient($httpClient);

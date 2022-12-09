@@ -69,7 +69,7 @@ $client = new Client($accountAPIkey, $userAPIkey);
 ```
 
 The following is a list of public methods in Client.php that interact with the SmarterU API:
-    
+
 1. [createUser](docs/Client.md#clientcreateuser)
 2. [readUserById](docs/Client.md#clientreaduserbyid)
 3. [readUserByEmail](docs/Client.md#clientreaduserbyemail)
@@ -145,7 +145,7 @@ given to a Group. When adding or removing a LearningModule from a Group via the
 to a Group via the `createGroup` method, "action" is not used, while all other
 attributes are required. More information can be found in
 [docs/DataTypes/LearningModule.md](docs/DataTypes/LearningModule.md).
- 
+
 A SubscriptionVariant is a record of a subscription that is assigned to a Group.
 When adding or removing a SubscriptionVariant from a Group via the `updateGroup`
 method, all attributes are required. When adding a SubscriptionVariant to a
@@ -208,12 +208,12 @@ criteria provided by the query.
 The classes contained in the `CBS\SmarterU\Queries\Tags` directory are query
 segments that are used when filling in certain attributes in the query classes.
 The `DateRangeTag` uses two DateTimeInterface objects to filter the results of
-your query by a specific time period, for example returning only the 
+your query by a specific time period, for example returning only the
 LearnerReports for courses that were completed between the provided dates. The
 `MatchTag` is used to filter the results of a ListGroups request by the Group's
 name, or to filter the results of a ListUsers request by the User's email
 address, employee ID, or name. The following example would only return Users
-whose name is John Smith: 
+whose name is John Smith:
 
 ```php
 use CBS\SmarterU\Queries\ListUsersQuery;

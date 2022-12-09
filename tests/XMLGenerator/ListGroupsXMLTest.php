@@ -36,7 +36,7 @@ class ListGroupsXMLTest extends TestCase {
         $tag = new Tag();
         $query = (new ListGroupsQuery())
             ->setTags([$tag]);
-        
+
         self::expectException(MissingValueException::class);
         self::expectExceptionMessage(
             'Tags must include a tag identifier when creating a ListGroups query.'
@@ -110,7 +110,7 @@ class ListGroupsXMLTest extends TestCase {
             ->setTagName('My Tag')
             ->setTagValues('Tag 2 values');
         $tags = [$tag1, $tag2];
-        
+
         $query = (new ListGroupsQuery())
             ->setGroupName($groupName)
             ->setGroupStatus($groupStatus)
@@ -138,7 +138,7 @@ class ListGroupsXMLTest extends TestCase {
         }
         self::assertCount(1, $parameters);
         self::assertContains('Group', $parameters);
-    
+
         $group = [];
         foreach ($xmlAsElement->Parameters->Group->children() as $groupTag) {
             $group[] = $groupTag->getName();

@@ -1009,7 +1009,7 @@ class XMLGenerator {
         }
         $info = $userTag->addChild('Info');
         $profile = $userTag->addChild('Profile');
-        
+
         $groups = $userTag->addChild('Groups');
         $groupTag = $groups->addChild('Group');
         if (!empty($group->getName())) {
@@ -1099,7 +1099,8 @@ class XMLGenerator {
         }
         if ($this->includeLearningModulesTag($query)) {
             $learningModules = $filters->addChild('LearningModules');
-            if (!empty($query->getLearningModuleStatus())
+            if (
+                !empty($query->getLearningModuleStatus())
                 || !empty($query->getLearningModuleNames())
             ) {
                 $learningModule = $learningModules->addChild('LearningModule');

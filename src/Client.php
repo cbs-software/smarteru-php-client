@@ -248,9 +248,9 @@ class Client {
             ->getHttpClient()
             ->request(
                 'POST',
-                self::POST_URL, 
+                self::POST_URL,
                 ['form_params' => ['Package' => $xml]]
-        );
+            );
 
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
@@ -281,7 +281,7 @@ class Client {
     public function readUserById(string $id): ?User {
         $query = (new GetUserQuery())
             ->setId($id);
-        
+
         return $this->getUser($query);
     }
 
@@ -300,7 +300,7 @@ class Client {
     public function readUserByEmail(string $email): ?User {
         $query = (new GetUserQuery())
             ->setEmail($email);
-        
+
         return $this->getUser($query);
     }
 
@@ -319,7 +319,7 @@ class Client {
     public function readUserByEmployeeId(string $employeeId): ?User {
         $query = (new GetUserQuery())
             ->setEmployeeId($employeeId);
-        
+
         return $this->getUser($query);
     }
 
@@ -346,9 +346,9 @@ class Client {
             ->getHttpClient()
             ->request(
                 'POST',
-                self::POST_URL, 
+                self::POST_URL,
                 ['form_params' => ['Package' => $xml]]
-        );
+            );
 
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
@@ -431,9 +431,9 @@ class Client {
             ->getHttpClient()
             ->request(
                 'POST',
-                self::POST_URL, 
+                self::POST_URL,
                 ['form_params' => ['Package' => $xml]]
-        );
+            );
 
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
@@ -530,9 +530,9 @@ class Client {
             ->getHttpClient()
             ->request(
                 'POST',
-                self::POST_URL, 
+                self::POST_URL,
                 ['form_params' => ['Package' => $xml]]
-        );
+            );
 
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
@@ -610,9 +610,9 @@ class Client {
             ->getHttpClient()
             ->request(
                 'POST',
-                self::POST_URL, 
+                self::POST_URL,
                 ['form_params' => ['Package' => $xml]]
-        );
+            );
 
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
@@ -672,9 +672,9 @@ class Client {
             ->getHttpClient()
             ->request(
                 'POST',
-                self::POST_URL, 
+                self::POST_URL,
                 ['form_params' => ['Package' => $xml]]
-        );
+            );
 
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
@@ -684,7 +684,7 @@ class Client {
 
         $groupName = (string) $bodyAsXml->Info->Group;
         $groupId = (string) $bodyAsXml->Info->GroupID;
-    
+
         return (new Group())
             ->setName($groupName)
             ->setGroupId($groupId);
@@ -725,9 +725,9 @@ class Client {
             ->getHttpClient()
             ->request(
                 'POST',
-                self::POST_URL, 
+                self::POST_URL,
                 ['form_params' => ['Package' => $xml]]
-        );
+            );
 
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
@@ -774,9 +774,9 @@ class Client {
             ->getHttpClient()
             ->request(
                 'POST',
-                self::POST_URL, 
+                self::POST_URL,
                 ['form_params' => ['Package' => $xml]]
-        );
+            );
 
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
@@ -844,9 +844,9 @@ class Client {
             ->getHttpClient()
             ->request(
                 'POST',
-                self::POST_URL, 
+                self::POST_URL,
                 ['form_params' => ['Package' => $xml]]
-        );
+            );
 
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
@@ -914,9 +914,9 @@ class Client {
             ->getHttpClient()
             ->request(
                 'POST',
-                self::POST_URL, 
+                self::POST_URL,
                 ['form_params' => ['Package' => $xml]]
-        );
+            );
 
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
@@ -958,9 +958,9 @@ class Client {
             ->getHttpClient()
             ->request(
                 'POST',
-                self::POST_URL, 
+                self::POST_URL,
                 ['form_params' => ['Package' => $xml]]
-        );
+            );
 
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
@@ -1080,7 +1080,7 @@ class Client {
             $learnerReports[] = $currentReport;
         }
 
-        return $learnerReports;        
+        return $learnerReports;
     }
 
     /**
@@ -1390,7 +1390,7 @@ class Client {
                 'POST',
                 self::POST_URL,
                 ['form_params' => ['Package' => $xml]]
-        );
+            );
 
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
