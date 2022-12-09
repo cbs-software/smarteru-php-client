@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Contains CBS\SmarterU\Queries\BaseQuery.php
+ * Contains CBS\SmarterU\Queries\BaseQuery
  *
  * @author      Will Santanen <will.santanen@thecoresolution.com>
  * @copyright   $year$ Core Business Solutions

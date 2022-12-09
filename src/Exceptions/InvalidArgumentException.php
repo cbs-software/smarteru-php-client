@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Contains SmarterU\Exceptions\InvalidArgumentException
+ * Contains CBS\SmarterU\Exceptions\InvalidArgumentException
  *
  * @author     Brian Reich <brian.reich@thecoresolution.com>
  * @copyright  $year$ Core Business Solutions

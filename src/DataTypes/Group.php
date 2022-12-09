@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file contains the class CBS\SmarterU\DataTypes\Group.
+ * Contains CBS\SmarterU\DataTypes\Group
  *
  * @author Brian Reich <brian.reich@thecoresolution.com>
  * @copyright $year$ Core Business Solutions

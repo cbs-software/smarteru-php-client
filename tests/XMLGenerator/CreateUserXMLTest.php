@@ -76,9 +76,10 @@ class CreateUserXMLTest extends TestCase {
     /**
      * Tests that the XML generation process for a CreateUser request produces
      * the expected output when all required information is present but all
-     * optional attributes are left blank.
+     * optional attributes are left blank, and the user is identified by their
+     * email address.
      */
-    public function testCreateUserProducesExpectedOutputWithoutRequiredInfo() {
+    public function testCreateUserProducesExpectedOutputWithoutRequiredInfoUsingEmail() {
         $user = (new User())
             ->setEmail('example@email.com')
             ->setGivenName('Test')
@@ -137,11 +138,177 @@ class CreateUserXMLTest extends TestCase {
         foreach ($xml->Parameters->User->Info->children() as $info) {
             $infoTag[] = $info->getName();
         }
-        self::assertCount(8, $infoTag);
+        self::assertCount(9, $infoTag);
         self::assertContains('Email', $infoTag);
         self::assertEquals(
             $user->getEmail(),
             $xml->Parameters->User->Info->Email
+        );
+        self::assertContains('EmployeeID', $infoTag);
+        self::assertEquals('', $xml->Parameters->User->Info->EmployeeID);
+        self::assertContains('GivenName', $infoTag);
+        self::assertEquals(
+            $user->getGivenName(),
+            $xml->Parameters->User->Info->GivenName
+        );
+        self::assertContains('Surname', $infoTag);
+        self::assertEquals(
+            $user->getSurname(),
+            $xml->Parameters->User->Info->Surname
+        );
+        self::assertContains('Password', $infoTag);
+        self::assertEquals(
+            $user->getPassword(),
+            $xml->Parameters->User->Info->Password
+        );
+        self::assertContains('LearnerNotifications', $infoTag);
+        self::assertEquals(
+            $user->getLearnerNotifications() ? '1' : '0',
+            $xml->Parameters->User->Info->LearnerNotifications
+        );
+        self::assertContains('SupervisorNotifications', $infoTag);
+        self::assertEquals(
+            $user->getSupervisorNotifications() ? '1' : '0',
+            $xml->Parameters->User->Info->SupervisorNotifications
+        );
+        self::assertContains('SendEmailTo', $infoTag);
+        self::assertEquals(
+            $user->getSendEmailTo(),
+            $xml->Parameters->User->Info->SendEmailTo
+        );
+        self::assertContains('AuthenticationType', $infoTag);
+        self::assertEquals(
+            $user->getAuthenticationType(),
+            $xml->Parameters->User->Info->AuthenticationType
+        );
+
+        // Ensure that the <Profile> tag has the correct children.
+        $profileTag = [];
+        foreach ($xml->Parameters->User->Profile->children() as $profile) {
+            $profileTag[] = $profile->getName();
+        }
+        self::assertCount(3, $profileTag);
+        self::assertContains('Status', $profileTag);
+        self::assertEquals(
+            $user->getStatus(),
+            $xml->Parameters->User->Profile->Status
+        );
+        self::assertContains('ReceiveNotifications', $profileTag);
+        self::assertEquals(
+            $user->getReceiveNotifications() ? 'True' : 'False',
+            $xml->Parameters->User->Profile->ReceiveNotifications
+        );
+        self::assertContains('HomeGroup', $profileTag);
+        self::assertEquals(
+            $user->getHomeGroup(),
+            $xml->Parameters->User->Profile->HomeGroup
+        );
+
+        // Ensure that the <Groups> tag has the correct children.
+        $group1 = $xml->Parameters->User->Groups->Group[0];
+        $group1Elements = [];
+        foreach ($group1->children() as $group) {
+            $group1Elements[] = $group->getName();
+        }
+        self::assertCount(2, $group1Elements);
+        self::assertContains('GroupName', $group1Elements);
+        self::assertEquals(
+            $user->getHomeGroup(),
+            $group1->GroupName
+        );
+        self::assertContains('GroupPermissions', $group1Elements);
+        $permissionTags = [];
+        foreach ($group1->GroupPermissions->children() as $tag) {
+            $permissionTags[] = (array) $tag;
+        }
+        self::assertCount(0, $permissionTags);
+
+        // Ensure that the <Venues> and <Wages> tags are empty.
+        self::assertCount(
+            0,
+            $xml->Parameters->User->Venues->children()
+        );
+        self::assertCount(
+            0,
+            $xml->Parameters->User->Wages->Children()
+        );
+    }
+
+    /**
+     * Tests that the XML generation process for a CreateUser request produces
+     * the expected output when all required information is present but all
+     * optional attributes are left blank, and the user is identified by their
+     * employee ID.
+     */
+    public function testCreateUserProducesExpectedOutputWithoutRequiredInfoUsingEmployeeID() {
+        $user = (new User())
+            ->setEmployeeId('12')
+            ->setGivenName('Test')
+            ->setSurname('User')
+            ->setPassword('myPassword1')
+            ->setLearnerNotifications(false)
+            ->setSupervisorNotifications(false)
+            ->setSendEmailTo('Self')
+            ->setAuthenticationType('SmarterU')
+            ->setHomeGroup('HomeGroup');
+
+        $xmlGenerator = new XMLGenerator();
+        $accountApi = 'account';
+        $userApi = 'user';
+        $xml = $xmlGenerator->createUser(
+            $accountApi,
+            $userApi,
+            $user
+        );
+
+        self::assertIsString($xml);
+        $xml = simplexml_load_string($xml);
+
+        self::assertEquals($xml->getName(), 'SmarterU');
+        $elements = [];
+        foreach ($xml->children() as $element) {
+            $elements[] = $element->getName();
+        }
+        self::assertContains('AccountAPI', $elements);
+        self::assertEquals($accountApi, $xml->AccountAPI);
+        self::assertContains('UserAPI', $elements);
+        self::assertEquals($userApi, $xml->UserAPI);
+        self::assertContains('Method', $elements);
+        self::assertEquals('createUser', $xml->Method);
+        self::assertContains('Parameters', $elements);
+
+        // Ensure that the <Parameters> tag has the correct children.
+        $parameters = [];
+        foreach ($xml->Parameters->children() as $parameter) {
+            $parameters[] = $parameter->getName();
+        }
+        self::assertCount(1, $parameters);
+        $userInfo = [];
+        foreach ($xml->Parameters->User->children() as $userTag) {
+            $userInfo[] = $userTag->getName();
+        }
+        self::assertCount(5, $userInfo);
+        self::assertContains('Info', $userInfo);
+        self::assertContains('Profile', $userInfo);
+        self::assertContains('Groups', $userInfo);
+        self::assertContains('Venues', $userInfo);
+        self::assertContains('Wages', $userInfo);
+
+        // Ensure that the <Info> tag has the correct children.
+        $infoTag = [];
+        foreach ($xml->Parameters->User->Info->children() as $info) {
+            $infoTag[] = $info->getName();
+        }
+        self::assertCount(9, $infoTag);
+        self::assertContains('Email', $infoTag);
+        self::assertEquals(
+            '',
+            $xml->Parameters->User->Info->Email
+        );
+        self::assertContains('EmployeeID', $infoTag);
+        self::assertEquals(
+            $user->getEmployeeId(),
+            $xml->Parameters->User->Info->EmployeeID
         );
         self::assertContains('GivenName', $infoTag);
         self::assertEquals(

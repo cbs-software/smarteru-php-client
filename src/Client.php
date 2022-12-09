@@ -1333,7 +1333,7 @@ class Client {
          * for a node name.
          */
         foreach ((array) $group->NotificationEmails->NotificationEmail as $email) {
-            $notificationEmails[] = $email;
+            $notificationEmails[] = (string) $email;
         }
 
         foreach ($group->Tags2->children() as $tag) {

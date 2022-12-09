@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Contains CBS\SmarterU\DataTypes\SubscriptionVariant.
+ * Contains CBS\SmarterU\DataTypes\SubscriptionVariant
  *
  * @author      Will Santanen <will.santanen@thecoresolution.com>
  * @copyright   $year$ Core Business Solutions

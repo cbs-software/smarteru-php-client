@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file contains the class Core\SmarterU\DataTypes\User.
+ * Contains CBS\SmarterU\DataTypes\User
  *
  * @author Brian Reich <brian.reich@thecoresolution.com>
  * @copyright $year$ Core Business Solutions

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Contains SmarterU\Queries\MatchTag.php.
+ * Contains CBS\SmarterU\Queries\MatchTag
  *
  * @author      Will Santanen <will.santanen@thecoresolution.com>
  * @copyright   $year$ Core Business Solutions
