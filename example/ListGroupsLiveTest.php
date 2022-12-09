@@ -17,6 +17,7 @@ namespace CBS\SmarterU\Tests\Usability;
 require_once(__DIR__ . '/../vendor/autoload.php');
 
 use CBS\SmarterU\Client;
+use CBS\SmarterU\DataTypes\User;
 use CBS\SmarterU\Queries\ListGroupsQuery;
 
 /**
@@ -33,29 +34,50 @@ $client = new Client($accountKey, $userKey);
 print_r($client->listGroups($query));
 
 /*
+The ListGroups method only returns the Group's name and ID and does not include
+any other attributes.
 Output:
 
 Array
 (
-    [Response] => Array
-        (
-            [0] => Array
-                (
-                    [Name] => (group 1's name)
-                    [GroupID] => (group 1's ID)
-                )
+    [0] => CBS\SmarterU\DataTypes\Group Object
+    (
+        [oldName:protected] =>
+        [oldGroupId:protected] =>
+        [name:protected] => Group 0's name
+        [groupId:protected] => Group 0's ID
+        [description:protected] =>
+        [homeGroupMessage:protected] =>
+        [notificationEmails:protected] => Array
+            (
+            )
 
-            [1] => Array
-                (
-                    [Name] => (group 2's name)
-                    [GroupID] => (group 2's ID)
-                )
-            ...
-        )
+        [userHelpOverrideDefault:protected] =>
+        [userHelpEnabled:protected] =>
+        [userHelpEmail:protected] =>
+        [userHelpText:protected] =>
+        [tags:protected] =>
+        [userLimitEnabled:protected] =>
+        [userLimitAmount:protected] =>
+        [status:protected] =>
+        [users:protected] => Array
+            (
+            )
 
-    [Errors] => Array
-        (
-        )
+        [learningModules:protected] => Array
+            (
+            )
 
+        [subscriptionVariants:protected] => Array
+            (
+            )
+
+        [dashboardSetId:protected] =>
+        [permissions:protected] => Array
+            (
+            )
+
+    )
+    ...
 )
  */

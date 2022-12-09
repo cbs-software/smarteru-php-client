@@ -67,59 +67,72 @@ print_r($client->listUsers($query));
 /*
 During testing, I discovered that the API will only return Users whose user
 type is 'User'. Anyone who has admin permissions will not be read by the API
-when making a ListUsers query.
+when making a ListUsers query. Any attributes that are left blank in the
+following User object are not returned by the API when making a ListUsers
+query.
 
 Output:
 
 Array
 (
-    [Response] => Array
-        (
-            [0] => Array
-                (
-                    [ID] => (user 1's ID)
-                    [Email] => user1@example.com
-                    [EmployeeID] => (user 1's employee ID)
-                    [GivenName] => John
-                    [Surname] => Doe
-                    [Name] => John Doe
-                    [Status] => Active
-                    [Title] => (user 1's title)
-                    [Division] => (user 1's division)
-                    [HomeGroup] => (user 1's home group)
-                    [CreatedDate] => (user 1's created date)
-                    [ModifiedDate] => (user 2's modified date)
-                    [Teams] => Array
-                        (
-                        )
+    [0] => CBS\SmarterU\DataTypes\User Object
+    (
+        [oldEmail:protected] =>
+        [oldEmployeeId:protected] =>
+        [id] => user 0's ID
+        [email:protected] => user 0's email
+        [employeeId:protected] => user 0's employee ID
+        [givenName:protected] => user 0's first name
+        [surname:protected] => user 0's last name
+        [timezone:protected] =>
+        [learnerNotifications:protected] =>
+        [supervisorNotifications:protected] =>
+        [sendEmailTo:protected] =>
+        [alternateEmail:protected] =>
+        [authenticationType:protected] =>
+        [supervisors:protected] => Array
+            (
+            )
 
-                )
+        [organization:protected] =>
+        [teams:protected] => Array
+            (
+                [0] => user 0's first team
+                ...
+            )
 
-            [1] => Array
-                (
-                    [ID] => (user 2's ID)
-                    [Email] => user2@example.com
-                    [EmployeeID] => (user 2's employee ID)
-                    [GivenName] => Jane
-                    [Surname] => Doe
-                    [Name] => Jane Doe
-                    [Status] => Active
-                    [Title] => (user 2's title)
-                    [Division] => (user 2's division)
-                    [HomeGroup] => (user 2's home group)
-                    [CreatedDate] =>  (user 2's created date)
-                    [ModifiedDate] =>  (user 2's modified date)
-                    [Teams] => Array
-                        (
-                        )
+        [customFields:protected] => Array
+            (
+            )
 
-                )
-            ...
-        )
-
-    [Errors] => Array
-        (
-        )
-
+        [language:protected] =>
+        [status:protected] => user 0's status
+        [title:protected] => user 0's title
+        [division:protected] => user 0's division
+        [allowFeedback:protected] =>
+        [phonePrimary:protected] =>
+        [phoneAlternate:protected] =>
+        [phoneMobile:protected] =>
+        [fax:protected] =>
+        [website:protected] =>
+        [address1:protected] =>
+        [address2:protected] =>
+        [city:protected] =>
+        [province:protected] =>
+        [country:protected] =>
+        [postalCode:protected] =>
+        [sendMailTo:protected] =>
+        [roles:protected] =>
+        [receiveNotifications:protected] =>
+        [homeGroup:protected] => user 0's home group
+        [venues:protected] =>
+        [wages:protected] =>
+        [createdDate:protected] => user 0's created date
+        [modifiedDate:protected] => user 0's modified date
+    )
+    [1] => CBS\SmarterU\DataTypes\User Object
+    (
+        ...
+    }
 )
  */

@@ -14,37 +14,7 @@ This project is not affiliated with Neovation.
 
 ## Installation
 
-1. Add the repository to the `repositories` in your composer.json
-
-```json
-"repositories": [
-    {
-        "type": "package",
-        "package": {
-            "name": "cbssoftware/smarteru-client",
-            "version": "0.1",
-            "type": "library",
-            "source": {
-                "url": "https://github.com/cbs-software/smarteru-php-client.git",
-                "type": "git",
-                "reference": "main"
-            },
-            "require": {
-                "guzzlehttp/guzzle": "^7.0",
-                "ext-SimpleXML": "*"
-            },
-            "autoload": {
-                "psr-4": {
-                    "CBS\\SmarterU\\": "src/"
-                }
-            }
-        }
-    },
-    ...
-],
-```
-
-2. Let `composer` install the library
+Use `composer` to add the library to your project.
 
 ```sh
 composer require cbssoftware/smarteru-client
@@ -273,6 +243,22 @@ If the SmarterU API reports a failure, a `CBS\SmarterU\Exceptions\SmarterUExcept
 will be thrown, and any error(s) returned by the SmarterU API will be listed in
 the exception message. A list of all possible SmarterU errors can be found
 [here](https://support.smarteru.com/docs/api-error-codes).
+
+## Contributing
+
+If you would like to make a contribution to this library, you may do so using
+the following process:
+
+1. Fork the GitHub repository.
+2. Clone the project to your own machine.
+3. Create a new branch based on 'main' with a name that summarizes what you're
+changing.
+4. Commit your changes to your branch. Make sure to update any unit tests that
+are affected by your changes, and to provide tests for any new classes and/or
+methods introduced.
+5. Push your branch back up to the fork.
+6. Submit a Pull Request targeting the 'main' branch so that we can review
+your changes.
 
 ## Tests
 
