@@ -66,9 +66,13 @@ class XMLGenerator {
         }
         if (!empty($user->getEmail())) {
             $info->addChild('Email', $user->getEmail());
+        } else {
+            $info->addChild('Email');
         }
         if (!empty($user->getEmployeeId())) {
             $info->addChild('EmployeeID', $user->getEmployeeId());
+        } else {
+            $info->addChild('EmployeeID');
         }
         $info->addChild('GivenName', $user->getGivenName());
         $info->addChild('Surname', $user->getSurname());
