@@ -4,7 +4,7 @@ An exception type to use when the SmarterU API returns a failure message
 due to some kind of problem with the data provided.
 
 ## Implements:
-Throwable, Stringable
+Stringable, Throwable
 
 ## Extend:
 
@@ -14,6 +14,7 @@ Exception
 
 | Name | Description |
 |------|-------------|
+|[getErrorCodes](#smarteruexceptiongeterrorcodes)|Get the list of Error codes detected when the exception was thrown|
 
 ## Inherited methods
 
@@ -30,4 +31,30 @@ Exception
 | [getTrace](https://secure.php.net/manual/en/exception.gettrace.php) | Gets the stack trace |
 | [getTraceAsString](https://secure.php.net/manual/en/exception.gettraceasstring.php) | Gets the stack trace as a string |
 
+
+
+### SmarterUException::getErrorCodes  
+
+**Description**
+
+```php
+public getErrorCodes (void)
+```
+
+Get the list of Error codes detected when the exception was thrown 
+
+ 
+
+**Parameters**
+
+`This function has no parameters.`
+
+**Return Values**
+
+`\ErrorCode[]`
+
+> the list of error codes
+
+
+<hr />
 

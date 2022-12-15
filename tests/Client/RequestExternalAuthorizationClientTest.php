@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace Tests\CBS\SmarterU\Client;
 
+use CBS\SmarterU\DataTypes\ErrorCode;
 use CBS\SmarterU\DataTypes\ExternalAuthorization;
 use CBS\SmarterU\Exceptions\SmarterUException;
 use CBS\SmarterU\Client;
@@ -128,22 +129,24 @@ class RequestExternalAuthorizationClientTest extends TestCase {
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
 
-        $xmlString = <<<XML
+        $code = 'UT:99';
+        $message = 'An error mocked for unit testing';
+        $body = <<<XML
         <SmarterU>
             <Result>Failed</Result>
             <Info>
             </Info>
             <Errors>
                 <Error>
-                    <ErrorID>1</ErrorID>
-                    <ErrorMessage>An error has occurred.</ErrorMessage>
+                    <ErrorID>$code</ErrorID>
+                    <ErrorMessage>$message</ErrorMessage>
                 </Error>
             </Errors>
         </SmarterU>
         XML;
 
         // Set up the container to capture the request.
-        $response = new Response(200, [], $xmlString);
+        $response = new Response(200, [], $body);
         $container = [];
         $history = Middleware::history($container);
         $mock = (new MockHandler([$response]));
@@ -152,12 +155,26 @@ class RequestExternalAuthorizationClientTest extends TestCase {
         $httpClient = new HttpClient(['handler' => $handlerStack]);
         $client->setHttpClient($httpClient);
 
-        // Make the request.
-        self::expectException(SmarterUException::class);
-        self::expectExceptionMessage(
-            'SmarterU rejected the request due to the following error(s): 1: An error has occurred'
-        );
-        $client->requestExternalAuthorizationByEmail($email);
+        // Make the request. Because we want to inspect custom exception
+        // properties we'll handle the try/catch/cache of the exception
+        $exception = null;
+        try {
+            $client->requestExternalAuthorizationByEmail($email);
+        } catch (SmarterUException $error) {
+            $exception = $error;
+        }
+
+        self::assertInstanceOf(SmarterUException::class, $exception);
+        self::assertEquals(Client::SMARTERU_EXCEPTION_MESSAGE, $exception->getMessage());
+
+        $errorCodes = $error->getErrorCodes();
+        self::assertIsArray($errorCodes);
+        self::assertCount(1, $errorCodes);
+
+        $errorCode = reset($errorCodes);
+        self::assertInstanceOf(ErrorCode::class, $errorCode);
+        self::assertEquals($code, $errorCode->getErrorCode());
+        self::assertEquals($message, $errorCode->getErrorMessage());
     }
 
     /**
@@ -258,22 +275,24 @@ class RequestExternalAuthorizationClientTest extends TestCase {
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
 
-        $xmlString = <<<XML
+        $code = 'UT:99';
+        $message = 'An error mocked for unit testing';
+        $body = <<<XML
         <SmarterU>
             <Result>Failed</Result>
             <Info>
             </Info>
             <Errors>
                 <Error>
-                    <ErrorID>1</ErrorID>
-                    <ErrorMessage>An error has occurred.</ErrorMessage>
+                    <ErrorID>$code</ErrorID>
+                    <ErrorMessage>$message</ErrorMessage>
                 </Error>
             </Errors>
         </SmarterU>
         XML;
 
         // Set up the container to capture the request.
-        $response = new Response(200, [], $xmlString);
+        $response = new Response(200, [], $body);
         $container = [];
         $history = Middleware::history($container);
         $mock = (new MockHandler([$response]));
@@ -282,11 +301,25 @@ class RequestExternalAuthorizationClientTest extends TestCase {
         $httpClient = new HttpClient(['handler' => $handlerStack]);
         $client->setHttpClient($httpClient);
 
-        // Make the request.
-        self::expectException(SmarterUException::class);
-        self::expectExceptionMessage(
-            'SmarterU rejected the request due to the following error(s): 1: An error has occurred'
-        );
-        $client->requestExternalAuthorizationByEmployeeId($employeeId);
+        // Make the request. Because we want to inspect custom exception
+        // properties we'll handle the try/catch/cache of the exception
+        $exception = null;
+        try {
+            $client->requestExternalAuthorizationByEmployeeId($employeeId);
+        } catch (SmarterUException $error) {
+            $exception = $error;
+        }
+
+        self::assertInstanceOf(SmarterUException::class, $exception);
+        self::assertEquals(Client::SMARTERU_EXCEPTION_MESSAGE, $exception->getMessage());
+
+        $errorCodes = $error->getErrorCodes();
+        self::assertIsArray($errorCodes);
+        self::assertCount(1, $errorCodes);
+
+        $errorCode = reset($errorCodes);
+        self::assertInstanceOf(ErrorCode::class, $errorCode);
+        self::assertEquals($code, $errorCode->getErrorCode());
+        self::assertEquals($message, $errorCode->getErrorMessage());
     }
 }

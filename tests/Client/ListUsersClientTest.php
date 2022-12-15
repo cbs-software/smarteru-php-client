@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace Tests\CBS\SmarterU\Client;
 
+use CBS\SmarterU\DataTypes\ErrorCode;
 use CBS\SmarterU\DataTypes\User;
 use CBS\SmarterU\Exceptions\MissingValueException;
 use CBS\SmarterU\Exceptions\SmarterUException;
@@ -331,22 +332,26 @@ class ListUsersClientTest extends TestCase {
         $query = (new ListUsersQuery())
             ->setUserStatus('Active');
 
-        $xmlString = <<<XML
+        $codes = ['UT:01', 'UT:02'];
+        $messages = [
+            'An error mocked for unit testing',
+            'Another error mocked for unit testing'
+        ];
+        $body = <<<XML
         <SmarterU>
+            <Result>Failed</Result>
+            <Errors>
+                <Error>
+                    <ErrorID>$codes[0]</ErrorID>
+                    <ErrorMessage>$messages[0]</ErrorMessage>
+                </Error>
+                <Error>
+                    <ErrorID>$codes[1]</ErrorID>
+                    <ErrorMessage>$messages[1]</ErrorMessage>
+                </Error>
+            </Errors>
         </SmarterU>
         XML;
-
-        $xml = simplexml_load_string($xmlString);
-        $xml->addChild('Result', 'Failed');
-        $xml->addChild('Info');
-        $errors = $xml->addChild('Errors');
-        $error1 = $errors->addChild('Error');
-        $error1->addChild('ErrorID', 'Error1');
-        $error1->addChild('ErrorMessage', 'Testing');
-        $error2 = $errors->addChild('Error');
-        $error2->addChild('ErrorID', 'Error2');
-        $error2->addChild('ErrorMessage', '123');
-        $body = $xml->asXML();
 
         $response = new Response(200, [], $body);
 
@@ -363,11 +368,31 @@ class ListUsersClientTest extends TestCase {
 
         $client->setHttpClient($httpClient);
 
-        self::expectException(SmarterUException::class);
-        self::expectExceptionMessage(
-            'SmarterU rejected the request due to the following error(s): Error1: Testing, Error2: 123'
-        );
-        $client->listUsers($query);
+        // Make the request. Because we want to inspect custom exception
+        // properties we'll handle the try/catch/cache of the exception
+        $exception = null;
+        try {
+            $client->listUsers($query);
+        } catch (SmarterUException $error) {
+            $exception = $error;
+        }
+
+        self::assertInstanceOf(SmarterUException::class, $exception);
+        self::assertEquals(Client::SMARTERU_EXCEPTION_MESSAGE, $exception->getMessage());
+
+        $errorCodes = $error->getErrorCodes();
+        self::assertIsArray($errorCodes);
+        self::assertCount(2, $errorCodes);
+
+        $errorCode = reset($errorCodes);
+        self::assertInstanceOf(ErrorCode::class, $errorCode);
+        self::assertContains($errorCode->getErrorCode(), $codes);
+        self::assertContains($errorCode->getErrorMessage(), $messages);
+
+        $errorCode = next($errorCodes);
+        self::assertInstanceOf(ErrorCode::class, $errorCode);
+        self::assertContains($errorCode->getErrorCode(), $codes);
+        self::assertContains($errorCode->getErrorMessage(), $messages);
     }
 
     /**
