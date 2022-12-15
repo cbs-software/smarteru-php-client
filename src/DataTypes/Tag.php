@@ -24,7 +24,7 @@ class Tag {
     #region Properties
 
     /**
-     * The ID of the tag. Either the ID or the name must be set when addding
+     * The ID of the tag. Either the ID or the name must be set when adding
      * a tag to a Group.
      */
     protected ?string $tagId = null;
