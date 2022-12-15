@@ -1,0 +1,15 @@
+name: pr-to-project
+
+on:
+  pull_request:
+    types:
+      - opened
+jobs:
+  add-to-project:
+    name: Add PR to Project
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/add-to-project@v0.3.0
+        with:
+          project-url: https://github.com/orgs/cbs-software/projects/1/views/1
+          github-token: ${{ secrets.PROJECT }}
