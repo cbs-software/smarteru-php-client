@@ -14,12 +14,10 @@ declare(strict_types=1);
 
 namespace CBS\SmarterU;
 
-use CBS\SmarterU\DataTypes\CustomField;
 use CBS\SmarterU\DataTypes\ErrorCode;
 use CBS\SmarterU\DataTypes\ExternalAuthorization;
 use CBS\SmarterU\DataTypes\Group;
 use CBS\SmarterU\DataTypes\LearnerReport;
-use CBS\SmarterU\DataTypes\Permission;
 use CBS\SmarterU\DataTypes\Tag;
 use CBS\SmarterU\DataTypes\User;
 use CBS\SmarterU\Exceptions\InvalidArgumentException;
@@ -32,7 +30,6 @@ use CBS\SmarterU\Queries\ListUsersQuery;
 use DateTime;
 use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Psr7\Request;
 use SimpleXMLElement;
 
 /**
