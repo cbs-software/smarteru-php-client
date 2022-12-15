@@ -80,6 +80,11 @@ class Client {
      */
     protected const SMARTERU_EXCEPTION_PREAMBLE = 'SmarterU rejected the request due to the following error(s): ';
 
+    /**
+     * Error code returned from getUser when the specified user is not found.
+     */
+    protected const ERROR_GET_USER_USER_NOT_FOUND = 'GU:03';
+
     #endregion constants
 
     #region properties
@@ -1126,6 +1131,10 @@ class Client {
     /**
      * Make a GetUser query to the SmarterU API.
      *
+     * Note that SmarterU's getUser API endpoint returns an error if a match
+     * for the GetUserQuery does not exist. This method checks for that error
+     * and returns null instead.
+     *
      * @param GetUserQuery $query The query representing the User to return
      * @return ?User The User matching the identifier specified in the query,
      *      or null if no such User exists within your SmarterU account.
@@ -1153,14 +1162,15 @@ class Client {
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
         if ((string) $bodyAsXml->Result === 'Failed') {
-            $errors = $this->readErrors($bodyAsXml->Errors);
-            // The SmarterU API treats "User not found" as a fatal error.
-            // If the API returns this error, this if statement will catch it
-            // before it becomes an exception and return null.
-            if (str_contains($errors, 'GU:03')) {
+            /*
+             * The SmarterU API treats "User not found" as a fatal error.
+             * We just want to return null.
+             */
+            if ($this->isErrorType($bodyAsXml->Errors, self::ERROR_GET_USER_USER_NOT_FOUND)) {
                 return null;
             }
-            throw new SmarterUException($errors);
+
+            throw new SmarterUException($this->readErrors($bodyAsXml->Errors));
         }
 
         $user = $bodyAsXml->Info->User;
@@ -1420,5 +1430,22 @@ class Client {
             $errorsAsString .= ', ';
         }
         return substr($errorsAsString, 0, -2);
+    }
+
+    /**
+     * Returns true if the given Errors XML contains the specified error code
+     *
+     * @param SimpleXMLElement $errors The Errors block from a SmarterU API response.
+     * @param string $errorId TheSmarterU ErrorID.
+     * @return bool Returns true if the Errors contains the specified ErrorID
+     */
+    private function isErrorType(SimpleXMLElement $errors, string $errorId): bool {
+        foreach ($errors->children() as $error) {
+            if ((string) $error->ErrorID === $errorId) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
