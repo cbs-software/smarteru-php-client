@@ -31,6 +31,12 @@ use SimpleXMLElement;
  */
 class XMLGenerator {
     /**
+     * The root node for the XML submitted via the 'Package' form field in most
+     * requests sent to the SmarterU API
+     */
+    private const ROOT_NODE_XML_STRING = '<SmarterU></SmarterU>';
+
+    /**
      * Generate the XML body for a createUser query.
      *
      * @param string $accountApi The SmarterU API key identifying the account
@@ -47,12 +53,7 @@ class XMLGenerator {
         string $userApi,
         User $user
     ): string {
-        $xmlString = <<<XML
-        <SmarterU>
-        </SmarterU>
-        XML;
-
-        $xml = simplexml_load_string($xmlString);
+        $xml = simplexml_load_string(self::ROOT_NODE_XML_STRING);
         $xml->addChild('AccountAPI', $accountApi);
         $xml->addChild('UserAPI', $userApi);
         $xml->addChild('Method', 'createUser');
@@ -173,7 +174,7 @@ class XMLGenerator {
         if (!empty($user->getReceiveNotifications())) {
             $profile->addChild(
                 'ReceiveNotifications',
-                $user->getReceiveNotifications() ? 'True' : 'False'
+                $user->getReceiveNotifications() ? '1' : '0'
             );
         }
         if (empty($user->getHomeGroup())) {
@@ -331,12 +332,7 @@ class XMLGenerator {
         string $userApi,
         User $user
     ): string {
-        $xmlString = <<<XML
-        <SmarterU>
-        </SmarterU>
-        XML;
-
-        $xml = simplexml_load_string($xmlString);
+        $xml = simplexml_load_string(self::ROOT_NODE_XML_STRING);
         $xml->addChild('AccountAPI', $accountApi);
         $xml->addChild('UserAPI', $userApi);
         $xml->addChild('Method', 'updateUser');
@@ -481,7 +477,7 @@ class XMLGenerator {
         if (!empty($user->getReceiveNotifications())) {
             $profile->addChild(
                 'ReceiveNotifications',
-                $user->getReceiveNotifications() ? 'True' : 'False'
+                $user->getReceiveNotifications() ? '1' : '0'
             );
         }
         if (!empty($user->getHomeGroup())) {
@@ -519,12 +515,7 @@ class XMLGenerator {
         string $userApi,
         Group $group
     ): string {
-        $xmlString = <<<XML
-        <SmarterU>
-        </SmarterU>
-        XML;
-
-        $xml = simplexml_load_string($xmlString);
+        $xml = simplexml_load_string(self::ROOT_NODE_XML_STRING);
         $xml->addChild('AccountAPI', $accountApi);
         $xml->addChild('UserAPI', $userApi);
         $xml->addChild('Method', 'createGroup');
@@ -737,12 +728,7 @@ class XMLGenerator {
         string $userApi,
         Group $group
     ): string {
-        $xmlString = <<<XML
-        <SmarterU>
-        </SmarterU>
-        XML;
-
-        $xml = simplexml_load_string($xmlString);
+        $xml = simplexml_load_string(self::ROOT_NODE_XML_STRING);
         $xml->addChild('AccountAPI', $accountApi);
         $xml->addChild('UserAPI', $userApi);
         $xml->addChild('Method', 'updateGroup');
@@ -903,12 +889,7 @@ class XMLGenerator {
         Group $group,
         string $action
     ): string {
-        $xmlString = <<<XML
-        <SmarterU>
-        </SmarterU>
-        XML;
-
-        $xml = simplexml_load_string($xmlString);
+        $xml = simplexml_load_string(self::ROOT_NODE_XML_STRING);
         $xml->addChild('AccountAPI', $accountApi);
         $xml->addChild('UserAPI', $userApi);
         $xml->addChild('Method', 'updateGroup');
@@ -986,12 +967,7 @@ class XMLGenerator {
         array $permissions,
         string $action
     ): string {
-        $xmlString = <<<XML
-        <SmarterU>
-        </SmarterU>
-        XML;
-
-        $xml = simplexml_load_string($xmlString);
+        $xml = simplexml_load_string(self::ROOT_NODE_XML_STRING);
         $xml->addChild('AccountAPI', $accountApi);
         $xml->addChild('UserAPI', $userApi);
         $xml->addChild('Method', 'updateUser');
@@ -1053,12 +1029,7 @@ class XMLGenerator {
         string $userApi,
         GetLearnerReportQuery $query
     ): string {
-        $xmlString = <<<XML
-        <SmarterU>
-        </SmarterU>
-        XML;
-
-        $xml = simplexml_load_string($xmlString);
+        $xml = simplexml_load_string(self::ROOT_NODE_XML_STRING);
         $xml->addChild('AccountAPI', $accountApi);
         $xml->addChild('UserAPI', $userApi);
         $xml->addChild('Method', 'getLearnerReport');
@@ -1298,12 +1269,7 @@ class XMLGenerator {
         string $userApi,
         array $identifier
     ): string {
-        $xmlString = <<<XML
-        <SmarterU>
-        </SmarterU>
-        XML;
-
-        $xml = simplexml_load_string($xmlString);
+        $xml = simplexml_load_string(self::ROOT_NODE_XML_STRING);
         $xml->addChild('AccountAPI', $accountApi);
         $xml->addChild('UserAPI', $userApi);
         $xml->addChild('Method', 'requestExternalAuthorization');
