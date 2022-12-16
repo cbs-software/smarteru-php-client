@@ -3,11 +3,11 @@
 /**
  * Contains CBS\SmarterU\DataTypes\Group
  *
- * @author Brian Reich <brian.reich@thecoresolution.com>
+ * @author    Brian Reich <brian.reich@thecoresolution.com>
  * @copyright $year$ Core Business Solutions
- * @license Proprietary
- * @since 2022/08/01
- * @version $version$
+ * @license   MIT
+ * @since     2022/08/01
+ * @version   $version$
  */
 
 declare(strict_types=1);

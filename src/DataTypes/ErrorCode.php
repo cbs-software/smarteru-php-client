@@ -3,11 +3,11 @@
 /**
  * Contains CBS\SmarterU\DataTypes\ErrorCode
  *
- * @author Tom Egan <tom.egan@thecoresolution.com>
+ * @author    Tom Egan <tom.egan@thecoresolution.com>
  * @copyright $year$ Core Business Solutions
- * @license Proprietary
- * @since 2022-12-07
- * @version $version$
+ * @license   MIT
+ * @since     2022-12-07
+ * @version   $version$
  */
 
 declare(strict_types=1);

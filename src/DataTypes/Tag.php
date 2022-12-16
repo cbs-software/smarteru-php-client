@@ -3,11 +3,11 @@
 /**
  * Contains CBS\SmarterU\DataTypes\Tag
  *
- * @author Brian Reich <brian.reich@thecoresolution.com>
+ * @author    Brian Reich <brian.reich@thecoresolution.com>
  * @copyright $year$ Core Business Solutions
- * @license Proprietary
- * @since 2022/08/01
- * @version $version$
+ * @license   MIT
+ * @since     2022/08/01
+ * @version   $version$
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ class Tag {
     #region Properties
 
     /**
-     * The ID of the tag. Either the ID or the name must be set when addding
+     * The ID of the tag. Either the ID or the name must be set when adding
      * a tag to a Group.
      */
     protected ?string $tagId = null;
