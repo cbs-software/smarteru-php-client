@@ -195,7 +195,7 @@ class CreateUserXMLTest extends TestCase {
         );
         self::assertContains('ReceiveNotifications', $profileTag);
         self::assertEquals(
-            $user->getReceiveNotifications() ? 'True' : 'False',
+            $user->getReceiveNotifications() ? '1' : '0',
             $xml->Parameters->User->Profile->ReceiveNotifications
         );
         self::assertContains('HomeGroup', $profileTag);
@@ -359,7 +359,7 @@ class CreateUserXMLTest extends TestCase {
         );
         self::assertContains('ReceiveNotifications', $profileTag);
         self::assertEquals(
-            $user->getReceiveNotifications() ? 'True' : 'False',
+            $user->getReceiveNotifications() ? '1' : '0',
             $xml->Parameters->User->Profile->ReceiveNotifications
         );
         self::assertContains('HomeGroup', $profileTag);
@@ -659,7 +659,7 @@ class CreateUserXMLTest extends TestCase {
         );
         self::assertContains('ReceiveNotifications', $profileTag);
         self::assertEquals(
-            $user->getReceiveNotifications() ? 'True' : 'False',
+            $user->getReceiveNotifications() ? '1' : '0',
             $xml->Parameters->User->Profile->ReceiveNotifications
         );
         self::assertContains('HomeGroup', $profileTag);
