@@ -24,8 +24,8 @@ use CBS\SmarterU\Queries\ListGroupsQuery;
  * This script contains a live test for Client::listGroups.
  */
 
-$accountKey = ''; //insert key here before running
-$userKey = ''; //insert key here before running
+$accountKey = '87CD3F946F81B62242AC4B5E4DC8F59F'; //insert key here before running
+$userKey = '$*376$1w4fk*o!l9cye!9t*3l4!ti4h5at*rb1k1'; //insert key here before running
 
 $query = new ListGroupsQuery();
 
