@@ -401,44 +401,10 @@ class CreateUserXMLTest extends TestCase {
     /**
      * Tests that the XML generation process for a CreateUser request produces
      * the expected output when all required and optional information is present.
+     *
+     * @dataProvider validUserDataProvider
      */
-    public function testCreateUserProducesExpectedOutputWithAllInfo() {
-        $user = (new User())
-            ->setId('1')
-            ->setEmail('phpunit@test.com')
-            ->setEmployeeId('1')
-            ->setGivenName('PHP')
-            ->setSurname('Unit')
-            ->setPassword('password')
-            ->setTimezone('EST')
-            ->setLearnerNotifications(true)
-            ->setSupervisorNotifications(true)
-            ->setSendEmailTo('Self')
-            ->setAlternateEmail('phpunit@test1.com')
-            ->setAuthenticationType('External')
-            ->setSupervisors(['supervisor1', 'supervisor2'])
-            ->setOrganization('organization')
-            ->setTeams(['team1', 'team2'])
-            ->setLanguage('English')
-            ->setStatus('Active')
-            ->setTitle('Title')
-            ->setDivision('division')
-            ->setAllowFeedback(true)
-            ->setPhonePrimary('555-555-5555')
-            ->setPhoneAlternate('555-555-1234')
-            ->setPhoneMobile('555-555-4321')
-            ->setFax('555-555-5432')
-            ->setWebsite('https://localhost')
-            ->setAddress1('123 Main St')
-            ->setAddress2('Apt. 1')
-            ->setCity('Anytown')
-            ->setProvince('Pennsylvania')
-            ->setCountry('United States')
-            ->setPostalCode('12345')
-            ->setSendMailTo('Personal')
-            ->setReceiveNotifications(true)
-            ->setHomeGroup('My Home Group');
-
+    public function testCreateUserProducesExpectedOutputWithAllInfo(User $user) {
         $xmlGenerator = new XMLGenerator();
         $accountApi = 'account';
         $userApi = 'user';
@@ -696,5 +662,84 @@ class CreateUserXMLTest extends TestCase {
             0,
             $xml->Parameters->User->Wages->Children()
         );
+    }
+
+    public function validUserDataProvider(): array {
+        return [
+            // Original Home group used for testing
+            [(new User())
+                ->setId('1')
+                ->setEmail('phpunit@test.com')
+                ->setEmployeeId('1')
+                ->setGivenName('PHP')
+                ->setSurname('Unit')
+                ->setPassword('password')
+                ->setTimezone('EST')
+                ->setLearnerNotifications(true)
+                ->setSupervisorNotifications(true)
+                ->setSendEmailTo('Self')
+                ->setAlternateEmail('phpunit@test1.com')
+                ->setAuthenticationType('External')
+                ->setSupervisors(['supervisor1', 'supervisor2'])
+                ->setOrganization('organization')
+                ->setTeams(['team1', 'team2'])
+                ->setLanguage('English')
+                ->setStatus('Active')
+                ->setTitle('Title')
+                ->setDivision('division')
+                ->setAllowFeedback(true)
+                ->setPhonePrimary('555-555-5555')
+                ->setPhoneAlternate('555-555-1234')
+                ->setPhoneMobile('555-555-4321')
+                ->setFax('555-555-5432')
+                ->setWebsite('https://localhost')
+                ->setAddress1('123 Main St')
+                ->setAddress2('Apt. 1')
+                ->setCity('Anytown')
+                ->setProvince('Pennsylvania')
+                ->setCountry('United States')
+                ->setPostalCode('12345')
+                ->setSendMailTo('Personal')
+                ->setReceiveNotifications(true)
+                ->setHomeGroup('My Home Group')
+            ],
+            [
+                (new User())
+                ->setId('1')
+                ->setEmail('phpunit@test.com')
+                ->setEmployeeId('1')
+                ->setGivenName('PHP')
+                ->setSurname('Unit')
+                ->setPassword('password')
+                ->setTimezone('EST')
+                ->setLearnerNotifications(true)
+                ->setSupervisorNotifications(true)
+                ->setSendEmailTo('Self')
+                ->setAlternateEmail('phpunit@test1.com')
+                ->setAuthenticationType('External')
+                ->setSupervisors(['supervisor1', 'supervisor2'])
+                ->setOrganization('organization')
+                ->setTeams(['team1', 'team2'])
+                ->setLanguage('English')
+                ->setStatus('Active')
+                ->setTitle('Title')
+                ->setDivision('division')
+                ->setAllowFeedback(true)
+                ->setPhonePrimary('555-555-5555')
+                ->setPhoneAlternate('555-555-1234')
+                ->setPhoneMobile('555-555-4321')
+                ->setFax('555-555-5432')
+                ->setWebsite('https://localhost')
+                ->setAddress1('123 Main St')
+                ->setAddress2('Apt. 1')
+                ->setCity('Anytown')
+                ->setProvince('Pennsylvania')
+                ->setCountry('United States')
+                ->setPostalCode('12345')
+                ->setSendMailTo('Personal')
+                ->setReceiveNotifications(true)
+                ->setHomeGroup('A, B & C Industries')
+            ]
+        ];
     }
 }
