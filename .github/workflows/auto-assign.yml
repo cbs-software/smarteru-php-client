@@ -9,4 +9,4 @@ jobs:
       - uses: delivery-much/actions-assigner@v1
         with:
           token: ${{ secrets.PROJECT }}
-          team-reviewers: developers
+          team-reviewers: full-time-developers
