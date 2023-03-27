@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Tests\CBS\SmarterU;
+namespace Tests\CBS\SmarterU\DataTypes;
 
-use CBS\SmarterU\Timezone;
+use CBS\SmarterU\DataTypes\Timezone;
 use PHPUnit\Framework\TestCase;
 
 /**

@@ -1,6 +1,6 @@
 <?php
 /*
- * This file contains the CBS\SmarterU\Timezone.
+ * This file contains the CBS\SmarterU\DataTypes\Timezone.
  *
  * @author Brian Reich <brian.reich@thecoresolution.com>
  * @copyright $year$ Core Business Solutions
@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace CBS\SmarterU;
+namespace CBS\SmarterU\DataTypes;
 
 use InvalidArgumentException;
 
