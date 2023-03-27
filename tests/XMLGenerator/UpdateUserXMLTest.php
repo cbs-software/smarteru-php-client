@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace Tests\CBS\SmarterU\XMLGenerator;
 
+use CBS\SmarterU\DataTypes\Timezone;
 use CBS\SmarterU\DataTypes\User;
 use CBS\SmarterU\Exceptions\MissingValueException;
 use CBS\SmarterU\XMLGenerator;
@@ -192,7 +193,7 @@ class UpdateUserXMLTest extends TestCase {
             ->setEmployeeId('1')
             ->setGivenName('PHP')
             ->setSurname('Unit')
-            ->setTimezone('EST')
+            ->setTimezone(Timezone::fromProvidedName('EST'))
             ->setLearnerNotifications(true)
             ->setSupervisorNotifications(true)
             ->setSendEmailTo('Self')
@@ -291,10 +292,10 @@ class UpdateUserXMLTest extends TestCase {
             $user->getSurname(),
             $xml->Parameters->User->Info->Surname
         );
-        self::assertContains('TimeZone', $infoTag);
+        self::assertContains('Timezone', $infoTag);
         self::assertEquals(
-            $user->getTimezone(),
-            $xml->Parameters->User->Info->TimeZone
+            $user->getTimezone()->getProvidedName(),
+            (string) $xml->Parameters->User->Info->Timezone
         );
         self::assertContains('LearnerNotifications', $infoTag);
         self::assertEquals(

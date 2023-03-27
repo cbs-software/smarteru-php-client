@@ -15,8 +15,8 @@ declare(strict_types=1);
 namespace Tests\CBS\SmarterU\Client;
 
 use CBS\SmarterU\DataTypes\ErrorCode;
+use CBS\SmarterU\DataTypes\Timezone;
 use CBS\SmarterU\DataTypes\User;
-use CBS\SmarterU\Exceptions\MissingValueException;
 use CBS\SmarterU\Exceptions\SmarterUException;
 use CBS\SmarterU\Queries\ListUsersQuery;
 use CBS\SmarterU\Queries\Tags\DateRangeTag;
@@ -28,7 +28,6 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Response;
-use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Exception\ClientException;
 use PHPUnit\Framework\TestCase;
 
@@ -63,7 +62,7 @@ class ListUsersClientTest extends TestCase {
             ->setGivenName('PHP')
             ->setSurname('Unit')
             ->setPassword('password')
-            ->setTimezone('EST')
+            ->setTimezone(Timezone::fromProvidedName('EST'))
             ->setLearnerNotifications(true)
             ->setSupervisorNotifications(true)
             ->setSendEmailTo('Self')
@@ -101,7 +100,7 @@ class ListUsersClientTest extends TestCase {
             ->setGivenName('Test')
             ->setSurname('User')
             ->setPassword('password')
-            ->setTimezone('EST')
+            ->setTimezone(Timezone::fromProvidedName('EST'))
             ->setLearnerNotifications(true)
             ->setSupervisorNotifications(true)
             ->setSendEmailTo('Self')
@@ -139,7 +138,7 @@ class ListUsersClientTest extends TestCase {
             ->setGivenName('Inactive')
             ->setSurname('User')
             ->setPassword('password')
-            ->setTimezone('EST')
+            ->setTimezone(Timezone::fromProvidedName('EST'))
             ->setLearnerNotifications(true)
             ->setSupervisorNotifications(true)
             ->setSendEmailTo('Self')

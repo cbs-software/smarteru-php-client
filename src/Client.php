@@ -19,6 +19,7 @@ use CBS\SmarterU\DataTypes\ExternalAuthorization;
 use CBS\SmarterU\DataTypes\Group;
 use CBS\SmarterU\DataTypes\LearnerReport;
 use CBS\SmarterU\DataTypes\Tag;
+use CBS\SmarterU\DataTypes\Timezone;
 use CBS\SmarterU\DataTypes\User;
 use CBS\SmarterU\Exceptions\InvalidArgumentException;
 use CBS\SmarterU\Exceptions\SmarterUException;
@@ -609,7 +610,8 @@ class Client {
      * @throws SmarterUException If the response from the SmarterU API
      *      reports a fatal error that prevents the request from executing.
      */
-    public function listGroups(ListGroupsQuery $query): array {
+    public function listGroups(ListGroupsQuery $query): array
+    {
         $xml = $this->getXMLGenerator()->listGroups(
             $this->getAccountApi(),
             $this->getUserApi(),
@@ -1233,7 +1235,7 @@ class Client {
             ))
             ->setStatus((string) $user->Status)
             ->setAuthenticationType((string) $user->AuthenticationType)
-            ->setTimezone((string) $user->Timezone)
+            ->setTimezone(Timezone::fromDisplayValue((string) $user->Timezone))
             ->setAlternateEmail((string) $user->AlternateEmail)
             ->setHomeGroup((string) $user->HomeGroup)
             ->setOrganization((string) $user->Organization)

@@ -18,24 +18,40 @@ require_once(__DIR__ . '/../vendor/autoload.php');
 
 use CBS\SmarterU\Client;
 use CBS\SmarterU\DataTypes\User;
+use CBS\SmarterU\DataTypes\Timezone;
+use CBS\SmarterU\Exceptions\SmarterUException;
 
 /**
  * This script contains a live test for Client::updateUser. It was used to
  * intentionally trigger errors and see how the API responds.
  */
-$accountKey = ''; //insert key here before running
-$userKey = ''; //insert key here before running
+$accountKey = '87CD3F946F81B62242AC4B5E4DC8F59F'; //insert key here before running
+$userKey = 'st^cyxyxoj6okog69ih4is983qufylzhe8*uf8c8'; //insert key here before running
 
 $user = (new User())
-    ->setEmail('') // insert email here
+    ->setEmail('cooluser@email.com') // insert email here
     ->setLearnerNotifications(true)
     ->setSupervisorNotifications(true)
+    ->setTimezone(Timezone::fromProvidedName('US/Mountain'))
     ->setGroups([])
-    ->setPhonePrimary('Invalid');
+    ->setPhonePrimary('555-555-5555');
 
-$client = new Client($accountKey, $userKey);
+try {
+    // Create the Client for speaking to the API
+    $client = new Client($accountKey, $userKey);
+    
+    // Update the user
+    $client->updateUser($user);
 
-print_r($client->updateUser($user));
+    // Read the user back
+    $user = $client->readUserByEmail($user->getEmail());
+
+    // Make sure the user is in the right time zone.
+    printf("User is in %s Time zone\n", $user->getTimezone()->getDisplayValue());
+
+} catch (SmarterUException $error) {
+    var_dump($error);
+}
 
 /*
 Output:

@@ -16,6 +16,7 @@ namespace Tests\CBS\SmarterU\Client;
 
 use CBS\SmarterU\DataTypes\ErrorCode;
 use CBS\SmarterU\DataTypes\Permission;
+use CBS\SmarterU\DataTypes\Timezone;
 use CBS\SmarterU\DataTypes\User;
 use CBS\SmarterU\Exceptions\MissingValueException;
 use CBS\SmarterU\Exceptions\SmarterUException;
@@ -52,7 +53,7 @@ class CreateUserClientTest extends TestCase {
             ->setGivenName('PHP')
             ->setSurname('Unit')
             ->setPassword('password')
-            ->setTimezone('EST')
+            ->setTimezone(Timezone::fromProvidedName('EST'))
             ->setLearnerNotifications(true)
             ->setSupervisorNotifications(true)
             ->setSendEmailTo('Self')
