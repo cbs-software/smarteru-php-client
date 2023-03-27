@@ -45,7 +45,7 @@ try {
     // Create the Client for speaking to the API
     $client = new Client($accountKey, $userKey);
     
-    // Update the user
+    // Create the user
     $client->createUser($user);
 
     // Read the user back
