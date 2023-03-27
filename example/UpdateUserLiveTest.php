@@ -25,8 +25,8 @@ use CBS\SmarterU\Exceptions\SmarterUException;
  * This script contains a live test for Client::updateUser. It was used to
  * intentionally trigger errors and see how the API responds.
  */
-$accountKey = '87CD3F946F81B62242AC4B5E4DC8F59F'; //insert key here before running
-$userKey = 'st^cyxyxoj6okog69ih4is983qufylzhe8*uf8c8'; //insert key here before running
+$accountKey = getenv('SMARTERU_ACCOUNT_KEY') ?? 'No Account Key Provided';
+$userKey = getenv('SMARTERU_USER_KEY') ?? 'No User Key Provided';
 
 $user = (new User())
     ->setEmail('cooluser@email.com') // insert email here
