@@ -1,6 +1,6 @@
 <?php
 /*
- * This file contains the Tests\CBS\SmarterU\TimezonesTest.
+ * This file contains the Tests\CBS\SmarterU\TimezoneTest.
  *
  * @author Brian Reich <brian.reich@thecoresolution.com>
  * @copyright $year$ Core Business Solutions
@@ -13,13 +13,13 @@ declare(strict_types=1);
 
 namespace Tests\CBS\SmarterU;
 
-use CBS\SmarterU\Timezones;
+use CBS\SmarterU\Timezone;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Tests Timezones
+ * Tests Timezone
  */
-class TimezonesTest extends TestCase {
+class TimezoneTest extends TestCase {
 
     #region Tests that are possibly too much
 
@@ -30,11 +30,11 @@ class TimezonesTest extends TestCase {
      * @dataProvider displayValueProvider
      */
     public function testGetProvidedNameFromDisplayValueReturnsMatchingProvidedNameForValidDisplayValue(string $displayValue) {
-        $flippedTimezones = array_flip(Timezones::VALID_TIMEZONES_PROVIDED_NAME_TO_DISPLAY_VALUE);
+        $flippedTimezones = array_flip(Timezone::VALID_TIMEZONES_PROVIDED_NAME_TO_DISPLAY_VALUE);
 
         $this->assertEquals(
             $flippedTimezones[$displayValue],
-            Timezones::getProvidedNameFromDisplayValue($displayValue)
+            Timezone::getProvidedNameFromDisplayValue($displayValue)
         );
     }
 
@@ -46,8 +46,8 @@ class TimezonesTest extends TestCase {
      */
     public function testGetDisplayValueFromProvidedNameReturnsMatchingDisplayValueForValidProvidedName(string $providedName) {
         $this->assertEquals(
-            Timezones::VALID_TIMEZONES_PROVIDED_NAME_TO_DISPLAY_VALUE[$providedName],
-            Timezones::getDisplayValueFromProvidedName($providedName)
+            Timezone::VALID_TIMEZONES_PROVIDED_NAME_TO_DISPLAY_VALUE[$providedName],
+            Timezone::getDisplayValueFromProvidedName($providedName)
         );
     }
 
@@ -59,7 +59,7 @@ class TimezonesTest extends TestCase {
     public function displayValueProvider(): array {
         return array_map(
             fn ($current) => [$current],
-            array_keys(array_flip(Timezones::VALID_TIMEZONES_PROVIDED_NAME_TO_DISPLAY_VALUE))
+            array_keys(array_flip(Timezone::VALID_TIMEZONES_PROVIDED_NAME_TO_DISPLAY_VALUE))
         );
     }
 
@@ -71,7 +71,7 @@ class TimezonesTest extends TestCase {
     public function providedNameProvider(): array {
         return array_map(
             fn ($current) => [$current],
-            array_keys(Timezones::VALID_TIMEZONES_PROVIDED_NAME_TO_DISPLAY_VALUE)
+            array_keys(Timezone::VALID_TIMEZONES_PROVIDED_NAME_TO_DISPLAY_VALUE)
         );
     }
 
@@ -83,7 +83,7 @@ class TimezonesTest extends TestCase {
      */
     public function testGetProvidedNameFromDisplayValueThrowsExceptionForInvalidDisplayValue() {
         $this->expectException(\InvalidArgumentException::class);
-        Timezones::getProvidedNameFromDisplayValue('invalid');
+        Timezone::getProvidedNameFromDisplayValue('invalid');
     }
 
     /**
@@ -92,6 +92,30 @@ class TimezonesTest extends TestCase {
      */
     public function testGetDisplayValueFromProvidedNameThrowsExceptionForInvalidProvidedName() {
         $this->expectException(\InvalidArgumentException::class);
-        Timezones::getDisplayValueFromProvidedName('invalid');
+        Timezone::getDisplayValueFromProvidedName('invalid');
+    }
+
+    /**
+     * Verifies that fromProvidedName() returns a Timezone instance for a valid
+     * provided name.
+     */
+    public function testFromProvidedNameReturnsTimezoneForValidValue() {
+        $instance = Timezone::fromProvidedName('US/Eastern');
+
+        $this->assertInstanceOf(Timezone::class, $instance);
+        $this->assertEquals('US/Eastern', $instance->getProvidedName());
+        $this->assertEquals('(GMT-5:00) - US/Eastern', $instance->getDisplayValue());
+    }
+
+    /**
+     * Verifies taht fromDisplayValue() returns a Timezone instance for a valid
+     * display value.
+     */
+    public function testFromDisplayValueReturnsTimezoneForValidValue() {
+        $instance = Timezone::fromDisplayValue('(GMT-5:00) - US/Eastern');
+
+        $this->assertInstanceOf(Timezone::class, $instance);
+        $this->assertEquals('US/Eastern', $instance->getProvidedName());
+        $this->assertEquals('(GMT-5:00) - US/Eastern', $instance->getDisplayValue());
     }
 }

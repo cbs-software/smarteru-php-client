@@ -1,6 +1,6 @@
 <?php
 /*
- * This file contains the CBS\SmarterU\Timezones.
+ * This file contains the CBS\SmarterU\Timezone.
  *
  * @author Brian Reich <brian.reich@thecoresolution.com>
  * @copyright $year$ Core Business Solutions
@@ -23,7 +23,9 @@ use InvalidArgumentException;
  * in, or in the format that it will send in a response. This class provides
  * a few utility methods that help to deal with this.
  */
-class Timezones {
+class Timezone {
+    #region Constants
+
     /**
      * Valid timezones, grabbed from https://support.smarteru.com/docs/time-zones
      * If you have have to refresh the list open your developer console and run
@@ -599,6 +601,91 @@ class Timezones {
         'Pacific/Kiritimati' => '(GMT+14:00) - Pacific/Kiritimati',
     ];
 
+    #endregion Constants
+    
+    #region Properties
+
+    /**
+     * The provided name for the Timezone.
+     */
+    protected string $providedName;
+
+    /**
+     * The display value for the Timezone.
+     */
+    protected string $displayValue;
+
+    #endregion Properties
+
+    #region Constructor
+
+    /**
+     * Don't call the constructor directly. If you have a display value, use
+     * fromDisplayValue(). If you have a provided name, use fromProvidedName().
+     *
+     * @param string $providedName The provided name of the timezone
+     * @param string $displayValue The display value of the timezone
+     */
+    protected function __construct(
+        string $providedName,
+        string $displayValue
+    ) {
+        $this->providedName = $providedName;
+        $this->displayValue = $displayValue;
+    }
+
+    #endregion Constructor
+
+    #region Getters and Setters
+
+    /**
+     * Returns the provided name for the timezone.
+     *
+     * @return string The provided name for the timezone
+     */
+    public function getProvidedName(): string {
+        return $this->providedName;
+    }
+
+    /**
+     * Returns the display value for the timezone.
+     *
+     * @return string The display value for the timezone
+     */
+    public function getDisplayValue(): string {
+        return $this->displayValue;
+    }
+
+    #endregion Getters and Setters
+
+    #region Factory Functions
+    
+    /**
+     * Returns a Timezone for the given Display Value.
+     *
+     * @param string $displayValue The display value of the timezone
+     * @return Timezone The timezone that matches the display value
+     * @throws InvalidArgumentException If the display value is not valid
+     */
+    public static function fromDisplayValue(string $displayValue): Timezone {
+        return new self(self::getProvidedNameFromDisplayValue($displayValue), $displayValue);
+    }
+
+    /**
+     * Returns the timezone provided name for the timezone with the given
+     * provided name.
+     *
+     * @param string $providedName The provided name of the timezone
+     * 
+     */
+    public static function fromProvidedName(string $providedName): Timezone {
+        return new self($providedName, self::getDisplayValueFromProvidedName($providedName));
+    }
+
+    #endregion Factory Functions
+
+    #region Static Methods
+
     /**
      * Returns the timezone Display Value for the timezone with the given
      * provided name.
@@ -632,5 +719,6 @@ class Timezones {
 
         return $flippedTimezoneArray[$displayValue];
     }
-
+    
+    #endregion Static Methods
 }
