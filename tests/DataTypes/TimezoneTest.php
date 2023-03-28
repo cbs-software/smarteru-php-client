@@ -108,7 +108,7 @@ class TimezoneTest extends TestCase {
     }
 
     /**
-     * Verifies taht fromDisplayValue() returns a Timezone instance for a valid
+     * Verifies that fromDisplayValue() returns a Timezone instance for a valid
      * display value.
      */
     public function testFromDisplayValueReturnsTimezoneForValidValue() {
