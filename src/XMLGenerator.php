@@ -182,11 +182,11 @@ class XMLGenerator {
             throw new MissingValueException('Cannot create a User without a Home Group.');
         }
 
-        $profile->addChild('HomeGroup', $user->getHomeGroup());
+        $profile->addChild('HomeGroup', $this->escapeValue($user->getHomeGroup()));
 
         $groups = $userTag->addChild('Groups');
         $groupTag = $groups->addChild('Group');
-        $groupTag->addChild('GroupName', $user->getHomeGroup());
+        $groupTag->addChild('GroupName', $this->escapeValue($user->getHomeGroup()));
         $groupPermissions = $groupTag->addChild('GroupPermissions');
 
         $venues = $userTag->addChild('Venues');
@@ -482,7 +482,7 @@ class XMLGenerator {
             );
         }
         if (!empty($user->getHomeGroup())) {
-            $profile->addChild('HomeGroup', $user->getHomeGroup());
+            $profile->addChild('HomeGroup', $this->escapeValue($user->getHomeGroup()));
         }
         $groups = $userTag->addChild('Groups');
 
@@ -1324,5 +1324,21 @@ class XMLGenerator {
             || !empty($query->getLastAccessedDates())
             || !empty($query->getStartedDates())
         );
+    }
+
+    /**
+     * Escapes a value for legal passthrough to addChild().
+     * 
+     * The documentation stinks on this point but if you dig far enough you
+     * will discover that addChild() will escape < and > when you pass a value
+     * in but it will NOT escape &.  This method will escape & making a value
+     * legal to pass-through to addChild().
+     *
+     * @see https://www.php.net/manual/en/simplexmlelement.addchild.php
+     * @param string $data The string to wrap in a CDATA tag.
+     * @return string The string wrapped in a CDATA tag.
+     */
+    private function escapeValue(string $data): string {
+        return str_replace('&', '&amp;', $data);
     }
 }

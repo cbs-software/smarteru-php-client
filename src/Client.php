@@ -443,9 +443,10 @@ class Client {
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
         if ((string) $bodyAsXml->Result === 'Failed') {
+            $errors = $this->getErrorCodesFromXmlElement($bodyAsXml->Errors);
             throw new SmarterUException(
                 self::SMARTERU_EXCEPTION_MESSAGE,
-                $this->getErrorCodesFromXmlElement($bodyAsXml->Errors)
+                $errors
             );
         }
 
@@ -629,9 +630,10 @@ class Client {
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
         if ((string) $bodyAsXml->Result === 'Failed') {
+            $errors = $this->getErrorCodesFromXmlElement($bodyAsXml->Errors);
             throw new SmarterUException(
                 self::SMARTERU_EXCEPTION_MESSAGE,
-                $this->getErrorCodesFromXmlElement($bodyAsXml->Errors)
+                $errors
             );
         }
 
