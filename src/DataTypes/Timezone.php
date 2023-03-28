@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file contains the CBS\SmarterU\DataTypes\Timezone.
  *
@@ -676,7 +677,7 @@ class Timezone {
      * provided name.
      *
      * @param string $providedName The provided name of the timezone
-     * 
+     *
      */
     public static function fromProvidedName(string $providedName): Timezone {
         return new self($providedName, self::getDisplayValueFromProvidedName($providedName));

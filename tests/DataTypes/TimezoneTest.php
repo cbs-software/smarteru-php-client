@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file contains the Tests\CBS\SmarterU\TimezoneTest.
  *
@@ -20,7 +21,6 @@ use PHPUnit\Framework\TestCase;
  * Tests Timezone
  */
 class TimezoneTest extends TestCase {
-
     #region Tests that are possibly too much
 
     /**
