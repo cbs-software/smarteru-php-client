@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace Tests\CBS\SmarterU\XMLGenerator;
 
+use CBS\SmarterU\DataTypes\Timezone;
 use CBS\SmarterU\DataTypes\User;
 use CBS\SmarterU\Exceptions\MissingValueException;
 use CBS\SmarterU\XMLGenerator;
@@ -404,7 +405,45 @@ class CreateUserXMLTest extends TestCase {
      *
      * @dataProvider validUserDataProvider
      */
-    public function testCreateUserProducesExpectedOutputWithAllInfo(User $user) {
+    public function testCreateUserProducesExpectedOutputWithAllInfo() {
+        $timezone = Timezone::fromProvidedName('EST');
+
+        $user = (new User())
+            ->setId('1')
+            ->setEmail('phpunit@test.com')
+            ->setEmployeeId('1')
+            ->setGivenName('PHP')
+            ->setSurname('Unit')
+            ->setPassword('password')
+            ->setTimezone($timezone)
+            ->setLearnerNotifications(true)
+            ->setSupervisorNotifications(true)
+            ->setSendEmailTo('Self')
+            ->setAlternateEmail('phpunit@test1.com')
+            ->setAuthenticationType('External')
+            ->setSupervisors(['supervisor1', 'supervisor2'])
+            ->setOrganization('organization')
+            ->setTeams(['team1', 'team2'])
+            ->setLanguage('English')
+            ->setStatus('Active')
+            ->setTitle('Title')
+            ->setDivision('division')
+            ->setAllowFeedback(true)
+            ->setPhonePrimary('555-555-5555')
+            ->setPhoneAlternate('555-555-1234')
+            ->setPhoneMobile('555-555-4321')
+            ->setFax('555-555-5432')
+            ->setWebsite('https://localhost')
+            ->setAddress1('123 Main St')
+            ->setAddress2('Apt. 1')
+            ->setCity('Anytown')
+            ->setProvince('Pennsylvania')
+            ->setCountry('United States')
+            ->setPostalCode('12345')
+            ->setSendMailTo('Personal')
+            ->setReceiveNotifications(true)
+            ->setHomeGroup('My Home Group');
+
         $xmlGenerator = new XMLGenerator();
         $accountApi = 'account';
         $userApi = 'user';
@@ -480,8 +519,8 @@ class CreateUserXMLTest extends TestCase {
         );
         self::assertContains('Timezone', $infoTag);
         self::assertEquals(
-            $user->getTimezone(),
-            $xml->Parameters->User->Info->Timezone
+            $user->getTimezone()->getProvidedName(),
+            (string) $xml->Parameters->User->Info->Timezone
         );
         self::assertContains('LearnerNotifications', $infoTag);
         self::assertEquals(

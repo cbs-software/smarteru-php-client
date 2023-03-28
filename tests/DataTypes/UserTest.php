@@ -14,9 +14,9 @@ declare(strict_types=1);
 
 namespace Tests\SmarterU\DataTypes;
 
+use CBS\SmarterU\DataTypes\Timezone;
 use CBS\SmarterU\DataTypes\Group;
 use CBS\SmarterU\DataTypes\User;
-use CBS\SmarterU\Exceptions\InvalidArgumentException;
 use DateTime;
 use PHPUnit\Framework\TestCase;
 
@@ -35,7 +35,7 @@ class UserTest extends TestCase {
         $givenName = 'test';
         $surname = 'user';
         $password = 'password';
-        $timezone = 'EST';
+        $timezone = Timezone::fromProvidedName('EST');
         $learnerNotifications = true;
         $supervisorNotifications = false;
         $sendEmailTo = 'Self';
