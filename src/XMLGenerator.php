@@ -357,10 +357,15 @@ class XMLGenerator {
                 );
             }
         }
+
+        // If the email address is being changed, or if the SendEmailTo field
+        // is set to 'Self', then the new email address must be included in
+        // the request.
         $info = $userTag->addChild('Info');
-        if (!empty($user->getOldEmail())) {
+        if (!empty($user->getOldEmail()) || $user->getSendEmailTo() == 'Self') {
             $info->addChild('Email', $user->getEmail());
         }
+        
         if (!empty($user->getOldEmployeeId())) {
             $info->addChild('EmployeeID', $user->getEmployeeId());
         }
