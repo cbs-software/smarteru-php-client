@@ -118,7 +118,7 @@ class UpdateUserXMLTest extends TestCase {
         foreach ($xml->Parameters->User->Info->children() as $info) {
             $infoTag[] = $info->getName();
         }
-        self::assertCount(5, $infoTag);
+        self::assertCount(6, $infoTag);
         self::assertContains('Email', $infoTag);
         self::assertEquals(
             $user->getEmail(),
@@ -280,7 +280,7 @@ class UpdateUserXMLTest extends TestCase {
         foreach ($xml->Parameters->User->Info->children() as $info) {
             $infoTag[] = $info->getName();
         }
-        self::assertCount(8, $infoTag);
+        self::assertCount(10, $infoTag);
         self::assertContains('GivenName', $infoTag);
         self::assertEquals(
             $user->getGivenName(),
