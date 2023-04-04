@@ -704,6 +704,8 @@ class CreateUserXMLTest extends TestCase {
     }
 
     public function validUserDataProvider(): array {
+        $timezone = Timezone::fromProvidedName('EST');
+
         return [
             // Original Home group used for testing
             [(new User())
@@ -713,7 +715,7 @@ class CreateUserXMLTest extends TestCase {
                 ->setGivenName('PHP')
                 ->setSurname('Unit')
                 ->setPassword('password')
-                ->setTimezone('EST')
+                ->setTimezone($timezone)
                 ->setLearnerNotifications(true)
                 ->setSupervisorNotifications(true)
                 ->setSendEmailTo('Self')
@@ -750,7 +752,7 @@ class CreateUserXMLTest extends TestCase {
                 ->setGivenName('PHP')
                 ->setSurname('Unit')
                 ->setPassword('password')
-                ->setTimezone('EST')
+                ->setTimezone($timezone)
                 ->setLearnerNotifications(true)
                 ->setSupervisorNotifications(true)
                 ->setSendEmailTo('Self')
