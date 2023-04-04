@@ -97,7 +97,7 @@ class User {
      *
      * @see https://support.smarteru.com/v1/docs/time-zones
      */
-    protected ?string $timezone = null;
+    protected ?Timezone $timezone = null;
 
     /**
      * True if and only if the user should receive weekly reminders of their
@@ -430,19 +430,19 @@ class User {
     /**
      * Returns the user's timezone.
      *
-     * @return ?string Returns the user's timezone.
+     * @return ?Timezone Returns the user's timezone.
      */
-    public function getTimezone(): ?string {
+    public function getTimezone(): ?Timezone {
         return $this->timezone;
     }
 
     /**
      * Sets the user's timezone.
      *
-     * @param ?string $timezone Sets the user's timezone.
+     * @param ?Timezone $timezone Sets the user's timezone.
      * @return self
      */
-    public function setTimezone(?string $timezone): self {
+    public function setTimezone(?Timezone $timezone): self {
         $this->timezone = $timezone;
         return $this;
     }

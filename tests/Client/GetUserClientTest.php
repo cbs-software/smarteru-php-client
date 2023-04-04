@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace Tests\CBS\SmarterU\Client;
 
 use CBS\SmarterU\DataTypes\ErrorCode;
+use CBS\SmarterU\DataTypes\Timezone;
 use CBS\SmarterU\DataTypes\User;
 use CBS\SmarterU\Exceptions\MissingValueException;
 use CBS\SmarterU\Exceptions\SmarterUException;
@@ -53,7 +54,7 @@ class GetUserClientTest extends TestCase {
             ->setGivenName('PHP')
             ->setSurname('Unit')
             ->setPassword('password')
-            ->setTimezone('EST')
+            ->setTimezone(Timezone::fromProvidedName('EST'))
             ->setLearnerNotifications(true)
             ->setSupervisorNotifications(true)
             ->setSendEmailTo('Self')
@@ -129,7 +130,7 @@ class GetUserClientTest extends TestCase {
             'AuthenticationType',
             $this->user1->getAuthenticationType()
         );
-        $user->addChild('Timezone', $this->user1->getTimezone());
+        $user->addChild('Timezone', $this->user1->getTimezone()->getDisplayValue());
         $user->addChild('AlternateEmail', $this->user1->getAlternateEmail());
         $user->addChild('HomeGroup', $this->user1->getHomeGroup());
         $user->addChild('Organization', $this->user1->getOrganization());
@@ -246,7 +247,7 @@ class GetUserClientTest extends TestCase {
             'AuthenticationType',
             $this->user1->getAuthenticationType()
         );
-        $user->addChild('Timezone', $this->user1->getTimezone());
+        $user->addChild('Timezone', $this->user1->getTimezone()->getDisplayValue());
         $user->addChild('AlternateEmail', $this->user1->getAlternateEmail());
         $user->addChild('HomeGroup', $this->user1->getHomeGroup());
         $user->addChild('Organization', $this->user1->getOrganization());
@@ -363,7 +364,7 @@ class GetUserClientTest extends TestCase {
             'AuthenticationType',
             $this->user1->getAuthenticationType()
         );
-        $user->addChild('Timezone', $this->user1->getTimezone());
+        $user->addChild('Timezone', $this->user1->getTimezone()->getDisplayValue());
         $user->addChild('AlternateEmail', $this->user1->getAlternateEmail());
         $user->addChild('HomeGroup', $this->user1->getHomeGroup());
         $user->addChild('Organization', $this->user1->getOrganization());
@@ -612,7 +613,7 @@ class GetUserClientTest extends TestCase {
             'AuthenticationType',
             $this->user1->getAuthenticationType()
         );
-        $user->addChild('Timezone', $this->user1->getTimezone());
+        $user->addChild('Timezone', $this->user1->getTimezone()->getDisplayValue());
         $user->addChild('AlternateEmail', $this->user1->getAlternateEmail());
         $user->addChild('HomeGroup', $this->user1->getHomeGroup());
         $user->addChild('Organization', $this->user1->getOrganization());

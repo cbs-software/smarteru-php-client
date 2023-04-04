@@ -79,7 +79,8 @@ class XMLGenerator {
         $info->addChild('Surname', $user->getSurname());
         $info->addChild('Password', $user->getPassword());
         if (!empty($user->getTimezone())) {
-            $info->addChild('Timezone', $user->getTimezone());
+            // 2023-03-27: As per Chris Wood at Neovation, createUser expects Provided Name
+            $info->addChild('Timezone', $user->getTimezone()->getProvidedName());
         }
         $info->addChild(
             'LearnerNotifications',
@@ -370,7 +371,7 @@ class XMLGenerator {
             $info->addChild('Surname', $user->getSurname());
         }
         if (!empty($user->getTimezone())) {
-            $info->addChild('TimeZone', $user->getTimezone());
+            $info->addChild('Timezone', $user->getTimezone()->getProvidedName());
         }
         if ($user->getLearnerNotifications() !== null) {
             $info->addChild(
