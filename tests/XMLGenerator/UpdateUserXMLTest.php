@@ -183,6 +183,23 @@ class UpdateUserXMLTest extends TestCase {
     }
 
     /**
+     * Verifieshat updateUser() throws a MissingValueException when the email
+     * address is not set but SendEmailTo is set to 'Self'.
+     */
+    public function testUpdateUserThrowsMissingValueExceptionWhenSendEmailToIsSelfAndNoEmailSet() {
+        $user = (new User())
+            ->setEmail(null)
+            ->setSendEmailTo('Self');
+
+        $this->assertEmpty($user->getEmail());
+        $this->assertEquals('Self', $user->getSendEmailTo());
+
+        $this->expectException(MissingValueException::class);
+        $this->expectExceptionMessage(XmlGenerator::ERROR_EMAIL_REQUIRED_FOR_SEND_EMAIL_TO_SELF);
+        (new XMLGenerator())->updateUser('account', 'user', $user);
+    }
+
+    /**
      * Tests that the XML generation process for an updateUser request produces
      * the expected output when all required and optional information is present.
      */
