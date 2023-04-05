@@ -36,6 +36,9 @@ class XMLGenerator {
      */
     private const ROOT_NODE_XML_STRING = '<SmarterU></SmarterU>';
 
+    /** Error when updateUser called with SendEmailTo Self and no email address. */
+    public const ERROR_EMAIL_REQUIRED_FOR_SEND_EMAIL_TO_SELF = 'Email is required when SendEmailTo is set to Self';
+
     /**
      * Generate the XML body for a createUser query.
      *
@@ -333,6 +336,7 @@ class XMLGenerator {
         string $userApi,
         User $user
     ): string {
+        $this->validateUpdateUser($user);
         $xml = simplexml_load_string(self::ROOT_NODE_XML_STRING);
         $xml->addChild('AccountAPI', $accountApi);
         $xml->addChild('UserAPI', $userApi);
@@ -358,13 +362,12 @@ class XMLGenerator {
                 );
             }
         }
+
         $info = $userTag->addChild('Info');
-        if (!empty($user->getOldEmail())) {
-            $info->addChild('Email', $user->getEmail());
-        }
-        if (!empty($user->getOldEmployeeId())) {
-            $info->addChild('EmployeeID', $user->getEmployeeId());
-        }
+       
+        $info->addChild('Email', (string) $user->getEmail());
+        $info->addChild('EmployeeID', (string) $user->getEmployeeId());
+
         if (!empty($user->getGivenName())) {
             $info->addChild('GivenName', $user->getGivenName());
         }
@@ -499,6 +502,26 @@ class XMLGenerator {
         return $xml->asXML();
     }
 
+    /**
+     * Sanity-check's a User object before using it to generate XML for an
+     * updateUser request.
+     *
+     * The following checks are implemented:
+     *
+     * 1. If the User's SendEmailTo is set to Self, then the User's Email must
+     *     be set. Otherwise, a MissingValueException is thrown. See
+     *     https://support.smarteru.com/docs/api-updateuser#sendemailto-optional
+     *     for details.
+     *
+     * @throws MissingValueException If the User is missing a required value.
+     */
+    public function validateUpdateUser(User $user) {
+
+        if ($user->getSendEmailTo() === 'Self' && empty($user->getEmail())) {
+            throw new MissingValueException(self::ERROR_EMAIL_REQUIRED_FOR_SEND_EMAIL_TO_SELF);
+        }
+    }
+    
     /**
      * Generate the XML body for a createGroup query.
      *

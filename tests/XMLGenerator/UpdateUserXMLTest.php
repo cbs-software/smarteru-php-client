@@ -119,7 +119,7 @@ class UpdateUserXMLTest extends TestCase {
         foreach ($xml->Parameters->User->Info->children() as $info) {
             $infoTag[] = $info->getName();
         }
-        self::assertCount(5, $infoTag);
+        self::assertCount(6, $infoTag);
         self::assertContains('Email', $infoTag);
         self::assertEquals(
             $user->getEmail(),
@@ -180,6 +180,23 @@ class UpdateUserXMLTest extends TestCase {
             0,
             $xml->Parameters->User->Wages->Children()
         );
+    }
+
+    /**
+     * Verifieshat updateUser() throws a MissingValueException when the email
+     * address is not set but SendEmailTo is set to 'Self'.
+     */
+    public function testUpdateUserThrowsMissingValueExceptionWhenSendEmailToIsSelfAndNoEmailSet() {
+        $user = (new User())
+            ->setEmail(null)
+            ->setSendEmailTo('Self');
+
+        $this->assertEmpty($user->getEmail());
+        $this->assertEquals('Self', $user->getSendEmailTo());
+
+        $this->expectException(MissingValueException::class);
+        $this->expectExceptionMessage(XmlGenerator::ERROR_EMAIL_REQUIRED_FOR_SEND_EMAIL_TO_SELF);
+        (new XMLGenerator())->updateUser('account', 'user', $user);
     }
 
     /**
@@ -281,7 +298,7 @@ class UpdateUserXMLTest extends TestCase {
         foreach ($xml->Parameters->User->Info->children() as $info) {
             $infoTag[] = $info->getName();
         }
-        self::assertCount(8, $infoTag);
+        self::assertCount(10, $infoTag);
         self::assertContains('GivenName', $infoTag);
         self::assertEquals(
             $user->getGivenName(),
