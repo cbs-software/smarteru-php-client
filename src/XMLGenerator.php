@@ -545,7 +545,7 @@ class XMLGenerator {
         $xml->addChild('Method', 'createGroup');
         $parameters = $xml->addChild('Parameters');
         $groupTag = $parameters->addChild('Group');
-        $groupTag->addChild('Name', $group->getName());
+        $groupTag->addChild('Name', $this->escapeValue($group->getName()));
         if (!empty($group->getGroupId())) {
             $groupTag->addChild('GroupID', $group->getGroupId());
         }
