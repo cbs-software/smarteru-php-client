@@ -133,7 +133,7 @@ class XMLGenerator {
         if (!empty($user->getAllowFeedback())) {
             $profile->addChild(
                 'AllowFeedback',
-                $user->getAllowFeedback() ? 'True' : 'False'
+                $user->getAllowFeedback() ? '1' : '0'
             );
         }
         if (!empty($user->getPhonePrimary())) {
@@ -436,7 +436,7 @@ class XMLGenerator {
         if (!empty($user->getAllowFeedback())) {
             $profile->addChild(
                 'AllowFeedback',
-                $user->getAllowFeedback() ? 'True' : 'False'
+                $user->getAllowFeedback() ? '1' : '0'
             );
         }
         if (!empty($user->getPhonePrimary())) {
