@@ -391,7 +391,7 @@ class UpdateUserXMLTest extends TestCase {
         );
         self::assertContains('AllowFeedback', $profileTag);
         self::assertEquals(
-            $user->getAllowFeedback() ? 'True' : 'False',
+            $user->getAllowFeedback() ? '1' : '0',
             $xml->Parameters->User->Profile->AllowFeedback
         );
         self::assertContains('PhonePrimary', $profileTag);
