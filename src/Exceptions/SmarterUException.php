@@ -99,7 +99,7 @@ class SmarterUException extends \Exception {
      * @return self
      */
     public function setRequest(?string $request = null): self {
-        $this->$request = $this->sanitizeRequest($request);
+        $this->request = $this->sanitizeRequest($request);
         return $this;
     }
 
