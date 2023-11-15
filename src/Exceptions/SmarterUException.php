@@ -135,7 +135,9 @@ class SmarterUException extends \Exception {
      */
     public function __toString() {
         $lines = [
-            __CLASS__ . ': ' . $this->message
+            __CLASS__ . ': ' . $this->message,
+            'Request: ' . $this->getRequest(),
+            'Response: ' . $this->getResponse(),
         ];
 
         foreach ($this->errorCodes as $errorCode) {
