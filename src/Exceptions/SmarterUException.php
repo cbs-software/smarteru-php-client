@@ -119,7 +119,7 @@ class SmarterUException extends \Exception {
      * @param string $request  the request XML
      * @return string the sanitized request XML
      */
-    private function sanitizeRequest(?string $request = null): string {
+    private function sanitizeRequest(?string $request = null): ?string {
         if (is_string($request)) {
             $request = preg_replace('/<AccountAPI>.*<\/AccountAPI>/', '<AccountAPI>********</AccountAPI>', $request);
             $request = preg_replace('/<UserAPI>.*<\/UserAPI>/', '<UserAPI>********</UserAPI>', $request);
