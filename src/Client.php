@@ -256,7 +256,9 @@ class Client {
         if ((string) $bodyAsXml->Result === 'Failed') {
             throw new SmarterUException(
                 self::SMARTERU_EXCEPTION_MESSAGE,
-                $this->getErrorCodesFromXmlElement($bodyAsXml->Errors)
+                $this->getErrorCodesFromXmlElement($bodyAsXml->Errors),
+                $xml,
+                (string) $response->getBody()
             );
         }
 
@@ -357,7 +359,9 @@ class Client {
         if ((string) $bodyAsXml->Result === 'Failed') {
             throw new SmarterUException(
                 self::SMARTERU_EXCEPTION_MESSAGE,
-                $this->getErrorCodesFromXmlElement($bodyAsXml->Errors)
+                $this->getErrorCodesFromXmlElement($bodyAsXml->Errors),
+                $xml,
+                (string) $response->getBody()
             );
         }
 
@@ -446,7 +450,9 @@ class Client {
             $errors = $this->getErrorCodesFromXmlElement($bodyAsXml->Errors);
             throw new SmarterUException(
                 self::SMARTERU_EXCEPTION_MESSAGE,
-                $errors
+                $errors,
+                $xml,
+                (string) $response->getBody()
             );
         }
 
@@ -548,7 +554,9 @@ class Client {
         if ((string) $bodyAsXml->Result === 'Failed') {
             throw new SmarterUException(
                 self::SMARTERU_EXCEPTION_MESSAGE,
-                $this->getErrorCodesFromXmlElement($bodyAsXml->Errors)
+                $this->getErrorCodesFromXmlElement($bodyAsXml->Errors),
+                $xml,
+                (string) $response->getBody()
             );
         }
 
@@ -633,7 +641,9 @@ class Client {
             $errors = $this->getErrorCodesFromXmlElement($bodyAsXml->Errors);
             throw new SmarterUException(
                 self::SMARTERU_EXCEPTION_MESSAGE,
-                $errors
+                $errors,
+                $xml,
+                (string) $response->getBody()
             );
         }
 
@@ -698,7 +708,9 @@ class Client {
         if ((string) $bodyAsXml->Result === 'Failed') {
             throw new SmarterUException(
                 self::SMARTERU_EXCEPTION_MESSAGE,
-                $this->getErrorCodesFromXmlElement($bodyAsXml->Errors)
+                $this->getErrorCodesFromXmlElement($bodyAsXml->Errors),
+                $xml,
+                (string) $response->getBody()
             );
         }
 
@@ -807,6 +819,8 @@ class Client {
             throw new SmarterUException(
                 self::SMARTERU_EXCEPTION_MESSAGE,
                 $this->getErrorCodesFromXmlElement($bodyAsXml->Errors)
+                $xml,
+                (string) $response->getBody()
             );
         }
 
@@ -999,7 +1013,9 @@ class Client {
         if ((string) $bodyAsXml->Result === 'Failed') {
             throw new SmarterUException(
                 self::SMARTERU_EXCEPTION_MESSAGE,
-                $this->getErrorCodesFromXmlElement($bodyAsXml->Errors)
+                $this->getErrorCodesFromXmlElement($bodyAsXml->Errors),
+                $xml,
+                (string) $response->getBody()
             );
         }
 
@@ -1202,7 +1218,9 @@ class Client {
 
             throw new SmarterUException(
                 self::SMARTERU_EXCEPTION_MESSAGE,
-                $errors
+                $,
+                $xml,
+                (string) $response->getBody()
             );
         }
 
@@ -1307,7 +1325,9 @@ class Client {
         if ((string) $bodyAsXml->Result === 'Failed') {
             throw new SmarterUException(
                 self::SMARTERU_EXCEPTION_MESSAGE,
-                $this->getErrorCodesFromXmlElement($bodyAsXml->Errors)
+                $this->getErrorCodesFromXmlElement($bodyAsXml->Errors),
+                $xml,
+                (string) $response->getBody()
             );
         }
 
@@ -1369,7 +1389,9 @@ class Client {
 
             throw new SmarterUException(
                 self::SMARTERU_EXCEPTION_MESSAGE,
-                $errors
+                $errors,
+                $xml,
+                (string) $response->getBody()
             );
         }
 
@@ -1449,7 +1471,9 @@ class Client {
         if ((string) $bodyAsXml->Result === 'Failed') {
             throw new SmarterUException(
                 self::SMARTERU_EXCEPTION_MESSAGE,
-                $this->getErrorCodesFromXmlElement($bodyAsXml->Errors)
+                $this->getErrorCodesFromXmlElement($bodyAsXml->Errors),
+                $xml,
+                (string) $response->getBody()
             );
         }
 
