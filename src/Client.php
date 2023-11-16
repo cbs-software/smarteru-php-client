@@ -32,7 +32,6 @@ use DateTime;
 use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Exception\ClientException;
 use Psr\Log\LoggerAwareTrait;
-use Psr\Log\LoggerInterface;
 use SimpleXMLElement;
 
 /**
