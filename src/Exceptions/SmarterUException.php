@@ -30,30 +30,13 @@ class SmarterUException extends \Exception {
     protected array $errorCodes = [];
 
     /**
-     * The request sent to the SmarterU API which resulted in this exception.
-     *
-     * @var string
-     */
-    protected ?string $request = null;
-
-    /**
-     * The response sent to the SmarterU API which resulted in this exception.
-     */
-    protected ?string $response = null;
-
-    /**
      * Create a new exception instance
      *
      * @param string $message  the exception message
      * @param ErrorCode[]  the list of SmarterU error codes which were detected
      *      when the exception was thrown
      */
-    public function __construct(
-        string $message = '',
-        array $errorCodes = [],
-        ?string $request = null,
-        ?string $response = null
-    ) {
+    public function __construct(string $message = '', array $errorCodes = []) {
         parent::__construct($message);
 
         foreach ($errorCodes as $errorCode) {
@@ -61,71 +44,6 @@ class SmarterUException extends \Exception {
                 $this->errorCodes[] = $errorCode;
             }
         }
-
-        $this->setRequest($request);
-        $this->setResponse($response);
-    }
-
-    /**
-     * Set the response XML returned from the SmarterU API which resulted in
-     * this exception.
-     *
-     * @param string $response  the response XML
-     * @return self
-     */
-    public function setResponse(?string $response = null): self {
-        $this->response = $response;
-        return $this;
-    }
-
-    /**
-     * Returns the response XML returned from the SmarterU API which resulted in
-     * this exception.
-     *
-     * @return string  the response XML
-     */
-    public function getResponse(): ?string {
-        return $this->response;
-    }
-
-    /**
-     * Set the request XML sent to the SmarterU API which resulted in this
-     * exception.
-     *
-     * The request ill have the AccountAPI and UserAPI values hidden to prevent
-     * sensitive information from being logged.
-     *
-     * @param string $request  the request XML
-     * @return self
-     */
-    public function setRequest(?string $request = null): self {
-        $this->request = $this->sanitizeRequest($request);
-        return $this;
-    }
-
-    /**
-     * Returns the request XML sent to the SmarterU API which resulted in this
-     * exception.
-     *
-     * @return string  the request XML
-     */
-    public function getRequest(): ?string {
-        return $this->request;
-    }
-
-    /**
-     * Sanitize the request XML to remove sensitive information.
-     *
-     * @param string $request  the request XML
-     * @return string the sanitized request XML
-     */
-    private function sanitizeRequest(?string $request = null): ?string {
-        if (is_string($request)) {
-            $request = preg_replace('/<AccountAPI>.*<\/AccountAPI>/', '<AccountAPI>********</AccountAPI>', $request);
-            $request = preg_replace('/<UserAPI>.*<\/UserAPI>/', '<UserAPI>********</UserAPI>', $request);
-        }
-
-        return $request;
     }
 
     /**
@@ -135,9 +53,7 @@ class SmarterUException extends \Exception {
      */
     public function __toString() {
         $lines = [
-            __CLASS__ . ': ' . $this->message,
-            'Request: ' . $this->getRequest(),
-            'Response: ' . $this->getResponse(),
+            __CLASS__ . ': ' . $this->message
         ];
 
         foreach ($this->errorCodes as $errorCode) {
