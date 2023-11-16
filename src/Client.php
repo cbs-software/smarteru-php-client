@@ -32,6 +32,8 @@ use DateTime;
 use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Exception\ClientException;
 use Psr\Log\LoggerAwareTrait;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use SimpleXMLElement;
 
 /**
@@ -132,13 +134,16 @@ class Client {
      *      You must set the user API key via the constructor or
      *      `setUserApi` before invoking methods which interact with the
      *      SmarterU API
+     * @param LoggerInterface|null $logger The logger used to record API errors.
      */
     public function __construct(
         string $apiKey,
-        string $apiUserKey
+        string $apiUserKey,
+        ?LoggerInterface $logger = null
     ) {
         $this->setAccountApi($apiKey);
         $this->setUserApi($apiUserKey);
+        $this->setLogger($logger ?? new NullLogger());
     }
 
     /**
@@ -1507,11 +1512,6 @@ class Client {
      * @param string $response The XML response that was received.
      */
     private function logFailedRequest(string $request, string $response) {
-        // If client doesn't have a logger, there is nothing more to do here.
-        if ($this->logger === null) {
-            return;
-        }
-
         // Scrub AccountAPI key so we don't expose a secret in logs.
         $sanitizedRequest = preg_replace(
             '/<AccountAPI>.*<\/AccountAPI>/',
