@@ -31,6 +31,8 @@ use CBS\SmarterU\Queries\ListUsersQuery;
 use DateTime;
 use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Exception\ClientException;
+use Psr\Log\LoggerAwareTrait;
+use Psr\Log\LoggerInterface;
 use SimpleXMLElement;
 
 /**
@@ -38,6 +40,12 @@ use SimpleXMLElement;
  * appropriate object.
  */
 class Client {
+    #region traits
+
+    use LoggerAwareTrait;
+
+    #endregion traits
+
     #region constants
 
     /**
@@ -107,6 +115,7 @@ class Client {
      */
     protected XMLGenerator $xmlGenerator;
 
+    
     #endregion properties
 
     /**
@@ -254,6 +263,7 @@ class Client {
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
         if ((string) $bodyAsXml->Result === 'Failed') {
+            
             throw new SmarterUException(
                 self::SMARTERU_EXCEPTION_MESSAGE,
                 $this->getErrorCodesFromXmlElement($bodyAsXml->Errors)
@@ -1475,5 +1485,41 @@ class Client {
             );
         }
         return $errorCodes;
+    }
+
+    /**
+     * Logs a failed request.
+     *
+     * @param string $request The XML request that failed.
+     * @param string $response The XML response that was received.
+     */
+    private function logFailedRequest(string $request, string $response) {
+        // If client doesn't have a logger, there is nothing more to do here.
+        if ($this->logger === null) {
+            return;
+        }
+
+        // Scrub AccountAPI key so we don't expose a secret in logs.
+        $sanitizedRequest = preg_replace(
+            '/<AccountAPI>.*<\/AccountAPI>/',
+            '<AccountAPI>********</AccountAPI>',
+            $request
+        );
+
+        // Scrub UserAPI key so we don't expose a secret in logs.
+        $sanitizedRequest = preg_replace(
+            '/<UserAPI>.*<\/UserAPI>/',
+            '<UserAPI>********</UserAPI>',
+            $sanitizedRequest
+        );
+
+        // Log the request and response.
+        $this->logger->error(
+            'Failed to make request to SmarterU API. See context for request/response details.',
+            [
+                'request' => $request,
+                'response' => $response
+            ]
+        );
     }
 }
