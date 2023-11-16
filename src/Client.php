@@ -1202,7 +1202,7 @@ class Client {
 
             throw new SmarterUException(
                 self::SMARTERU_EXCEPTION_MESSAGE,
-                $this->getErrorCodesFromXmlElement($bodyAsXml->Errors)
+                $errors
             );
         }
 
@@ -1369,9 +1369,7 @@ class Client {
 
             throw new SmarterUException(
                 self::SMARTERU_EXCEPTION_MESSAGE,
-                $errors,
-                $xml,
-                (string) $response->getBody()
+                $errors
             );
         }
 
