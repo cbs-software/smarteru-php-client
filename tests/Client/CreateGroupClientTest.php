@@ -299,8 +299,18 @@ class CreateGroupClientTest extends TestCase {
         $handlerStack->push($history);
 
         $httpClient = new HttpClient(['handler' => $handlerStack]);
+        $logger = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $logger->expects($this->once())->method('error')->with(
+            $this->identicalTo('Failed to make request to SmarterU API. See context for request/response details.'),
+            $this->identicalTo([
+                'request' => "<?xml version=\"1.0\"?>\n<SmarterU><AccountAPI>********</AccountAPI><UserAPI>********</UserAPI><Method>createGroup</Method><Parameters><Group><Name>My Group</Name><GroupID>12</GroupID><Status>Active</Status><Description>This is a group created for testing.</Description><HomeGroupMessage>Home Group</HomeGroupMessage><NotificationEmails><NotificationEmail>phpunit@test.com</NotificationEmail><NotificationEmail>test@phpunit.com</NotificationEmail></NotificationEmails><UserHelpOverrideDefault>0</UserHelpOverrideDefault><UserHelpEnabled>1</UserHelpEnabled><UserHelpEmail>phpunit2@test.com,test2@phpunit.com</UserHelpEmail><UserHelpText>Help Message</UserHelpText><Tags2><Tag2><TagID>1</TagID><TagValues>Tag1 values</TagValues></Tag2><Tag2><TagID>2</TagID><TagValues>Tag2 values</TagValues></Tag2></Tags2><UserLimit><Enabled>1</Enabled><Amount>50</Amount></UserLimit><Users/><LearningModules><LearningModule><ID>4</ID><AllowSelfEnroll>1</AllowSelfEnroll><AutoEnroll>0</AutoEnroll></LearningModule><LearningModule><ID>5</ID><AllowSelfEnroll>0</AllowSelfEnroll><AutoEnroll>1</AutoEnroll></LearningModule></LearningModules><SubscriptionVariants><SubscriptionVariant><ID>6</ID><RequiresCredits>1</RequiresCredits></SubscriptionVariant><SubscriptionVariant><ID>7</ID><RequiresCredits>0</RequiresCredits></SubscriptionVariant></SubscriptionVariants><DashboardSetID>8</DashboardSetID></Group></Parameters></SmarterU>\n",
+                'response' => $body
+            ])
+        );
 
-        $client->setHttpClient($httpClient);
+        $client
+            ->setHttpClient($httpClient)
+            ->setLogger($logger);
 
         // Make the request. Because we want to inspect custom exception
         // properties we'll handle the try/catch/cache of the exception

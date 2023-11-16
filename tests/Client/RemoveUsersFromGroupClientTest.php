@@ -285,7 +285,18 @@ class RemoveUsersFromGroupClientTest extends TestCase {
         $handlerStack = HandlerStack::create($mock);
         $handlerStack->push($history);
         $httpClient = new HttpClient(['handler' => $handlerStack]);
-        $client->setHttpClient($httpClient);
+        $logger = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $logger->expects($this->once())->method('error')->with(
+            $this->identicalTo('Failed to make request to SmarterU API. See context for request/response details.'),
+            $this->identicalTo([
+                'request' => "<?xml version=\"1.0\"?>\n<SmarterU><AccountAPI>********</AccountAPI><UserAPI>********</UserAPI><Method>updateGroup</Method><Parameters><Group><Identifier><Name>My Group</Name></Identifier><Users><User><Email>test@test.com</Email><UserAction>Remove</UserAction><HomeGroup>0</HomeGroup><Permissions/></User></Users><LearningModules/><SubscriptionVariants/></Group></Parameters></SmarterU>\n",
+                'response' => $body
+            ])
+        );
+
+        $client
+            ->setHttpClient($httpClient)
+            ->setLogger($logger);
 
         // Make the request. Because we want to inspect custom exception
         // properties we'll handle the try/catch/cache of the exception

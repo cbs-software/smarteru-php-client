@@ -244,6 +244,13 @@ will be thrown, and any error(s) returned by the SmarterU API will be listed in
 the exception message. A list of all possible SmarterU errors can be found
 [here](https://support.smarteru.com/docs/api-error-codes).
 
+## Logging
+
+This library uses the `psr/log` library to log information about failed requests
+to a logger of your choosing.  If an instance of `Psr\Log\LoggerInterface` is
+inject using `Client::setLogger()` then any failed requests will be logged and
+a sanitized version of the request and response will be sent to the logger.
+
 ## Contributing
 
 If you would like to make a contribution to this library, you may do so using

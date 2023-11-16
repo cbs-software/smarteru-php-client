@@ -31,6 +31,9 @@ use CBS\SmarterU\Queries\ListUsersQuery;
 use DateTime;
 use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Exception\ClientException;
+use Psr\Log\LoggerAwareTrait;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use SimpleXMLElement;
 
 /**
@@ -38,6 +41,12 @@ use SimpleXMLElement;
  * appropriate object.
  */
 class Client {
+    #region traits
+
+    use LoggerAwareTrait;
+
+    #endregion traits
+
     #region constants
 
     /**
@@ -107,6 +116,7 @@ class Client {
      */
     protected XMLGenerator $xmlGenerator;
 
+    
     #endregion properties
 
     /**
@@ -124,13 +134,16 @@ class Client {
      *      You must set the user API key via the constructor or
      *      `setUserApi` before invoking methods which interact with the
      *      SmarterU API
+     * @param LoggerInterface|null $logger The logger used to record API errors.
      */
     public function __construct(
         string $apiKey,
-        string $apiUserKey
+        string $apiUserKey,
+        ?LoggerInterface $logger = null
     ) {
         $this->setAccountApi($apiKey);
         $this->setUserApi($apiUserKey);
+        $this->setLogger($logger ?? new NullLogger());
     }
 
     /**
@@ -254,6 +267,7 @@ class Client {
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
         if ((string) $bodyAsXml->Result === 'Failed') {
+            $this->logFailedRequest($xml, (string) $response->getBody());
             throw new SmarterUException(
                 self::SMARTERU_EXCEPTION_MESSAGE,
                 $this->getErrorCodesFromXmlElement($bodyAsXml->Errors)
@@ -355,6 +369,7 @@ class Client {
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
         if ((string) $bodyAsXml->Result === 'Failed') {
+            $this->logFailedRequest($xml, (string) $response->getBody());
             throw new SmarterUException(
                 self::SMARTERU_EXCEPTION_MESSAGE,
                 $this->getErrorCodesFromXmlElement($bodyAsXml->Errors)
@@ -444,6 +459,7 @@ class Client {
 
         if ((string) $bodyAsXml->Result === 'Failed') {
             $errors = $this->getErrorCodesFromXmlElement($bodyAsXml->Errors);
+            $this->logFailedRequest($xml, (string) $response->getBody());
             throw new SmarterUException(
                 self::SMARTERU_EXCEPTION_MESSAGE,
                 $errors
@@ -546,6 +562,7 @@ class Client {
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
         if ((string) $bodyAsXml->Result === 'Failed') {
+            $this->logFailedRequest($xml, (string) $response->getBody());
             throw new SmarterUException(
                 self::SMARTERU_EXCEPTION_MESSAGE,
                 $this->getErrorCodesFromXmlElement($bodyAsXml->Errors)
@@ -631,6 +648,7 @@ class Client {
 
         if ((string) $bodyAsXml->Result === 'Failed') {
             $errors = $this->getErrorCodesFromXmlElement($bodyAsXml->Errors);
+            $this->logFailedRequest($xml, (string) $response->getBody());
             throw new SmarterUException(
                 self::SMARTERU_EXCEPTION_MESSAGE,
                 $errors
@@ -696,6 +714,7 @@ class Client {
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
         if ((string) $bodyAsXml->Result === 'Failed') {
+            $this->logFailedRequest($xml, (string) $response->getBody());
             throw new SmarterUException(
                 self::SMARTERU_EXCEPTION_MESSAGE,
                 $this->getErrorCodesFromXmlElement($bodyAsXml->Errors)
@@ -752,6 +771,7 @@ class Client {
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
         if ((string) $bodyAsXml->Result === 'Failed') {
+            $this->logFailedRequest($xml, (string) $response->getBody());
             throw new SmarterUException(
                 self::SMARTERU_EXCEPTION_MESSAGE,
                 $this->getErrorCodesFromXmlElement($bodyAsXml->Errors)
@@ -804,6 +824,7 @@ class Client {
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
         if ((string) $bodyAsXml->Result === 'Failed') {
+            $this->logFailedRequest($xml, (string) $response->getBody());
             throw new SmarterUException(
                 self::SMARTERU_EXCEPTION_MESSAGE,
                 $this->getErrorCodesFromXmlElement($bodyAsXml->Errors)
@@ -877,6 +898,7 @@ class Client {
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
         if ((string) $bodyAsXml->Result === 'Failed') {
+            $this->logFailedRequest($xml, (string) $response->getBody());
             throw new SmarterUException(
                 self::SMARTERU_EXCEPTION_MESSAGE,
                 $this->getErrorCodesFromXmlElement($bodyAsXml->Errors)
@@ -950,6 +972,7 @@ class Client {
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
         if ((string) $bodyAsXml->Result === 'Failed') {
+            $this->logFailedRequest($xml, (string) $response->getBody());
             throw new SmarterUException(
                 self::SMARTERU_EXCEPTION_MESSAGE,
                 $this->getErrorCodesFromXmlElement($bodyAsXml->Errors)
@@ -997,6 +1020,7 @@ class Client {
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
         if ((string) $bodyAsXml->Result === 'Failed') {
+            $this->logFailedRequest($xml, (string) $response->getBody());
             throw new SmarterUException(
                 self::SMARTERU_EXCEPTION_MESSAGE,
                 $this->getErrorCodesFromXmlElement($bodyAsXml->Errors)
@@ -1200,6 +1224,7 @@ class Client {
                 }
             }
 
+            $this->logFailedRequest($xml, (string) $response->getBody());
             throw new SmarterUException(
                 self::SMARTERU_EXCEPTION_MESSAGE,
                 $errors
@@ -1305,6 +1330,7 @@ class Client {
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
         if ((string) $bodyAsXml->Result === 'Failed') {
+            $this->logFailedRequest($xml, (string) $response->getBody());
             throw new SmarterUException(
                 self::SMARTERU_EXCEPTION_MESSAGE,
                 $this->getErrorCodesFromXmlElement($bodyAsXml->Errors)
@@ -1367,6 +1393,7 @@ class Client {
                 }
             }
 
+            $this->logFailedRequest($xml, (string) $response->getBody());
             throw new SmarterUException(
                 self::SMARTERU_EXCEPTION_MESSAGE,
                 $errors
@@ -1447,6 +1474,7 @@ class Client {
         $bodyAsXml = simplexml_load_string((string) $response->getBody());
 
         if ((string) $bodyAsXml->Result === 'Failed') {
+            $this->logFailedRequest($xml, (string) $response->getBody());
             throw new SmarterUException(
                 self::SMARTERU_EXCEPTION_MESSAGE,
                 $this->getErrorCodesFromXmlElement($bodyAsXml->Errors)
@@ -1475,5 +1503,46 @@ class Client {
             );
         }
         return $errorCodes;
+    }
+
+    /**
+     * Accepts a request XML string and sanitizes it for logging purposes.
+     *
+     * @param string $request The XML request to sanitize.
+     * @return string The sanitized XML request.
+     */
+    public function sanitizeRequestXML(string $request): string {
+        // Scrub AccountAPI key so we don't expose a secret in logs.
+        $sanitizedRequest = preg_replace(
+            '/<AccountAPI>.*<\/AccountAPI>/',
+            '<AccountAPI>********</AccountAPI>',
+            $request
+        );
+
+        // Scrub UserAPI key so we don't expose a secret in logs.
+        $sanitizedRequest = preg_replace(
+            '/<UserAPI>.*<\/UserAPI>/',
+            '<UserAPI>********</UserAPI>',
+            $sanitizedRequest
+        );
+
+        return $sanitizedRequest;
+    }
+
+    /**
+     * Logs a failed request.
+     *
+     * @param string $request The XML request that failed.
+     * @param string $response The XML response that was received.
+     */
+    private function logFailedRequest(string $request, string $response) {
+        // Log the request and response.
+        $this->logger->error(
+            'Failed to make request to SmarterU API. See context for request/response details.',
+            [
+                'request' => $this->sanitizeRequestXML($request),
+                'response' => $response
+            ]
+        );
     }
 }

@@ -364,8 +364,18 @@ class ListUsersClientTest extends TestCase {
         $handlerStack->push($history);
 
         $httpClient = new HttpClient(['handler' => $handlerStack]);
+        $logger = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $logger->expects($this->once())->method('error')->with(
+            $this->identicalTo('Failed to make request to SmarterU API. See context for request/response details.'),
+            $this->identicalTo([
+                'request' => "<?xml version=\"1.0\"?>\n<SmarterU>\n<AccountAPI>********</AccountAPI><UserAPI>********</UserAPI><Method>listUsers</Method><Parameters><User><Page>1</Page><PageSize>50</PageSize><Filters><UserStatus>Active</UserStatus></Filters></User></Parameters></SmarterU>\n",
+                'response' => $body
+            ])
+        );
 
-        $client->setHttpClient($httpClient);
+        $client
+            ->setHttpClient($httpClient)
+            ->setLogger($logger);
 
         // Make the request. Because we want to inspect custom exception
         // properties we'll handle the try/catch/cache of the exception

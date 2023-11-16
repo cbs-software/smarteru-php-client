@@ -327,7 +327,18 @@ class RevokePermissionsClientTest extends TestCase {
         $handlerStack = HandlerStack::create($mock);
         $handlerStack->push($history);
         $httpClient = new HttpClient(['handler' => $handlerStack]);
-        $client->setHttpClient($httpClient);
+        $logger = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $logger->expects($this->once())->method('error')->with(
+            $this->identicalTo('Failed to make request to SmarterU API. See context for request/response details.'),
+            $this->identicalTo([
+                'request' => "<?xml version=\"1.0\"?>\n<SmarterU><AccountAPI>********</AccountAPI><UserAPI>********</UserAPI><Method>updateUser</Method><Parameters><User><Identifier><Email>test@test.com</Email></Identifier><Info/><Profile/><Groups><Group><GroupName>My Group</GroupName><GroupAction>Add</GroupAction><GroupPermissions><Permission><Action>Deny</Action><Code>MANAGE_GROUP</Code></Permission></GroupPermissions></Group></Groups><Venues/><Wages/></User></Parameters></SmarterU>\n",
+                'response' => $body
+            ])
+        );
+
+        $client
+            ->setHttpClient($httpClient)
+            ->setLogger($logger);
 
         // Make the request. Because we want to inspect custom exception
         // properties we'll handle the try/catch/cache of the exception

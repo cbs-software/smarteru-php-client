@@ -24,7 +24,6 @@ class SmarterUExceptionTest extends TestCase {
     public function testAgreement() {
         $code = 'SU:01';
         $message = 'No POST data detected';
-
         $errorCode = new ErrorCode($code, $message);
 
         $exception = new SmarterUException($message, [$errorCode]);
