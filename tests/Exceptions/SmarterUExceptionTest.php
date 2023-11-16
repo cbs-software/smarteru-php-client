@@ -26,7 +26,7 @@ class SmarterUExceptionTest extends TestCase {
         $message = 'No POST data detected';
         $errorCode = new ErrorCode($code, $message);
 
-        $exception = new SmarterUException($message, [$errorCode], $request, $response);
+        $exception = new SmarterUException($message, [$errorCode]);
 
         self::assertEquals($message, $exception->getMessage());
         $errorCodes = $exception->getErrorCodes();
