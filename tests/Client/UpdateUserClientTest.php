@@ -312,8 +312,18 @@ class UpdateUserClientTest extends TestCase {
         $handlerStack->push($history);
 
         $httpClient = new HttpClient(['handler' => $handlerStack]);
+        $logger = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $logger->expects($this->once())->method('error')->with(
+            $this->identicalTo('Failed to make request to SmarterU API. See context for request/response details.'),
+            $this->identicalTo([
+                'request' => "<?xml version=\"1.0\"?>\n<SmarterU><AccountAPI>********</AccountAPI><UserAPI>********</UserAPI><Method>updateUser</Method><Parameters><User><Identifier><Email>phpunit@test.com</Email></Identifier><Info><Email>phpunit@test.com</Email><EmployeeID>1</EmployeeID><GivenName>PHP</GivenName><Surname>Unit</Surname><Timezone>EST</Timezone><LearnerNotifications>1</LearnerNotifications><SupervisorNotifications>1</SupervisorNotifications><SendEmailTo>Self</SendEmailTo><AlternateEmail>phpunit@test1.com</AlternateEmail><AuthenticationType>External</AuthenticationType></Info><Profile><Supervisors><Supervisor>supervisor1</Supervisor><Supervisor>supervisor2</Supervisor></Supervisors><Organization>organization</Organization><Teams><Team>team1</Team><Team>team2</Team></Teams><Language>English</Language><Status>Active</Status><Title>Title</Title><Division>division</Division><AllowFeedback>1</AllowFeedback><PhonePrimary>555-555-5555</PhonePrimary><PhoneAlternate>555-555-1234</PhoneAlternate><PhoneMobile>555-555-4321</PhoneMobile><Fax>555-555-5432</Fax><Website>https://localhost</Website><Address1>123 Main St</Address1><Address2>Apt. 1</Address2><City>Anytown</City><Province>Pennsylvania</Province><Country>United States</Country><PostalCode>12345</PostalCode><SendMailTo>Personal</SendMailTo><ReceiveNotifications>1</ReceiveNotifications><HomeGroup>My Home Group</HomeGroup></Profile><Groups/><Venues/><Wages/></User></Parameters></SmarterU>\n",
+                'response' => $body
+            ])
+        );
 
-        $client->setHttpClient($httpClient);
+        $client
+            ->setHttpClient($httpClient)
+            ->setLogger($logger);
 
         // Make the request. Because we want to inspect custom exception
         // properties we'll handle the try/catch/cache of the exception

@@ -1506,12 +1506,12 @@ class Client {
     }
 
     /**
-     * Logs a failed request.
+     * Accepts a request XML string and sanitizes it for logging purposes.
      *
-     * @param string $request The XML request that failed.
-     * @param string $response The XML response that was received.
+     * @param string $request The XML request to sanitize.
+     * @return string The sanitized XML request.
      */
-    private function logFailedRequest(string $request, string $response) {
+    public function sanitizeRequestXML(string $request): string {
         // Scrub AccountAPI key so we don't expose a secret in logs.
         $sanitizedRequest = preg_replace(
             '/<AccountAPI>.*<\/AccountAPI>/',
@@ -1526,11 +1526,21 @@ class Client {
             $sanitizedRequest
         );
 
+        return $sanitizedRequest;
+    }
+
+    /**
+     * Logs a failed request.
+     *
+     * @param string $request The XML request that failed.
+     * @param string $response The XML response that was received.
+     */
+    private function logFailedRequest(string $request, string $response) {
         // Log the request and response.
         $this->logger->error(
             'Failed to make request to SmarterU API. See context for request/response details.',
             [
-                'request' => $request,
+                'request' => $this->sanitizeRequestXML($request),
                 'response' => $response
             ]
         );

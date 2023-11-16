@@ -170,7 +170,18 @@ class GetLearnerReportClientTest extends TestCase {
         $handlerStack = HandlerStack::create($mock);
         $handlerStack->push($history);
         $httpClient = new HttpClient(['handler' => $handlerStack]);
-        $client->setHttpClient($httpClient);
+        $logger = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $logger->expects($this->once())->method('error')->with(
+            $this->identicalTo('Failed to make request to SmarterU API. See context for request/response details.'),
+            $this->identicalTo([
+                'request' => "<?xml version=\"1.0\"?>\n<SmarterU><AccountAPI>********</AccountAPI><UserAPI>********</UserAPI><Method>getLearnerReport</Method><Parameters><Report><Page>1</Page><PageSize>50</PageSize><Filters><EnrollmentID>1</EnrollmentID><Groups><GroupStatus>Active</GroupStatus></Groups><Enrollments/><Users><UserStatus>Active</UserStatus></Users></Filters></Report><Columns/><CustomFields/></Parameters></SmarterU>\n",
+                'response' => $body
+            ])
+        );
+
+        $client
+            ->setHttpClient($httpClient)
+            ->setLogger($logger);
 
         // Make the request. Because we want to inspect custom exception
         // properties we'll handle the try/catch/cache of the exception
