@@ -23,8 +23,27 @@ use CBS\SmarterU\Client;
 use CBS\SmarterU\Exceptions\SmarterUException;
 use CBS\SmarterU\Queries\GetLearnerReportQuery;
 
-$accountKey = getenv('SMARTERU_ACCOUNT_KEY') ?? 'No Account Key Provided';
-$userKey = getenv('SMARTERU_USER_KEY') ?? 'No User Key Provided';
+$accountKey = getenv('SMARTERU_ACCOUNT_KEY') ?? null;
+$userKey = getenv('SMARTERU_USER_KEY') ?? null;
+$groupName = $argv[1] ?? null;
+
+function printHelp() {
+    echo <<< END_OF_HELP
+        Prints a CSV Enrollment Report for all active users in the specified group.
+        
+        The script expects the SMARTERU_ACCOUNT_KEY and SMARTERU_USER_KEY environment
+        variables to be set.
+        
+        Usage: php GetEnrollmentReportLiveTest.php <group-name>
+
+        Example: php GetEnrollmentReportLiveTest.php "Widgets Inc."
+    END_OF_HELP;
+}
+// Make sure we have the necessary environment variables to perform the test.
+if (empty($accountKey) || empty($userKey) || empty($groupName)) {
+    printHelp();
+    exit(1);
+}
 
 try {
     // Create the Client for speaking to the API
@@ -34,7 +53,7 @@ try {
     // that are active. Add some optional fields that we care about.
     $results = $client->getLearnerReport(
         (new GetLearnerReportQuery())
-            ->setGroupNames(['SANDBOX - Core Business Solutions'])
+            ->setGroupNames([$groupName])
             ->setUserStatus('Active')
             ->setColumns(['PROGRESS', 'COURSE_DURATION', 'DUE_DATE', ])
     );

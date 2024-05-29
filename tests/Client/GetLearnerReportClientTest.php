@@ -6,7 +6,6 @@
  * @copyright   $year$ Core Business Solutions
  * @license     MIT
  * @version     $version$
- * @since       2022/09/27
  */
 
 declare(strict_types=1);
