@@ -3,6 +3,11 @@
 /**
  * A live Enrollment Report test.
  *
+ * This test expects the SMARTERU_ACCOUNT_KEY and SMARTERU_USER_KEY environment
+ * variables to be set. It will query the SMARTERU API for a list of all users
+ * in the SANDBOX group that are active and output their progress in the
+ * courses they are enrolled in, in CSV format.
+ *
  * @copyright   $year$ Core Business Solutions
  * @license     MIT
  * @version     $version$
@@ -15,15 +20,9 @@ namespace CBS\SmarterU\Tests\Usability;
 require_once(__DIR__ . '/../vendor/autoload.php');
 
 use CBS\SmarterU\Client;
-use CBS\SmarterU\DataTypes\User;
-use CBS\SmarterU\DataTypes\Timezone;
 use CBS\SmarterU\Exceptions\SmarterUException;
 use CBS\SmarterU\Queries\GetLearnerReportQuery;
 
-/**
- * This script contains a live test for Client::createUser. It was used to
- * intentionally trigger errors and see how the API responds.
- */
 $accountKey = getenv('SMARTERU_ACCOUNT_KEY') ?? 'No Account Key Provided';
 $userKey = getenv('SMARTERU_USER_KEY') ?? 'No User Key Provided';
 
@@ -31,7 +30,8 @@ try {
     // Create the Client for speaking to the API
     $client = new Client($accountKey, $userKey);
     
-    // Create the user
+    // Query for an Enrollment report for all users in our SANDBOX group
+    // that are active. Add some optional fields that we care about.
     $results = $client->getLearnerReport(
         (new GetLearnerReportQuery())
             ->setGroupNames(['SANDBOX - Core Business Solutions'])
