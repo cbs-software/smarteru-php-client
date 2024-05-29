@@ -120,13 +120,13 @@ class GetLearnerReportXMLTest extends TestCase {
         foreach ($xml->Parameters->children() as $parameter) {
             $parameters[] = $parameter->getName();
         }
-        self::assertCount(3, $parameters);
+        self::assertCount(1, $parameters);
         self::assertContains('Report', $parameters);
         $report = [];
         foreach ($xml->Parameters->Report->children() as $reportTag) {
             $report[] = $reportTag->getName();
         }
-        self::assertCount(3, $report);
+        self::assertCount(5, $report);
         self::assertContains('Page', $report);
         self::assertEquals(
             (int) $xml->Parameters->Report->Page,
@@ -142,7 +142,7 @@ class GetLearnerReportXMLTest extends TestCase {
         foreach ($xml->Parameters->Report->Filters->children() as $tag) {
             $filters[] = $tag->getName();
         }
-        self::assertCount(4, $filters);
+        self::assertCount(5, $filters);
         self::assertContains('EnrollmentID', $filters);
         self::assertEquals(
             $query->getEnrollmentId(),
@@ -172,10 +172,10 @@ class GetLearnerReportXMLTest extends TestCase {
             $query->getUserStatus(),
             $xml->Parameters->Report->Filters->Users->UserStatus
         );
-        self::assertContains('Columns', $parameters);
-        self::assertCount(0, $xml->Parameters->CustomFields->children());
-        self::assertContains('CustomFields', $parameters);
-        self::assertCount(0, $xml->Parameters->CustomFields->children());
+        self::assertArrayHasKey('Columns', (array) $xml->Parameters->Report);
+        self::assertCount(0, (array) $xml->Parameters->CustomFields->children());
+        self::assertArrayHasKey('CustomFields', (array) $xml->Parameters->Report);
+        self::assertCount(0, (array) $xml->Parameters->CustomFields->children());
     }
 
     /**
@@ -284,13 +284,13 @@ class GetLearnerReportXMLTest extends TestCase {
         foreach ($xml->Parameters->children() as $parameter) {
             $parameters[] = $parameter->getName();
         }
-        self::assertCount(3, $parameters);
+        self::assertCount(1, $parameters);
         self::assertContains('Report', $parameters);
         $report = [];
         foreach ($xml->Parameters->Report->children() as $reportTag) {
             $report[] = $reportTag->getName();
         }
-        self::assertCount(3, $report);
+        self::assertCount(5, $report);
         self::assertContains('Page', $report);
         self::assertEquals(
             (int) $xml->Parameters->Report->Page,
@@ -533,13 +533,14 @@ class GetLearnerReportXMLTest extends TestCase {
         foreach ($userEmployeeIds as $id) {
             self::assertContains($id, $ids);
         }
-        self::assertContains('Columns', $parameters);
-        $columnTags = (array) $xml->Parameters->Columns->ColumnName;
+
+        self::assertArrayHasKey('Columns', (array) $xml->Parameters->Report);
+        $columnTags = (array) $xml->Parameters->Report->Columns->ColumnName;
         foreach ($columns as $column) {
             self::assertContains($column, $columnTags);
         }
-        self::assertContains('CustomFields', $parameters);
-        $fields = (array) $xml->Parameters->CustomFields;
+        self::assertArrayHasKey('CustomFields', (array) $xml->Parameters->Report);
+        $fields = (array) $xml->Parameters->Report->CustomFields;
         $fields = $fields['FieldName'];
         foreach ($customFields as $field) {
             self::assertContains($field->getName(), $fields);

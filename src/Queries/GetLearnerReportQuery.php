@@ -112,7 +112,7 @@ class GetLearnerReportQuery {
     /**
      * The system-generated identifier for the user's course enrollment.
      */
-    protected string $enrollmentId;
+    protected ?string $enrollmentId = null;
 
     /**
      * The status of groups to return. Acceptable values are "Active",
@@ -284,20 +284,15 @@ class GetLearnerReportQuery {
 
     /**
      * Get the system-generated identifier for the user's course enrollment.
-     *
-     * @return string The system-generated identifier.
      */
-    public function getEnrollmentId(): string {
+    public function getEnrollmentId(): ?string {
         return $this->enrollmentId;
     }
 
     /**
      * Set the system-generated identifier for the user's course enrollment.
-     *
-     * @param string $enrollmentId The system-generated identifier.
-     * @return self
      */
-    public function setEnrollmentId(string $enrollmentId): self {
+    public function setEnrollmentId(?string $enrollmentId): self {
         $this->enrollmentId = $enrollmentId;
         return $this;
     }

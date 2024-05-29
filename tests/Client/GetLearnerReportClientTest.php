@@ -6,6 +6,7 @@
  * @copyright   $year$ Core Business Solutions
  * @license     MIT
  * @version     $version$
+ * @since       2022/09/27
  */
 
 declare(strict_types=1);
@@ -169,13 +170,16 @@ class GetLearnerReportClientTest extends TestCase {
         $handlerStack->push($history);
         $httpClient = new HttpClient(['handler' => $handlerStack]);
         $logger = $this->createMock(\Psr\Log\LoggerInterface::class);
-        $logger->expects($this->once())->method('error')->with(
-            $this->identicalTo('Failed to make request to SmarterU API. See context for request/response details.'),
-            $this->identicalTo([
-                'request' => "<?xml version=\"1.0\"?>\n<SmarterU><AccountAPI>********</AccountAPI><UserAPI>********</UserAPI><Method>getLearnerReport</Method><Parameters><Report><Page>1</Page><PageSize>50</PageSize><Filters><EnrollmentID>1</EnrollmentID><Groups><GroupStatus>Active</GroupStatus></Groups><Enrollments/><Users><UserStatus>Active</UserStatus></Users></Filters></Report><Columns/><CustomFields/></Parameters></SmarterU>\n",
-                'response' => $body
-            ])
-        );
+        $logger
+            ->expects($this->once())
+            ->method('error')
+            ->with(
+                $this->identicalTo(Client::ERROR_GENERIC_REQUEST_FAILURE),
+                $this->identicalTo([
+                    'request' => "<?xml version=\"1.0\"?>\n<SmarterU><AccountAPI>********</AccountAPI><UserAPI>********</UserAPI><Method>getLearnerReport</Method><Parameters><Report><Page>1</Page><PageSize>50</PageSize><Filters><EnrollmentID>1</EnrollmentID><Groups><GroupStatus>Active</GroupStatus></Groups><LearningModules/><Enrollments/><Users><UserStatus>Active</UserStatus></Users></Filters><Columns/><CustomFields/></Report></Parameters></SmarterU>\n",
+                    'response' => $body
+                ])
+            );
 
         $client
             ->setHttpClient($httpClient)
