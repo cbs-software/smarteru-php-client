@@ -5,7 +5,6 @@
  *
  * @copyright $year$ Core Business Solutions
  * @license Proprietary
- * @version $version$
  */
 
 declare(strict_types=1);

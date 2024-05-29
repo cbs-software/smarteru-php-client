@@ -10,7 +10,6 @@
  *
  * @copyright   $year$ Core Business Solutions
  * @license     MIT
- * @version     $version$
  */
  
 declare(strict_types=1);
