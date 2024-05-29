@@ -3,11 +3,9 @@
 /**
  * Contains CBS\SmarterU\Queries\BaseQuery
  *
- * @author      Will Santanen <will.santanen@thecoresolution.com>
  * @copyright   $year$ Core Business Solutions
  * @license     MIT
  * @version     $version$
- * @since       2022/07/14
  */
 
 declare(strict_types=1);

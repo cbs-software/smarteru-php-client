@@ -3,11 +3,9 @@
 /**
  * Contains Tests\CBS\SmarterU\Exceptions\SmarterUExceptionTest
  *
- * @author      Tom Egan <tom.egan@thecoresolution.com>
  * @copyright   $year$ Core Business Solutions
  * @license     MIT
  * @version     $version$
- * @since       2022-12-08
  */
 
 declare(strict_types=1);

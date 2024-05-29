@@ -3,11 +3,9 @@
 /**
  * Contains CBS\SmarterU\Exceptions\InvalidArgumentException
  *
- * @author     Brian Reich <brian.reich@thecoresolution.com>
  * @copyright  $year$ Core Business Solutions
  * @license    MIT
  * @version    $version$
- * @since      2022/07/25
  */
 
 declare(strict_types=1);

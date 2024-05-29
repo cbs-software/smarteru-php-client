@@ -3,10 +3,8 @@
 /**
  * Contains CBS\SmarterU\DataTypes\User
  *
- * @author Brian Reich <brian.reich@thecoresolution.com>
  * @copyright $year$ Core Business Solutions
  * @license MIT
- * @since 2022/06/16
  * @version $version$
  */
 

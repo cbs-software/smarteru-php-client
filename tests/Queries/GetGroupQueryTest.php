@@ -3,11 +3,9 @@
 /**
  * Contains Tests\CBS\SmarterU\Queries\GetGroupQueryTest
  *
- * @author      Will Santanen <will.santanen@thecoresolution.com>
  * @copyright   $year$ Core Business Solutions
  * @license     MIT
  * @version     $version$
- * @since       2022/08/05
  */
 
 declare(strict_types=1);

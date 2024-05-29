@@ -302,3 +302,9 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+## Contributors
+
+- [Will Santanen](https://github.com/willsantanentcs)
+- [Tom Egan](https://github.com/tomegantcs)
+- [Brian Reich](https://github.com/brianreichtcs)

@@ -3,11 +3,9 @@
 /**
  * Contains CBS\SmarterU\DataTypes\LearningModule
  *
- * @author      Will Santanen <will.santanen@thecoresolution.com>
  * @copyright   $year$ Core Business Solutions
  * @license     MIT
  * @version     $version$
- * @since       2022-08-02
  */
 
 declare(strict_types=1);

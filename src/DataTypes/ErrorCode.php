@@ -3,10 +3,8 @@
 /**
  * Contains CBS\SmarterU\DataTypes\ErrorCode
  *
- * @author    Tom Egan <tom.egan@thecoresolution.com>
  * @copyright $year$ Core Business Solutions
  * @license   MIT
- * @since     2022-12-07
  * @version   $version$
  */
 

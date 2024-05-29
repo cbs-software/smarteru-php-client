@@ -3,11 +3,9 @@
 /**
  * Contains Tests\CBS\SmarterU\XMLGenerator\GetLearnerReportXMLTest.php
  *
- * @author      Will Santanen <will.santanen@thecoresolution.com>
  * @copyright   $year$ Core Business Solutions
  * @license     MIT
  * @version     $version$
- * @since       2022/09/26
  */
 
 declare(strict_types=1);

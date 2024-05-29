@@ -3,11 +3,9 @@
 /**
  * Contains Tests\CBS\SmarterU\DataTypes\Group.
  *
- * @author      Will Santanen <will.santanen@thecoresolution.com>
  * @copyright   $year$ Core Business Solutions
  * @license     MIT
  * @version     $version$
- * @since       2022/08/03
  */
 
 declare(strict_types=1);

@@ -3,11 +3,9 @@
 /**
  * A live user creation test.
  *
- * @author      Brian Reich <brian.reich@thecoresolution.com>
  * @copyright   $year$ Core Business Solutions
  * @license     MIT
  * @version     $version$
- * @since       2023/03/27
  */
  
 declare(strict_types=1);
