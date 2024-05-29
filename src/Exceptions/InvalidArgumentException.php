@@ -3,7 +3,7 @@
 /**
  * Contains CBS\SmarterU\Exceptions\InvalidArgumentException
  *
- * @author     Brian Reich <brian.reich@thecoresolution.com>
+ * @author      CORE Software Team
  * @copyright  $year$ Core Business Solutions
  * @license    MIT
  * @version    $version$

@@ -3,7 +3,7 @@
 /**
  * Contains CBS\SmarterU\XMLGenerator.
  *
- * @author      Will Santanen <will.santanen@thecoresolution.com>
+ * @author      CORE Software Team
  * @copyright   $year$ Core Business Solutions
  * @license     MIT
  * @version     $version$

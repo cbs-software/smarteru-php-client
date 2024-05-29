@@ -3,7 +3,7 @@
 /**
  * Contains Tests\CBS\SmarterU\Exceptions\SmarterUExceptionTest
  *
- * @author      Tom Egan <tom.egan@thecoresolution.com>
+ * @author      CORE Software Team
  * @copyright   $year$ Core Business Solutions
  * @license     MIT
  * @version     $version$

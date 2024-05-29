@@ -3,7 +3,7 @@
 /**
  * Contains CBS\SmarterU\Tests\Client\RequestExternalAuthorizationClientTest.php.
  *
- * @author      Will Santanen
+ * @author      CORE Software Team
  * @copyright   $year$ Core Business Solutions
  * @license     MIT
  * @version     $version$

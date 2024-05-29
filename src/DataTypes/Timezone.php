@@ -3,7 +3,7 @@
 /*
  * This file contains the CBS\SmarterU\DataTypes\Timezone.
  *
- * @author Brian Reich <brian.reich@thecoresolution.com>
+ * @author      CORE Software Team
  * @copyright $year$ Core Business Solutions
  * @license Proprietary
  * @since 2023/03/27
