@@ -989,6 +989,9 @@ class Client {
     /**
      * Make a GetLearnerReport query to the SmarterU API.
      *
+     * Note: SmarterU has begun calling this an Enrollment Report, but the API
+     * method and XML request/response still refer to it as a learner Report.
+     *
      * @param GetLearnerReportQuery $query The query by which to filter the
      *      results of the Learner Report.
      * @return LearnerReport[] A list of all LearnerReports matching the query.
