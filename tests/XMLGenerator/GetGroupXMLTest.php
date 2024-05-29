@@ -3,11 +3,9 @@
 /**
  * Contains Tests\CBS\SmarterU\XMLGenerator\GetGroupXMLTest.
  *
- * @author      CORE Software Team
  * @copyright   $year$ Core Business Solutions
  * @license     MIT
  * @version     $version$
- * @since       2022/09/07
  */
 
 declare(strict_types=1);

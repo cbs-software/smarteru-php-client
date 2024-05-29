@@ -3,11 +3,9 @@
 /**
  * Contains CBS\SmarterU\tests\Client\GetUserGroupsClientTest.
  *
- * @author      CORE Software Team
  * @copyright   $year$ Core Business Solutions
  * @license     MIT
  * @version     $version$
- * @since       2022/08/03
  */
 
 declare(strict_types=1);

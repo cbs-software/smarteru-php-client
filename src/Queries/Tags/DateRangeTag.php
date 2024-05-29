@@ -3,11 +3,9 @@
 /**
  * Contains CBS\SmarterU\Queries\Tags\DateRangeTag
  *
- * @author      CORE Software Team
  * @copyright   $year$ Core Business Solutions
  * @license     MIT
  * @version     $version$
- * @since       2022/07/13
  */
 
 declare(strict_types=1);

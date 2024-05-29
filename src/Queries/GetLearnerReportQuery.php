@@ -3,11 +3,9 @@
 /**
  * Contains CBS\SmarterU\Queries\GetLearnerReportQuery
  *
- * @author      CORE Software Team
  * @copyright   $year$ Core Business Solutions
  * @license     MIT
  * @version     $version$
- * @since       2022/09/20
  */
 
 declare(strict_types=1);

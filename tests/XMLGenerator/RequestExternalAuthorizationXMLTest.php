@@ -3,11 +3,9 @@
 /**
  * Contains Tests\CBS\SmarterU\XMLGenerator\RequestExternalAuthorizationXMLTest.
  *
- * @author      CORE Software Team
  * @copyright   $year$ Core Business Solutions
  * @license     MIT
  * @version     $version$
- * @since       2022/10/10
  */
 
 declare(strict_types=1);

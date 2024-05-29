@@ -3,11 +3,9 @@
 /**
  * Contains Tests\SmarterU\DataTypes\UserTest.php
  *
- * @author      CORE Software Team
  * @copyright   $year$ Core Business Solutions
  * @license     MIT
  * @version     $version$
- * @since       2022/07/22
  */
 
 declare(strict_types=1);

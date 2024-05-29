@@ -3,11 +3,9 @@
 /**
  * Contains Tests\CBS\SmarterU\XMLGenerator\ChangePermissionsXMLTest.
  *
- * @author      CORE Software Team
  * @copyright   $year$ Core Business Solutions
  * @license     MIT
  * @version     $version$
- * @since       2022/09/09
  */
 
 declare(strict_types=1);

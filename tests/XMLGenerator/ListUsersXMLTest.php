@@ -3,11 +3,9 @@
 /**
  * Contains Tests\CBS\SmarterU\XMLGenerator\ListUsersXMLTest.
  *
- * @author      CORE Software Team
  * @copyright   $year$ Core Business Solutions
  * @license     MIT
  * @version     $version$
- * @since       2022/09/02
  */
 
 declare(strict_types=1);

@@ -3,11 +3,9 @@
 /**
  * Contains CBS\SmarterU\XMLGenerator.
  *
- * @author      CORE Software Team
  * @copyright   $year$ Core Business Solutions
  * @license     MIT
  * @version     $version$
- * @since       2022/08/31
  */
 
 declare(strict_types=1);

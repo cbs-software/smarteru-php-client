@@ -3,11 +3,9 @@
 /**
  * Contains Tests\CBS\SmarterU\UpdateGroupClientTest.php
  *
- * @author      CORE Software Team
  * @copyright   $year$ Core Business Solutions
  * @license     MIT
  * @version     $version$
- * @since       2022/08/11
  */
 
 declare(strict_types=1);

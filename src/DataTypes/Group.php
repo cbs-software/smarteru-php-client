@@ -3,10 +3,8 @@
 /**
  * Contains CBS\SmarterU\DataTypes\Group
  *
- * @author      CORE Software Team
  * @copyright $year$ Core Business Solutions
  * @license   MIT
- * @since     2022/08/01
  * @version   $version$
  */
 
