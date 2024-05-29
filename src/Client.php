@@ -86,6 +86,8 @@ class Client {
      */
     public const SMARTERU_EXCEPTION_MESSAGE = 'SmarterU rejected the request.';
 
+    public const ERROR_GENERIC_REQUEST_FAILURE = 'Failed to make request to SmarterU API. See context for request/response details.';
+
     #endregion constants
 
     #region properties
@@ -1536,7 +1538,7 @@ class Client {
     private function logFailedRequest(string $request, string $response) {
         // Log the request and response.
         $this->logger->error(
-            'Failed to make request to SmarterU API. See context for request/response details.',
+            self::ERROR_GENERIC_REQUEST_FAILURE,
             [
                 'request' => $this->sanitizeRequestXML($request),
                 'response' => $response

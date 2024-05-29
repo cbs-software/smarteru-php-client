@@ -1060,7 +1060,12 @@ class XMLGenerator {
         $report->addChild('Page', (string) $query->getPage());
         $report->addChild('PageSize', (string) $query->getPageSize());
         $filters = $report->addChild('Filters');
-        $filters->addChild('EnrollmentID', $query->getEnrollmentId());
+
+        // Don't include EnrollmentId tag if it does not have a value.
+        if (! is_null($query->getEnrollmentId())) {
+            $filters->addChild('EnrollmentID', $query->getEnrollmentId());
+        }
+
         $groups = $filters->addChild('Groups');
         if (!empty($query->getGroupStatus())) {
             $groups->addChild('GroupStatus', $query->getGroupStatus());
@@ -1090,133 +1095,133 @@ class XMLGenerator {
                 $currentTag->addChild('TagValues', $tag->getTagValues());
             }
         }
-        if ($this->includeLearningModulesTag($query)) {
-            $learningModules = $filters->addChild('LearningModules');
-            if (
-                !empty($query->getLearningModuleStatus())
-                || !empty($query->getLearningModuleNames())
-            ) {
-                $learningModule = $learningModules->addChild('LearningModule');
-                if (!empty($query->getLearningModuleStatus())) {
-                    $learningModule->addChild(
-                        'LearningModuleStatus',
-                        $query->getLearningModuleStatus()
-                    );
-                }
-                if (!empty($query->getLearningModuleNames())) {
-                    $names = $learningModule->addChild('LearningModuleNames');
-                    foreach ($query->getLearningModuleNames() as $name) {
-                        $names->addChild('LearningModuleName', $name);
-                    }
-                }
-            }
-            if (!empty($query->getEnrollmentStatuses())) {
-                $enrollmentStatuses = $learningModules->addChild(
-                    'EnrollmentStatuses'
+    
+        $learningModules = $filters->addChild('LearningModules');
+        if (
+            !empty($query->getLearningModuleStatus())
+            || !empty($query->getLearningModuleNames())
+        ) {
+            $learningModule = $learningModules->addChild('LearningModule');
+            if (!empty($query->getLearningModuleStatus())) {
+                $learningModule->addChild(
+                    'LearningModuleStatus',
+                    $query->getLearningModuleStatus()
                 );
-                foreach ($query->getEnrollmentStatuses() as $status) {
-                    $enrollmentStatuses->addChild('EnrollmentStatus', $status);
-                }
             }
-            if (!empty($query->getCompletedDates())) {
-                $completedDates = $learningModules->addChild('CompletedDates');
-                foreach ($query->getCompletedDates() as $date) {
-                    $completedDate = $completedDates->addChild(
-                        'CompletedDate'
-                    );
-                    $completedDate->addChild(
-                        'CompletedDateFrom',
-                        $date->getDateFrom()->format('d-M-y')
-                    );
-                    $completedDate->addChild(
-                        'CompletedDateTo',
-                        $date->getDateTo()->format('d-M-y')
-                    );
-                }
-            }
-            if (!empty($query->getDueDates())) {
-                $dueDates = $learningModules->addChild('DueDates');
-                foreach ($query->getDueDates() as $date) {
-                    $dueDate = $dueDates->addChild('DueDate');
-                    $dueDate->addChild(
-                        'DueDateFrom',
-                        $date->getDateFrom()->format('d-M-y')
-                    );
-                    $dueDate->addChild(
-                        'DueDateTo',
-                        $date->getDateTo()->format('d-M-y')
-                    );
-                }
-            }
-            if (!empty($query->getEnrolledDates())) {
-                $enrolledDates = $learningModules->addChild('EnrolledDates');
-                foreach ($query->getEnrolledDates() as $date) {
-                    $enrolledDate = $enrolledDates->addChild(
-                        'EnrolledDate'
-                    );
-                    $enrolledDate->addChild(
-                        'EnrolledDateFrom',
-                        $date->getDateFrom()->format('d-M-y')
-                    );
-                    $enrolledDate->addChild(
-                        'EnrolledDateTo',
-                        $date->getDateTo()->format('d-M-y')
-                    );
-                }
-            }
-            if (!empty($query->getGracePeriodDates())) {
-                $gracePeriodDates = $learningModules->addChild(
-                    'GracePeriodDates'
-                );
-                foreach ($query->getGracePeriodDates() as $date) {
-                    $gracePeriodDate = $gracePeriodDates->addChild(
-                        'GracePeriodDate'
-                    );
-                    $gracePeriodDate->addChild(
-                        'GracePeriodDateFrom',
-                        $date->getDateFrom()->format('d-M-y')
-                    );
-                    $gracePeriodDate->addChild(
-                        'GracePeriodDateTo',
-                        $date->getDateTo()->format('d-M-y')
-                    );
-                }
-            }
-            if (!empty($query->getLastAccessedDates())) {
-                $lastAccessedDates = $learningModules->addChild(
-                    'LastAccessedDates'
-                );
-                foreach ($query->getLastAccessedDates() as $date) {
-                    $lastAccessedDate = $lastAccessedDates->addChild(
-                        'LastAccessedDate'
-                    );
-                    $lastAccessedDate->addChild(
-                        'LastAccessedDateFrom',
-                        $date->getDateFrom()->format('d-M-y')
-                    );
-                    $lastAccessedDate->addChild(
-                        'LastAccessedDateTo',
-                        $date->getDateTo()->format('d-M-y')
-                    );
-                }
-            }
-            if (!empty($query->getStartedDates())) {
-                $startedDates = $learningModules->addChild('StartedDates');
-                foreach ($query->getStartedDates() as $date) {
-                    $startedDate = $startedDates->addChild(
-                        'StartedDate'
-                    );
-                    $startedDate->addChild(
-                        'StartedDateFrom',
-                        $date->getDateFrom()->format('d-M-y')
-                    );
-                    $startedDate->addChild(
-                        'StartedDateTo',
-                        $date->getDateTo()->format('d-M-y')
-                    );
+            if (!empty($query->getLearningModuleNames())) {
+                $names = $learningModule->addChild('LearningModuleNames');
+                foreach ($query->getLearningModuleNames() as $name) {
+                    $names->addChild('LearningModuleName', $name);
                 }
             }
         }
+        if (!empty($query->getEnrollmentStatuses())) {
+            $enrollmentStatuses = $learningModules->addChild(
+                'EnrollmentStatuses'
+            );
+            foreach ($query->getEnrollmentStatuses() as $status) {
+                $enrollmentStatuses->addChild('EnrollmentStatus', $status);
+            }
+        }
+        if (!empty($query->getCompletedDates())) {
+            $completedDates = $learningModules->addChild('CompletedDates');
+            foreach ($query->getCompletedDates() as $date) {
+                $completedDate = $completedDates->addChild(
+                    'CompletedDate'
+                );
+                $completedDate->addChild(
+                    'CompletedDateFrom',
+                    $date->getDateFrom()->format('d-M-y')
+                );
+                $completedDate->addChild(
+                    'CompletedDateTo',
+                    $date->getDateTo()->format('d-M-y')
+                );
+            }
+        }
+        if (!empty($query->getDueDates())) {
+            $dueDates = $learningModules->addChild('DueDates');
+            foreach ($query->getDueDates() as $date) {
+                $dueDate = $dueDates->addChild('DueDate');
+                $dueDate->addChild(
+                    'DueDateFrom',
+                    $date->getDateFrom()->format('d-M-y')
+                );
+                $dueDate->addChild(
+                    'DueDateTo',
+                    $date->getDateTo()->format('d-M-y')
+                );
+            }
+        }
+        if (!empty($query->getEnrolledDates())) {
+            $enrolledDates = $learningModules->addChild('EnrolledDates');
+            foreach ($query->getEnrolledDates() as $date) {
+                $enrolledDate = $enrolledDates->addChild(
+                    'EnrolledDate'
+                );
+                $enrolledDate->addChild(
+                    'EnrolledDateFrom',
+                    $date->getDateFrom()->format('d-M-y')
+                );
+                $enrolledDate->addChild(
+                    'EnrolledDateTo',
+                    $date->getDateTo()->format('d-M-y')
+                );
+            }
+        }
+        if (!empty($query->getGracePeriodDates())) {
+            $gracePeriodDates = $learningModules->addChild(
+                'GracePeriodDates'
+            );
+            foreach ($query->getGracePeriodDates() as $date) {
+                $gracePeriodDate = $gracePeriodDates->addChild(
+                    'GracePeriodDate'
+                );
+                $gracePeriodDate->addChild(
+                    'GracePeriodDateFrom',
+                    $date->getDateFrom()->format('d-M-y')
+                );
+                $gracePeriodDate->addChild(
+                    'GracePeriodDateTo',
+                    $date->getDateTo()->format('d-M-y')
+                );
+            }
+        }
+        if (!empty($query->getLastAccessedDates())) {
+            $lastAccessedDates = $learningModules->addChild(
+                'LastAccessedDates'
+            );
+            foreach ($query->getLastAccessedDates() as $date) {
+                $lastAccessedDate = $lastAccessedDates->addChild(
+                    'LastAccessedDate'
+                );
+                $lastAccessedDate->addChild(
+                    'LastAccessedDateFrom',
+                    $date->getDateFrom()->format('d-M-y')
+                );
+                $lastAccessedDate->addChild(
+                    'LastAccessedDateTo',
+                    $date->getDateTo()->format('d-M-y')
+                );
+            }
+        }
+        if (!empty($query->getStartedDates())) {
+            $startedDates = $learningModules->addChild('StartedDates');
+            foreach ($query->getStartedDates() as $date) {
+                $startedDate = $startedDates->addChild(
+                    'StartedDate'
+                );
+                $startedDate->addChild(
+                    'StartedDateFrom',
+                    $date->getDateFrom()->format('d-M-y')
+                );
+                $startedDate->addChild(
+                    'StartedDateTo',
+                    $date->getDateTo()->format('d-M-y')
+                );
+            }
+        }
+
         $enrollments = $filters->addChild('Enrollments');
         if (!empty($query->getCreatedDate())) {
             $createdDate = $enrollments->addChild('CreatedDate');
@@ -1259,14 +1264,18 @@ class XMLGenerator {
                 'GetLearnerReport requires either a User Status or User Identifiers.'
             );
         }
-        $columns = $parameters->addChild('Columns');
+
+        
+        $columns = $report->addChild('Columns');
         foreach ($query->getColumns() as $column) {
             $columns->addChild('ColumnName', $column);
         }
-        $customFields = $parameters->addChild('CustomFields');
+        
+        $customFields = $report->addChild('CustomFields');
         foreach ($query->getCustomFields() as $field) {
             $customFields->addChild('FieldName', $field->getName());
         }
+
         return $xml->asXML();
     }
 
