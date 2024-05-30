@@ -20,7 +20,10 @@ use DateTimeInterface;
  * A Learner Report, also known as an Enrollment Report, enables course
  * managers to view the progress of Users who have been assigned to the
  * course. Please refer to the SmarterU documentation for further information:
- * https://support.smarteru.com/v1/docs/enrollment-report
+ * https://support.smarteru.com/v1/docs/enrollment-report.
+ *
+ * Note: SmarterU has begun calling this an Enrollment Report, but the API
+ * method and XML request/response still refer to it as a learner Report.
  */
 class LearnerReport {
     /**
