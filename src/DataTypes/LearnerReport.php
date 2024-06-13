@@ -184,7 +184,7 @@ class LearnerReport {
     /**
      * Any CustomFields specified by the SmarterU API.
      */
-    protected array $customFields;
+    protected array $customFields = [];
 
     /**
      * Get the system-generated identifier for the user's course enrollment.
