@@ -31,7 +31,7 @@ class LearnerReportTest extends TestCase {
         $givenName = 'Test';
         $learningModuleId = '2';
         $userId = '3';
-        $userEmail = 'test@test.com';
+        $learnerEmail = 'test@test.com';
         $alternateEmail = 'test1@test.com';
         $employeeId = '4';
         $division = 'My Division';
@@ -81,7 +81,7 @@ class LearnerReportTest extends TestCase {
         self::assertEquals($givenName, $report->getGivenName());
         self::assertEquals($learningModuleId, $report->getLearningModuleId());
         self::assertEquals($userId, $report->getUserId());
-        self::assertNull($report->getUserEmail());
+        self::assertNull($report->getLearnerEmail());
         self::assertNull($report->getAlternateEmail());
         self::assertNull($report->getEmployeeId());
         self::assertNull($report->getDivision());
@@ -112,7 +112,7 @@ class LearnerReportTest extends TestCase {
         self::assertContains($field2, $report->getCustomFields());
 
         $report
-            ->setUserEmail($userEmail)
+            ->setLearnerEmail($learnerEmail)
             ->setAlternateEmail($alternateEmail)
             ->setEmployeeId($employeeId)
             ->setDivision($division)
@@ -136,7 +136,7 @@ class LearnerReportTest extends TestCase {
             ->setVariantEndDate($variantEndDate)
             ->setRoleId($roleId);
 
-        self::assertEquals($userEmail, $report->getUserEmail());
+        self::assertEquals($learnerEmail, $report->getLearnerEmail());
         self::assertEquals($alternateEmail, $report->getAlternateEmail());
         self::assertEquals($employeeId, $report->getEmployeeId());
         self::assertEquals($division, $report->getDivision());

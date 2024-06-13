@@ -1122,8 +1122,8 @@ class Client {
             if (isset($report->Title)) {
                 $currentReport->setTitle((string) $report->Title);
             }
-            if (isset($report->UserEmail)) {
-                $currentReport->setUserEmail((string) $report->UserEmail);
+            if (isset($report->LearnerEmail)) {
+                $currentReport->setLearnerEmail((string) $report->LearnerEmail);
             }
             if (isset($report->VariantEndDate)) {
                 $currentReport->setVariantEndDate(

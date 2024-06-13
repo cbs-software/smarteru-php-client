@@ -59,7 +59,7 @@ class LearnerReport {
     /**
      * The User's email address.
      */
-    protected ?string $userEmail = null;
+    protected ?string $learnerEmail = null;
 
     /**
      * The User's alternate email address.
@@ -311,8 +311,8 @@ class LearnerReport {
      *
      * @return ?string The User's email address.
      */
-    public function getUserEmail(): ?string {
-        return $this->userEmail;
+    public function getLearnerEmail(): ?string {
+        return $this->learnerEmail;
     }
 
     /**
@@ -321,8 +321,8 @@ class LearnerReport {
      * @param string $userEmail The User's email address.
      * @return self
      */
-    public function setUserEmail(string $userEmail): self {
-        $this->userEmail = $userEmail;
+    public function setLearnerEmail(string $learnerEmail): self {
+        $this->learnerEmail = $learnerEmail;
         return $this;
     }
 
