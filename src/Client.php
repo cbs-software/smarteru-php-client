@@ -1039,8 +1039,8 @@ class Client {
                 ->setGivenName((string) $report->FirstName)
                 ->setLearningModuleId((string) $report->LearningModuleID)
                 ->setUserId((string) $report->UserID)
-                ->setCreatedDate(new DateTime((string) $report->CreatedDate))
-                ->setModifiedDate(new DateTime((string)$report->ModifiedDate));
+                ->setCreatedDate($this->setDateToBlankOrDateTimeObject((string)$report->CreatedDate))
+                ->setModifiedDate($this->setDateToBlankOrDateTimeObject((string)$report->ModifiedDate));
 
             // Other values may or may not be returned, depending on the input.
             if (isset($report->AlternateEmail)) {
@@ -1050,7 +1050,7 @@ class Client {
             }
             if (isset($report->CompletedDate)) {
                 $currentReport->setCompletedDate(
-                    new DateTime((string) $report->CompletedDate)
+                    $this->setDateToBlankOrDateTimeObject((string) $report->CompletedDate)
                 );
             }
             if (isset($report->CourseDuration)) {
@@ -1068,7 +1068,7 @@ class Client {
             }
             if (isset($report->DueDate)) {
                 $currentReport->setDueDate(
-                    new DateTime((string) $report->DueDate)
+                    $this->setDateToBlankOrDateTimeObject((string) $report->DueDate)
                 );
             }
             if (isset($report->EmployeeID)) {
@@ -1078,7 +1078,7 @@ class Client {
             }
             if (isset($report->EnrolledDate)) {
                 $currentReport->setEnrolledDate(
-                    new DateTime((string) $report->EnrolledDate)
+                    $this->setDateToBlankOrDateTimeObject((string) $report->EnrolledDate)
                 );
             }
             if (isset($report->Grade)) {
@@ -1097,7 +1097,7 @@ class Client {
             }
             if (isset($report->LastAccessedDate)) {
                 $currentReport->setLastAccessedDate(
-                    new DateTime((string) $report->LastAccessedDate)
+                    $this->setDateToBlankOrDateTimeObject((string) $report->LastAccessedDate)
                 );
             }
             if (isset($report->Points)) {
@@ -1111,7 +1111,7 @@ class Client {
             }
             if (isset($report->StartedDate)) {
                 $currentReport->setStartedDate(
-                    new DateTime((string) $report->StartedDate)
+                    $this->setDateToBlankOrDateTimeObject((string) $report->StartedDate)
                 );
             }
             if (isset($report->SubscriptionName)) {
@@ -1127,7 +1127,7 @@ class Client {
             }
             if (isset($report->VariantEndDate)) {
                 $currentReport->setVariantEndDate(
-                    new DateTime((string) $report->VariantEndDate)
+                    $this->setDateToBlankOrDateTimeObject((string) $report->VariantEndDate)
                 );
             }
             if (isset($report->VariantName)) {
@@ -1135,13 +1135,24 @@ class Client {
             }
             if (isset($report->VariantStartDate)) {
                 $currentReport->setVariantStartDate(
-                    new DateTime((string) $report->VariantStartDate)
+                    $this->setDateToBlankOrDateTimeObject((string) $report->VariantStartDate)
                 );
             }
             $learnerReports[] = $currentReport;
         }
 
         return $learnerReports;
+    }
+    
+    /**
+     * Sets the provided date to either a blank string or a DateTime object.
+     */
+    private function setDateToBlankOrDateTimeObject(string $dateString): ?DateTime {
+        if ($dateString === null || $dateString === '') {
+            return null;
+        } else {
+            return new DateTime((string) $dateString);
+        }
     }
 
     /**
