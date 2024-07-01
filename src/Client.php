@@ -1145,7 +1145,7 @@ class Client {
     }
     
     /**
-     * Sets the provided date to either a blank string or a DateTime object.
+     * Sets the provided date to either null or a DateTime object.
      */
     private function setDateToNullOrDateTimeObject(string $dateString): ?DateTime {
         if ($dateString === null || $dateString === '') {
