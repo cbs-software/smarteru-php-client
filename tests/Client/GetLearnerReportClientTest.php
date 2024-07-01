@@ -294,7 +294,7 @@ class GetLearnerReportClientTest extends TestCase {
             $modifiedDate,
             $report->getModifiedDate()->format('d-M-y')
         );
-        self::assertNull($report->getUserEmail());
+        self::assertNull($report->getLearnerEmail());
         self::assertNull($report->getAlternateEmail());
         self::assertNull($report->getEmployeeId());
         self::assertNull($report->getDivision());
@@ -317,6 +317,89 @@ class GetLearnerReportClientTest extends TestCase {
         self::assertNull($report->getVariantStartDate());
         self::assertNull($report->getVariantEndDate());
         self::assertNull($report->getRoleId());
+    }
+
+    /**
+     * Test that Client::getLearnerReport() produces the correct output when
+     * the query does not contain any optional information and the SmarterU API
+     * returns a single LearnerReport.
+     */
+    public function testGetLearnerReportProducesCorrectOutputWithBlankDates() {
+        $accountApi = 'account';
+        $userApi = 'user';
+        $client = new Client($accountApi, $userApi);
+
+        $query = (new GetLearnerReportQuery())
+            ->setEnrollmentId('1')
+            ->setGroupStatus('Active')
+            ->setUserStatus('Active');
+
+        $id = '1';
+        $courseName = 'My Course';
+        $lastName = 'User';
+        $firstName = 'Test';
+        $learningModuleId = '2';
+        $userId = '3';
+        $createdDate = '';
+
+        $xmlString = <<<XML
+        <SmarterU>
+            <Result>Success</Result>
+            <Info>
+                <LearnerReport rows="0">
+                    <Learner>
+                        <ID>$id</ID>
+                        <CourseName>$courseName</CourseName>
+                        <LastName>$lastName</LastName>
+                        <FirstName>$firstName</FirstName>
+                        <LearningModuleID>$learningModuleId</LearningModuleID>
+                        <UserID>$userId</UserID>
+                        <CreatedDate>$createdDate</CreatedDate>
+                    </Learner>
+                </LearnerReport>
+            </Info>
+            <Errors>
+            </Errors>
+        </SmarterU>
+        XML;
+
+        // Set up the container to capture the request.
+        $response = new Response(200, [], $xmlString);
+        $container = [];
+        $history = Middleware::history($container);
+        $mock = (new MockHandler([$response]));
+        $handlerStack = HandlerStack::create($mock);
+        $handlerStack->push($history);
+        $httpClient = new HttpClient(['handler' => $handlerStack]);
+        $client->setHttpClient($httpClient);
+
+        // Make the request.
+        $result = $client->getLearnerReport($query);
+
+        // Make sure there is only 1 request, then translate it to XML.
+        self::assertCount(1, $container);
+        $request = $container[0]['request'];
+        $decodedBody = urldecode((string) $request->getBody());
+        $expectedBody = 'Package=' . $client->getXMLGenerator()->getLearnerReport(
+            $accountApi,
+            $userApi,
+            $query
+        );
+        self::assertEquals($decodedBody, $expectedBody);
+
+        // Make sure the expected value is returned.
+        self::assertIsArray($result);
+        self::assertCount(1, $result);
+        $report = $result[0];
+        self::assertInstanceOf(LearnerReport::class, $report);
+        self::assertEquals($id, $report->getId());
+        self::assertEquals($courseName, $report->getCourseName());
+        self::assertEquals($lastName, $report->getSurname());
+        self::assertEquals($firstName, $report->getGivenName());
+        self::assertEquals($learningModuleId, $report->getLearningModuleId());
+        self::assertEquals($userId, $report->getUserId());
+        self::assertNull($report->getCreatedDate());
+        self::assertNull($report->getModifiedDate());
     }
 
     /**
@@ -468,7 +551,7 @@ class GetLearnerReportClientTest extends TestCase {
                         <StartedDate>$startedDate</StartedDate>
                         <SubscriptionName>$subscriptionName</SubscriptionName>
                         <Title>$title</Title>
-                        <UserEmail>$userEmail</UserEmail>
+                        <LearnerEmail>$userEmail</LearnerEmail>
                         <VariantEndDate>$variantEndDate</VariantEndDate>
                         <VariantName>$variantName</VariantName>
                         <VariantStartDate>$variantStartDate</VariantStartDate>
@@ -523,7 +606,8 @@ class GetLearnerReportClientTest extends TestCase {
             $modifiedDate,
             $report->getModifiedDate()->format('d-M-y')
         );
-        self::assertEquals($userEmail, $report->getUserEmail());
+
+        self::assertEquals($userEmail, $report->getLearnerEmail());
         self::assertEquals($alternateEmail, $report->getAlternateEmail());
         self::assertEquals($employeeId, $report->getEmployeeId());
         self::assertEquals($division, $report->getDivision());
@@ -677,7 +761,7 @@ class GetLearnerReportClientTest extends TestCase {
                 $modifiedDate,
                 $report->getModifiedDate()->format('d-M-y')
             );
-            self::assertNull($report->getUserEmail());
+            self::assertNull($report->getLearnerEmail());
             self::assertNull($report->getAlternateEmail());
             self::assertNull($report->getEmployeeId());
             self::assertNull($report->getDivision());
@@ -923,7 +1007,7 @@ class GetLearnerReportClientTest extends TestCase {
                         <StartedDate>$startedDate</StartedDate>
                         <SubscriptionName>$subscriptionName</SubscriptionName>
                         <Title>$title</Title>
-                        <UserEmail>$userEmail</UserEmail>
+                        <LearnerEmail>$userEmail</LearnerEmail>
                         <VariantEndDate>$variantEndDate</VariantEndDate>
                         <VariantName>$variantName</VariantName>
                         <VariantStartDate>$variantStartDate</VariantStartDate>
@@ -956,7 +1040,7 @@ class GetLearnerReportClientTest extends TestCase {
                         <StartedDate>$startedDate2</StartedDate>
                         <SubscriptionName>$subscriptionName2</SubscriptionName>
                         <Title>$title2</Title>
-                        <UserEmail>$userEmail2</UserEmail>
+                        <LearnerEmail>$userEmail2</LearnerEmail>
                         <VariantEndDate>$variantEndDate2</VariantEndDate>
                         <VariantName>$variantName2</VariantName>
                         <VariantStartDate>$variantStartDate2</VariantStartDate>
@@ -989,7 +1073,7 @@ class GetLearnerReportClientTest extends TestCase {
                         <StartedDate>$startedDate3</StartedDate>
                         <SubscriptionName>$subscriptionName3</SubscriptionName>
                         <Title>$title3</Title>
-                        <UserEmail>$userEmail3</UserEmail>
+                        <LearnerEmail>$userEmail3</LearnerEmail>
                         <VariantEndDate>$variantEndDate3</VariantEndDate>
                         <VariantName>$variantName3</VariantName>
                         <VariantStartDate>$variantStartDate3</VariantStartDate>
@@ -1046,7 +1130,7 @@ class GetLearnerReportClientTest extends TestCase {
             $modifiedDate,
             $report1->getModifiedDate()->format('d-M-y')
         );
-        self::assertEquals($userEmail, $report1->getUserEmail());
+        self::assertEquals($userEmail, $report1->getLearnerEmail());
         self::assertEquals($alternateEmail, $report1->getAlternateEmail());
         self::assertEquals($employeeId, $report1->getEmployeeId());
         self::assertEquals($division, $report1->getDivision());
@@ -1102,7 +1186,7 @@ class GetLearnerReportClientTest extends TestCase {
             $modifiedDate2,
             $report2->getModifiedDate()->format('d-M-y')
         );
-        self::assertEquals($userEmail2, $report2->getUserEmail());
+        self::assertEquals($userEmail2, $report2->getLearnerEmail());
         self::assertEquals($alternateEmail2, $report2->getAlternateEmail());
         self::assertEquals($employeeId2, $report2->getEmployeeId());
         self::assertEquals($division2, $report2->getDivision());
@@ -1158,7 +1242,7 @@ class GetLearnerReportClientTest extends TestCase {
             $modifiedDate3,
             $report3->getModifiedDate()->format('d-M-y')
         );
-        self::assertEquals($userEmail3, $report3->getUserEmail());
+        self::assertEquals($userEmail3, $report3->getLearnerEmail());
         self::assertEquals($alternateEmail3, $report3->getAlternateEmail());
         self::assertEquals($employeeId3, $report3->getEmployeeId());
         self::assertEquals($division3, $report3->getDivision());

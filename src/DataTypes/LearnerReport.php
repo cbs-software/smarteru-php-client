@@ -104,12 +104,12 @@ class LearnerReport {
     /**
      * The UTC date the enrollment was created.
      */
-    protected DateTimeInterface $createdDate;
+    protected ?DateTimeInterface $createdDate = null;
 
     /**
      * The UTC date the enrollment was last updated.
      */
-    protected DateTimeInterface $modifiedDate;
+    protected ?DateTimeInterface $modifiedDate = null;
 
     /**
      * The UTC date the User was enrolled in the Course.
@@ -489,9 +489,9 @@ class LearnerReport {
     /**
      * Get the UTC date the enrollment was created.
      *
-     * @return DateTimeInterface The UTC date the enrollment was created.
+     * @return ?DateTimeInterface The UTC date the enrollment was created.
      */
-    public function getCreatedDate(): DateTimeInterface {
+    public function getCreatedDate(): ?DateTimeInterface {
         return $this->createdDate;
     }
 
@@ -502,7 +502,7 @@ class LearnerReport {
      *      created.
      * @return self
      */
-    public function setCreatedDate(DateTimeInterface $createdDate): self {
+    public function setCreatedDate(?DateTimeInterface $createdDate): self {
         $this->createdDate = $createdDate;
         return $this;
     }
@@ -510,9 +510,9 @@ class LearnerReport {
     /**
      * Get the UTC date the enrollment was last updated.
      *
-     * @return DateTimeInterface The UTC date the enrollment was last updated.
+     * @return ?DateTimeInterface The UTC date the enrollment was last updated.
      */
-    public function getModifiedDate(): DateTimeInterface {
+    public function getModifiedDate(): ?DateTimeInterface {
         return $this->modifiedDate;
     }
 
@@ -523,7 +523,7 @@ class LearnerReport {
      *      last updated.
      * @return self
      */
-    public function setModifiedDate(DateTimeInterface $modifiedDate): self {
+    public function setModifiedDate(?DateTimeInterface $modifiedDate): self {
         $this->modifiedDate = $modifiedDate;
         return $this;
     }
@@ -590,7 +590,7 @@ class LearnerReport {
      * @param DateTimeInterface $enrolledDate The UTC date the User was enrolled.
      * @return self
      */
-    public function setEnrolledDate(DateTimeInterface $enrolledDate): self {
+    public function setEnrolledDate(?DateTimeInterface $enrolledDate): self {
         $this->enrolledDate = $enrolledDate;
         return $this;
     }
@@ -610,7 +610,7 @@ class LearnerReport {
      * @param DateTimeInterface $dueDate The UTC date the Course is due.
      * @return self
      */
-    public function setDueDate(DateTimeInterface $dueDate): self {
+    public function setDueDate(?DateTimeInterface $dueDate): self {
         $this->dueDate = $dueDate;
         return $this;
     }
@@ -630,7 +630,7 @@ class LearnerReport {
      * @param DateTimeInterface $startedDate The UTC date the User started the Course.
      * @return self
      */
-    public function setStartedDate(DateTimeInterface $startedDate): self {
+    public function setStartedDate(?DateTimeInterface $startedDate): self {
         $this->startedDate = $startedDate;
         return $this;
     }
@@ -651,7 +651,7 @@ class LearnerReport {
      *      accessed the Course.
      * @return self
      */
-    public function setLastAccessedDate(DateTimeInterface $lastAccessedDate): self {
+    public function setLastAccessedDate(?DateTimeInterface $lastAccessedDate): self {
         $this->lastAccessedDate = $lastAccessedDate;
         return $this;
     }
@@ -672,7 +672,7 @@ class LearnerReport {
      *      the Course.
      * @return self
      */
-    public function setCompletedDate(DateTimeInterface $completedDate): self {
+    public function setCompletedDate(?DateTimeInterface $completedDate): self {
         $this->completedDate = $completedDate;
         return $this;
     }
@@ -813,7 +813,7 @@ class LearnerReport {
      *      variant started.
      * @return self
      */
-    public function setVariantStartDate(DateTimeInterface $variantStartDate): self {
+    public function setVariantStartDate(?DateTimeInterface $variantStartDate): self {
         $this->variantStartDate = $variantStartDate;
         return $this;
     }
@@ -834,7 +834,7 @@ class LearnerReport {
      *      variant ends.
      * @return self
      */
-    public function setVariantEndDate(DateTimeInterface $variantEndDate): self {
+    public function setVariantEndDate(?DateTimeInterface $variantEndDate): self {
         $this->variantEndDate = $variantEndDate;
         return $this;
     }
