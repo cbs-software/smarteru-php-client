@@ -1039,8 +1039,8 @@ class Client {
                 ->setGivenName((string) $report->FirstName)
                 ->setLearningModuleId((string) $report->LearningModuleID)
                 ->setUserId((string) $report->UserID)
-                ->setCreatedDate($this->setDateToBlankOrDateTimeObject((string)$report->CreatedDate))
-                ->setModifiedDate($this->setDateToBlankOrDateTimeObject((string)$report->ModifiedDate));
+                ->setCreatedDate($this->setDateToNullOrDateTimeObject((string)$report->CreatedDate))
+                ->setModifiedDate($this->setDateToNullOrDateTimeObject((string)$report->ModifiedDate));
 
             // Other values may or may not be returned, depending on the input.
             if (isset($report->AlternateEmail)) {
@@ -1050,7 +1050,7 @@ class Client {
             }
             if (isset($report->CompletedDate)) {
                 $currentReport->setCompletedDate(
-                    $this->setDateToBlankOrDateTimeObject((string) $report->CompletedDate)
+                    $this->setDateToNullOrDateTimeObject((string) $report->CompletedDate)
                 );
             }
             if (isset($report->CourseDuration)) {
@@ -1068,7 +1068,7 @@ class Client {
             }
             if (isset($report->DueDate)) {
                 $currentReport->setDueDate(
-                    $this->setDateToBlankOrDateTimeObject((string) $report->DueDate)
+                    $this->setDateToNullOrDateTimeObject((string) $report->DueDate)
                 );
             }
             if (isset($report->EmployeeID)) {
@@ -1078,7 +1078,7 @@ class Client {
             }
             if (isset($report->EnrolledDate)) {
                 $currentReport->setEnrolledDate(
-                    $this->setDateToBlankOrDateTimeObject((string) $report->EnrolledDate)
+                    $this->setDateToNullOrDateTimeObject((string) $report->EnrolledDate)
                 );
             }
             if (isset($report->Grade)) {
@@ -1097,7 +1097,7 @@ class Client {
             }
             if (isset($report->LastAccessedDate)) {
                 $currentReport->setLastAccessedDate(
-                    $this->setDateToBlankOrDateTimeObject((string) $report->LastAccessedDate)
+                    $this->setDateToNullOrDateTimeObject((string) $report->LastAccessedDate)
                 );
             }
             if (isset($report->Points)) {
@@ -1111,7 +1111,7 @@ class Client {
             }
             if (isset($report->StartedDate)) {
                 $currentReport->setStartedDate(
-                    $this->setDateToBlankOrDateTimeObject((string) $report->StartedDate)
+                    $this->setDateToNullOrDateTimeObject((string) $report->StartedDate)
                 );
             }
             if (isset($report->SubscriptionName)) {
@@ -1127,7 +1127,7 @@ class Client {
             }
             if (isset($report->VariantEndDate)) {
                 $currentReport->setVariantEndDate(
-                    $this->setDateToBlankOrDateTimeObject((string) $report->VariantEndDate)
+                    $this->setDateToNullOrDateTimeObject((string) $report->VariantEndDate)
                 );
             }
             if (isset($report->VariantName)) {
@@ -1135,7 +1135,7 @@ class Client {
             }
             if (isset($report->VariantStartDate)) {
                 $currentReport->setVariantStartDate(
-                    $this->setDateToBlankOrDateTimeObject((string) $report->VariantStartDate)
+                    $this->setDateToNullOrDateTimeObject((string) $report->VariantStartDate)
                 );
             }
             $learnerReports[] = $currentReport;
@@ -1147,7 +1147,7 @@ class Client {
     /**
      * Sets the provided date to either a blank string or a DateTime object.
      */
-    private function setDateToBlankOrDateTimeObject(string $dateString): ?DateTime {
+    private function setDateToNullOrDateTimeObject(string $dateString): ?DateTime {
         if ($dateString === null || $dateString === '') {
             return null;
         } else {
