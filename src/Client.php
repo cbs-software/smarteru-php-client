@@ -26,6 +26,8 @@ use CBS\SmarterU\Queries\GetUserQuery;
 use CBS\SmarterU\Queries\ListGroupsQuery;
 use CBS\SmarterU\Queries\ListUsersQuery;
 use DateTime;
+use DateTimeInterface;
+use DateTimeImmutable;
 use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Exception\ClientException;
 use Psr\Log\LoggerAwareTrait;
@@ -1039,8 +1041,8 @@ class Client {
                 ->setGivenName((string) $report->FirstName)
                 ->setLearningModuleId((string) $report->LearningModuleID)
                 ->setUserId((string) $report->UserID)
-                ->setCreatedDate($this->setDateToNullOrDateTimeObject((string)$report->CreatedDate))
-                ->setModifiedDate($this->setDateToNullOrDateTimeObject((string)$report->ModifiedDate));
+                ->setCreatedDate($this->toDateTimeInterface((string)$report->CreatedDate))
+                ->setModifiedDate($this->toDateTimeInterface((string)$report->ModifiedDate));
 
             // Other values may or may not be returned, depending on the input.
             if (isset($report->AlternateEmail)) {
@@ -1050,7 +1052,7 @@ class Client {
             }
             if (isset($report->CompletedDate)) {
                 $currentReport->setCompletedDate(
-                    $this->setDateToNullOrDateTimeObject((string) $report->CompletedDate)
+                    $this->toDateTimeInterface((string) $report->CompletedDate)
                 );
             }
             if (isset($report->CourseDuration)) {
@@ -1068,7 +1070,7 @@ class Client {
             }
             if (isset($report->DueDate)) {
                 $currentReport->setDueDate(
-                    $this->setDateToNullOrDateTimeObject((string) $report->DueDate)
+                    $this->toDateTimeInterface((string) $report->DueDate)
                 );
             }
             if (isset($report->EmployeeID)) {
@@ -1078,7 +1080,7 @@ class Client {
             }
             if (isset($report->EnrolledDate)) {
                 $currentReport->setEnrolledDate(
-                    $this->setDateToNullOrDateTimeObject((string) $report->EnrolledDate)
+                    $this->toDateTimeInterface((string) $report->EnrolledDate)
                 );
             }
             if (isset($report->Grade)) {
@@ -1097,7 +1099,7 @@ class Client {
             }
             if (isset($report->LastAccessedDate)) {
                 $currentReport->setLastAccessedDate(
-                    $this->setDateToNullOrDateTimeObject((string) $report->LastAccessedDate)
+                    $this->toDateTimeInterface((string) $report->LastAccessedDate)
                 );
             }
             if (isset($report->Points)) {
@@ -1111,7 +1113,7 @@ class Client {
             }
             if (isset($report->StartedDate)) {
                 $currentReport->setStartedDate(
-                    $this->setDateToNullOrDateTimeObject((string) $report->StartedDate)
+                    $this->toDateTimeInterface((string) $report->StartedDate)
                 );
             }
             if (isset($report->SubscriptionName)) {
@@ -1127,7 +1129,7 @@ class Client {
             }
             if (isset($report->VariantEndDate)) {
                 $currentReport->setVariantEndDate(
-                    $this->setDateToNullOrDateTimeObject((string) $report->VariantEndDate)
+                    $this->toDateTimeInterface((string) $report->VariantEndDate)
                 );
             }
             if (isset($report->VariantName)) {
@@ -1135,24 +1137,13 @@ class Client {
             }
             if (isset($report->VariantStartDate)) {
                 $currentReport->setVariantStartDate(
-                    $this->setDateToNullOrDateTimeObject((string) $report->VariantStartDate)
+                    $this->toDateTimeInterface((string) $report->VariantStartDate)
                 );
             }
             $learnerReports[] = $currentReport;
         }
 
         return $learnerReports;
-    }
-    
-    /**
-     * Sets the provided date to either null or a DateTime object.
-     */
-    private function setDateToNullOrDateTimeObject(string $dateString): ?DateTime {
-        if ($dateString === null || $dateString === '') {
-            return null;
-        } else {
-            return new DateTime((string) $dateString);
-        }
     }
 
     /**
@@ -1516,6 +1507,17 @@ class Client {
             );
         }
         return $errorCodes;
+    }
+
+    /**
+     * Sets the provided date to either null or a DateTimeInterface.
+     */
+    private function toDateTimeInterface(string $dateString): DateTimeInterface|null {
+        if ($dateString === null || $dateString === '') {
+            return null;
+        } else {
+            return new DateTimeImmutable((string) $dateString);
+        }
     }
 
     /**

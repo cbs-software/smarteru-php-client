@@ -341,7 +341,6 @@ class GetLearnerReportClientTest extends TestCase {
         $learningModuleId = '2';
         $userId = '3';
         $createdDate = '';
-        $modifiedDate = null;
 
         $xmlString = <<<XML
         <SmarterU>
@@ -356,7 +355,6 @@ class GetLearnerReportClientTest extends TestCase {
                         <LearningModuleID>$learningModuleId</LearningModuleID>
                         <UserID>$userId</UserID>
                         <CreatedDate>$createdDate</CreatedDate>
-                        <ModifiedDate>$modifiedDate</ModifiedDate>
                     </Learner>
                 </LearnerReport>
             </Info>

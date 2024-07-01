@@ -104,12 +104,12 @@ class LearnerReport {
     /**
      * The UTC date the enrollment was created.
      */
-    protected ?DateTimeInterface $createdDate;
+    protected ?DateTimeInterface $createdDate = null;
 
     /**
      * The UTC date the enrollment was last updated.
      */
-    protected ?DateTimeInterface $modifiedDate;
+    protected ?DateTimeInterface $modifiedDate = null;
 
     /**
      * The UTC date the User was enrolled in the Course.
