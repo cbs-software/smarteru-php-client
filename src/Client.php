@@ -1513,7 +1513,7 @@ class Client {
      * Sets the provided date to either null or a DateTimeInterface.
      */
     private function toDateTimeInterface(string $dateString): DateTimeInterface|null {
-        if ($dateString === null || $dateString === '') {
+        if ($dateString === '') {
             return null;
         } else {
             return new DateTimeImmutable((string) $dateString);
