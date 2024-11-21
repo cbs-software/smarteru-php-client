@@ -550,7 +550,7 @@ class GetLearnerReportXMLTest extends TestCase {
      * Test that XMLGenerator::getLearnerReport() produces the expected output
      * when the group name contains an ampersand.
      */
-    public function testGetLearnerReportProducesExpectedOutputWithAllInfo() {
+    public function testGetLearnerReportProducesExpectedOutputWhenGroupNameContainsAmpersand() {
         $enrollmentId = '1';
         $groupNames = ['PHP Unit & Sons'];
         $tag1 = (new Tag())
