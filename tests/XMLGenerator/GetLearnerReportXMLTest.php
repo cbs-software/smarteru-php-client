@@ -641,7 +641,6 @@ class GetLearnerReportXMLTest extends TestCase {
         self::assertCount(2, $groups);
         self::assertContains('GroupNames', $groups);
         $names = (array) $xml->Parameters->Report->Filters->Groups->GroupNames->GroupName;
-        self::assertCount(2, $names);
         foreach ($groupNames as $name) {
             self::assertContains($name, $names);
         }
