@@ -292,7 +292,7 @@ class XMLGenerator {
             $filters->addChild('HomeGroup', $query->getHomeGroup());
         }
         if (!empty($query->getGroupName())) {
-            $filters->addChild('GroupName', $query->getGroupName());
+            $filters->addChild('GroupName', $this->escapeValue($query->getGroupName()));
         }
         if (!empty($query->getUserStatus())) {
             $filters->addChild('UserStatus', $query->getUserStatus());
@@ -1071,7 +1071,7 @@ class XMLGenerator {
         } else if (!empty($query->getGroupNames())) {
             $groupNames = $groups->addChild('GroupNames');
             foreach ($query->getGroupNames() as $name) {
-                $groupNames->addChild('GroupName', $name);
+                $groupNames->addChild('GroupName', $this->escapeValue($name));
             }
         } else {
             throw new MissingValueException(

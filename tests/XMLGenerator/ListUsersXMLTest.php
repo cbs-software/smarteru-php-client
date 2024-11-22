@@ -289,4 +289,67 @@ class ListUsersXMLTest extends TestCase {
             $xml->Parameters->User->Filters->UserStatus
         );
     }
+
+    /**
+     * Tests that XML generation produces the expected result when the group
+     * name contains an ampersand.
+     */
+    public function testEmittedXMLIsAsExpectedWenGroupNameContainsAnAmpersand() {
+        $xmlGenerator = new XMLGenerator();
+        $accountApi = 'account';
+        $userApi = 'user';
+        $page = 1;
+        $pageSize = 50;
+        $sortField = 'NAME';
+        $sortOrder = 'ASC';
+        $email = (new MatchTag())
+            ->setMatchType('EXACT')
+            ->setValue('phpunit@test.com');
+        $employeeId = (new MatchTag())
+            ->setMatchType('CONTAINS')
+            ->setValue('2');
+        $name = (new MatchTag())
+            ->setMatchType('EXACT')
+            ->setValue('Test User');
+        $homeGroup = 'My Home Group';
+        $groupName = 'PHP Unit & Sons';
+        $userStatus = 'Active';
+        $createdDateFrom = new DateTime('2022-07-25');
+        $createdDateTo = new DateTime();
+        $modifiedDateFrom = new DateTime('2022-07-20');
+        $modifiedDateTo = new DateTime('2022-07-24');
+        $createdDate = (new DateRangeTag())
+            ->setDateFrom($createdDateFrom)
+            ->setDateTo($createdDateTo);
+        $modifiedDate = (new DateRangeTag())
+            ->setDateFrom($modifiedDateFrom)
+            ->setDateTo($modifiedDateTo);
+        $team1 = 'team1';
+        $team2 = 'team2';
+        $teams = [$team1, $team2];
+
+        $query = (new ListUsersQuery())
+            ->setPage($page)
+            ->setPageSize($pageSize)
+            ->setSortField($sortField)
+            ->setSortOrder($sortOrder)
+            ->setEmail($email)
+            ->setEmployeeId($employeeId)
+            ->setName($name)
+            ->setHomeGroup($homeGroup)
+            ->setGroupName($groupName)
+            ->setUserStatus($userStatus)
+            ->setCreatedDate($createdDate)
+            ->setModifiedDate($modifiedDate)
+            ->setTeams($teams);
+
+        $xml = $xmlGenerator->listUsers($accountApi, $userApi, $query);
+        self::assertIsString($xml);
+        $xml = simplexml_load_string($xml);
+        
+        self::assertEquals(
+            $groupName,
+            $xml->Parameters->User->Filters->GroupName
+        );
+    }
 }

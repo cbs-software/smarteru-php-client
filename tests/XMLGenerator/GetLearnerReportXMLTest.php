@@ -545,4 +545,104 @@ class GetLearnerReportXMLTest extends TestCase {
             self::assertContains($field->getName(), $fields);
         }
     }
+
+    /**
+     * Test that XMLGenerator::getLearnerReport() produces the expected output
+     * when the group name contains an ampersand.
+     */
+    public function testGetLearnerReportProducesExpectedOutputWhenGroupNameContainsAmpersand() {
+        $enrollmentId = '1';
+        $groupNames = ['PHP Unit & Sons'];
+        $tag1 = (new Tag())
+            ->setTagName('My Tag')
+            ->setTagValues('Tag 1\'s Values');
+        $tag2 = (new Tag())
+            ->setTagId('3')
+            ->setTagValues('Tag 2\'s Values');
+        $groupTags = [$tag1, $tag2];
+        $learningModuleStatus = 'Active';
+        $learningModuleNames = ['Course 1', 'Course 2'];
+        $enrollmentStatuses = ['Enrolled', 'In Progress', 'Completed'];
+        $completedDate1 = (new DateRangeTag())
+            ->setDateFrom(new DateTime('2022-07-01'))
+            ->setDateTo(new DateTime('2022-07-31'));
+        $completedDate2 = (new DateRangeTag())
+            ->setDateFrom(new DateTime('2022-09-01'))
+            ->setDateTo(new DateTime('2022-09-30'));
+        $completedDates = [$completedDate1, $completedDate2];
+        $dueDate1 = (new DateRangeTag())
+            ->setDateFrom(new DateTime('2022-08-01'))
+            ->setDateTo(new DateTime('2022-09-30'));
+        $dueDates = [$dueDate1];
+        $enrolledDate1 = (new DateRangeTag())
+            ->setDateFrom(new DateTime('2022-01-01'))
+            ->setDateTo(new DateTime('2022-06-30'));
+        $enrolledDates = [$enrolledDate1];
+        $gracePeriodDate1 = (new DateRangeTag())
+            ->setDateFrom(new DateTime('2022-10-01'))
+            ->setDateTo(new DateTime('2022-10-07'));
+        $gracePeriodDates = [$gracePeriodDate1];
+        $lastAccessedDate1 = (new DateRangeTag())
+            ->setDateFrom(new DateTime('2022-09-14'))
+            ->setDateTo(new DateTime('2022-09-21'));
+        $lastAccessedDates = [$lastAccessedDate1];
+        $startedDate1 = (new DateRangeTag())
+            ->setDateFrom(new DateTime('2022-09-01'))
+            ->setDateTo(new DateTime('2022-09-22'));
+        $startedDates = [$startedDate1];
+        $createdDate = (new DateRangeTag())
+            ->setDateFrom(new DateTime('2022-07-01'))
+            ->setDateTo(new DateTime('2022-07-02'));
+        $modifiedDate = (new DateRangeTag())
+            ->setDateFrom(new DateTime('2022-09-22'))
+            ->setDateTo(new DateTime());
+        $userEmailAddresses = ['test@test.com', 'test2@test.com'];
+        $userEmployeeIds = ['4', '5', '6'];
+        $columns = ['ALTERNATE_EMAIL', 'COMPLETED_DATE'];
+        $customField1 = (new CustomField())
+            ->setName('My Custom Field');
+        $customField2 = (new CustomField())
+            ->setName('Other Custom Field');
+        $customFields = [$customField1, $customField2];
+
+        $query = (new GetLearnerReportQuery())
+            ->setEnrollmentId($enrollmentId)
+            ->setGroupNames($groupNames)
+            ->setGroupTags($groupTags)
+            ->setLearningModuleStatus($learningModuleStatus)
+            ->setLearningModuleNames($learningModuleNames)
+            ->setEnrollmentStatuses($enrollmentStatuses)
+            ->setCompletedDates($completedDates)
+            ->setDueDates($dueDates)
+            ->setEnrolledDates($enrolledDates)
+            ->setGracePeriodDates($gracePeriodDates)
+            ->setLastAccessedDates($lastAccessedDates)
+            ->setStartedDates($startedDates)
+            ->setCreatedDate($createdDate)
+            ->setModifiedDate($modifiedDate)
+            ->setUserEmailAddresses($userEmailAddresses)
+            ->setUserEmployeeIds($userEmployeeIds)
+            ->setColumns($columns)
+            ->setCustomFields($customFields);
+
+        $xmlGenerator = new XMLGenerator();
+        $accountApi = 'account';
+        $userApi = 'user';
+
+        $xml = $xmlGenerator->getLearnerReport($accountApi, $userApi, $query);
+        self::assertIsString($xml);
+
+        $xml = simplexml_load_string($xml);
+
+        $groups = [];
+        foreach ($xml->Parameters->Report->Filters->Groups->children() as $tag) {
+            $groups[] = $tag->getName();
+        }
+        self::assertCount(2, $groups);
+        self::assertContains('GroupNames', $groups);
+        $names = (array) $xml->Parameters->Report->Filters->Groups->GroupNames->GroupName;
+        foreach ($groupNames as $name) {
+            self::assertContains($name, $names);
+        }
+    }
 }
