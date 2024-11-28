@@ -1,11 +1,11 @@
-# PHP SmarterU LMS API CLient
+# PHP SmarterU LMS API Client
 
 An API Client for the [SmarterU LMS API](https://support.smarteru.com/docs/api).
 This project is not affiliated with Neovation.
 
 ## Requirements
 
-* PHP 7.4 or greater
+* PHP 8.0 or greater
 * PHP SimpleXML extension enabled
 
 ## Third-Party Dependencies
