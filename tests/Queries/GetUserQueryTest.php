@@ -22,7 +22,7 @@ class GetUserQueryTest extends TestCase {
     /**
      * Tests agreement between getters and setters.
      */
-    public function testAgreement() {
+    public function testAgreement(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $id = '12';

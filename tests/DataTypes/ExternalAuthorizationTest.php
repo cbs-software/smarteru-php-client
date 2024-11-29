@@ -21,7 +21,7 @@ class ExternalAuthorizationTest extends TestCase {
     /**
      * Test agreement between getters and setters.
      */
-    public function testAgreement() {
+    public function testAgreement(): void {
         $authKey = 'authKey';
         $requestKey = 'requestKey';
         $redirectPath = 'redirectPath';

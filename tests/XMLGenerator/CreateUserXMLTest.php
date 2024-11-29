@@ -25,7 +25,7 @@ class CreateUserXMLTest extends TestCase {
      * Tests that the XML generation process for a CreateUser request throws
      * an exception if the User being created does not have a home group.
      */
-    public function testCreateUserThrowsExceptionWhenNoHomeGroup() {
+    public function testCreateUserThrowsExceptionWhenNoHomeGroup(): void {
         $user = (new User())
             ->setEmail('example1@email.com')
             ->setGivenName('Test')
@@ -55,7 +55,7 @@ class CreateUserXMLTest extends TestCase {
      * an exception if the User being created does not have an email address
      * or an employee ID.
      */
-    public function testCreateUserThrowsExceptionWhenNoUserIdentifier() {
+    public function testCreateUserThrowsExceptionWhenNoUserIdentifier(): void {
         $xmlGenerator = new XMLGenerator();
         $accountApi = 'account';
         $userApi = 'user';
@@ -77,7 +77,7 @@ class CreateUserXMLTest extends TestCase {
      * optional attributes are left blank, and the user is identified by their
      * email address.
      */
-    public function testCreateUserProducesExpectedOutputWithoutRequiredInfoUsingEmail() {
+    public function testCreateUserProducesExpectedOutputWithoutRequiredInfoUsingEmail(): void {
         $user = (new User())
             ->setEmail('example@email.com')
             ->setGivenName('Test')
@@ -238,7 +238,7 @@ class CreateUserXMLTest extends TestCase {
      * optional attributes are left blank, and the user is identified by their
      * employee ID.
      */
-    public function testCreateUserProducesExpectedOutputWithoutRequiredInfoUsingEmployeeID() {
+    public function testCreateUserProducesExpectedOutputWithoutRequiredInfoUsingEmployeeID(): void {
         $user = (new User())
             ->setEmployeeId('12')
             ->setGivenName('Test')
@@ -402,7 +402,7 @@ class CreateUserXMLTest extends TestCase {
      *
      * @dataProvider validUserDataProvider
      */
-    public function testCreateUserProducesExpectedOutputWithAllInfo() {
+    public function testCreateUserProducesExpectedOutputWithAllInfo(): void {
         $timezone = Timezone::fromProvidedName('EST');
 
         $user = (new User())

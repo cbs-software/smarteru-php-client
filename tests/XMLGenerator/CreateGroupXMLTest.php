@@ -28,7 +28,7 @@ class CreateGroupXMLTest extends TestCase {
      * an exception if the Group being created has a Tag that does not have
      * an identifier.
      */
-    public function testCreateGroupThrowsExceptionWhenNoTagIdentifier() {
+    public function testCreateGroupThrowsExceptionWhenNoTagIdentifier(): void {
         $tag = (new Tag())
             ->setTagValues('This will throw an exception');
 
@@ -70,7 +70,7 @@ class CreateGroupXMLTest extends TestCase {
      * the expected output when all required information is present but all
      * optional attributes are left blank.
      */
-    public function testCreateGroupProducesExpectedOutputWithoutOptionalInfo() {
+    public function testCreateGroupProducesExpectedOutputWithoutOptionalInfo(): void {
         $module1 = (new LearningModule())
             ->setId('4')
             ->setAllowSelfEnroll(true)
@@ -210,7 +210,7 @@ class CreateGroupXMLTest extends TestCase {
      * Tests that the XML generation process for a CreateGroup request produces
      * the expected output when all required and optional information is present.
      */
-    public function testCreateGroupProducesExpectedOutputWithAllInfo() {
+    public function testCreateGroupProducesExpectedOutputWithAllInfo(): void {
         $tag1 = (new Tag())
             ->setTagId('1')
             ->setTagValues('Tag1 values');

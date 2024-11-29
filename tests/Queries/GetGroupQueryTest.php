@@ -22,7 +22,7 @@ class GetGroupQueryTest extends TestCase {
     /**
      * Tests agreement between getters and setters.
      */
-    public function testAgreement() {
+    public function testAgreement(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $name = 'My Group';

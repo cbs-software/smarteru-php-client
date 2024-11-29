@@ -24,7 +24,7 @@ class GetGroupXMLTest extends TestCase {
      * Tests that XML generation throws the expected exception when the
      * required group identifier is not set.
      */
-    public function testExceptionIsThrownWhenGroupIdentifierNotSet() {
+    public function testExceptionIsThrownWhenGroupIdentifierNotSet(): void {
         $xmlGenerator = new XMLGenerator();
         $accountApi = 'account';
         $userApi = 'user';
@@ -43,7 +43,7 @@ class GetGroupXMLTest extends TestCase {
      * Tests that XML generation produces the expected result when all required
      * information is present and the group is identified by its name.
      */
-    public function testXMLGeneratedAsExpectedForGroupName() {
+    public function testXMLGeneratedAsExpectedForGroupName(): void {
         $xmlGenerator = new XMLGenerator();
         $accountApi = 'account';
         $userApi = 'user';
@@ -87,7 +87,7 @@ class GetGroupXMLTest extends TestCase {
      * Tests that XML generation produces the expected result when all required
      * information is present and the group is identified by its ID.
      */
-    public function testXMLGeneratedAsExpectedForGroupID() {
+    public function testXMLGeneratedAsExpectedForGroupID(): void {
         $xmlGenerator = new XMLGenerator();
         $accountApi = 'account';
         $userApi = 'user';

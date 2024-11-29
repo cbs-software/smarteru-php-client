@@ -115,7 +115,7 @@ class UpdateGroupClientTest extends TestCase {
      * Test that Client::updateGroup() produces the expected input for the API
      * when all required information and all optional information is present.
      */
-    public function testUpdateGroupProducesExpectedInputWhenAllInfoIsPresent() {
+    public function testUpdateGroupProducesExpectedInputWhenAllInfoIsPresent(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
@@ -164,7 +164,7 @@ class UpdateGroupClientTest extends TestCase {
      * Test that Client::updateGroup() produces the expected input for the API
      * when all required information but no optional information is present.
      */
-    public function testUpdateGroupProducesExpectedInputWithOnlyRequiredInfo() {
+    public function testUpdateGroupProducesExpectedInputWithOnlyRequiredInfo(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $method = 'method';
@@ -232,7 +232,7 @@ class UpdateGroupClientTest extends TestCase {
      * Test that updateGroup() throws an exception when the request results
      * in an HTTP error.
      */
-    public function testUpdateGroupThrowsExceptionWhenHTTPErrorOccurs() {
+    public function testUpdateGroupThrowsExceptionWhenHTTPErrorOccurs(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
@@ -261,7 +261,7 @@ class UpdateGroupClientTest extends TestCase {
      * Test that updateGroup() throws an exception when the SmarterU API
      * returns a fatal error.
      */
-    public function testUpdateGroupThrowsExceptionWhenFatalErrorReturned() {
+    public function testUpdateGroupThrowsExceptionWhenFatalErrorReturned(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
@@ -343,7 +343,7 @@ class UpdateGroupClientTest extends TestCase {
      * Test that updateGroup() returns the expected output when the SmarterU
      * API returns no errors.
      */
-    public function testUpdateGroupProducesCorrectOutput() {
+    public function testUpdateGroupProducesCorrectOutput(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);

@@ -31,7 +31,6 @@ use PHPUnit\Framework\TestCase;
 /**
  * Tests CBS\SmarterU\Client::listUsers().
  */
-
 class ListUsersClientTest extends TestCase {
     /**
      * A User to use for testing purposes.
@@ -171,7 +170,7 @@ class ListUsersClientTest extends TestCase {
      * Test that listUsers() sends the correct information when making an API
      * call.
      */
-    public function testListUsersMakesCorrectAPICall() {
+    public function testListUsersMakesCorrectAPICall(): void {
         $sortField = 'NAME';
         $sortOrder = 'ASC';
         $email = (new MatchTag())
@@ -288,7 +287,7 @@ class ListUsersClientTest extends TestCase {
      * Test that listUsers() throws an exception when an HTTP error occurs
      * while attempting to make a request to the SmarterU API.
      */
-    public function testListUsersThrowsExceptionWhenHTTPErrorOccurs() {
+    public function testListUsersThrowsExceptionWhenHTTPErrorOccurs(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
@@ -320,7 +319,7 @@ class ListUsersClientTest extends TestCase {
      * Test that listUsers() throws an exception when the SmarterU API
      * returns a fatal error.
      */
-    public function testListUsersThrowsExceptionWhenFatalErrorReturned() {
+    public function testListUsersThrowsExceptionWhenFatalErrorReturned(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
@@ -405,7 +404,7 @@ class ListUsersClientTest extends TestCase {
      * Test that listUsers() returns the expected output when the SmarterU API
      * does not return any Users.
      */
-    public function testListUsersReturnsExpectedNoUsers() {
+    public function testListUsersReturnsExpectedNoUsers(): void {
         $sortField = 'NAME';
         $sortOrder = 'ASC';
         $email = (new MatchTag())
@@ -485,7 +484,7 @@ class ListUsersClientTest extends TestCase {
      * Test that listUsers() returns the expected output when the SmarterU API
      * does not return any errors and the query only matches 1 User.
      */
-    public function testListUsersReturnsExpectedResultSingleUser() {
+    public function testListUsersReturnsExpectedResultSingleUser(): void {
         $sortField = 'NAME';
         $sortOrder = 'ASC';
         $email = (new MatchTag())
@@ -637,7 +636,7 @@ class ListUsersClientTest extends TestCase {
      * Test that listUsers returns the expected output when the SmarterU API
      * does not return any errors and the query matches multiple Users.
      */
-    public function testListUsersReturnsExpectedResultMultipleUsers() {
+    public function testListUsersReturnsExpectedResultMultipleUsers(): void {
         $sortField = 'NAME';
         $sortOrder = 'ASC';
         $email = (new MatchTag())

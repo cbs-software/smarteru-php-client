@@ -35,7 +35,7 @@ class RevokePermissionsClientTest extends TestCase {
      * Test that Client::revokePermissions() throws the expected exception when
      * the "$permissions" array contains a value that is not a string.
      */
-    public function testRevokePermissionsThrowsExceptionWhenPermissionIsNotString() {
+    public function testRevokePermissionsThrowsExceptionWhenPermissionIsNotString(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
@@ -54,7 +54,7 @@ class RevokePermissionsClientTest extends TestCase {
      * the "$permissions" array contains a string that is not one of the valid
      * permissions defined by the SmarterU API.
      */
-    public function testRevokePermissionsThrowsExceptionWhenPermissionIsInvalid() {
+    public function testRevokePermissionsThrowsExceptionWhenPermissionIsInvalid(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
@@ -73,7 +73,7 @@ class RevokePermissionsClientTest extends TestCase {
      * the User whose permissions are being revoked does not have an email address
      * or an employee ID.
      */
-    public function testRevokePermissionsThrowsExceptionWhenNoUserIdentifier() {
+    public function testRevokePermissionsThrowsExceptionWhenNoUserIdentifier(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
@@ -92,7 +92,7 @@ class RevokePermissionsClientTest extends TestCase {
      * the Group in which the User's permissions are being revoked does not have a
      * name or an ID.
      */
-    public function testRevokePermissionsThrowsExceptionWhenNoGroupIdentifier() {
+    public function testRevokePermissionsThrowsExceptionWhenNoGroupIdentifier(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
@@ -114,7 +114,7 @@ class RevokePermissionsClientTest extends TestCase {
      * SmarterU API when all required information is present and only one
      * permission is being revoked.
      */
-    public function testRevokePermissionsProducesCorrectInputSinglePermission() {
+    public function testRevokePermissionsProducesCorrectInputSinglePermission(): void {
         $email = 'test@test.com';
         $user = (new User())
             ->setEmail($email)
@@ -176,7 +176,7 @@ class RevokePermissionsClientTest extends TestCase {
      * SmarterU API when all required information is present and multiple
      * permissions are being revoked.
      */
-    public function testRevokePermissionsProducesCorrectInputMultiplePermissions() {
+    public function testRevokePermissionsProducesCorrectInputMultiplePermissions(): void {
         $email = 'test@test.com';
         $user = (new User())
             ->setEmail($email)
@@ -244,7 +244,7 @@ class RevokePermissionsClientTest extends TestCase {
      * Test that Client::revokePermissions() throws the expected exception
      * when an HTTP error occurs and prevents the request from being made.
      */
-    public function testRevokePermissionsThrowsExceptionWhenHttpErrorOccurs() {
+    public function testRevokePermissionsThrowsExceptionWhenHttpErrorOccurs(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
@@ -284,7 +284,7 @@ class RevokePermissionsClientTest extends TestCase {
      * Test that Client::revokePermissions() throws the expected exception
      * when the SmarterU API returns a fatal error.
      */
-    public function testRevokePermissionsThrowsExceptionWhenFatalErrorReturned() {
+    public function testRevokePermissionsThrowsExceptionWhenFatalErrorReturned(): void {
         $email = 'test@test.com';
         $name = 'My Group';
         $user = (new User())

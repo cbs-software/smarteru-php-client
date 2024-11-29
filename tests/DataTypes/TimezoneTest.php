@@ -26,7 +26,9 @@ class TimezoneTest extends TestCase {
      *
      * @dataProvider displayValueProvider
      */
-    public function testGetProvidedNameFromDisplayValueReturnsMatchingProvidedNameForValidDisplayValue(string $displayValue) {
+    public function testGetProvidedNameFromDisplayValueReturnsMatchingProvidedNameForValidDisplayValue(
+        string $displayValue
+    ): void {
         $flippedTimezones = array_flip(Timezone::VALID_TIMEZONES_PROVIDED_NAME_TO_DISPLAY_VALUE);
 
         $this->assertEquals(
@@ -41,7 +43,9 @@ class TimezoneTest extends TestCase {
      *
      * @dataProvider providedNameProvider
      */
-    public function testGetDisplayValueFromProvidedNameReturnsMatchingDisplayValueForValidProvidedName(string $providedName) {
+    public function testGetDisplayValueFromProvidedNameReturnsMatchingDisplayValueForValidProvidedName(
+        string $providedName
+    ): void {
         $this->assertEquals(
             Timezone::VALID_TIMEZONES_PROVIDED_NAME_TO_DISPLAY_VALUE[$providedName],
             Timezone::getDisplayValueFromProvidedName($providedName)
@@ -78,7 +82,7 @@ class TimezoneTest extends TestCase {
      * Verifies that getProvidedNameFromDisplayValue throws an exception when
      * an invalid display value is passed.
      */
-    public function testGetProvidedNameFromDisplayValueThrowsExceptionForInvalidDisplayValue() {
+    public function testGetProvidedNameFromDisplayValueThrowsExceptionForInvalidDisplayValue(): void {
         $this->expectException(\InvalidArgumentException::class);
         Timezone::getProvidedNameFromDisplayValue('invalid');
     }
@@ -87,7 +91,7 @@ class TimezoneTest extends TestCase {
      * Verifies that getDisplayValueFromProvidedName throws an exception when
      * an invalid provided name is passed.
      */
-    public function testGetDisplayValueFromProvidedNameThrowsExceptionForInvalidProvidedName() {
+    public function testGetDisplayValueFromProvidedNameThrowsExceptionForInvalidProvidedName(): void {
         $this->expectException(\InvalidArgumentException::class);
         Timezone::getDisplayValueFromProvidedName('invalid');
     }
@@ -96,7 +100,7 @@ class TimezoneTest extends TestCase {
      * Verifies that fromProvidedName() returns a Timezone instance for a valid
      * provided name.
      */
-    public function testFromProvidedNameReturnsTimezoneForValidValue() {
+    public function testFromProvidedNameReturnsTimezoneForValidValue(): void {
         $instance = Timezone::fromProvidedName('US/Eastern');
 
         $this->assertInstanceOf(Timezone::class, $instance);
@@ -108,7 +112,7 @@ class TimezoneTest extends TestCase {
      * Verifies that fromDisplayValue() returns a Timezone instance for a valid
      * display value.
      */
-    public function testFromDisplayValueReturnsTimezoneForValidValue() {
+    public function testFromDisplayValueReturnsTimezoneForValidValue(): void {
         $instance = Timezone::fromDisplayValue('(GMT-5:00) - US/Eastern');
 
         $this->assertInstanceOf(Timezone::class, $instance);

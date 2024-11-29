@@ -26,7 +26,7 @@ class UpdateUserXMLTest extends TestCase {
      * an exception if the User being created does not have an email address
      * or an employee ID.
      */
-    public function testUpdateUserThrowsExceptionWhenNoUserIdentifier() {
+    public function testUpdateUserThrowsExceptionWhenNoUserIdentifier(): void {
         $xmlGenerator = new XMLGenerator();
         $accountApi = 'account';
         $userApi = 'user';
@@ -47,7 +47,7 @@ class UpdateUserXMLTest extends TestCase {
      * the expected output when all required information is present but all
      * optional attributes are left blank.
      */
-    public function testUpdateUserProducesExpectedOutputWithoutRequiredInfo() {
+    public function testUpdateUserProducesExpectedOutputWithoutRequiredInfo(): void {
         $user = (new User())
             ->setEmail('example@email.com')
             ->setOldEmail('old@email.com')
@@ -183,7 +183,7 @@ class UpdateUserXMLTest extends TestCase {
      * Verifieshat updateUser() throws a MissingValueException when the email
      * address is not set but SendEmailTo is set to 'Self'.
      */
-    public function testUpdateUserThrowsMissingValueExceptionWhenSendEmailToIsSelfAndNoEmailSet() {
+    public function testUpdateUserThrowsMissingValueExceptionWhenSendEmailToIsSelfAndNoEmailSet(): void {
         $user = (new User())
             ->setEmail(null)
             ->setSendEmailTo('Self');
@@ -200,7 +200,7 @@ class UpdateUserXMLTest extends TestCase {
      * Tests that the XML generation process for an updateUser request produces
      * the expected output when all required and optional information is present.
      */
-    public function testUpdateUserProducesExpectedOutputWithAllInfo() {
+    public function testUpdateUserProducesExpectedOutputWithAllInfo(): void {
         $user = (new User())
             ->setId('1')
             ->setEmail('phpunit@test.com')

@@ -26,7 +26,7 @@ class GetLearnerReportQueryTest extends TestCase {
     /**
      * Test agreement between getters and setters.
      */
-    public function testAgreement() {
+    public function testAgreement(): void {
         $page = 2;
         $pageSize = 40;
         $enrollmentId = '1';
@@ -171,7 +171,7 @@ class GetLearnerReportQueryTest extends TestCase {
      * Test that GetLearnerReportQuery::setGroupStatus() throws an exception
      * when the provided status is invalid.
      */
-    public function testSetGroupStatusThrowsExceptionWhenStatusIsInvalid() {
+    public function testSetGroupStatusThrowsExceptionWhenStatusIsInvalid(): void {
         $query = new GetLearnerReportQuery();
         self::expectException(InvalidArgumentException::class);
         self::expectExceptionMessage(
@@ -184,7 +184,7 @@ class GetLearnerReportQueryTest extends TestCase {
      * Test that GetLearnerReportQuery::setGroupNames() throws an exception
      * when the provided name is not a string.
      */
-    public function testSetGroupNamesThrowsExceptionWhenNameNotString() {
+    public function testSetGroupNamesThrowsExceptionWhenNameNotString(): void {
         $query = new GetLearnerReportQuery();
         self::expectException(InvalidArgumentException::class);
         self::expectExceptionMessage(
@@ -197,7 +197,7 @@ class GetLearnerReportQueryTest extends TestCase {
      * Test that GetLearnerReportQuery::setGroupTags() throws an exception
      * when the provided tag is not an instance of CBS\SmarterU\DataTypes\Tag.
      */
-    public function testSetGroupTagsThrowsExceptionWhenTagNotInstanceOfTag() {
+    public function testSetGroupTagsThrowsExceptionWhenTagNotInstanceOfTag(): void {
         $query = new GetLearnerReportQuery();
         self::expectException(InvalidArgumentException::class);
         self::expectExceptionMessage(
@@ -210,7 +210,7 @@ class GetLearnerReportQueryTest extends TestCase {
      * Test that GetLearnerReportQuery::setLearningModuleStatus() throws an
      * exception when the provided status is invalid.
      */
-    public function testSetLearningModuleStatusThrowsExceptionWhenStatusIsInvalid() {
+    public function testSetLearningModuleStatusThrowsExceptionWhenStatusIsInvalid(): void {
         $query = new GetLearnerReportQuery();
         self::expectException(InvalidArgumentException::class);
         self::expectExceptionMessage(
@@ -223,7 +223,7 @@ class GetLearnerReportQueryTest extends TestCase {
      * Test that GetLearnerReportQuery::setLearningModuleNames() throws an
      * exception when the provided name is not a string.
      */
-    public function testSetLearningModuleNamesThrowsExceptionWhenNameNotString() {
+    public function testSetLearningModuleNamesThrowsExceptionWhenNameNotString(): void {
         $query = new GetLearnerReportQuery();
         self::expectException(InvalidArgumentException::class);
         self::expectExceptionMessage(
@@ -236,7 +236,7 @@ class GetLearnerReportQueryTest extends TestCase {
      * Test that GetLearnerReportQuery::setEnrollmentStatuses() throws an
      * exception when the provided status is not a string.
      */
-    public function testSetEnrollmentStatusesThrowsExceptionWhenStatusNotString() {
+    public function testSetEnrollmentStatusesThrowsExceptionWhenStatusNotString(): void {
         $query = new GetLearnerReportQuery();
         self::expectException(InvalidArgumentException::class);
         self::expectExceptionMessage(
@@ -250,7 +250,7 @@ class GetLearnerReportQueryTest extends TestCase {
      * exception when the provided status is not one of the valid statuses
      * recognized by the SmarterU API.
      */
-    public function testSetEnrollmentStatusesThrowsExceptionWhenStatusNotValid() {
+    public function testSetEnrollmentStatusesThrowsExceptionWhenStatusNotValid(): void {
         $query = new GetLearnerReportQuery();
         self::expectException(InvalidArgumentException::class);
         self::expectExceptionMessage(
@@ -264,7 +264,7 @@ class GetLearnerReportQueryTest extends TestCase {
      * exception when the provided value is not an instance of
      * CBS\SmarterU\Queries\Tags\DateRangeTag.
      */
-    public function testSetCompletedDatesThrowsExceptionWhenDatesNotInstaceOfDateRangeTag() {
+    public function testSetCompletedDatesThrowsExceptionWhenDatesNotInstanceOfDateRangeTag(): void {
         $query = new GetLearnerReportQuery();
         self::expectException(InvalidArgumentException::class);
         self::expectExceptionMessage(
@@ -278,7 +278,7 @@ class GetLearnerReportQueryTest extends TestCase {
      * exception when the provided value is not an instance of
      * CBS\SmarterU\Queries\Tags\DateRangeTag.
      */
-    public function testSetDueDatesThrowsExceptionWhenDatesNotInstaceOfDateRangeTag() {
+    public function testSetDueDatesThrowsExceptionWhenDatesNotInstanceOfDateRangeTag(): void {
         $query = new GetLearnerReportQuery();
         self::expectException(InvalidArgumentException::class);
         self::expectExceptionMessage(
@@ -292,7 +292,7 @@ class GetLearnerReportQueryTest extends TestCase {
      * exception when the provided value is not an instance of
      * CBS\SmarterU\Queries\Tags\DateRangeTag.
      */
-    public function testSetEnrolledDatesThrowsExceptionWhenDatesNotInstaceOfDateRangeTag() {
+    public function testSetEnrolledDatesThrowsExceptionWhenDatesNotInstanceOfDateRangeTag(): void {
         $query = new GetLearnerReportQuery();
         self::expectException(InvalidArgumentException::class);
         self::expectExceptionMessage(
@@ -306,7 +306,7 @@ class GetLearnerReportQueryTest extends TestCase {
      * exception when the provided value is not an instance of
      * CBS\SmarterU\Queries\Tags\DateRangeTag.
      */
-    public function testSetGracePeriodDatesThrowsExceptionWhenDatesNotInstaceOfDateRangeTag() {
+    public function testSetGracePeriodDatesThrowsExceptionWhenDatesNotInstanceOfDateRangeTag(): void {
         $query = new GetLearnerReportQuery();
         self::expectException(InvalidArgumentException::class);
         self::expectExceptionMessage(
@@ -320,7 +320,7 @@ class GetLearnerReportQueryTest extends TestCase {
      * exception when the provided value is not an instance of
      * CBS\SmarterU\Queries\Tags\DateRangeTag.
      */
-    public function testSetLastAccessedDatesThrowsExceptionWhenDatesNotInstaceOfDateRangeTag() {
+    public function testSetLastAccessedDatesThrowsExceptionWhenDatesNotInstanceOfDateRangeTag(): void {
         $query = new GetLearnerReportQuery();
         self::expectException(InvalidArgumentException::class);
         self::expectExceptionMessage(
@@ -334,7 +334,7 @@ class GetLearnerReportQueryTest extends TestCase {
      * exception when the provided value is not an instance of
      * CBS\SmarterU\Queries\Tags\DateRangeTag.
      */
-    public function testSetStartedDatesThrowsExceptionWhenDatesNotInstaceOfDateRangeTag() {
+    public function testSetStartedDatesThrowsExceptionWhenDatesNotInstanceOfDateRangeTag(): void {
         $query = new GetLearnerReportQuery();
         self::expectException(InvalidArgumentException::class);
         self::expectExceptionMessage(
@@ -347,7 +347,7 @@ class GetLearnerReportQueryTest extends TestCase {
      * Test that GetLearnerReportQuery::setUserStatus() throws an exception
      * when the provided status is invalid.
      */
-    public function testSetUserStatusThrowsExceptionWhenStatusInvalid() {
+    public function testSetUserStatusThrowsExceptionWhenStatusInvalid(): void {
         $query = new GetLearnerReportQuery();
         self::expectException(InvalidArgumentException::class);
         self::expectExceptionMessage(
@@ -360,7 +360,7 @@ class GetLearnerReportQueryTest extends TestCase {
      * Test that GetLearnerReportQuery::setUserEmailAddresses() throws an
      * exception when one of the provided email addresses is not a string.
      */
-    public function testSetUserEmailAddressesThrowsExceptionWhenEmailNotString() {
+    public function testSetUserEmailAddressesThrowsExceptionWhenEmailNotString(): void {
         $query = new GetLearnerReportQuery();
         self::expectException(InvalidArgumentException::class);
         self::expectExceptionMessage(
@@ -373,7 +373,7 @@ class GetLearnerReportQueryTest extends TestCase {
      * Test that GetLearnerReportQuery::setUserEmployeeIds() throws an
      * exception when one of the provided employee IDs is not a string.
      */
-    public function testSetUserEmployeeIdsThrowsExceptionWhenIdNotString() {
+    public function testSetUserEmployeeIdsThrowsExceptionWhenIdNotString(): void {
         $query = new GetLearnerReportQuery();
         self::expectException(InvalidArgumentException::class);
         self::expectExceptionMessage(
@@ -387,7 +387,7 @@ class GetLearnerReportQueryTest extends TestCase {
      * one of the provided columns is not one of the columns accepted by the
      * SmarterU API.
      */
-    public function testSetColumnsThrowsExceptionWhenColumnNotValid() {
+    public function testSetColumnsThrowsExceptionWhenColumnNotValid(): void {
         $query = new GetLearnerReportQuery();
         self::expectException(InvalidArgumentException::class);
         self::expectExceptionMessage(
@@ -401,7 +401,7 @@ class GetLearnerReportQueryTest extends TestCase {
      * when one of the provided values is not an instance of
      * CBS\SmarterU\DataTypes\CustomField.
      */
-    public function testSetCustomFieldsThrowsExceptionWhenNotInstanceOfCustomField() {
+    public function testSetCustomFieldsThrowsExceptionWhenNotInstanceOfCustomField(): void {
         $query = new GetLearnerReportQuery();
         self::expectException(InvalidArgumentException::class);
         self::expectExceptionMessage(

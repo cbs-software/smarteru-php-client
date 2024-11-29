@@ -122,7 +122,7 @@ class UpdateGroupXMLTest extends TestCase {
      * an exception if the Group being updated has a Tag that does not have
      * an identifier.
      */
-    public function testUpdateGroupThrowsExceptionWhenNoTagIdentifier() {
+    public function testUpdateGroupThrowsExceptionWhenNoTagIdentifier(): void {
         $xmlGenerator = new XMLGenerator();
         $accountApi = 'account';
         $userApi = 'user';
@@ -142,7 +142,7 @@ class UpdateGroupXMLTest extends TestCase {
      * the expected output when all required information is present but all
      * optional attributes are left blank.
      */
-    public function testUpdateGroupProducesExpectedOutputWithoutOptionalInfo() {
+    public function testUpdateGroupProducesExpectedOutputWithoutOptionalInfo(): void {
         $xmlGenerator = new XMLGenerator();
         $accountApi = 'account';
         $userApi = 'user';
@@ -214,7 +214,7 @@ class UpdateGroupXMLTest extends TestCase {
      * Tests that the XML generation process for an UpdateGroup request produces
      * the expected output when all required and optional information is present.
      */
-    public function testUpdateGroupProducesExpectedOutputWithAllInfo() {
+    public function testUpdateGroupProducesExpectedOutputWithAllInfo(): void {
         $xmlGenerator = new XMLGenerator();
         $accountApi = 'account';
         $userApi = 'user';

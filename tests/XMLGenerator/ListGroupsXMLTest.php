@@ -26,7 +26,7 @@ class ListGroupsXMLTest extends TestCase {
      * Tests that XML generation throws the expected exception when the
      * required tag identifier is not set.
      */
-    public function testExceptionIsThrownWhenTagIdentifierNotSet() {
+    public function testExceptionIsThrownWhenTagIdentifierNotSet(): void {
         $xmlGenerator = new XMLGenerator();
         $accountApi = 'account';
         $userApi = 'user';
@@ -46,7 +46,7 @@ class ListGroupsXMLTest extends TestCase {
      * does not contain any information (i.e. do not filter the results, list
      * all groups).
      */
-    public function testXMLGeneratedAsExpectedWhenQueryIsEmpty() {
+    public function testXMLGeneratedAsExpectedWhenQueryIsEmpty(): void {
         $xmlGenerator = new XMLGenerator();
         $accountApi = 'account';
         $userApi = 'user';
@@ -92,7 +92,7 @@ class ListGroupsXMLTest extends TestCase {
      * Tests that XML generation produces the expected result when all
      * information is present.
      */
-    public function testXMLGeneratedAsExpectedWithAllInfo() {
+    public function testXMLGeneratedAsExpectedWithAllInfo(): void {
         $xmlGenerator = new XMLGenerator();
         $accountApi = 'account';
         $userApi = 'user';

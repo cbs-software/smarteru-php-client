@@ -37,7 +37,7 @@ class GetUserGroupsClientTest extends TestCase {
      * when all required information is present and the query uses the ID as
      * the user identifier.
      */
-    public function testGetUserGroupsProducesCorrectInputForUserID() {
+    public function testGetUserGroupsProducesCorrectInputForUserID(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $id = '1';
@@ -104,7 +104,7 @@ class GetUserGroupsClientTest extends TestCase {
      * when all required information is present and the query uses the ID as
      * the user identifier.
      */
-    public function testGetUserGroupsProducesCorrectInputForEmailAddress() {
+    public function testGetUserGroupsProducesCorrectInputForEmailAddress(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $email = 'test@test.com';
@@ -174,7 +174,7 @@ class GetUserGroupsClientTest extends TestCase {
      * when all required information is present and the query uses the employee
      * ID as the user identifier.
      */
-    public function testGetUserGroupsProducesCorrectInputForEmployeeID() {
+    public function testGetUserGroupsProducesCorrectInputForEmployeeID(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $employeeId = '1';
@@ -239,7 +239,7 @@ class GetUserGroupsClientTest extends TestCase {
      * Test that getUserGroups() throws an exception when the request results
      * in an HTTP error.
      */
-    public function testGetUserThrowsExceptionWhenHTTPErrorOccurs() {
+    public function testGetUserThrowsExceptionWhenHTTPErrorOccurs(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
@@ -268,7 +268,7 @@ class GetUserGroupsClientTest extends TestCase {
      * Test that getUserGroups() throws an exception when the SmarterU API
      * returns a fatal error.
      */
-    public function testGetUserThrowsExceptionWhenFatalErrorReturned() {
+    public function testGetUserThrowsExceptionWhenFatalErrorReturned(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
@@ -350,7 +350,7 @@ class GetUserGroupsClientTest extends TestCase {
      * Test that getUserGroups() returns the expected output when the SmarterU API
      * returns a single Group with no errors.
      */
-    public function testGetUserGroupsReturnsExpectedSingleGroup() {
+    public function testGetUserGroupsReturnsExpectedSingleGroup(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
@@ -414,7 +414,7 @@ class GetUserGroupsClientTest extends TestCase {
      * Test that getUserGroups() returns the expected output when the SmarterU API
      * returns multiple Groups without any errors.
      */
-    public function testGetUserGroupsReturnsExpectedMultipleGroups() {
+    public function testGetUserGroupsReturnsExpectedMultipleGroups(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);

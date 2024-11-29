@@ -37,7 +37,7 @@ class ListGroupsClientTest extends TestCase {
      * Test that listGroups() passes the correct input into the SmarterU API
      * when the query is blank (i.e. list all groups without filtering results).
      */
-    public function testListGroupsProducesCorrectInputForEmptyQuery() {
+    public function testListGroupsProducesCorrectInputForEmptyQuery(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
@@ -111,7 +111,7 @@ class ListGroupsClientTest extends TestCase {
      * Test that listGroups() passes the correct input into the SmarterU API
      * when all optional information is present.
      */
-    public function testListGroupsProducesCorrectInputWithAllOptionalInfo() {
+    public function testListGroupsProducesCorrectInputWithAllOptionalInfo(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
@@ -202,7 +202,7 @@ class ListGroupsClientTest extends TestCase {
      * Test that listGroups() throws an exception when the request results
      * in an HTTP error.
      */
-    public function testListGroupsThrowsExceptionWhenHTTPErrorOccurs() {
+    public function testListGroupsThrowsExceptionWhenHTTPErrorOccurs(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
@@ -233,7 +233,7 @@ class ListGroupsClientTest extends TestCase {
      * Test that listGroups() throws an exception when the SmarterU API
      * returns a fatal error.
      */
-    public function testListGroupsThrowsExceptionWhenFatalErrorReturned() {
+    public function testListGroupsThrowsExceptionWhenFatalErrorReturned(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
@@ -317,7 +317,7 @@ class ListGroupsClientTest extends TestCase {
      * Test that listGroups() produces the correct output when no errors occur
      * and only a single group is returned.
      */
-    public function testListGroupsReturnsExpectedSingleGroup() {
+    public function testListGroupsReturnsExpectedSingleGroup(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
@@ -367,7 +367,7 @@ class ListGroupsClientTest extends TestCase {
      * Test that listGroups() produces the correct output when no errors occur
      * and multiple groups are returned.
      */
-    public function testListGroupsReturnsExpectedMultipleGroups() {
+    public function testListGroupsReturnsExpectedMultipleGroups(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);

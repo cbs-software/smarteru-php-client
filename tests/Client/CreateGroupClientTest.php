@@ -111,7 +111,7 @@ class CreateGroupClientTest extends TestCase {
      * Test that Client::createGroup() produces the expected input for the API
      * when all required information and all optional information is present.
      */
-    public function testCreateGroupProducesExpectedInputWhenAllInfoIsPresent() {
+    public function testCreateGroupProducesExpectedInputWhenAllInfoIsPresent(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
@@ -160,7 +160,7 @@ class CreateGroupClientTest extends TestCase {
      * Test that Client::createGroup() produces the expected input for the API
      * when all required information but no optional information is present.
      */
-    public function testCreateGroupProducesExpectedInputWithOnlyRequiredInfo() {
+    public function testCreateGroupProducesExpectedInputWithOnlyRequiredInfo(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $method = 'method';
@@ -229,7 +229,7 @@ class CreateGroupClientTest extends TestCase {
      * Test that createGroup() throws an exception when the request results
      * in an HTTP error.
      */
-    public function testCreateGroupThrowsExceptionWhenHTTPErrorOccurs() {
+    public function testCreateGroupThrowsExceptionWhenHTTPErrorOccurs(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
@@ -258,7 +258,7 @@ class CreateGroupClientTest extends TestCase {
      * Test that createGroup() throws an exception when the SmarterU API
      * returns a fatal error.
      */
-    public function testCreateGroupThrowsExceptionWhenFatalErrorReturned() {
+    public function testCreateGroupThrowsExceptionWhenFatalErrorReturned(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
@@ -340,7 +340,7 @@ class CreateGroupClientTest extends TestCase {
      * Test that createGroup() returns the expected output when the SmarterU
      * API returns no errors.
      */
-    public function testCreateGroupProducesCorrectOutput() {
+    public function testCreateGroupProducesCorrectOutput(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);

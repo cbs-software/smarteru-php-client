@@ -35,7 +35,7 @@ class GrantPermissionsClientTest extends TestCase {
      * Test that Client::grantPermissions() throws the expected exception when
      * the "$permissions" array contains a value that is not a string.
      */
-    public function testGrantPermissionsThrowsExceptionWhenPermissionIsNotString() {
+    public function testGrantPermissionsThrowsExceptionWhenPermissionIsNotString(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
@@ -54,7 +54,7 @@ class GrantPermissionsClientTest extends TestCase {
      * the "$permissions" array contains a string that is not one of the valid
      * permissions defined by the SmarterU API.
      */
-    public function testGrantPermissionsThrowsExceptionWhenPermissionIsInvalid() {
+    public function testGrantPermissionsThrowsExceptionWhenPermissionIsInvalid(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
@@ -73,7 +73,7 @@ class GrantPermissionsClientTest extends TestCase {
      * the User who is being granted permissions does not have an email address
      * or an employee ID.
      */
-    public function testGrantPermissionsThrowsExceptionWhenNoUserIdentifier() {
+    public function testGrantPermissionsThrowsExceptionWhenNoUserIdentifier(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
@@ -92,7 +92,7 @@ class GrantPermissionsClientTest extends TestCase {
      * the Group in which the User is being granted permissions does not have a
      * name or an ID.
      */
-    public function testGrantPermissionsThrowsExceptionWhenNoGroupIdentifier() {
+    public function testGrantPermissionsThrowsExceptionWhenNoGroupIdentifier(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
@@ -114,7 +114,7 @@ class GrantPermissionsClientTest extends TestCase {
      * SmarterU API when all required information is present and only one
      * permission is being granted.
      */
-    public function testGrantPermissionsProducesCorrectInputSinglePermission() {
+    public function testGrantPermissionsProducesCorrectInputSinglePermission(): void {
         $email = 'test@test.com';
         $user = (new User())
             ->setEmail($email)
@@ -176,7 +176,7 @@ class GrantPermissionsClientTest extends TestCase {
      * SmarterU API when all required information is present and multiple
      * permissions are being granted.
      */
-    public function testGrantPermissionsProducesCorrectInputMultiplePermissions() {
+    public function testGrantPermissionsProducesCorrectInputMultiplePermissions(): void {
         $email = 'test@test.com';
         $user = (new User())
             ->setEmail($email)
@@ -244,7 +244,7 @@ class GrantPermissionsClientTest extends TestCase {
      * Test that Client::grantPermissions() throws the expected exception
      * when an HTTP error occurs and prevents the request from being made.
      */
-    public function testGrantPermissionsThrowsExceptionWhenHttpErrorOccurs() {
+    public function testGrantPermissionsThrowsExceptionWhenHttpErrorOccurs(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
@@ -284,7 +284,7 @@ class GrantPermissionsClientTest extends TestCase {
      * Test that Client::grantPermissions() throws the expected exception
      * when the SmarterU API returns a fatal error.
      */
-    public function testGrantPermissionsThrowsExceptionWhenFatalErrorReturned() {
+    public function testGrantPermissionsThrowsExceptionWhenFatalErrorReturned(): void {
         $email = 'test@test.com';
         $name = 'My Group';
         $user = (new User())

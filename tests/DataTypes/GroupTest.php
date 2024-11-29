@@ -28,7 +28,7 @@ class GroupTest extends TestCase {
     /**
      * Tests agreement between getters and setters.
      */
-    public function testAgreement() {
+    public function testAgreement(): void {
         $name = 'My Group';
         $groupId = '12';
         $createdDate = new DateTime('2022/08/02');
@@ -167,7 +167,7 @@ class GroupTest extends TestCase {
     /**
      * Tests that an exception is thrown if the status is invalid.
      */
-    public function testExceptionIsThrownWhenStatusIsInvalid() {
+    public function testExceptionIsThrownWhenStatusIsInvalid(): void {
         self::expectException(InvalidArgumentException::class);
         self::expectExceptionMessage('Invalid is not one of ');
         $group = (new Group())
@@ -178,7 +178,7 @@ class GroupTest extends TestCase {
      * Tests that an exception is thrown if the email address to which to send
      * notifications is not a string.
      */
-    public function testExceptionIsThrownWhenEmailAddressIsNotString() {
+    public function testExceptionIsThrownWhenEmailAddressIsNotString(): void {
         self::expectException(InvalidArgumentException::class);
         self::expectExceptionMessage(
             'Parameter to CBS\SmarterU\DataTypes\Group::setNotificationEmails must be a list of email addresses as strings'

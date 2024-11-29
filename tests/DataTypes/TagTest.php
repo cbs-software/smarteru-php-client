@@ -21,7 +21,7 @@ class TagTest extends TestCase {
     /**
      * Tests agreement between getters and setters.
      */
-    public function testAgreement() {
+    public function testAgreement(): void {
         $tagId = '2';
         $tagName = 'My Tag';
         $tagValues = 'This, is, my, tag, for, testing';
