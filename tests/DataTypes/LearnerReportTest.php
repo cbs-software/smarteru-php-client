@@ -24,7 +24,7 @@ class LearnerReportTest extends TestCase {
     /**
      * Test agreement between getters and setters.
      */
-    public function testAgreement() {
+    public function testAgreement(): void {
         $id = '1';
         $courseName = 'My Course';
         $surname = 'User';
@@ -165,7 +165,7 @@ class LearnerReportTest extends TestCase {
      * Test that an exception is thrown when attempting to set CustomFields to
      * a value that is not an array of CustomFields.
      */
-    public function testExceptionIsThrownWhenCustomFieldsNotInstanceOfCustomField() {
+    public function testExceptionIsThrownWhenCustomFieldsNotInstanceOfCustomField(): void {
         $customFields = [1, 2, 3];
         $report = new LearnerReport();
 

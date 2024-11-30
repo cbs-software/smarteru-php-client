@@ -22,7 +22,7 @@ class DateRangeTagTest extends TestCase {
     /**
      * Tests agreement between getters and setters.
      */
-    public function testAgreement() {
+    public function testAgreement(): void {
         $dateFrom = new DateTime('now');
         $dateTo = new DateTime('9999-12-31');
         $dateRangeTag = (new DateRangeTag())

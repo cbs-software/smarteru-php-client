@@ -26,7 +26,7 @@ class ChangeGroupMembersXMLTest extends TestCase {
      * Test that XMLGenerator::changeGroupMembers() throws an exception when
      * the Group the Users are being assigned to does not have a name or an ID.
      */
-    public function testChangeGroupMembersThrowsExceptionWhenNoGroupIdentifier() {
+    public function testChangeGroupMembersThrowsExceptionWhenNoGroupIdentifier(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $user = new User();
@@ -50,7 +50,7 @@ class ChangeGroupMembersXMLTest extends TestCase {
      * the array of Users being added to or removed from the Group contains
      * a value that is not an instance of User.
      */
-    public function testChangeGroupMembersThrowsExceptionWhenUserNotInstanceOfUser() {
+    public function testChangeGroupMembersThrowsExceptionWhenUserNotInstanceOfUser(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $users = [1, 2, 3];
@@ -75,7 +75,7 @@ class ChangeGroupMembersXMLTest extends TestCase {
      * one of the Users passed in does not have an email address or an
      * employee ID.
      */
-    public function testChangeGroupMembersThrowsExceptionWhenNoUserIdentifier() {
+    public function testChangeGroupMembersThrowsExceptionWhenNoUserIdentifier(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $user = new User();
@@ -100,7 +100,7 @@ class ChangeGroupMembersXMLTest extends TestCase {
      * output when all required values are present and only one User is going
      * to be added to or removed from the Group.
      */
-    public function testChangeGroupMembersProducesExpectedOutputSingleUser() {
+    public function testChangeGroupMembersProducesExpectedOutputSingleUser(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $user = (new User())
@@ -205,7 +205,7 @@ class ChangeGroupMembersXMLTest extends TestCase {
      * output when all required values are present and multiple Users are going
      * to be added to or removed from the Group.
      */
-    public function testChangeGroupMembersProducesExpectedOutputMultipleUsers() {
+    public function testChangeGroupMembersProducesExpectedOutputMultipleUsers(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $user1 = (new User())

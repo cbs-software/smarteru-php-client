@@ -18,6 +18,11 @@
             "email": "will.santanen@thecoresolution.com"
         }
     ],
+    "config": {
+        "platform": {
+            "php": "8.0"
+        }
+    },
     "require": {
         "guzzlehttp/guzzle": "^7.0",
         "ext-SimpleXML": "*",
@@ -25,6 +30,7 @@
     },
     "require-dev": {
         "phpunit/phpunit": "9.5",
-        "clean/phpdoc-md": "^0.19.1"
+        "clean/phpdoc-md": "^0.19.1",
+        "vimeo/psalm": "^5.26"
     }
 }

@@ -13,7 +13,6 @@ namespace Tests\CBS\SmarterU;
 
 use CBS\SmarterU\DataTypes\ErrorCode;
 use CBS\SmarterU\DataTypes\Group;
-use CBS\SmarterU\Exceptions\MissingValueException;
 use CBS\SmarterU\Exceptions\SmarterUException;
 use CBS\SmarterU\Queries\GetGroupQuery;
 use CBS\SmarterU\Client;
@@ -23,7 +22,6 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Response;
-use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Exception\ClientException;
 use PHPUnit\Framework\TestCase;
 
@@ -36,7 +34,7 @@ class GetGroupClientTest extends TestCase {
      * when all required information is present and the query uses the group
      * name as the group identifier.
      */
-    public function testGetGroupProducesCorrectInputForGroupName() {
+    public function testGetGroupProducesCorrectInputForGroupName(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $name = 'My Group';
@@ -134,7 +132,7 @@ class GetGroupClientTest extends TestCase {
      * when all required information is present and the query uses the group
      * ID as the group identifier.
      */
-    public function testGetGroupProducesCorrectInputForGroupID() {
+    public function testGetGroupProducesCorrectInputForGroupID(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $groupId = '1';
@@ -231,7 +229,7 @@ class GetGroupClientTest extends TestCase {
      * Test that getGroup() throws an exception when the request results
      * in an HTTP error.
      */
-    public function testGetGroupThrowsExceptionWhenHTTPErrorOccurs() {
+    public function testGetGroupThrowsExceptionWhenHTTPErrorOccurs(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
@@ -260,7 +258,7 @@ class GetGroupClientTest extends TestCase {
      * Test that getGroup() throws an exception when the SmarterU API
      * returns a fatal error.
      */
-    public function testGetGroupThrowsExceptionWhenFatalErrorReturned() {
+    public function testGetGroupThrowsExceptionWhenFatalErrorReturned(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
@@ -342,7 +340,7 @@ class GetGroupClientTest extends TestCase {
      * Test that getGroup() returns null when the SmarterU API throws an error
      * indicating that the Group requested does not exist.
      */
-    public function testGetGroupReturnsNullWhenGroupDoesNotExist() {
+    public function testGetGroupReturnsNullWhenGroupDoesNotExist(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $groupId = '1';
@@ -400,7 +398,7 @@ class GetGroupClientTest extends TestCase {
      * Test that getGroup() returns the expected output when the SmarterU API
      * does not return any errors.
      */
-    public function testGetGroupProducesCorrectOutput() {
+    public function testGetGroupProducesCorrectOutput(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $groupId = '1';

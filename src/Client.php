@@ -19,6 +19,7 @@ use CBS\SmarterU\DataTypes\Tag;
 use CBS\SmarterU\DataTypes\Timezone;
 use CBS\SmarterU\DataTypes\User;
 use CBS\SmarterU\Exceptions\InvalidArgumentException;
+use CBS\SmarterU\Exceptions\MissingValueException;
 use CBS\SmarterU\Exceptions\SmarterUException;
 use CBS\SmarterU\Queries\GetGroupQuery;
 use CBS\SmarterU\Queries\GetLearnerReportQuery;
@@ -117,7 +118,6 @@ class Client {
      */
     protected XMLGenerator $xmlGenerator;
 
-    
     #endregion properties
 
     /**
@@ -152,7 +152,7 @@ class Client {
      *
      * @return string the account API key
      */
-    public function getAccountApi(): ?string {
+    public function getAccountApi(): string {
         return $this->accountApi;
     }
 
@@ -172,7 +172,7 @@ class Client {
      *
      * @return string the user API key
      */
-    public function getUserApi(): ?string {
+    public function getUserApi(): string {
         return $this->userApi;
     }
 
@@ -286,7 +286,7 @@ class Client {
     /**
      * Read the User whose ID matches the one provided.
      *
-     * @param string $employeeId The ID of the User to return.
+     * @param string $id The ID of the User to return.
      * @return ?User The User whose ID matches the provided ID,
      *      or null if no such User exists within your SmarterU Account.
      * @throws ClientException If the HTTP response includes a status code
@@ -305,7 +305,7 @@ class Client {
     /**
      * Read the User whose email address matches the one provided.
      *
-     * @param string $employeeId The email address of the User to return.
+     * @param string $email The email address of the User to return.
      * @return ?User The User whose email address matches the one provided,
      *      or null if no such User exists within your SmarterU Account.
      * @throws ClientException If the HTTP response includes a status code
@@ -1549,8 +1549,9 @@ class Client {
      *
      * @param string $request The XML request that failed.
      * @param string $response The XML response that was received.
+     * @return void
      */
-    private function logFailedRequest(string $request, string $response) {
+    private function logFailedRequest(string $request, string $response): void {
         // Log the request and response.
         $this->logger->error(
             self::ERROR_GENERIC_REQUEST_FAILURE,

@@ -22,7 +22,7 @@ class ClientTest extends TestCase {
     /**
      * Test agreement between getters and setters.
      */
-    public function testAgreement() {
+    public function testAgreement(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $httpClient = (new HttpClient(['base_uri' => 'https://localhost']));
@@ -37,7 +37,7 @@ class ClientTest extends TestCase {
      * Test that Client automatically generates the correct HttpClient if one
      * is not provided.
      */
-    public function testProvisionHttpClient() {
+    public function testProvisionHttpClient(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);

@@ -23,7 +23,6 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Response;
-use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Exception\ClientException;
 use PHPUnit\Framework\TestCase;
 
@@ -35,7 +34,7 @@ class AddUsersToGroupClientTest extends TestCase {
      * Test that Client::addUsersToGroup() throws the expected exception when
      * the Group does not have a name or an ID.
      */
-    public function testAddUsersToGroupThrowsExceptionWhenNoGroupIdentifier() {
+    public function testAddUsersToGroupThrowsExceptionWhenNoGroupIdentifier(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
@@ -50,9 +49,9 @@ class AddUsersToGroupClientTest extends TestCase {
 
     /**
      * Test that Client::addUsersToGroup() throws the expected exception when
-     * the "$users" array contains a value that is not an instace of User.
+     * the "$users" array contains a value that is not an instance of User.
      */
-    public function testAddUsersToGroupThrowsExceptionWhenUsersNotInstanceOfUser() {
+    public function testAddUsersToGroupThrowsExceptionWhenUsersNotInstanceOfUser(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
@@ -71,7 +70,7 @@ class AddUsersToGroupClientTest extends TestCase {
      * one of the provided Users does not have an email address or an employee
      * ID.
      */
-    public function testAddUsersToGroupThrowsExceptionWhenNoUserIdentifier() {
+    public function testAddUsersToGroupThrowsExceptionWhenNoUserIdentifier(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
@@ -90,7 +89,7 @@ class AddUsersToGroupClientTest extends TestCase {
      * SmarterU API and returns the correct output when all required information
      * is present and only one User is being added to the Group.
      */
-    public function testAddUsersToGroupProducesCorrectInputSingleUser() {
+    public function testAddUsersToGroupProducesCorrectInputSingleUser(): void {
         $name = 'My Group';
         $user = (new User())
             ->setEmail('test@test.com');
@@ -148,7 +147,7 @@ class AddUsersToGroupClientTest extends TestCase {
      * SmarterU API and returns the correct output when all required information
      * is present and multiple Users are being added to the Group.
      */
-    public function testAddUsersToGroupProducesCorrectInputMultipleUsers() {
+    public function testAddUsersToGroupProducesCorrectInputMultipleUsers(): void {
         $name = 'My Group';
         $user = (new User())
             ->setEmail('test@test.com');
@@ -209,7 +208,7 @@ class AddUsersToGroupClientTest extends TestCase {
      * Test that Client::addUsersToGroup() throws the expected exception
      * when an HTTP error occurs and prevents the request from being made.
      */
-    public function testAddUsersToGroupThrowsExceptionWhenHttpErrorOccurs() {
+    public function testAddUsersToGroupThrowsExceptionWhenHttpErrorOccurs(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
@@ -245,7 +244,7 @@ class AddUsersToGroupClientTest extends TestCase {
      * Test that Client::addUsersToGroup() throws the expected exception
      * when the SmarterU API returns a fatal error.
      */
-    public function testAddUsersToGroupThrowsExceptionWhenFatalErrorReturned() {
+    public function testAddUsersToGroupThrowsExceptionWhenFatalErrorReturned(): void {
         $email = 'test@test.com';
         $name = 'My Group';
         $user = (new User())

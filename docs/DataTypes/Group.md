@@ -1,13 +1,9 @@
-# CBS\SmarterU\DataTypes\Group  
+# CBS\SmarterU\DataTypes\Group
 
 Represents a SmarterU Group.
 
 A group is a collection of users that can be collectively assigned to
-training.  
-
-
-
-
+training.
 
 ## Methods
 
@@ -32,7 +28,7 @@ training.
 |[getUserCount](#groupgetusercount)|Get the number of Users assigned to the Group.|
 |[getUserHelpEmail](#groupgetuserhelpemail)|Get the email addresses to which help requests will be sent. If no email addresses are specified, the help requests will be sent to all administrators.|
 |[getUserHelpEnabled](#groupgetuserhelpenabled)|Get whether a link displays in the header of the learner interface that enables users who have the group as their home group to request help.|
-|[getUserHelpOverrideDefault](#groupgetuserhelpoverridedefault)|Get whether the Enable User Help setting is overriden by the group.|
+|[getUserHelpOverrideDefault](#groupgetuserhelpoverridedefault)|Get whether the Enable User Help setting is overridden by the group.|
 |[getUserHelpText](#groupgetuserhelptext)|Get the text to display for the help link in the learner interface's header.|
 |[getUserLimitAmount](#groupgetuserlimitamount)|Get the maximum number of users that can be added to the group. Null if there is no limit.|
 |[getUserLimitEnabled](#groupgetuserlimitenabled)|Get whether or not the group has a user limit enabled.|
@@ -56,7 +52,7 @@ training.
 |[setUserCount](#groupsetusercount)|Set the number of Users assigned to the Group.|
 |[setUserHelpEmail](#groupsetuserhelpemail)|Set the email addresses to which help requests will be sent. If no email addresses are specified, the help requests will be sent to all administrators.|
 |[setUserHelpEnabled](#groupsetuserhelpenabled)|Set whether a link displays in the header of the learner interface that enables users who have the group as their home group to request help.|
-|[setUserHelpOverrideDefault](#groupsetuserhelpoverridedefault)|Set whether the Enable User Help setting is overriden by the group.|
+|[setUserHelpOverrideDefault](#groupsetuserhelpoverridedefault)|Set whether the Enable User Help setting is overridden by the group.|
 |[setUserHelpText](#groupsetuserhelptext)|Set the text to display for the help link in the learner interface's header.|
 |[setUserLimitAmount](#groupsetuserlimitamount)|Set the maximum number of users that can be added to the group. Set this to null to remove the limit.|
 |[setUserLimitEnabled](#groupsetuserlimitenabled)|Set whether or not the group has a user limit enabled.|
@@ -65,7 +61,7 @@ training.
 
 
 
-### Group::getCreatedDate  
+### Group::getCreatedDate
 
 **Description**
 
@@ -73,9 +69,9 @@ training.
 public getCreatedDate (void)
 ```
 
-Returns the date and time when the group was created. 
+Returns the date and time when the group was created.
 
- 
+
 
 **Parameters**
 
@@ -91,7 +87,7 @@ Returns the date and time when the group was created.
 <hr />
 
 
-### Group::getDashboardSetId  
+### Group::getDashboardSetId
 
 **Description**
 
@@ -99,9 +95,9 @@ Returns the date and time when the group was created.
 public getDashboardSetId (void)
 ```
 
-Get the identifier of the dashboard set that is assigned to the group. 
+Get the identifier of the dashboard set that is assigned to the group.
 
- 
+
 
 **Parameters**
 
@@ -117,7 +113,7 @@ Get the identifier of the dashboard set that is assigned to the group.
 <hr />
 
 
-### Group::getDescription  
+### Group::getDescription
 
 **Description**
 
@@ -125,9 +121,9 @@ Get the identifier of the dashboard set that is assigned to the group.
 public getDescription (void)
 ```
 
-Returns the group's description. 
+Returns the group's description.
 
- 
+
 
 **Parameters**
 
@@ -143,7 +139,7 @@ Returns the group's description.
 <hr />
 
 
-### Group::getGroupId  
+### Group::getGroupId
 
 **Description**
 
@@ -151,9 +147,9 @@ Returns the group's description.
 public getGroupId (void)
 ```
 
-Returns the unique id of the group. 
+Returns the unique id of the group.
 
- 
+
 
 **Parameters**
 
@@ -169,7 +165,7 @@ Returns the unique id of the group.
 <hr />
 
 
-### Group::getHomeGroupMessage  
+### Group::getHomeGroupMessage
 
 **Description**
 
@@ -177,9 +173,9 @@ Returns the unique id of the group.
 public getHomeGroupMessage (void)
 ```
 
-Returns the group's home message. 
+Returns the group's home message.
 
- 
+
 
 **Parameters**
 
@@ -195,7 +191,7 @@ Returns the group's home message.
 <hr />
 
 
-### Group::getLearningModuleCount  
+### Group::getLearningModuleCount
 
 **Description**
 
@@ -203,9 +199,9 @@ Returns the group's home message.
 public getLearningModuleCount (void)
 ```
 
-Get the number of LearningModules assigned to the Group. 
+Get the number of LearningModules assigned to the Group.
 
- 
+
 
 **Parameters**
 
@@ -221,7 +217,7 @@ Get the number of LearningModules assigned to the Group.
 <hr />
 
 
-### Group::getLearningModules  
+### Group::getLearningModules
 
 **Description**
 
@@ -229,9 +225,9 @@ Get the number of LearningModules assigned to the Group.
 public getLearningModules (void)
 ```
 
-Get the container for assigning Learning Modules to the group. 
+Get the container for assigning Learning Modules to the group.
 
- 
+
 
 **Parameters**
 
@@ -247,7 +243,7 @@ Get the container for assigning Learning Modules to the group.
 <hr />
 
 
-### Group::getModifiedDate  
+### Group::getModifiedDate
 
 **Description**
 
@@ -255,9 +251,9 @@ Get the container for assigning Learning Modules to the group.
 public getModifiedDate (void)
 ```
 
-Returns the date and time the group was last modified. 
+Returns the date and time the group was last modified.
 
- 
+
 
 **Parameters**
 
@@ -273,7 +269,7 @@ Returns the date and time the group was last modified.
 <hr />
 
 
-### Group::getName  
+### Group::getName
 
 **Description**
 
@@ -281,9 +277,9 @@ Returns the date and time the group was last modified.
 public getName (void)
 ```
 
-Returns the name of the group. 
+Returns the name of the group.
 
- 
+
 
 **Parameters**
 
@@ -299,7 +295,7 @@ Returns the name of the group.
 <hr />
 
 
-### Group::getNotificationEmails  
+### Group::getNotificationEmails
 
 **Description**
 
@@ -307,9 +303,9 @@ Returns the name of the group.
 public getNotificationEmails (void)
 ```
 
-Returns the group's notification email addresses. 
+Returns the group's notification email addresses.
 
- 
+
 
 **Parameters**
 
@@ -325,7 +321,7 @@ Returns the group's notification email addresses.
 <hr />
 
 
-### Group::getOldGroupId  
+### Group::getOldGroupId
 
 **Description**
 
@@ -333,9 +329,9 @@ Returns the group's notification email addresses.
 public getOldGroupId (void)
 ```
 
-Get the group's old ID. 
+Get the group's old ID.
 
- 
+
 
 **Parameters**
 
@@ -351,7 +347,7 @@ Get the group's old ID.
 <hr />
 
 
-### Group::getOldName  
+### Group::getOldName
 
 **Description**
 
@@ -359,9 +355,9 @@ Get the group's old ID.
 public getOldName (void)
 ```
 
-Get the group's old name. 
+Get the group's old name.
 
- 
+
 
 **Parameters**
 
@@ -377,7 +373,7 @@ Get the group's old name.
 <hr />
 
 
-### Group::getPermissions  
+### Group::getPermissions
 
 **Description**
 
@@ -385,9 +381,9 @@ Get the group's old name.
 public getPermissions (void)
 ```
 
-Get the User's permissions within the Group. 
+Get the User's permissions within the Group.
 
- 
+
 
 **Parameters**
 
@@ -403,7 +399,7 @@ Get the User's permissions within the Group.
 <hr />
 
 
-### Group::getStatus  
+### Group::getStatus
 
 **Description**
 
@@ -411,9 +407,9 @@ Get the User's permissions within the Group.
 public getStatus (void)
 ```
 
-Returns the group's status. 
+Returns the group's status.
 
- 
+
 
 **Parameters**
 
@@ -429,7 +425,7 @@ Returns the group's status.
 <hr />
 
 
-### Group::getSubscriptionVariants  
+### Group::getSubscriptionVariants
 
 **Description**
 
@@ -437,9 +433,9 @@ Returns the group's status.
 public getSubscriptionVariants (void)
 ```
 
-Get the container for assigning subscription variants to the group. 
+Get the container for assigning subscription variants to the group.
 
- 
+
 
 **Parameters**
 
@@ -455,7 +451,7 @@ Get the container for assigning subscription variants to the group.
 <hr />
 
 
-### Group::getTags  
+### Group::getTags
 
 **Description**
 
@@ -463,9 +459,9 @@ Get the container for assigning subscription variants to the group.
 public getTags (void)
 ```
 
-Returns the group's tags. 
+Returns the group's tags.
 
- 
+
 
 **Parameters**
 
@@ -481,7 +477,7 @@ Returns the group's tags.
 <hr />
 
 
-### Group::getUserCount  
+### Group::getUserCount
 
 **Description**
 
@@ -489,9 +485,9 @@ Returns the group's tags.
 public getUserCount (void)
 ```
 
-Get the number of Users assigned to the Group. 
+Get the number of Users assigned to the Group.
 
- 
+
 
 **Parameters**
 
@@ -507,7 +503,7 @@ Get the number of Users assigned to the Group.
 <hr />
 
 
-### Group::getUserHelpEmail  
+### Group::getUserHelpEmail
 
 **Description**
 
@@ -515,9 +511,9 @@ Get the number of Users assigned to the Group.
 public getUserHelpEmail (void)
 ```
 
-Get the email addresses to which help requests will be sent. If no email addresses are specified, the help requests will be sent to all administrators. 
+Get the email addresses to which help requests will be sent. If no email addresses are specified, the help requests will be sent to all administrators.
 
- 
+
 
 **Parameters**
 
@@ -533,7 +529,7 @@ Get the email addresses to which help requests will be sent. If no email address
 <hr />
 
 
-### Group::getUserHelpEnabled  
+### Group::getUserHelpEnabled
 
 **Description**
 
@@ -541,9 +537,9 @@ Get the email addresses to which help requests will be sent. If no email address
 public getUserHelpEnabled (void)
 ```
 
-Get whether a link displays in the header of the learner interface that enables users who have the group as their home group to request help. 
+Get whether a link displays in the header of the learner interface that enables users who have the group as their home group to request help.
 
- 
+
 
 **Parameters**
 
@@ -559,7 +555,7 @@ Get whether a link displays in the header of the learner interface that enables 
 <hr />
 
 
-### Group::getUserHelpOverrideDefault  
+### Group::getUserHelpOverrideDefault
 
 **Description**
 
@@ -567,9 +563,9 @@ Get whether a link displays in the header of the learner interface that enables 
 public getUserHelpOverrideDefault (void)
 ```
 
-Get whether the Enable User Help setting is overriden by the group. 
+Get whether the Enable User Help setting is overridden by the group.
 
- 
+
 
 **Parameters**
 
@@ -579,14 +575,14 @@ Get whether the Enable User Help setting is overriden by the group.
 
 `?bool`
 
-> true if and only if the Enable User Help setting is  
-overriden by the group
+> true if and only if the Enable User Help setting is
+overridden by the group
 
 
 <hr />
 
 
-### Group::getUserHelpText  
+### Group::getUserHelpText
 
 **Description**
 
@@ -594,9 +590,9 @@ overriden by the group
 public getUserHelpText (void)
 ```
 
-Get the text to display for the help link in the learner interface's header. 
+Get the text to display for the help link in the learner interface's header.
 
- 
+
 
 **Parameters**
 
@@ -612,7 +608,7 @@ Get the text to display for the help link in the learner interface's header.
 <hr />
 
 
-### Group::getUserLimitAmount  
+### Group::getUserLimitAmount
 
 **Description**
 
@@ -620,9 +616,9 @@ Get the text to display for the help link in the learner interface's header.
 public getUserLimitAmount (void)
 ```
 
-Get the maximum number of users that can be added to the group. Null if there is no limit. 
+Get the maximum number of users that can be added to the group. Null if there is no limit.
 
- 
+
 
 **Parameters**
 
@@ -632,14 +628,14 @@ Get the maximum number of users that can be added to the group. Null if there is
 
 `?int`
 
-> The maximum number of users that can be added to a group,  
+> The maximum number of users that can be added to a group,
 or null if there is no limit.
 
 
 <hr />
 
 
-### Group::getUserLimitEnabled  
+### Group::getUserLimitEnabled
 
 **Description**
 
@@ -647,9 +643,9 @@ or null if there is no limit.
 public getUserLimitEnabled (void)
 ```
 
-Get whether or not the group has a user limit enabled. 
+Get whether or not the group has a user limit enabled.
 
- 
+
 
 **Parameters**
 
@@ -665,7 +661,7 @@ Get whether or not the group has a user limit enabled.
 <hr />
 
 
-### Group::getUsers  
+### Group::getUsers
 
 **Description**
 
@@ -673,9 +669,9 @@ Get whether or not the group has a user limit enabled.
 public getUsers (void)
 ```
 
-Get the container for assigning Users to the group. 
+Get the container for assigning Users to the group.
 
- 
+
 
 **Parameters**
 
@@ -691,7 +687,7 @@ Get the container for assigning Users to the group.
 <hr />
 
 
-### Group::setCreatedDate  
+### Group::setCreatedDate
 
 **Description**
 
@@ -699,14 +695,14 @@ Get the container for assigning Users to the group.
 public setCreatedDate (\DateTimeImmutable $createdDate)
 ```
 
-Sets the date and time when the group was created. 
+Sets the date and time when the group was created.
 
- 
+
 
 **Parameters**
 
 * `(\DateTimeImmutable) $createdDate`
-: the date and time when the group was created.  
+: the date and time when the group was created.
 
 **Return Values**
 
@@ -718,7 +714,7 @@ Sets the date and time when the group was created.
 <hr />
 
 
-### Group::setDashboardSetId  
+### Group::setDashboardSetId
 
 **Description**
 
@@ -726,14 +722,14 @@ Sets the date and time when the group was created.
 public setDashboardSetId (string $dashboardSetId)
 ```
 
-Set the identifier of the dashboard set that is assigned to the group. 
+Set the identifier of the dashboard set that is assigned to the group.
 
- 
+
 
 **Parameters**
 
 * `(string) $dashboardSetId`
-: The identifier of the dashboard set  
+: The identifier of the dashboard set
 
 **Return Values**
 
@@ -745,7 +741,7 @@ Set the identifier of the dashboard set that is assigned to the group.
 <hr />
 
 
-### Group::setDescription  
+### Group::setDescription
 
 **Description**
 
@@ -753,14 +749,14 @@ Set the identifier of the dashboard set that is assigned to the group.
 public setDescription (string $description)
 ```
 
-Sets the group's description. 
+Sets the group's description.
 
- 
+
 
 **Parameters**
 
 * `(string) $description`
-: the group's description.  
+: the group's description.
 
 **Return Values**
 
@@ -772,7 +768,7 @@ Sets the group's description.
 <hr />
 
 
-### Group::setGroupId  
+### Group::setGroupId
 
 **Description**
 
@@ -780,14 +776,14 @@ Sets the group's description.
 public setGroupId (string $groupId)
 ```
 
-Sets the unique id of the group. 
+Sets the unique id of the group.
 
- 
+
 
 **Parameters**
 
 * `(string) $groupId`
-: the unique id of the group.  
+: the unique id of the group.
 
 **Return Values**
 
@@ -799,7 +795,7 @@ Sets the unique id of the group.
 <hr />
 
 
-### Group::setHomeGroupMessage  
+### Group::setHomeGroupMessage
 
 **Description**
 
@@ -807,14 +803,14 @@ Sets the unique id of the group.
 public setHomeGroupMessage (string $homeGroupMessage)
 ```
 
-Sets the group's home message. 
+Sets the group's home message.
 
- 
+
 
 **Parameters**
 
 * `(string) $homeGroupMessage`
-: the group's home message.  
+: the group's home message.
 
 **Return Values**
 
@@ -826,7 +822,7 @@ Sets the group's home message.
 <hr />
 
 
-### Group::setLearningModuleCount  
+### Group::setLearningModuleCount
 
 **Description**
 
@@ -834,14 +830,14 @@ Sets the group's home message.
 public setLearningModuleCount (int $learningModuleCount)
 ```
 
-Set the number of LearningModules assigned to the Group. 
+Set the number of LearningModules assigned to the Group.
 
- 
+
 
 **Parameters**
 
 * `(int) $learningModuleCount`
-: the number of LearningModules  
+: the number of LearningModules
 
 **Return Values**
 
@@ -853,7 +849,7 @@ Set the number of LearningModules assigned to the Group.
 <hr />
 
 
-### Group::setLearningModules  
+### Group::setLearningModules
 
 **Description**
 
@@ -861,14 +857,14 @@ Set the number of LearningModules assigned to the Group.
 public setLearningModules (array $learningModules)
 ```
 
-Set the container for assigning Learning Modules to the group. 
+Set the container for assigning Learning Modules to the group.
 
- 
+
 
 **Parameters**
 
 * `(array) $learningModules`
-: the container for LearningModules  
+: the container for LearningModules
 
 **Return Values**
 
@@ -880,7 +876,7 @@ Set the container for assigning Learning Modules to the group.
 <hr />
 
 
-### Group::setModifiedDate  
+### Group::setModifiedDate
 
 **Description**
 
@@ -888,14 +884,14 @@ Set the container for assigning Learning Modules to the group.
 public setModifiedDate (\DateTimeInterface $modifiedDate)
 ```
 
-Sets the date and time the group was last modified. 
+Sets the date and time the group was last modified.
 
- 
+
 
 **Parameters**
 
 * `(\DateTimeInterface) $modifiedDate`
-: The date and time the group was last modified.  
+: The date and time the group was last modified.
 
 **Return Values**
 
@@ -907,7 +903,7 @@ Sets the date and time the group was last modified.
 <hr />
 
 
-### Group::setName  
+### Group::setName
 
 **Description**
 
@@ -915,14 +911,14 @@ Sets the date and time the group was last modified.
 public setName (string $name)
 ```
 
-Sets the name of the group. 
+Sets the name of the group.
 
- 
+
 
 **Parameters**
 
 * `(string) $name`
-: the name of the group.  
+: the name of the group.
 
 **Return Values**
 
@@ -934,7 +930,7 @@ Sets the name of the group.
 <hr />
 
 
-### Group::setNotificationEmails  
+### Group::setNotificationEmails
 
 **Description**
 
@@ -942,15 +938,15 @@ Sets the name of the group.
 public setNotificationEmails (string[] $notificationEmails)
 ```
 
-Sets the group's notification email addresses. 
+Sets the group's notification email addresses.
 
-All members of the array must be strings. If they are not, then an  
-InvalidArgumentException is thrown. 
+All members of the array must be strings. If they are not, then an
+InvalidArgumentException is thrown.
 
 **Parameters**
 
 * `(string[]) $notificationEmails`
-: The Group's notification email addresses.  
+: The Group's notification email addresses.
 
 **Return Values**
 
@@ -968,7 +964,7 @@ InvalidArgumentException is thrown.
 <hr />
 
 
-### Group::setOldGroupId  
+### Group::setOldGroupId
 
 **Description**
 
@@ -976,14 +972,14 @@ InvalidArgumentException is thrown.
 public setOldGroupId (?string $oldName)
 ```
 
-Set the group's old ID. 
+Set the group's old ID.
 
- 
+
 
 **Parameters**
 
 * `(?string) $oldName`
-: the old ID  
+: the old ID
 
 **Return Values**
 
@@ -995,7 +991,7 @@ Set the group's old ID.
 <hr />
 
 
-### Group::setOldName  
+### Group::setOldName
 
 **Description**
 
@@ -1003,14 +999,14 @@ Set the group's old ID.
 public setOldName (?string $oldName)
 ```
 
-Set the group's old name. 
+Set the group's old name.
 
- 
+
 
 **Parameters**
 
 * `(?string) $oldName`
-: the old name  
+: the old name
 
 **Return Values**
 
@@ -1022,7 +1018,7 @@ Set the group's old name.
 <hr />
 
 
-### Group::setPermissions  
+### Group::setPermissions
 
 **Description**
 
@@ -1030,14 +1026,14 @@ Set the group's old name.
 public setPermissions (string[] $permissions)
 ```
 
-Set the User's permissions within the Group. 
+Set the User's permissions within the Group.
 
- 
+
 
 **Parameters**
 
 * `(string[]) $permissions`
-: The User's permissions within the Group  
+: The User's permissions within the Group
 
 **Return Values**
 
@@ -1049,7 +1045,7 @@ Set the User's permissions within the Group.
 <hr />
 
 
-### Group::setStatus  
+### Group::setStatus
 
 **Description**
 
@@ -1057,15 +1053,15 @@ Set the User's permissions within the Group.
 public setStatus (string $status)
 ```
 
-Sets the group's status. 
+Sets the group's status.
 
-The status value must be one of STATUS_ACTIVE or STATUS_INACTIVE. If it  
-is not a valid value, an InvalidArgumentException is thrown. 
+The status value must be one of STATUS_ACTIVE or STATUS_INACTIVE. If it
+is not a valid value, an InvalidArgumentException is thrown.
 
 **Parameters**
 
 * `(string) $status`
-: The group's status.  
+: The group's status.
 
 **Return Values**
 
@@ -1083,7 +1079,7 @@ is not a valid value, an InvalidArgumentException is thrown.
 <hr />
 
 
-### Group::setSubscriptionVariants  
+### Group::setSubscriptionVariants
 
 **Description**
 
@@ -1091,14 +1087,14 @@ is not a valid value, an InvalidArgumentException is thrown.
 public setSubscriptionVariants (array $)
 ```
 
-Set the container for assigning subscription variants to the group. 
+Set the container for assigning subscription variants to the group.
 
- 
+
 
 **Parameters**
 
 * `(array) $`
-: The container for subscription variants  
+: The container for subscription variants
 
 **Return Values**
 
@@ -1110,7 +1106,7 @@ Set the container for assigning subscription variants to the group.
 <hr />
 
 
-### Group::setTags  
+### Group::setTags
 
 **Description**
 
@@ -1118,14 +1114,14 @@ Set the container for assigning subscription variants to the group.
 public setTags (\Tag[] $tags)
 ```
 
-Sets the group's tags. 
+Sets the group's tags.
 
- 
+
 
 **Parameters**
 
 * `(\Tag[]) $tags`
-: The group's tags.  
+: The group's tags.
 
 **Return Values**
 
@@ -1143,7 +1139,7 @@ Sets the group's tags.
 <hr />
 
 
-### Group::setUserCount  
+### Group::setUserCount
 
 **Description**
 
@@ -1151,14 +1147,14 @@ Sets the group's tags.
 public setUserCount (int $userCount)
 ```
 
-Set the number of Users assigned to the Group. 
+Set the number of Users assigned to the Group.
 
- 
+
 
 **Parameters**
 
 * `(int) $userCount`
-: the number of Users  
+: the number of Users
 
 **Return Values**
 
@@ -1170,7 +1166,7 @@ Set the number of Users assigned to the Group.
 <hr />
 
 
-### Group::setUserHelpEmail  
+### Group::setUserHelpEmail
 
 **Description**
 
@@ -1178,14 +1174,14 @@ Set the number of Users assigned to the Group.
 public setUserHelpEmail (array $userHelpEmail)
 ```
 
-Set the email addresses to which help requests will be sent. If no email addresses are specified, the help requests will be sent to all administrators. 
+Set the email addresses to which help requests will be sent. If no email addresses are specified, the help requests will be sent to all administrators.
 
- 
+
 
 **Parameters**
 
 * `(array) $userHelpEmail`
-: the email addresses  
+: the email addresses
 
 **Return Values**
 
@@ -1197,7 +1193,7 @@ Set the email addresses to which help requests will be sent. If no email address
 <hr />
 
 
-### Group::setUserHelpEnabled  
+### Group::setUserHelpEnabled
 
 **Description**
 
@@ -1205,14 +1201,14 @@ Set the email addresses to which help requests will be sent. If no email address
 public setUserHelpEnabled (bool $)
 ```
 
-Set whether a link displays in the header of the learner interface that enables users who have the group as their home group to request help. 
+Set whether a link displays in the header of the learner interface that enables users who have the group as their home group to request help.
 
- 
+
 
 **Parameters**
 
 * `(bool) $`
-: userHelpEnabled true if and only if the link is displayed  
+: userHelpEnabled true if and only if the link is displayed
 
 **Return Values**
 
@@ -1224,7 +1220,7 @@ Set whether a link displays in the header of the learner interface that enables 
 <hr />
 
 
-### Group::setUserHelpOverrideDefault  
+### Group::setUserHelpOverrideDefault
 
 **Description**
 
@@ -1232,15 +1228,15 @@ Set whether a link displays in the header of the learner interface that enables 
 public setUserHelpOverrideDefault (bool $userHelpOverrideDefault)
 ```
 
-Set whether the Enable User Help setting is overriden by the group. 
+Set whether the Enable User Help setting is overridden by the group.
 
- 
+
 
 **Parameters**
 
 * `(bool) $userHelpOverrideDefault`
-: true if and only if the Enable  
-User Help setting is overriden by the group  
+: true if and only if the Enable
+User Help setting is overridden by the group
 
 **Return Values**
 
@@ -1250,7 +1246,7 @@ User Help setting is overriden by the group
 <hr />
 
 
-### Group::setUserHelpText  
+### Group::setUserHelpText
 
 **Description**
 
@@ -1258,14 +1254,14 @@ User Help setting is overriden by the group
 public setUserHelpText (string $userHelpText)
 ```
 
-Set the text to display for the help link in the learner interface's header. 
+Set the text to display for the help link in the learner interface's header.
 
- 
+
 
 **Parameters**
 
 * `(string) $userHelpText`
-: the text to display for the help link  
+: the text to display for the help link
 
 **Return Values**
 
@@ -1277,7 +1273,7 @@ Set the text to display for the help link in the learner interface's header.
 <hr />
 
 
-### Group::setUserLimitAmount  
+### Group::setUserLimitAmount
 
 **Description**
 
@@ -1285,15 +1281,15 @@ Set the text to display for the help link in the learner interface's header.
 public setUserLimitAmount (?int $userLimitAmount)
 ```
 
-Set the maximum number of users that can be added to the group. Set this to null to remove the limit. 
+Set the maximum number of users that can be added to the group. Set this to null to remove the limit.
 
- 
+
 
 **Parameters**
 
 * `(?int) $userLimitAmount`
-: The maximum number of users that can be  
-added to the group, or null if there is no maximum  
+: The maximum number of users that can be
+added to the group, or null if there is no maximum
 
 **Return Values**
 
@@ -1305,7 +1301,7 @@ added to the group, or null if there is no maximum
 <hr />
 
 
-### Group::setUserLimitEnabled  
+### Group::setUserLimitEnabled
 
 **Description**
 
@@ -1313,15 +1309,15 @@ added to the group, or null if there is no maximum
 public setUserLimitEnabled (bool $userLimitEnabled)
 ```
 
-Set whether or not the group has a user limit enabled. 
+Set whether or not the group has a user limit enabled.
 
- 
+
 
 **Parameters**
 
 * `(bool) $userLimitEnabled`
-: true if and only if the group has a user  
-limit enabled  
+: true if and only if the group has a user
+limit enabled
 
 **Return Values**
 
@@ -1333,7 +1329,7 @@ limit enabled
 <hr />
 
 
-### Group::setUsers  
+### Group::setUsers
 
 **Description**
 
@@ -1341,16 +1337,16 @@ limit enabled
 public setUsers (array $users)
 ```
 
-Set the container for assigning Users to the group. 
+Set the container for assigning Users to the group.
 
- 
+
 
 **Parameters**
 
 * `(array) $users`
-: A container for assigning Users to the group.  
-Each element must be an instance of CBS\SmarterU\DataTypes\  
-User.  
+: A container for assigning Users to the group.
+Each element must be an instance of CBS\SmarterU\DataTypes\
+User.
 
 **Return Values**
 
@@ -1360,4 +1356,3 @@ User.
 
 
 <hr />
-

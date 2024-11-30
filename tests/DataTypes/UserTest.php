@@ -24,7 +24,7 @@ class UserTest extends TestCase {
     /**
      * Test agreement between getters and setters.
      */
-    public function testAgreement() {
+    public function testAgreement(): void {
         $id = '17';
         $createdDate = new DateTime();
         $email = 'phpunit@test.com';

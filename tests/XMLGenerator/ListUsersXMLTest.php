@@ -27,7 +27,7 @@ class ListUsersXMLTest extends TestCase {
      * Tests that XML generation produces the expected result when all
      * required and optional information is present.
      */
-    public function testEmittedXMLIsAsExpectedWithAllInfo() {
+    public function testEmittedXMLIsAsExpectedWithAllInfo(): void {
         $xmlGenerator = new XMLGenerator();
         $accountApi = 'account';
         $userApi = 'user';
@@ -234,7 +234,7 @@ class ListUsersXMLTest extends TestCase {
      * Tests that XML generation produces the expected result when all
      * required information but no optional information is present.
      */
-    public function testEmittedXMLIsAsExpectedWithoutOptionalInfo() {
+    public function testEmittedXMLIsAsExpectedWithoutOptionalInfo(): void {
         $xmlGenerator = new XMLGenerator();
         $accountApi = 'account';
         $userApi = 'user';
@@ -294,7 +294,7 @@ class ListUsersXMLTest extends TestCase {
      * Tests that XML generation produces the expected result when the group
      * name contains an ampersand.
      */
-    public function testEmittedXMLIsAsExpectedWenGroupNameContainsAnAmpersand() {
+    public function testEmittedXMLIsAsExpectedWenGroupNameContainsAnAmpersand(): void {
         $xmlGenerator = new XMLGenerator();
         $accountApi = 'account';
         $userApi = 'user';
@@ -346,7 +346,7 @@ class ListUsersXMLTest extends TestCase {
         $xml = $xmlGenerator->listUsers($accountApi, $userApi, $query);
         self::assertIsString($xml);
         $xml = simplexml_load_string($xml);
-        
+
         self::assertEquals(
             $groupName,
             $xml->Parameters->User->Filters->GroupName

@@ -21,7 +21,7 @@ class MatchTagTest extends TestCase {
     /**
      * Tests agreement between getters and setters.
      */
-    public function testAgreement() {
+    public function testAgreement(): void {
         $matchType = 'EXACT';
         $value = 'match';
         $matchTag = (new MatchTag())

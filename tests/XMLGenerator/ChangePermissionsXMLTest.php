@@ -27,7 +27,7 @@ class ChangePermissionsXMLTest extends TestCase {
      * User whose permissions are being changed does not have an email address
      * or an employee ID.
      */
-    public function testChangePermissionsThrowsExceptionWhenNoUserIdentifier() {
+    public function testChangePermissionsThrowsExceptionWhenNoUserIdentifier(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $user = new User();
@@ -52,7 +52,7 @@ class ChangePermissionsXMLTest extends TestCase {
      * Group in which the User's permissions are being changed does not have a
      * name or an ID.
      */
-    public function testChangePermissionsThrowsExceptionWhenNoGroupIdentifier() {
+    public function testChangePermissionsThrowsExceptionWhenNoGroupIdentifier(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $user = (new User())
@@ -78,7 +78,7 @@ class ChangePermissionsXMLTest extends TestCase {
      * when all required values are present and only one permission is being
      * changed.
      */
-    public function testChangePermissionsProducesExpectedOutputSinglePermission() {
+    public function testChangePermissionsProducesExpectedOutputSinglePermission(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $user = (new User())
@@ -199,7 +199,7 @@ class ChangePermissionsXMLTest extends TestCase {
      * when all required values are present and multiple permissions are being
      * changed.
      */
-    public function testChangePermissionsProducesExpectedOutputMultiplePermissions() {
+    public function testChangePermissionsProducesExpectedOutputMultiplePermissions(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $user = (new User())

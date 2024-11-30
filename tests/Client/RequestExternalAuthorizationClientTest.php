@@ -32,7 +32,7 @@ class RequestExternalAuthorizationClientTest extends TestCase {
      * Test that Client::requestExternalAuthorizationByEmail() produces the
      * correct input to the SmarterU API and returns the correct value.
      */
-    public function testRequestExternalAuthorizationByEmailProducesCorrectOutput() {
+    public function testRequestExternalAuthorizationByEmailProducesCorrectOutput(): void {
         $authKey = 'authKey';
         $requestKey = 'requestKey';
         $redirectPath = 'redirectPath';
@@ -90,7 +90,7 @@ class RequestExternalAuthorizationClientTest extends TestCase {
      * expected exception when an HTTP error occurs and prevents the request
      * from being made.
      */
-    public function testRequestExternalAuthorizationByEmailThrowsExceptionWhenHttpErrorOccurs() {
+    public function testRequestExternalAuthorizationByEmailThrowsExceptionWhenHttpErrorOccurs(): void {
         $email = 'test@test.com';
         $accountApi = 'account';
         $userApi = 'user';
@@ -120,7 +120,7 @@ class RequestExternalAuthorizationClientTest extends TestCase {
      * Test that Client::requestExternalAuthorizationByEmail() throws the
      * expected exception when the SmarterU API returns a fatal error.
      */
-    public function testRequestExternalAuthorizationByEmailThrowsExceptionWhenFatalErrorReturned() {
+    public function testRequestExternalAuthorizationByEmailThrowsExceptionWhenFatalErrorReturned(): void {
         $email = 'test@test.com';
         $accountApi = 'account';
         $userApi = 'user';
@@ -189,7 +189,7 @@ class RequestExternalAuthorizationClientTest extends TestCase {
      * Test that Client::requestExternalAuthorizationByEmployeeId() produces
      * the correct input to the SmarterU API and returns the correct value.
      */
-    public function testRequestExternalAuthorizationByEmployeeIdProducesCorrectOutput() {
+    public function testRequestExternalAuthorizationByEmployeeIdProducesCorrectOutput(): void {
         $authKey = 'authKey';
         $requestKey = 'requestKey';
         $redirectPath = 'redirectPath';
@@ -247,7 +247,7 @@ class RequestExternalAuthorizationClientTest extends TestCase {
      * expected exception when an HTTP error occurs and prevents the request
      * from being made.
      */
-    public function testRequestExternalAuthorizationByEmployeeIdThrowsExceptionWhenHttpErrorOccurs() {
+    public function testRequestExternalAuthorizationByEmployeeIdThrowsExceptionWhenHttpErrorOccurs(): void {
         $employeeId = '12';
         $accountApi = 'account';
         $userApi = 'user';
@@ -277,7 +277,7 @@ class RequestExternalAuthorizationClientTest extends TestCase {
      * Test that Client::requestExternalAuthorizationByEmployeeId() throws the
      * expected exception when the SmarterU API returns a fatal error.
      */
-    public function testRequestExternalAuthorizationByEmployeeIdThrowsExceptionWhenFatalErrorReturned() {
+    public function testRequestExternalAuthorizationByEmployeeIdThrowsExceptionWhenFatalErrorReturned(): void {
         $employeeId = '12';
         $accountApi = 'account';
         $userApi = 'user';

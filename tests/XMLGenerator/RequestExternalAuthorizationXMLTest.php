@@ -24,7 +24,7 @@ class RequestExternalAuthorizationXMLTest extends TestCase {
      * request throws an exception if the array provided as a parameter does
      * not have an "Email" key or an "EmployeeID" key.
      */
-    public function testRequestExternalAuthorizationThrowsExceptionWhenNoIdentifier() {
+    public function testRequestExternalAuthorizationThrowsExceptionWhenNoIdentifier(): void {
         $xmlGenerator = new XMLGenerator();
         $accountApi = 'account';
         $userApi = 'user';
@@ -44,7 +44,7 @@ class RequestExternalAuthorizationXMLTest extends TestCase {
      * request produces the expected output when the user is identified by
      * their email address.
      */
-    public function testRequestExternalAuthorizationProducesExpectedOutputForEmail() {
+    public function testRequestExternalAuthorizationProducesExpectedOutputForEmail(): void {
         $xmlGenerator = new XMLGenerator();
         $accountApi = 'account';
         $userApi = 'user';
@@ -91,7 +91,7 @@ class RequestExternalAuthorizationXMLTest extends TestCase {
      * request produces the expected output when the user is identified by
      * their employee ID.
      */
-    public function testRequestExternalAuthorizationProducesExpectedOutputForEmployeeId() {
+    public function testRequestExternalAuthorizationProducesExpectedOutputForEmployeeId(): void {
         $xmlGenerator = new XMLGenerator();
         $accountApi = 'account';
         $userApi = 'user';

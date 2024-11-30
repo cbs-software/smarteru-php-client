@@ -24,7 +24,7 @@ class SubscriptionVariant {
     protected string $id;
 
     /**
-     * Specifies if the variant is to be assigned to or remvoed from the group.
+     * Specifies if the variant is to be assigned to or removed from the group.
      * Acceptable values are 'Add' or 'Remove'. Only necessary when making an
      * updateGroup request to add or remove the subscription variant.
      */
