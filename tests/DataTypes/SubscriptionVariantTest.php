@@ -21,7 +21,7 @@ class SubscriptionVariantTest extends TestCase {
     /**
      * Tests agreement between getters and setters.
      */
-    public function testAgreement() {
+    public function testAgreement(): void {
         $id = '1';
         $requiresCredits = true;
         $action = 'Add';

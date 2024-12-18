@@ -18,7 +18,7 @@ use PHPUnit\Framework\TestCase;
 /** Tests CBS\SmarterU\Exceptions\SmarterUException */
 class SmarterUExceptionTest extends TestCase {
     /** Test that properties are correctly initialized */
-    public function testAgreement() {
+    public function testAgreement(): void {
         $code = 'SU:01';
         $message = 'No POST data detected';
         $errorCode = new ErrorCode($code, $message);

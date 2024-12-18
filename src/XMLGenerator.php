@@ -20,7 +20,6 @@ use CBS\SmarterU\Queries\GetLearnerReportQuery;
 use CBS\SmarterU\Queries\GetUserQuery;
 use CBS\SmarterU\Queries\ListGroupsQuery;
 use CBS\SmarterU\Queries\ListUsersQuery;
-use SimpleXMLElement;
 
 /**
  * This class contains helper methods for Client that generate the XML body of
@@ -361,7 +360,7 @@ class XMLGenerator {
         }
 
         $info = $userTag->addChild('Info');
-       
+
         $info->addChild('Email', (string) $user->getEmail());
         $info->addChild('EmployeeID', (string) $user->getEmployeeId());
 
@@ -511,14 +510,14 @@ class XMLGenerator {
      *     for details.
      *
      * @throws MissingValueException If the User is missing a required value.
+     * @return void
      */
-    public function validateUpdateUser(User $user) {
-
+    public function validateUpdateUser(User $user): void {
         if ($user->getSendEmailTo() === 'Self' && empty($user->getEmail())) {
             throw new MissingValueException(self::ERROR_EMAIL_REQUIRED_FOR_SEND_EMAIL_TO_SELF);
         }
     }
-    
+
     /**
      * Generate the XML body for a createGroup query.
      *
@@ -1094,7 +1093,7 @@ class XMLGenerator {
                 $currentTag->addChild('TagValues', $tag->getTagValues());
             }
         }
-    
+
         $learningModules = $filters->addChild('LearningModules');
         if (
             !empty($query->getLearningModuleStatus())
@@ -1264,12 +1263,12 @@ class XMLGenerator {
             );
         }
 
-        
+
         $columns = $report->addChild('Columns');
         foreach ($query->getColumns() as $column) {
             $columns->addChild('ColumnName', $column);
         }
-        
+
         $customFields = $report->addChild('CustomFields');
         foreach ($query->getCustomFields() as $field) {
             $customFields->addChild('FieldName', $field->getName());
@@ -1357,7 +1356,7 @@ class XMLGenerator {
 
     /**
      * Escapes a value for legal passthrough to addChild().
-     * 
+     *
      * The documentation stinks on this point but if you dig far enough you
      * will discover that addChild() will escape < and > when you pass a value
      * in but it will NOT escape &.  This method will escape & making a value

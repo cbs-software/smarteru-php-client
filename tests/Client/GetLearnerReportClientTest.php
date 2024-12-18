@@ -40,7 +40,7 @@ class GetLearnerReportClientTest extends TestCase {
      * Test that Client::getLearnerReport() throws an exception when the
      * query doesn't have either a group status or a list of group names.
      */
-    public function testGetLearnerReportThrowsExceptionWhenNoGroupIdentifier() {
+    public function testGetLearnerReportThrowsExceptionWhenNoGroupIdentifier(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
@@ -58,7 +58,7 @@ class GetLearnerReportClientTest extends TestCase {
      * Test that Client::getLearnerReport() throws an exception when the
      * query contains a Tag that doesn't have a name or an ID.
      */
-    public function testGetLearnerReportThrowsExceptionWhenNoTagIdentifier() {
+    public function testGetLearnerReportThrowsExceptionWhenNoTagIdentifier(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
@@ -79,7 +79,7 @@ class GetLearnerReportClientTest extends TestCase {
      * Test that Client::getLearnerReport() throws an exception when the
      * query doesn't have either a user status or a list of user identifiers.
      */
-    public function testGetLearnerReportThrowsExceptionWhenNoUserIdentifier() {
+    public function testGetLearnerReportThrowsExceptionWhenNoUserIdentifier(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
@@ -99,7 +99,7 @@ class GetLearnerReportClientTest extends TestCase {
      * response includes a status code indicating that an HTTP error prevented
      * the request from being made.
      */
-    public function testGetLearnerReportThrowsExceptionWhenHTTPErrorOccurs() {
+    public function testGetLearnerReportThrowsExceptionWhenHTTPErrorOccurs(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
@@ -133,7 +133,7 @@ class GetLearnerReportClientTest extends TestCase {
      * Test that Client::getLearnerReport() throws the expected exception
      * when the SmarterU API returns a fatal error.
      */
-    public function testAddUsersToGroupThrowsExceptionWhenFatalErrorReturned() {
+    public function testAddUsersToGroupThrowsExceptionWhenFatalErrorReturned(): void {
         $query = (new GetLearnerReportQuery())
             ->setEnrollmentId('1')
             ->setGroupStatus('Active')
@@ -210,7 +210,7 @@ class GetLearnerReportClientTest extends TestCase {
      * the query does not contain any optional information and the SmarterU API
      * returns a single LearnerReport.
      */
-    public function testGetLearnerReportProducesCorrectOutputWithoutOptionalInfoSingleReport() {
+    public function testGetLearnerReportProducesCorrectOutputWithoutOptionalInfoSingleReport(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
@@ -324,7 +324,7 @@ class GetLearnerReportClientTest extends TestCase {
      * the query does not contain any optional information and the SmarterU API
      * returns a single LearnerReport.
      */
-    public function testGetLearnerReportProducesCorrectOutputWithBlankDates() {
+    public function testGetLearnerReportProducesCorrectOutputWithBlankDates(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
@@ -407,7 +407,7 @@ class GetLearnerReportClientTest extends TestCase {
      * the query contains all optional information and the SmarterU API
      * returns a single LearnerReport.
      */
-    public function testGetLearnerReportProducesCorrectOutputWithOptionalInfoSingleReport() {
+    public function testGetLearnerReportProducesCorrectOutputWithOptionalInfoSingleReport(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
@@ -655,7 +655,7 @@ class GetLearnerReportClientTest extends TestCase {
      * the query does not contain any optional information and the SmarterU API
      * returns multiple LearnerReports.
      */
-    public function testGetLearnerReportProducesCorrectOutputWithoutOptionalInfoMultipleReports() {
+    public function testGetLearnerReportProducesCorrectOutputWithoutOptionalInfoMultipleReports(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
@@ -801,7 +801,7 @@ class GetLearnerReportClientTest extends TestCase {
      * the query contains all optional information and the SmarterU API
      * returns multiple LearnerReports.
      */
-    public function testGetLearnerReportProducesCorrectOutputWithOptionalInfoMultipleReports() {
+    public function testGetLearnerReportProducesCorrectOutputWithOptionalInfoMultipleReports(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);

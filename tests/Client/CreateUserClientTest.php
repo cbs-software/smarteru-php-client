@@ -84,7 +84,7 @@ class CreateUserClientTest extends TestCase {
      * Test that createUser() passes the correct information into the API
      * when making the request.
      */
-    public function testCreateUserMakesCorrectAPICall() {
+    public function testCreateUserMakesCorrectAPICall(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
@@ -136,7 +136,7 @@ class CreateUserClientTest extends TestCase {
      * Test that createUser() throws an exception when the request results
      * in an HTTP error.
      */
-    public function testCreateUserThrowsExceptionWhenHTTPErrorOccurs() {
+    public function testCreateUserThrowsExceptionWhenHTTPErrorOccurs(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
@@ -166,7 +166,7 @@ class CreateUserClientTest extends TestCase {
      * returns a fatal error, as indicated by the value of the <Result>
      * tag.
      */
-    public function testCreateUserThrowsExceptionWhenFatalErrorReturned() {
+    public function testCreateUserThrowsExceptionWhenFatalErrorReturned(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
@@ -248,7 +248,7 @@ class CreateUserClientTest extends TestCase {
      * Test that createUser() returns the expected output when the SmarterU API
      * does not return any errors.
      */
-    public function testCreateUserReturnsExpectedResult() {
+    public function testCreateUserReturnsExpectedResult(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);

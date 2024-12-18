@@ -14,17 +14,13 @@ namespace Tests\CBS\SmarterU\Client;
 use CBS\SmarterU\DataTypes\ErrorCode;
 use CBS\SmarterU\DataTypes\Timezone;
 use CBS\SmarterU\DataTypes\User;
-use CBS\SmarterU\Exceptions\MissingValueException;
 use CBS\SmarterU\Exceptions\SmarterUException;
-use CBS\SmarterU\Queries\Tags\DateRangeTag;
-use CBS\SmarterU\Queries\Tags\MatchTag;
 use CBS\SmarterU\Client;
 use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Response;
-use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Exception\ClientException;
 use PHPUnit\Framework\TestCase;
 
@@ -84,7 +80,7 @@ class UpdateUserClientTest extends TestCase {
      * when making the request if all required and optional information is
      * present.
      */
-    public function testUpdateUserMakesCorrectAPICallWithAllInfo() {
+    public function testUpdateUserMakesCorrectAPICallWithAllInfo(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $user = (new User())
@@ -171,7 +167,7 @@ class UpdateUserClientTest extends TestCase {
      * when making the request if all required but no optional information is
      * present.
      */
-    public function testUpdateUserMakesCorrectAPICallWithoutOptionalInfo() {
+    public function testUpdateUserMakesCorrectAPICallWithoutOptionalInfo(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $oldEmail = 'phpunit@test.com';
@@ -241,7 +237,7 @@ class UpdateUserClientTest extends TestCase {
      * Test that updateUser() throws an exception when the request results
      * in an HTTP error.
      */
-    public function testUpdateUserThrowsExceptionWhenHTTPErrorOccurs() {
+    public function testUpdateUserThrowsExceptionWhenHTTPErrorOccurs(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
@@ -271,7 +267,7 @@ class UpdateUserClientTest extends TestCase {
      * returns a fatal error, as indicated by the value of the <Result>
      * tag.
      */
-    public function testUpdateUserThrowsExceptionWhenFatalErrorReturned() {
+    public function testUpdateUserThrowsExceptionWhenFatalErrorReturned(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
@@ -353,7 +349,7 @@ class UpdateUserClientTest extends TestCase {
      * Test that updateUser() returns the expected output when the SmarterU API
      * does not return any errors.
      */
-    public function testUpdateUserReturnsExpectedResult() {
+    public function testUpdateUserReturnsExpectedResult(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);

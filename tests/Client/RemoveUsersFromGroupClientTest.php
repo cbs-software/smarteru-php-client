@@ -50,7 +50,7 @@ class RemoveUsersFromGroupClientTest extends TestCase {
 
     /**
      * Test that Client::removeUsersFromGroup() throws the expected exception when
-     * the "$users" array contains a value that is not an instace of User.
+     * the "$users" array contains a value that is not an instance of User.
      */
     public function testRemoveUsersFromGroupThrowsExceptionWhenUsersNotInstanceOfUser() {
         $accountApi = 'account';

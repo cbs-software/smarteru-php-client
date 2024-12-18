@@ -24,7 +24,7 @@ class GetUserXMLTest extends TestCase {
      * Tests that XML generation throws the expected exception when the
      * required user identifier is not set.
      */
-    public function testExceptionIsThrownWhenUserIdentifierNotSet() {
+    public function testExceptionIsThrownWhenUserIdentifierNotSet(): void {
         $xmlGenerator = new XMLGenerator();
         $accountApi = 'account';
         $userApi = 'user';
@@ -42,7 +42,7 @@ class GetUserXMLTest extends TestCase {
      * Tests that XML generation produces the expected result when all required
      * information is present and the user is identified by their ID.
      */
-    public function testXMLGeneratedAsExpectedWithId() {
+    public function testXMLGeneratedAsExpectedWithId(): void {
         $xmlGenerator = new XMLGenerator();
         $accountApi = 'account';
         $userApi = 'user';
@@ -89,7 +89,7 @@ class GetUserXMLTest extends TestCase {
      * Tests that XML generation produces the expected result when all required
      * information is present and the user is identified by their email.
      */
-    public function testXMLGeneratedAsExpectedWithEmail() {
+    public function testXMLGeneratedAsExpectedWithEmail(): void {
         $xmlGenerator = new XMLGenerator();
         $accountApi = 'account';
         $userApi = 'user';
@@ -136,7 +136,7 @@ class GetUserXMLTest extends TestCase {
      * Tests that XML generation produces the expected result when all required
      * information is present and the user is identified by their employee ID.
      */
-    public function testXMLGeneratedAsExpectedWithEmployeeId() {
+    public function testXMLGeneratedAsExpectedWithEmployeeId(): void {
         $xmlGenerator = new XMLGenerator();
         $accountApi = 'account';
         $userApi = 'user';

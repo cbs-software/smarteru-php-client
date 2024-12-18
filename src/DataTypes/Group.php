@@ -16,7 +16,6 @@ use CBS\SmarterU\DataTypes\LearningModule;
 use CBS\SmarterU\DataTypes\SubscriptionVariant;
 use CBS\SmarterU\DataTypes\Tag;
 use CBS\SmarterU\Exceptions\InvalidArgumentException;
-use CBS\SmarterU\Exceptions\MissingValueException;
 use DateTimeInterface;
 
 /**
@@ -88,11 +87,11 @@ class Group {
     protected array $notificationEmails = [];
 
     /**
-     * Specifies whether the account's Enable User Help setting is overriden by
+     * Specifies whether the account's Enable User Help setting is overridden by
      * the group.
      *
-     * True: The account's Enable User Help setting is overriden by the group
-     * False: The account's Enable User Help setting is not overriden
+     * True: The account's Enable User Help setting is overridden by the group
+     * False: The account's Enable User Help setting is not overridden
      */
     protected ?bool $userHelpOverrideDefault = null;
 
@@ -142,14 +141,16 @@ class Group {
     protected ?string $status = null;
 
     /**
-     * A container for the Users who are assigned to the group. Each element
-     * must be an instance of CBS\SmarterU\DataTypes\User.
+     * A container for the Users who are assigned to the group.
+     *
+     * @var User[]
      */
     protected array $users = [];
 
     /**
-     * A container for assigning courses to the group. Each element must be an
-     * instance of CBS\SmarterU\DataTypes\LearningModule.
+     * A container for assigning courses to the group.
+     *
+     * @var LearningModule[]
      */
     protected array $learningModules = [];
 
@@ -164,8 +165,9 @@ class Group {
     protected int $learningModuleCount;
 
     /**
-     * A container for assigning subscription variants to the group. Each element
-     * must be an instance of CBS\SmarterU\DataTypes\SubscriptionVariant.
+     * A container for assigning subscription variants to the group.
+     *
+     * @var SubscriptionVariant[]
      */
     protected array $subscriptionVariants = [];
 
@@ -498,20 +500,20 @@ class Group {
     }
 
     /**
-     * Get whether the Enable User Help setting is overriden by the group.
+     * Get whether the Enable User Help setting is overridden by the group.
      *
      * @return ?bool true if and only if the Enable User Help setting is
-     *      overriden by the group
+     *      overridden by the group
      */
     public function getUserHelpOverrideDefault(): ?bool {
         return $this->userHelpOverrideDefault;
     }
 
     /**
-     * Set whether the Enable User Help setting is overriden by the group.
+     * Set whether the Enable User Help setting is overridden by the group.
      *
      * @param bool $userHelpOverrideDefault true if and only if the Enable
-     *      User Help setting is overriden by the group
+     *      User Help setting is overridden by the group
      */
     public function setUserHelpOverrideDefault(bool $userHelpOverrideDefault): self {
         $this->userHelpOverrideDefault = $userHelpOverrideDefault;
@@ -649,7 +651,7 @@ class Group {
     /**
      * Sets the date and time when the group was created.
      *
-     * @param DateTimeImmutable $createdDate the date and time when the group was created.
+     * @param DateTimeInterface $createdDate the date and time when the group was created.
      * @return self
      */
     public function setCreatedDate(DateTimeInterface $createdDate): self {

@@ -21,7 +21,7 @@ class CustomFieldTest extends TestCase {
     /**
      * Test agreement between getters and setters.
      */
-    public function testAgreement() {
+    public function testAgreement(): void {
         $name = 'My Custom Field';
         $value = 'This is the field\'s value.';
 

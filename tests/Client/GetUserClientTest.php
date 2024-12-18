@@ -88,7 +88,7 @@ class GetUserClientTest extends TestCase {
      * all required information is present and the query uses the ID as the
      * user identifier.
      */
-    public function testGetUserProducesCorrectInputForUserID() {
+    public function testGetUserProducesCorrectInputForUserID(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
@@ -205,7 +205,7 @@ class GetUserClientTest extends TestCase {
      * all required information is present and the query uses the email address
      * as the user identifier.
      */
-    public function testGetUserProducesCorrectInputForEmail() {
+    public function testGetUserProducesCorrectInputForEmail(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
@@ -322,7 +322,7 @@ class GetUserClientTest extends TestCase {
      * all required information is present and the query uses the employee ID
      * as the user identifier.
      */
-    public function testGetUserProducesCorrectInputForEmployeeID() {
+    public function testGetUserProducesCorrectInputForEmployeeID(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
@@ -438,7 +438,7 @@ class GetUserClientTest extends TestCase {
      * Test that getUser() throws an exception when the request results
      * in an HTTP error.
      */
-    public function testGetUserThrowsExceptionWhenHTTPErrorOccurs() {
+    public function testGetUserThrowsExceptionWhenHTTPErrorOccurs(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
@@ -467,7 +467,7 @@ class GetUserClientTest extends TestCase {
      * Test that getUser() throws an exception when the SmarterU API
      * returns a fatal error.
      */
-    public function testGetUserThrowsExceptionWhenFatalErrorReturned() {
+    public function testGetUserThrowsExceptionWhenFatalErrorReturned(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
@@ -549,7 +549,7 @@ class GetUserClientTest extends TestCase {
      * Test that getUser() returns the expected output when the SmarterU API
      * does not return any Users.
      */
-    public function testGetUserReturnsNullWhenUserDoesNotExist() {
+    public function testGetUserReturnsNullWhenUserDoesNotExist(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);
@@ -587,7 +587,7 @@ class GetUserClientTest extends TestCase {
      * Test that getUser() returns the expected output when the SmarterU API
      * does not return any errors.
      */
-    public function testGetUserReturnsExpectedResult() {
+    public function testGetUserReturnsExpectedResult(): void {
         $accountApi = 'account';
         $userApi = 'user';
         $client = new Client($accountApi, $userApi);

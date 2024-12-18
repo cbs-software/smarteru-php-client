@@ -29,7 +29,7 @@ class GetLearnerReportXMLTest extends TestCase {
      * Test that XMLGenerator::getLearnerReport() throws an exception when the
      * query doesn't have either a group status or a list of group names.
      */
-    public function testGetLearnerReportThrowsExceptionWhenNoGroupIdentifier() {
+    public function testGetLearnerReportThrowsExceptionWhenNoGroupIdentifier(): void {
         $xmlGenerator = new XMLGenerator();
         $accountApi = 'account';
         $userApi = 'user';
@@ -47,7 +47,7 @@ class GetLearnerReportXMLTest extends TestCase {
      * Test that XMLGenerator::getLearnerReport() throws an exception when the
      * query contains a Tag that doesn't have a name or an ID.
      */
-    public function testGetLearnerReportThrowsExceptionWhenNoTagIdentifier() {
+    public function testGetLearnerReportThrowsExceptionWhenNoTagIdentifier(): void {
         $xmlGenerator = new XMLGenerator();
         $accountApi = 'account';
         $userApi = 'user';
@@ -68,7 +68,7 @@ class GetLearnerReportXMLTest extends TestCase {
      * Test that XMLGenerator::getLearnerReport() throws an exception when the
      * query doesn't have either a user status or a list of user identifiers.
      */
-    public function testGetLearnerReportThrowsExceptionWhenNoUserIdentifier() {
+    public function testGetLearnerReportThrowsExceptionWhenNoUserIdentifier(): void {
         $xmlGenerator = new XMLGenerator();
         $accountApi = 'account';
         $userApi = 'user';
@@ -87,7 +87,7 @@ class GetLearnerReportXMLTest extends TestCase {
      * Test that XMLGenerator::getLearnerReport() produces the expected output
      * when all required values are present, but all optional values are blank.
      */
-    public function testGetLearnerReportProducesExpectedOutputWithoutOptionalInfo() {
+    public function testGetLearnerReportProducesExpectedOutputWithoutOptionalInfo(): void {
         $xmlGenerator = new XMLGenerator();
         $accountApi = 'account';
         $userApi = 'user';
@@ -181,7 +181,7 @@ class GetLearnerReportXMLTest extends TestCase {
      * Test that XMLGenerator::getLearnerReport() produces the expected output
      * when all required and optional values are present.
      */
-    public function testGetLearnerReportProducesExpectedOutputWithAllInfo() {
+    public function testGetLearnerReportProducesExpectedOutputWithAllInfo(): void {
         $enrollmentId = '1';
         $groupNames = ['My Group', 'My Other Group'];
         $tag1 = (new Tag())
