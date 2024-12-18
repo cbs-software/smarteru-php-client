@@ -664,9 +664,9 @@ class XMLGenerator {
         $parameters = $xml->addChild('Parameters');
         $group = $parameters->addChild('Group');
         if ($query->getName() !== null) {
-            $group->addChild('Name', $query->getName());
+            $group->addChild('Name', htmlentities($query->getName()));
         } else if ($query->getGroupId() !== null) {
-            $group->addChild('GroupID', $query->getGroupId());
+            $group->addChild('GroupID', htmlentities($query->getGroupId()));
         } else {
             throw new MissingValueException(
                 'Group identifier must be specified when creating a GetGroupQuery.'
