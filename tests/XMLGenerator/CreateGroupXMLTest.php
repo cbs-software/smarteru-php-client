@@ -475,4 +475,148 @@ class CreateGroupXMLTest extends TestCase {
             $group->getDashboardSetId()
         );
     }
+
+    /**
+     * Verifies that createGroup() runs without errors when fields contain
+     * ampersands.
+     */
+    public function testCreateGroupWithAmpersands(): void {
+        $module1 = (new LearningModule())
+            ->setId('4')
+            ->setAllowSelfEnroll(true)
+            ->setAutoEnroll(false);
+        $module2 = (new LearningModule())
+            ->setId('5')
+            ->setAllowSelfEnroll(false)
+            ->setAutoEnroll(true);
+
+        $groupName = 'A & W Rootbeer';
+        $homeGroupMessage = 'A & W Rootbeer is a great place to eat!';
+        $description = 'A & W Rootbeer is a great drink! yum!';
+
+        $group = (new Group())
+            ->setName($groupName)
+            ->setStatus('Active')
+            ->setDescription($description)
+            ->setHomeGroupMessage($homeGroupMessage)
+            ->setNotificationEmails(['test3@test.com', 'test4@test.com'])
+            ->setLearningModules([$module1, $module2]);
+
+        $xmlGenerator = new XMLGenerator();
+        $accountApi = 'account';
+        $userApi = 'user';
+        $xml = $xmlGenerator->createGroup(
+            $accountApi,
+            $userApi,
+            $group
+        );
+
+        self::assertIsString($xml);
+        $xml = simplexml_load_string($xml);
+
+        self::assertEquals($xml->getName(), 'SmarterU');
+        $elements = [];
+        foreach ($xml->children() as $element) {
+            $elements[] = $element->getName();
+        }
+        self::assertContains('AccountAPI', $elements);
+        self::assertEquals($accountApi, $xml->AccountAPI);
+        self::assertContains('UserAPI', $elements);
+        self::assertEquals($userApi, $xml->UserAPI);
+        self::assertContains('Method', $elements);
+        self::assertEquals('createGroup', $xml->Method);
+        self::assertContains('Parameters', $elements);
+
+        // Ensure that the <Parameters> tag has the correct children.
+        $parameters = [];
+        foreach ($xml->Parameters->children() as $parameter) {
+            $parameters[] = $parameter->getName();
+        }
+        self::assertCount(1, $parameters);
+        self::assertContains('Group', $parameters);
+        $groupTags = [];
+        foreach ($xml->Parameters->Group->children() as $tag) {
+            $groupTags[] = $tag->getName();
+        }
+        self::assertCount(7, $groupTags);
+        self::assertContains('Name', $groupTags);
+        self::assertEquals(
+            $group->getName(),
+            $xml->Parameters->Group->Name
+        );
+        self::assertContains('Status', $groupTags);
+        self::assertEquals(
+            $group->getStatus(),
+            $xml->Parameters->Group->Status
+        );
+        self::assertContains('Description', $groupTags);
+        self::assertEquals(
+            $group->getDescription(),
+            $xml->Parameters->Group->Description
+        );
+        self::assertContains('HomeGroupMessage', $groupTags);
+        self::assertEquals(
+            $group->getHomeGroupMessage(),
+            $xml->Parameters->Group->HomeGroupMessage
+        );
+        self::assertContains('NotificationEmails', $groupTags);
+        $emails = [];
+        foreach ((array) $xml->Parameters->Group->NotificationEmails->NotificationEmail as $email) {
+            $emails[] = $email;
+        }
+        self::assertEquals(
+            count($emails),
+            count($group->getNotificationEmails())
+        );
+        foreach ($emails as $email) {
+            self::assertContains(
+                $email,
+                $group->getNotificationEmails()
+            );
+        }
+
+        self::assertCount(0, $xml->Parameters->Group->Users->children());
+
+        self::assertContains('LearningModules', $groupTags);
+        $modules = [];
+        foreach ($xml->Parameters->Group->LearningModules->LearningModule as $module) {
+            $modules[] = (array) $module;
+        }
+
+        self::assertEquals(
+            count($modules),
+            count($group->getLearningModules())
+        );
+        foreach ($modules as $module) {
+            self::assertIsArray($module);
+            self::assertCount(3, $module);
+            self::assertArrayHasKey('ID', $module);
+            self::assertArrayHasKey('AllowSelfEnroll', $module);
+            self::assertArrayHasKey('AutoEnroll', $module);
+        }
+        self::assertEquals(
+            $modules[0]['ID'],
+            $group->getLearningModules()[0]->getId()
+        );
+        self::assertEquals(
+            $modules[0]['AllowSelfEnroll'],
+            $group->getLearningModules()[0]->getAllowSelfEnroll() ? '1' : '0'
+        );
+        self::assertEquals(
+            $modules[0]['AutoEnroll'],
+            $group->getLearningModules()[0]->getAutoEnroll() ? '1' : '0'
+        );
+        self::assertEquals(
+            $modules[1]['ID'],
+            $group->getLearningModules()[1]->getId()
+        );
+        self::assertEquals(
+            $modules[1]['AllowSelfEnroll'],
+            $group->getLearningModules()[1]->getAllowSelfEnroll() ? '1' : '0'
+        );
+        self::assertEquals(
+            $modules[1]['AutoEnroll'],
+            $group->getLearningModules()[1]->getAutoEnroll() ? '1' : '0'
+        );
+    }
 }
