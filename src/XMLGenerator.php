@@ -547,7 +547,7 @@ class XMLGenerator {
         }
         $groupTag->addChild('Status', $group->getStatus());
         $groupTag->addChild('Description', $group->getDescription());
-        $groupTag->addChild('HomeGroupMessage', $group->getHomeGroupMessage());
+        $groupTag->addChild('HomeGroupMessage', htmlentities($group->getHomeGroupMessage()));
         $notificationEmails = $groupTag->addChild('NotificationEmails');
         foreach ($group->getNotificationEmails() as $email) {
             $notificationEmails->addChild('NotificationEmail', $email);
