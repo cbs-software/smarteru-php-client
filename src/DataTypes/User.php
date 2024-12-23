@@ -11,10 +11,7 @@ declare(strict_types=1);
 
 namespace CBS\SmarterU\DataTypes;
 
-use CBS\SmarterU\Exceptions\MissingValueException;
-use CBS\SmarterU\Queries\BaseQuery;
 use DateTimeInterface;
-use SimpleXMLElement;
 
 /**
  * A User in SmarterU.
@@ -654,7 +651,7 @@ class User {
      * Set the container for the teams to assign to the user. The team names
      * provided must already exist in your SmarterU account.
      *
-     * @param array teams the teams to assign to the user
+     * @param array $teams the teams to assign to the user
      * @return self
      */
     public function setTeams(array $teams): self {

@@ -11,10 +11,7 @@ declare(strict_types=1);
 
 namespace CBS\SmarterU\Queries;
 
-use CBS\SmarterU\DataTypes\Tag;
-use CBS\SmarterU\Exceptions\MissingValueException;
 use CBS\SmarterU\Queries\Tags\MatchTag;
-use SimpleXMLElement;
 
 /**
  * Represents a listGroups query made to the SmarterU API.

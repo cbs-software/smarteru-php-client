@@ -406,7 +406,7 @@ class Group {
     /**
      * Set the container for assigning subscription variants to the group.
      *
-     * @param array The container for subscription variants
+     * @param array $subscriptionVariants  the container for subscription variants
      * @return self
      */
     public function setSubscriptionVariants(array $subscriptionVariants): self {

@@ -34,4 +34,17 @@ class SmarterUExceptionTest extends TestCase {
         self::assertEquals($code, $errorCode->getErrorCode());
         self::assertEquals($message, $errorCode->getErrorMessage());
     }
+
+    public function testStringification(): void {
+        $exceptionMessage = 'Invalid request';
+
+        $code = 'SU:01';
+        $message = 'No POST data detected';
+        $errorCode = new ErrorCode($code, $message);
+
+        $exception = new SmarterUException($exceptionMessage, [$errorCode]);
+
+        $expected = "CBS\SmarterU\Exceptions\SmarterUException: {$exceptionMessage}\n\t{{$code}: {$message}}";
+        self::assertSame($expected, (string)$exception);
+    }
 }
