@@ -112,6 +112,11 @@ class LearnerReport {
     protected ?DateTimeInterface $modifiedDate = null;
 
     /**
+     * The columns specified by the SmarterU API
+     */
+    protected array $columns = [];
+
+    /**
      * The UTC date the User was enrolled in the Course.
      */
     protected ?DateTimeInterface $enrolledDate = null;

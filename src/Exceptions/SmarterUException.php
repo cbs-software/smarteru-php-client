@@ -48,13 +48,13 @@ class SmarterUException extends \Exception {
      *
      * @return string  a string representing the exception
      */
-    public function __toString() {
+    public function __toString(): string {
         $lines = [
             __CLASS__ . ': ' . $this->message
         ];
 
         foreach ($this->errorCodes as $errorCode) {
-            $line[] = "\t{" . $errorCode->getErrorCode() . ': ' . $errorCode->getErrorMessage() . '}';
+            $lines[] = "\t{" . $errorCode->getErrorCode() . ': ' . $errorCode->getErrorMessage() . '}';
         }
 
         return implode("\n", $lines);

@@ -11,9 +11,6 @@ declare(strict_types=1);
 
 namespace CBS\SmarterU\Queries;
 
-use SimpleXMLElement;
-use CBS\SmarterU\Exceptions\MissingValueException;
-
 /**
  * Represents a getUser query or a getUserGroups query made to the SmarterU API.
  */

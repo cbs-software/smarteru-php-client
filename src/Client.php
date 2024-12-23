@@ -922,7 +922,7 @@ class Client {
      *      permissions revoked.
      * @param string[] $permissions The permissions to be revoked from the
      *      specified User within the specified Group.
-     * @return array The User as updated by the SmarterU API.
+     * @return User The User as updated by the SmarterU API.
      * @throws InvalidArgumentException If any value in the "$permissions"
      *      array is not a string or is not one of the permissions accepted
      *      by the SmarterU API.
