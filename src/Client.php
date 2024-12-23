@@ -629,8 +629,7 @@ class Client {
      * @throws SmarterUException If the response from the SmarterU API
      *      reports a fatal error that prevents the request from executing.
      */
-    public function listGroups(ListGroupsQuery $query): array
-    {
+    public function listGroups(ListGroupsQuery $query): array {
         $xml = $this->getXMLGenerator()->listGroups(
             $this->getAccountApi(),
             $this->getUserApi(),
