@@ -22,8 +22,8 @@ jobs:
             - uses: actions/checkout@v4
             - uses: php-actions/composer@v6
 
-            - name: PHP Code Sniffer
-              uses: php-actions/phpcs@v1
+            - uses: tinovyatkin/action-php-codesniffer@v1
               with:
-                  path: ./
+                  files: "**.php"
+                  phpcs_path: php vendor/bin/phpcs
                   standard: phpcs.xml
