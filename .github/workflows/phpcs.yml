@@ -4,34 +4,26 @@ name: action-php-codesniffer
 
 # Controls when the workflow will run
 on:
-  push:
-    branches:
-      - 'master'
-      - 'develop'
-      - 'releases/**'
-  pull_request:
+    push:
+        branches:
+            - "master"
+            - "develop"
+            - "releases/**"
+    pull_request:
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
+    # Allows you to run this workflow manually from the Actions tab
+    workflow_dispatch:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  phpcs:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0 # important!
+    phpcs:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: php-actions/composer@v6
 
-      # we may use whatever way to install phpcs, just specify the path on the next step
-      # however, curl seems to be the fastest
-      - name: Install PHP_CodeSniffer
-        run: |
-          curl -OL https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar
-          php phpcs.phar --version
-
-      - uses: tinovyatkin/action-php-codesniffer@v1
-        with:
-          files: "**.php" # you may customize glob as needed
-          phpcs_path: php phpcs.phar
-          standard: phpcs.xml
+            - uses: tinovyatkin/action-php-codesniffer@v1
+              with:
+                  files: "**.php"
+                  phpcs_path: php vendor/bin/phpcs
+                  standard: phpcs.xml
