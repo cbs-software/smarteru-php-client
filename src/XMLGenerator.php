@@ -1247,8 +1247,8 @@ class XMLGenerator {
         if (!empty($query->getUserStatus())) {
             $users->addChild('UserStatus', $query->getUserStatus());
         } else if (
-            !empty($query->getUserEmailAddresses()
-            || !empty($query->getUserEmployeeIds()))
+            !empty($query->getUserEmailAddresses())
+            || !empty($query->getUserEmployeeIds())
         ) {
             $userIdentifier = $users->addChild('UserIdentifier');
             foreach ($query->getUserEmailAddresses() as $email) {
