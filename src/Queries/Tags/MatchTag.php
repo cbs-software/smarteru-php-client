@@ -11,8 +11,6 @@ declare(strict_types=1);
 
 namespace CBS\SmarterU\Queries\Tags;
 
-use SmarterU\Exceptions\InvalidArgumentException;
-
 /**
  * This class represents the value passed into several different query parameters
  * determining whether to retrieve results that exactly match the input or that

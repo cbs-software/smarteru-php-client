@@ -13,7 +13,6 @@ namespace CBS\SmarterU\Queries;
 
 use CBS\SmarterU\Queries\Tags\DateRangeTag;
 use CBS\SmarterU\Queries\Tags\MatchTag;
-use SimpleXMLElement;
 
 /**
  * Represents a listUsers query made to the SmarterU API.
