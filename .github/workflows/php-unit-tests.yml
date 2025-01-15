@@ -6,24 +6,32 @@ name: php-unit-tests
 # few times we cherry picked onto a release and it's just a good idea to protect
 # the main/master and develop branches in case of an accidental commit.
 on:
-  push:
-    branches:
-      - 'main'
-      - 'develop'
-      - 'releases/**'
-  pull_request:
+    push:
+        branches:
+            - "main"
+            - "develop"
+            - "releases/**"
+    pull_request:
 
 jobs:
-  run-php-unit-tests:
-    name: Run PHP Unit Tests
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - uses: php-actions/composer@v5 # or alternative dependency management
-    - uses: php-actions/phpunit@v3
-      with:
-        php_version: "8.0"
-        version: "9"
-        configuration: ./phpunit.xml
-        memory_limit: 256M
-        testsuite: ci
+    run-php-unit-tests:
+        name: Run PHP Unit Tests
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Cache Composer dependencies
+              uses: actions/cache@v3
+              with:
+                  path: /tmp/composer-cache
+                  key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
+
+            - uses: php-actions/composer@v6
+
+            - uses: php-actions/phpunit@v3
+              with:
+                  php_version: "8.0"
+                  version: "9"
+                  configuration: ./phpunit.xml
+                  memory_limit: 256M
+                  testsuite: ci
