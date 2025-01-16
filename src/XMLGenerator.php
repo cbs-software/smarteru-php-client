@@ -756,17 +756,17 @@ class XMLGenerator {
         $groupTag = $parameters->addChild('Group');
         $identifier = $groupTag->addChild('Identifier');
         if (!empty($group->getOldName())) {
-            $identifier->addChild('Name', $group->getOldName());
+            $identifier->addChild('Name', htmlentities($group->getOldName()));
         } else if (!empty($group->getOldGroupId())) {
             $identifier->addChild('GroupID', $group->getOldGroupId());
         } else {
             // If neither of the above conditionals are true, then the
             // group name and ID are not being updated and the current
             // value can still be used to identify the group.
-            $identifier->addChild('Name', $group->getName());
+            $identifier->addChild('Name', htmlentities($group->getName()));
         }
         if (!empty($group->getOldName())) {
-            $groupTag->addChild('Name', $group->getName());
+            $groupTag->addChild('Name', htmlentities($group->getName()));
         }
         if (!empty($group->getOldGroupId())) {
             $groupTag->addChild('GroupID', $group->getGroupId());

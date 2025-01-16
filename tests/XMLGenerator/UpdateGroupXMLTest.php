@@ -93,28 +93,28 @@ class UpdateGroupXMLTest extends TestCase {
             ->setDashboardSetId('3');
 
         $this->group2 = (new Group())
-        ->setName('Second Group')
-        ->setOldName('Old Name')
-        ->setLearningModules([])
-        ->setSubscriptionVariants([]);
+            ->setName('Second Group')
+            ->setOldName('Old Name')
+            ->setLearningModules([])
+            ->setSubscriptionVariants([]);
 
         $this->group3 = (new Group())
-        ->setName('Third Group')
-        ->setGroupId('3')
-        ->setStatus('Active')
-        ->setDescription('A Group with an invalid tag')
-        ->setHomeGroupMessage('Third group\'s message')
-        ->setNotificationEmails(['test5@test.com', 'test6@test.com'])
-        ->setUserHelpOverrideDefault(false)
-        ->setUserHelpEnabled(true)
-        ->setUserHelpEmail(['help3@test.com', 'help4@test.com'])
-        ->setUserHelpText('Help')
-        ->setTags([$tag3])
-        ->setUserLimitEnabled(true)
-        ->setUserLimitAmount(20)
-        ->setLearningModules([$module1, $module2])
-        ->setSubscriptionVariants([$variant1, $variant2])
-        ->setDashboardSetId('3');
+            ->setName('Third Group')
+            ->setGroupId('3')
+            ->setStatus('Active')
+            ->setDescription('A Group with an invalid tag')
+            ->setHomeGroupMessage('Third group\'s message')
+            ->setNotificationEmails(['test5@test.com', 'test6@test.com'])
+            ->setUserHelpOverrideDefault(false)
+            ->setUserHelpEnabled(true)
+            ->setUserHelpEmail(['help3@test.com', 'help4@test.com'])
+            ->setUserHelpText('Help')
+            ->setTags([$tag3])
+            ->setUserLimitEnabled(true)
+            ->setUserLimitAmount(20)
+            ->setLearningModules([$module1, $module2])
+            ->setSubscriptionVariants([$variant1, $variant2])
+            ->setDashboardSetId('3');
     }
 
     /**
@@ -453,6 +453,152 @@ class UpdateGroupXMLTest extends TestCase {
         self::assertEquals(
             $xml->Parameters->Group->DashboardSetID,
             $this->group1->getDashboardSetId()
+        );
+    }
+
+    /**
+     * Tests that the XML generation process for an UpdateGroup request produces
+     * the expected output when group name contains a special character.
+     */
+    public function testUpdateGroupWithSpecialCharInName(): void {
+        $xmlGenerator = new XMLGenerator();
+        $accountApi = 'account';
+        $userApi = 'user';
+        $group = $this->group2->setName('Sanford & Son');
+        $xml = $xmlGenerator->updateGroup(
+            $accountApi,
+            $userApi,
+            $group
+        );
+
+        self::assertIsString($xml);
+        $xml = simplexml_load_string($xml);
+
+        self::assertEquals($xml->getName(), 'SmarterU');
+        $elements = [];
+        foreach ($xml->children() as $element) {
+            $elements[] = $element->getName();
+        }
+        self::assertContains('AccountAPI', $elements);
+        self::assertEquals($accountApi, $xml->AccountAPI);
+        self::assertContains('UserAPI', $elements);
+        self::assertEquals($userApi, $xml->UserAPI);
+        self::assertContains('Method', $elements);
+        self::assertEquals('updateGroup', $xml->Method);
+        self::assertContains('Parameters', $elements);
+
+        // Ensure that the <Parameters> tag has the correct children.
+        $parameters = [];
+        foreach ($xml->Parameters->children() as $parameter) {
+            $parameters[] = $parameter->getName();
+        }
+        self::assertCount(1, $parameters);
+        self::assertContains('Group', $parameters);
+        $groupTags = [];
+        foreach ($xml->Parameters->Group->children() as $tag) {
+            $groupTags[] = $tag->getName();
+        }
+        self::assertCount(5, $groupTags);
+        self::assertContains('Identifier', $groupTags);
+        $identifierTag = [];
+        foreach ($xml->Parameters->Group->Identifier->children() as $identifier) {
+            $identifierTag[] = $identifier->getName();
+        }
+        self::assertCount(1, $identifierTag);
+        self::assertContains('Name', $identifierTag);
+        self::assertEquals(
+            $group->getOldName(),
+            $xml->Parameters->Group->Identifier->Name
+        );
+        self::assertContains('Name', $groupTags);
+        self::assertEquals(
+            $group->getName(),
+            $xml->Parameters->Group->Name
+        );
+        self::assertContains('Users', $groupTags);
+        self::assertCount(0, $xml->Parameters->Group->Users->children());
+        self::assertContains('LearningModules', $groupTags);
+        self::assertCount(
+            0,
+            $xml->Parameters->Group->LearningModules->children()
+        );
+        self::assertContains('SubscriptionVariants', $groupTags);
+        self::assertCount(
+            0,
+            $xml->Parameters->Group->SubscriptionVariants->children()
+        );
+    }
+
+    /**
+     * Tests that the XML generation process for an UpdateGroup request produces
+     * the expected output when the old group name contains a special character.
+     */
+    public function testUpdateGroupWithSpecialCharInOldName(): void {
+        $xmlGenerator = new XMLGenerator();
+        $accountApi = 'account';
+        $userApi = 'user';
+        $group = $this->group2->setOldName('Sanford & Son');
+        $xml = $xmlGenerator->updateGroup(
+            $accountApi,
+            $userApi,
+            $group
+        );
+
+        self::assertIsString($xml);
+        $xml = simplexml_load_string($xml);
+
+        self::assertEquals($xml->getName(), 'SmarterU');
+        $elements = [];
+        foreach ($xml->children() as $element) {
+            $elements[] = $element->getName();
+        }
+        self::assertContains('AccountAPI', $elements);
+        self::assertEquals($accountApi, $xml->AccountAPI);
+        self::assertContains('UserAPI', $elements);
+        self::assertEquals($userApi, $xml->UserAPI);
+        self::assertContains('Method', $elements);
+        self::assertEquals('updateGroup', $xml->Method);
+        self::assertContains('Parameters', $elements);
+
+        // Ensure that the <Parameters> tag has the correct children.
+        $parameters = [];
+        foreach ($xml->Parameters->children() as $parameter) {
+            $parameters[] = $parameter->getName();
+        }
+        self::assertCount(1, $parameters);
+        self::assertContains('Group', $parameters);
+        $groupTags = [];
+        foreach ($xml->Parameters->Group->children() as $tag) {
+            $groupTags[] = $tag->getName();
+        }
+        self::assertCount(5, $groupTags);
+        self::assertContains('Identifier', $groupTags);
+        $identifierTag = [];
+        foreach ($xml->Parameters->Group->Identifier->children() as $identifier) {
+            $identifierTag[] = $identifier->getName();
+        }
+        self::assertCount(1, $identifierTag);
+        self::assertContains('Name', $identifierTag);
+        self::assertEquals(
+            $group->getOldName(),
+            $xml->Parameters->Group->Identifier->Name
+        );
+        self::assertContains('Name', $groupTags);
+        self::assertEquals(
+            $group->getName(),
+            $xml->Parameters->Group->Name
+        );
+        self::assertContains('Users', $groupTags);
+        self::assertCount(0, $xml->Parameters->Group->Users->children());
+        self::assertContains('LearningModules', $groupTags);
+        self::assertCount(
+            0,
+            $xml->Parameters->Group->LearningModules->children()
+        );
+        self::assertContains('SubscriptionVariants', $groupTags);
+        self::assertCount(
+            0,
+            $xml->Parameters->Group->SubscriptionVariants->children()
         );
     }
 }
