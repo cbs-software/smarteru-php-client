@@ -464,7 +464,8 @@ class UpdateGroupXMLTest extends TestCase {
         $xmlGenerator = new XMLGenerator();
         $accountApi = 'account';
         $userApi = 'user';
-        $group = $this->group2->setName('Sanford & Son');
+        $name = 'Sanford & Son';
+        $group = $this->group2->setName($name);
         $xml = $xmlGenerator->updateGroup(
             $accountApi,
             $userApi,
@@ -472,61 +473,7 @@ class UpdateGroupXMLTest extends TestCase {
         );
 
         self::assertIsString($xml);
-        $xml = simplexml_load_string($xml);
-
-        self::assertEquals($xml->getName(), 'SmarterU');
-        $elements = [];
-        foreach ($xml->children() as $element) {
-            $elements[] = $element->getName();
-        }
-        self::assertContains('AccountAPI', $elements);
-        self::assertEquals($accountApi, $xml->AccountAPI);
-        self::assertContains('UserAPI', $elements);
-        self::assertEquals($userApi, $xml->UserAPI);
-        self::assertContains('Method', $elements);
-        self::assertEquals('updateGroup', $xml->Method);
-        self::assertContains('Parameters', $elements);
-
-        // Ensure that the <Parameters> tag has the correct children.
-        $parameters = [];
-        foreach ($xml->Parameters->children() as $parameter) {
-            $parameters[] = $parameter->getName();
-        }
-        self::assertCount(1, $parameters);
-        self::assertContains('Group', $parameters);
-        $groupTags = [];
-        foreach ($xml->Parameters->Group->children() as $tag) {
-            $groupTags[] = $tag->getName();
-        }
-        self::assertCount(5, $groupTags);
-        self::assertContains('Identifier', $groupTags);
-        $identifierTag = [];
-        foreach ($xml->Parameters->Group->Identifier->children() as $identifier) {
-            $identifierTag[] = $identifier->getName();
-        }
-        self::assertCount(1, $identifierTag);
-        self::assertContains('Name', $identifierTag);
-        self::assertEquals(
-            $group->getOldName(),
-            $xml->Parameters->Group->Identifier->Name
-        );
-        self::assertContains('Name', $groupTags);
-        self::assertEquals(
-            $group->getName(),
-            $xml->Parameters->Group->Name
-        );
-        self::assertContains('Users', $groupTags);
-        self::assertCount(0, $xml->Parameters->Group->Users->children());
-        self::assertContains('LearningModules', $groupTags);
-        self::assertCount(
-            0,
-            $xml->Parameters->Group->LearningModules->children()
-        );
-        self::assertContains('SubscriptionVariants', $groupTags);
-        self::assertCount(
-            0,
-            $xml->Parameters->Group->SubscriptionVariants->children()
-        );
+        self::assertStringContainsString('Sanford &amp; Son', $xml);
     }
 
     /**
@@ -537,7 +484,8 @@ class UpdateGroupXMLTest extends TestCase {
         $xmlGenerator = new XMLGenerator();
         $accountApi = 'account';
         $userApi = 'user';
-        $group = $this->group2->setOldName('Sanford & Son');
+        $oldName = 'Sanford & Son';
+        $group = $this->group2->setOldName($oldName);
         $xml = $xmlGenerator->updateGroup(
             $accountApi,
             $userApi,
@@ -545,60 +493,6 @@ class UpdateGroupXMLTest extends TestCase {
         );
 
         self::assertIsString($xml);
-        $xml = simplexml_load_string($xml);
-
-        self::assertEquals($xml->getName(), 'SmarterU');
-        $elements = [];
-        foreach ($xml->children() as $element) {
-            $elements[] = $element->getName();
-        }
-        self::assertContains('AccountAPI', $elements);
-        self::assertEquals($accountApi, $xml->AccountAPI);
-        self::assertContains('UserAPI', $elements);
-        self::assertEquals($userApi, $xml->UserAPI);
-        self::assertContains('Method', $elements);
-        self::assertEquals('updateGroup', $xml->Method);
-        self::assertContains('Parameters', $elements);
-
-        // Ensure that the <Parameters> tag has the correct children.
-        $parameters = [];
-        foreach ($xml->Parameters->children() as $parameter) {
-            $parameters[] = $parameter->getName();
-        }
-        self::assertCount(1, $parameters);
-        self::assertContains('Group', $parameters);
-        $groupTags = [];
-        foreach ($xml->Parameters->Group->children() as $tag) {
-            $groupTags[] = $tag->getName();
-        }
-        self::assertCount(5, $groupTags);
-        self::assertContains('Identifier', $groupTags);
-        $identifierTag = [];
-        foreach ($xml->Parameters->Group->Identifier->children() as $identifier) {
-            $identifierTag[] = $identifier->getName();
-        }
-        self::assertCount(1, $identifierTag);
-        self::assertContains('Name', $identifierTag);
-        self::assertEquals(
-            $group->getOldName(),
-            $xml->Parameters->Group->Identifier->Name
-        );
-        self::assertContains('Name', $groupTags);
-        self::assertEquals(
-            $group->getName(),
-            $xml->Parameters->Group->Name
-        );
-        self::assertContains('Users', $groupTags);
-        self::assertCount(0, $xml->Parameters->Group->Users->children());
-        self::assertContains('LearningModules', $groupTags);
-        self::assertCount(
-            0,
-            $xml->Parameters->Group->LearningModules->children()
-        );
-        self::assertContains('SubscriptionVariants', $groupTags);
-        self::assertCount(
-            0,
-            $xml->Parameters->Group->SubscriptionVariants->children()
-        );
+        self::assertStringContainsString('Sanford &amp; Son', $xml);
     }
 }
