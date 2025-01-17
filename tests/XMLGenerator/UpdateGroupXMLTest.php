@@ -93,28 +93,28 @@ class UpdateGroupXMLTest extends TestCase {
             ->setDashboardSetId('3');
 
         $this->group2 = (new Group())
-        ->setName('Second Group')
-        ->setOldName('Old Name')
-        ->setLearningModules([])
-        ->setSubscriptionVariants([]);
+            ->setName('Second Group')
+            ->setOldName('Old Name')
+            ->setLearningModules([])
+            ->setSubscriptionVariants([]);
 
         $this->group3 = (new Group())
-        ->setName('Third Group')
-        ->setGroupId('3')
-        ->setStatus('Active')
-        ->setDescription('A Group with an invalid tag')
-        ->setHomeGroupMessage('Third group\'s message')
-        ->setNotificationEmails(['test5@test.com', 'test6@test.com'])
-        ->setUserHelpOverrideDefault(false)
-        ->setUserHelpEnabled(true)
-        ->setUserHelpEmail(['help3@test.com', 'help4@test.com'])
-        ->setUserHelpText('Help')
-        ->setTags([$tag3])
-        ->setUserLimitEnabled(true)
-        ->setUserLimitAmount(20)
-        ->setLearningModules([$module1, $module2])
-        ->setSubscriptionVariants([$variant1, $variant2])
-        ->setDashboardSetId('3');
+            ->setName('Third Group')
+            ->setGroupId('3')
+            ->setStatus('Active')
+            ->setDescription('A Group with an invalid tag')
+            ->setHomeGroupMessage('Third group\'s message')
+            ->setNotificationEmails(['test5@test.com', 'test6@test.com'])
+            ->setUserHelpOverrideDefault(false)
+            ->setUserHelpEnabled(true)
+            ->setUserHelpEmail(['help3@test.com', 'help4@test.com'])
+            ->setUserHelpText('Help')
+            ->setTags([$tag3])
+            ->setUserLimitEnabled(true)
+            ->setUserLimitAmount(20)
+            ->setLearningModules([$module1, $module2])
+            ->setSubscriptionVariants([$variant1, $variant2])
+            ->setDashboardSetId('3');
     }
 
     /**
@@ -454,5 +454,45 @@ class UpdateGroupXMLTest extends TestCase {
             $xml->Parameters->Group->DashboardSetID,
             $this->group1->getDashboardSetId()
         );
+    }
+
+    /**
+     * Tests that the XML generation process for an UpdateGroup request produces
+     * the expected output when group name contains a special character.
+     */
+    public function testUpdateGroupWithSpecialCharInName(): void {
+        $xmlGenerator = new XMLGenerator();
+        $accountApi = 'account';
+        $userApi = 'user';
+        $name = 'Sanford & Son';
+        $group = $this->group2->setName($name);
+        $xml = $xmlGenerator->updateGroup(
+            $accountApi,
+            $userApi,
+            $group
+        );
+
+        self::assertIsString($xml);
+        self::assertStringContainsString('Sanford &amp; Son', $xml);
+    }
+
+    /**
+     * Tests that the XML generation process for an UpdateGroup request produces
+     * the expected output when the old group name contains a special character.
+     */
+    public function testUpdateGroupWithSpecialCharInOldName(): void {
+        $xmlGenerator = new XMLGenerator();
+        $accountApi = 'account';
+        $userApi = 'user';
+        $oldName = 'Sanford & Son';
+        $group = $this->group2->setOldName($oldName);
+        $xml = $xmlGenerator->updateGroup(
+            $accountApi,
+            $userApi,
+            $group
+        );
+
+        self::assertIsString($xml);
+        self::assertStringContainsString('Sanford &amp; Son', $xml);
     }
 }
