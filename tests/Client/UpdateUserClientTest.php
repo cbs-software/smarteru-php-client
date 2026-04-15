@@ -11,6 +11,8 @@ declare(strict_types=1);
 
 namespace Tests\CBS\SmarterU\Client;
 
+use CBS\SmarterU\DataTypes\EmailAddressIdentifier;
+use CBS\SmarterU\DataTypes\EmployeeIdIdentifier;
 use CBS\SmarterU\DataTypes\ErrorCode;
 use CBS\SmarterU\DataTypes\Timezone;
 use CBS\SmarterU\DataTypes\User;
@@ -35,7 +37,12 @@ class UpdateUserClientTest extends TestCase {
     protected User $user1;
 
     /**
-     * Set up the test User.
+     * An identifier for $user1.
+     */
+    protected EmailAddressIdentifier $identifier1;
+
+    /**
+     * Set up the test User and its identifier.
      */
     public function setUp(): void {
         $this->user1 = (new User())
@@ -73,6 +80,8 @@ class UpdateUserClientTest extends TestCase {
             ->setSendMailTo('Personal')
             ->setReceiveNotifications(true)
             ->setHomeGroup('My Home Group');
+
+        $this->identifier1 = new EmailAddressIdentifier($this->user1->getEmail());
     }
 
     /**
@@ -83,6 +92,7 @@ class UpdateUserClientTest extends TestCase {
     public function testUpdateUserMakesCorrectAPICallWithAllInfo(): void {
         $accountApi = 'account';
         $userApi = 'user';
+        $identifier = new EmailAddressIdentifier('phpunit4@test.com');
         $user = (new User())
             ->setId('4')
             ->setEmail('phpunit4@test.com')
@@ -148,7 +158,7 @@ class UpdateUserClientTest extends TestCase {
         $client->setHttpClient($httpClient);
 
         // Make the request.
-        $client->updateUser($user);
+        $client->updateUser($identifier, $user);
 
         // Make sure there is only 1 request, then translate it to XML.
         self::assertCount(1, $container);
@@ -157,6 +167,7 @@ class UpdateUserClientTest extends TestCase {
         $expectedBody = 'Package=' . $client->getXMLGenerator()->updateUser(
             $accountApi,
             $userApi,
+            $identifier,
             $user
         );
         self::assertEquals($decodedBody, $expectedBody);
@@ -170,13 +181,10 @@ class UpdateUserClientTest extends TestCase {
     public function testUpdateUserMakesCorrectAPICallWithoutOptionalInfo(): void {
         $accountApi = 'account';
         $userApi = 'user';
-        $oldEmail = 'phpunit@test.com';
-        $oldEmployeeId = '12';
+        $identifier = new EmployeeIdIdentifier('12');
         $user = (new User())
             ->setId('4')
-            ->setOldEmail($oldEmail)
             ->setEmail('phpunit4@test.com')
-            ->setOldEmployeeId($oldEmployeeId)
             ->setEmployeeId('4')
             ->setLearnerNotifications(true)
             ->setSupervisorNotifications(false);
@@ -211,15 +219,7 @@ class UpdateUserClientTest extends TestCase {
         $client->setHttpClient($httpClient);
 
         // Make the request.
-        $client->updateUser($user);
-
-        // XML translation clears out the old email/employee ID values so that
-        // any future updateUser queries on the same User object do not
-        // mistakenly use the old data to identify the User after the email
-        // and/or employee ID have already been updated by a previous query.
-        // They must be set again to produce the expected output below.
-        $user->setOldEmail($oldEmail);
-        $user->setOldEmployeeID($oldEmployeeId);
+        $client->updateUser($identifier, $user);
 
         // Make sure there is only 1 request, then translate it to XML.
         self::assertCount(1, $container);
@@ -228,6 +228,7 @@ class UpdateUserClientTest extends TestCase {
         $expectedBody = 'Package=' . $client->getXMLGenerator()->updateUser(
             $accountApi,
             $userApi,
+            $identifier,
             $user
         );
         self::assertEquals($decodedBody, $expectedBody);
@@ -259,7 +260,7 @@ class UpdateUserClientTest extends TestCase {
 
         self::expectException(ClientException::class);
         self::expectExceptionMessage('Client error: ');
-        $client->updateUser($this->user1);
+        $client->updateUser($this->identifier1, $this->user1);
     }
 
     /**
@@ -322,7 +323,7 @@ class UpdateUserClientTest extends TestCase {
         // properties we'll handle the try/catch/cache of the exception
         $exception = null;
         try {
-            $client->updateUser($this->user1);
+            $client->updateUser($this->identifier1, $this->user1);
         } catch (SmarterUException $error) {
             $exception = $error;
         }
@@ -376,7 +377,7 @@ class UpdateUserClientTest extends TestCase {
         $client->setHttpClient($httpClient);
 
         // Make the request.
-        $result = $client->updateUser($this->user1);
+        $result = $client->updateUser($this->identifier1, $this->user1);
 
         self::assertInstanceOf(User::class, $result);
         self::assertEquals($result->getEmail(), $this->user1->getEmail());

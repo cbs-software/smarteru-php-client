@@ -34,18 +34,6 @@ class User {
     #region Properties
 
     /**
-     * The old email address of the user. Necessary for identifying the user to
-     * update when making a change to the user's email address.
-     */
-    protected ?string $oldEmail = null;
-
-    /**
-     * The old employee ID of the user. Necessary for identifying the user to
-     * update when making a change to the user's employee ID.
-     */
-    protected ?string $oldEmployeeId = null;
-
-    /**
      * The user ID of the user.
      */
     protected ?string $id;
@@ -298,46 +286,6 @@ class User {
     #endregion Properties
 
     #region Getters and Setters
-
-    /**
-     * Get the old email address of the user.
-     *
-     * @return ?string the old email address
-     */
-    public function getOldEmail(): ?string {
-        return $this->oldEmail;
-    }
-
-    /**
-     * Set the old email address of the user.
-     *
-     * @param ?string $oldEmail the old email address
-     * @return self
-     */
-    public function setOldEmail(?string $oldEmail): self {
-        $this->oldEmail = $oldEmail;
-        return $this;
-    }
-
-    /**
-     * Get the old employee ID of the user.
-     *
-     * @return ?string the old employee ID
-     */
-    public function getOldEmployeeId(): ?string {
-        return $this->oldEmployeeId;
-    }
-
-    /**
-     * Set the old employee ID of the user.
-     *
-     * @param ?string $oldEmployeeId the old employee ID
-     * @return self
-     */
-    public function setOldEmployeeId(?string $oldEmployeeId): self {
-        $this->oldEmployeeId = $oldEmployeeId;
-        return $this;
-    }
 
     /**
      * Gets the user's ID.
