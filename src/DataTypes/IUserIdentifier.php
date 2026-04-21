@@ -26,7 +26,7 @@ interface IUserIdentifier{
     public function getUserIdentifier(): string;
 
     /**
-     * Returns the tag name to  use when specifying this identifier in the XML.
+     * Returns the tag name to use when specifying this identifier in the XML.
      */
     public function getApiType(): string;
 }
