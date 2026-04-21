@@ -11,6 +11,8 @@ declare(strict_types=1);
 
 namespace Tests\CBS\SmarterU\XMLGenerator;
 
+use CBS\SmarterU\DataTypes\EmailAddressIdentifier;
+use CBS\SmarterU\DataTypes\EmployeeIdIdentifier;
 use CBS\SmarterU\DataTypes\Timezone;
 use CBS\SmarterU\DataTypes\User;
 use CBS\SmarterU\Exceptions\MissingValueException;
@@ -22,24 +24,53 @@ use PHPUnit\Framework\TestCase;
  */
 class UpdateUserXMLTest extends TestCase {
     /**
-     * Tests that the XML generation process for an UpdateUser request throws
-     * an exception if the User being created does not have an email address
-     * or an employee ID.
+     * Tests that updateUser() places the email address in the <Identifier>
+     * tag when an EmailAddressIdentifier is provided.
      */
-    public function testUpdateUserThrowsExceptionWhenNoUserIdentifier(): void {
-        $xmlGenerator = new XMLGenerator();
-        $accountApi = 'account';
-        $userApi = 'user';
-        $user = new User();
-        self::expectException(MissingValueException::class);
-        self::expectExceptionMessage(
-            'A User cannot be updated without either an email address or an employee ID.'
-        );
-        $xml = $xmlGenerator->updateUser(
-            $accountApi,
-            $userApi,
-            $user
-        );
+    public function testUpdateUserUsesEmailAddressIdentifier(): void {
+        $email = 'test@example.com';
+        $identifier = new EmailAddressIdentifier($email);
+        $user = (new User())
+            ->setGivenName('Test')
+            ->setSurname('User')
+            ->setHomeGroup('HomeGroup');
+
+        $xml = (new XMLGenerator())->updateUser('account', 'user', $identifier, $user);
+
+        self::assertIsString($xml);
+        $xml = simplexml_load_string($xml);
+        $identifierTag = [];
+        foreach ($xml->Parameters->User->Identifier->children() as $child) {
+            $identifierTag[] = $child->getName();
+        }
+        self::assertCount(1, $identifierTag);
+        self::assertContains('Email', $identifierTag);
+        self::assertEquals($email, $xml->Parameters->User->Identifier->Email);
+    }
+
+    /**
+     * Tests that updateUser() places the employee ID in the <Identifier>
+     * tag when an EmployeeIdIdentifier is provided.
+     */
+    public function testUpdateUserUsesEmployeeIdIdentifier(): void {
+        $employeeId = 'EMP001';
+        $identifier = new EmployeeIdIdentifier($employeeId);
+        $user = (new User())
+            ->setGivenName('Test')
+            ->setSurname('User')
+            ->setHomeGroup('HomeGroup');
+
+        $xml = (new XMLGenerator())->updateUser('account', 'user', $identifier, $user);
+
+        self::assertIsString($xml);
+        $xml = simplexml_load_string($xml);
+        $identifierTag = [];
+        foreach ($xml->Parameters->User->Identifier->children() as $child) {
+            $identifierTag[] = $child->getName();
+        }
+        self::assertCount(1, $identifierTag);
+        self::assertContains('EmployeeID', $identifierTag);
+        self::assertEquals($employeeId, $xml->Parameters->User->Identifier->EmployeeID);
     }
 
     /**
@@ -47,10 +78,10 @@ class UpdateUserXMLTest extends TestCase {
      * the expected output when all required information is present but all
      * optional attributes are left blank.
      */
-    public function testUpdateUserProducesExpectedOutputWithoutRequiredInfo(): void {
+    public function testUpdateUserProducesExpectedOutputWithoutOptionalInfo(): void {
+        $identifier = new EmailAddressIdentifier('old@email.com');
         $user = (new User())
             ->setEmail('example@email.com')
-            ->setOldEmail('old@email.com')
             ->setGivenName('Test')
             ->setSurname('User')
             ->setSendEmailTo('Self')
@@ -60,11 +91,7 @@ class UpdateUserXMLTest extends TestCase {
         $xmlGenerator = new XMLGenerator();
         $accountApi = 'account';
         $userApi = 'user';
-        $xml = $xmlGenerator->updateUser(
-            $accountApi,
-            $userApi,
-            $user
-        );
+        $xml = $xmlGenerator->updateUser($accountApi, $userApi, $identifier, $user);
 
         self::assertIsString($xml);
         $xml = simplexml_load_string($xml);
@@ -101,8 +128,8 @@ class UpdateUserXMLTest extends TestCase {
         self::assertContains('Wages', $userInfo);
 
         $identifierTag = [];
-        foreach ($xml->Parameters->User->Identifier->children() as $identifier) {
-            $identifierTag[] = $identifier->getName();
+        foreach ($xml->Parameters->User->Identifier->children() as $child) {
+            $identifierTag[] = $child->getName();
         }
         self::assertCount(1, $identifierTag);
         self::assertContains('Email', $identifierTag);
@@ -180,10 +207,11 @@ class UpdateUserXMLTest extends TestCase {
     }
 
     /**
-     * Verifieshat updateUser() throws a MissingValueException when the email
+     * Verifies that updateUser() throws a MissingValueException when the email
      * address is not set but SendEmailTo is set to 'Self'.
      */
     public function testUpdateUserThrowsMissingValueExceptionWhenSendEmailToIsSelfAndNoEmailSet(): void {
+        $identifier = new EmployeeIdIdentifier('EMP001');
         $user = (new User())
             ->setEmail(null)
             ->setSendEmailTo('Self');
@@ -192,8 +220,8 @@ class UpdateUserXMLTest extends TestCase {
         $this->assertEquals('Self', $user->getSendEmailTo());
 
         $this->expectException(MissingValueException::class);
-        $this->expectExceptionMessage(XmlGenerator::ERROR_EMAIL_REQUIRED_FOR_SEND_EMAIL_TO_SELF);
-        (new XMLGenerator())->updateUser('account', 'user', $user);
+        $this->expectExceptionMessage(XMLGenerator::ERROR_EMAIL_REQUIRED_FOR_SEND_EMAIL_TO_SELF);
+        (new XMLGenerator())->updateUser('account', 'user', $identifier, $user);
     }
 
     /**
@@ -201,6 +229,7 @@ class UpdateUserXMLTest extends TestCase {
      * the expected output when all required and optional information is present.
      */
     public function testUpdateUserProducesExpectedOutputWithAllInfo(): void {
+        $identifier = new EmailAddressIdentifier('phpunit@test.com');
         $user = (new User())
             ->setId('1')
             ->setEmail('phpunit@test.com')
@@ -239,11 +268,7 @@ class UpdateUserXMLTest extends TestCase {
         $xmlGenerator = new XMLGenerator();
         $accountApi = 'account';
         $userApi = 'user';
-        $xml = $xmlGenerator->updateUser(
-            $accountApi,
-            $userApi,
-            $user
-        );
+        $xml = $xmlGenerator->updateUser($accountApi, $userApi, $identifier, $user);
 
         self::assertIsString($xml);
         $xml = simplexml_load_string($xml);
@@ -280,13 +305,13 @@ class UpdateUserXMLTest extends TestCase {
         self::assertContains('Wages', $userInfo);
 
         $identifierTag = [];
-        foreach ($xml->Parameters->User->Identifier->children() as $identifier) {
-            $identifierTag[] = $identifier->getName();
+        foreach ($xml->Parameters->User->Identifier->children() as $child) {
+            $identifierTag[] = $child->getName();
         }
         self::assertCount(1, $identifierTag);
         self::assertContains('Email', $identifierTag);
         self::assertEquals(
-            $user->getEmail(),
+            $identifier->getUserIdentifier(),
             $xml->Parameters->User->Identifier->Email
         );
 

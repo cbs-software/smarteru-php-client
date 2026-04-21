@@ -14,6 +14,8 @@ namespace CBS\SmarterU\Tests\Usability;
 require_once(__DIR__ . '/../vendor/autoload.php');
 
 use CBS\SmarterU\Client;
+use CBS\SmarterU\DataTypes\EmailAddressIdentifier;
+use CBS\SmarterU\DataTypes\EmployeeIdIdentifier;
 use CBS\SmarterU\DataTypes\User;
 use CBS\SmarterU\DataTypes\Timezone;
 use CBS\SmarterU\Exceptions\SmarterUException;
@@ -24,9 +26,12 @@ use CBS\SmarterU\Exceptions\SmarterUException;
  */
 $accountKey = getenv('SMARTERU_ACCOUNT_KEY') ?? 'No Account Key Provided';
 $userKey = getenv('SMARTERU_USER_KEY') ?? 'No User Key Provided';
+$employeeId = 'example-67';
+$identifier = new EmployeeIdIdentifier($employeeId);
 
 $user = (new User())
-    ->setEmail('cooluser@email.com') // insert email here
+    ->setEmployeeId($employeeId)
+    ->setEmail('cooluser3@email.com') // insert email here
     ->setLearnerNotifications(true)
     ->setSupervisorNotifications(true)
     ->setTimezone(Timezone::fromProvidedName('US/Mountain'))
@@ -36,9 +41,9 @@ $user = (new User())
 try {
     // Create the Client for speaking to the API
     $client = new Client($accountKey, $userKey);
-    
+
     // Update the user
-    $client->updateUser($user);
+    $client->updateUser($identifier, $user);
 
     // Read the user back
     $user = $client->readUserByEmail($user->getEmail());
@@ -54,8 +59,6 @@ try {
 Output:
 CBS\SmarterU\DataTypes\User Object
 (
-    [oldEmail:protected] =>
-    [oldEmployeeId:protected] =>
     [id] =>
     [email:protected] => user 0's email
     [employeeId:protected] => user 0's employee ID

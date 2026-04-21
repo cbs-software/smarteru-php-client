@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace CBS\SmarterU;
 
 use CBS\SmarterU\DataTypes\Group;
+use CBS\SmarterU\DataTypes\IUserIdentifier;
 use CBS\SmarterU\DataTypes\User;
 use CBS\SmarterU\Exceptions\InvalidArgumentException;
 use CBS\SmarterU\Exceptions\MissingValueException;
@@ -320,6 +321,8 @@ class XMLGenerator {
      *
      * @param string $accountApi The SmarterU API key identifying the account
      *      making the request.
+     * @param IUserIdentifier $userIdentifier The identifier to use to find the
+     *   User to update. This can be either the email address or the employee ID.
      * @param string $userApi The SmarterU API key identifying the user within
      *      that account who is making the request.
      * @param User $user The User to translate to XML
@@ -330,6 +333,7 @@ class XMLGenerator {
     public function updateUser(
         string $accountApi,
         string $userApi,
+        IUserIdentifier $userIdentifier,
         User $user
     ): string {
         $this->validateUpdateUser($user);
@@ -340,24 +344,14 @@ class XMLGenerator {
         $parameters = $xml->addChild('Parameters');
         $userTag = $parameters->addChild('User');
         $identifier = $userTag->addChild('Identifier');
-        if (!empty($user->getOldEmail())) {
-            $identifier->addChild('Email', $user->getOldEmail());
-        } else if (!empty($user->getOldEmployeeId())) {
-            $identifier->addChild('EmployeeID', $user->getOldEmployeeId());
-        } else {
-            // If neither of the above conditionals are true, then the
-            // email address and employee ID are not being updated and
-            // the current value can still be used to identify the user.
-            if (!empty($user->getEmail())) {
-                $identifier->addChild('Email', $user->getEmail());
-            } else if (!empty($user->getEmployeeId())) {
-                $identifier->addChild('EmployeeID', $user->getEmployeeId());
-            } else {
-                throw new MissingValueException(
-                    'A User cannot be updated without either an email address or an employee ID.'
-                );
-            }
-        }
+
+        // The concrete IUserIdentifier implementation will determine both the
+        // tag name and the specific value. This ensures that a call to this
+        // API wrapper cannot be made without incomplete user identification
+        // information.
+        $identifier->addChild(
+            $userIdentifier->getApiType(),
+            $userIdentifier->getUserIdentifier());
 
         $info = $userTag->addChild('Info');
 
