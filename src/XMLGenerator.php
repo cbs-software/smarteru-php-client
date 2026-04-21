@@ -347,7 +347,7 @@ class XMLGenerator {
 
         // The concrete IUserIdentifier implementation will determine both the
         // tag name and the specific value. This ensures that a call to this
-        // API wrapper cannot be made without incomplete user identificaetion
+        // API wrapper cannot be made without incomplete user identification
         // information.
         $identifier->addChild(
             $userIdentifier->getApiType(),
