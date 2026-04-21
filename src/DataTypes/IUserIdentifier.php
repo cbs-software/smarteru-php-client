@@ -19,7 +19,7 @@ namespace CBS\SmarterU\DataTypes;
  * using polymorphism, we can allow API callers to specify the user in either
  * way without forcing them to use a specific method.
  */
-interface IUserIdentifier{
+interface IUserIdentifier {
     /**
      * Gets the user identifier as a string.
      */
