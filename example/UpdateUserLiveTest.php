@@ -27,7 +27,7 @@ use CBS\SmarterU\Exceptions\SmarterUException;
 $accountKey = getenv('SMARTERU_ACCOUNT_KEY') ?? 'No Account Key Provided';
 $userKey = getenv('SMARTERU_USER_KEY') ?? 'No User Key Provided';
 $employeeId = 'example-67';
-$identifier = new EmployeeIdIdentifier($employeeId); // insert email here
+$identifier = new EmployeeIdIdentifier($employeeId);
 
 $user = (new User())
     ->setEmployeeId($employeeId)
