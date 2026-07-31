@@ -919,6 +919,17 @@ class XMLGenerator {
                 'Cannot add or remove users from a Group without a group name or ID.'
             );
         }
+
+        // SmarterU's updateGroup is a full-replace: any field omitted from the
+        // request is cleared on the server. Because a changeGroupMembers
+        // request identifies the group by its Name, omitting the GroupID wipes
+        // it, after which every readGroupById() lookup misses and callers keep
+        // creating duplicate groups. Echo the GroupID back so simply enrolling
+        // a user cannot clear it.
+        if (!empty($group->getGroupId())) {
+            $groupTag->addChild('GroupID', $group->getGroupId());
+        }
+
         $usersTag = $groupTag->addChild('Users');
         foreach ($users as $user) {
             if (!($user instanceof User)) {
