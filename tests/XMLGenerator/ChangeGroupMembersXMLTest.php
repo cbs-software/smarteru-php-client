@@ -326,4 +326,83 @@ class ChangeGroupMembersXMLTest extends TestCase {
             $xml->Parameters->Group->SubscriptionVariants->children()
         );
     }
+
+    /**
+     * Test that XMLGenerator::changeGroupMembers() echoes the Group's GroupID
+     * back into the request when the Group has one. changeGroupMembers is an
+     * updateGroup request, and SmarterU's updateGroup is a full-replace: any
+     * field omitted from the request is cleared on the server. Omitting the
+     * GroupID therefore wipes it, orphaning the group from every
+     * readGroupById() lookup. The GroupID must survive a membership change.
+     */
+    public function testChangeGroupMembersPreservesGroupId(): void {
+        $accountApi = 'account';
+        $userApi = 'user';
+        $user = (new User())
+            ->setEmail('test@test.com')
+            ->setHomeGroup('My Group');
+        $group = (new Group())
+            ->setName('My Group')
+            ->setGroupId('my-group-id');
+        $action = 'Add';
+        $xmlGenerator = new XMLGenerator();
+        $xml = $xmlGenerator->changeGroupMembers(
+            $accountApi,
+            $userApi,
+            [$user],
+            $group,
+            $action
+        );
+        self::assertIsString($xml);
+        $xml = simplexml_load_string($xml);
+
+        // The group is still identified by its Name, not its GroupID.
+        self::assertEquals(
+            $group->getName(),
+            $xml->Parameters->Group->Identifier->Name
+        );
+
+        // The GroupID is present as a sibling of the Identifier so the
+        // full-replace re-asserts it rather than clearing it.
+        $groupTags = [];
+        foreach ($xml->Parameters->Group->children() as $tag) {
+            $groupTags[] = $tag->getName();
+        }
+        self::assertContains('GroupID', $groupTags);
+        self::assertEquals(
+            $group->getGroupId(),
+            $xml->Parameters->Group->GroupID
+        );
+    }
+
+    /**
+     * Test that XMLGenerator::changeGroupMembers() omits the GroupID tag when
+     * the Group has no GroupID, so a group identified only by name is
+     * unaffected.
+     */
+    public function testChangeGroupMembersOmitsGroupIdWhenAbsent(): void {
+        $accountApi = 'account';
+        $userApi = 'user';
+        $user = (new User())
+            ->setEmail('test@test.com')
+            ->setHomeGroup('My Group');
+        $group = (new Group())
+            ->setName('My Group');
+        $xmlGenerator = new XMLGenerator();
+        $xml = $xmlGenerator->changeGroupMembers(
+            $accountApi,
+            $userApi,
+            [$user],
+            $group,
+            'Add'
+        );
+        self::assertIsString($xml);
+        $xml = simplexml_load_string($xml);
+
+        $groupTags = [];
+        foreach ($xml->Parameters->Group->children() as $tag) {
+            $groupTags[] = $tag->getName();
+        }
+        self::assertNotContains('GroupID', $groupTags);
+    }
 }
