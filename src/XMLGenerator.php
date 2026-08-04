@@ -911,7 +911,7 @@ class XMLGenerator {
         $groupTag = $parameters->addChild('Group');
         $identifier = $groupTag->addChild('Identifier');
         if (!empty($group->getName())) {
-            $identifier->addChild('Name', $group->getName());
+            $identifier->addChild('Name', $this->escapeValue($group->getName()));
         } else if (!empty($group->getGroupId())) {
             $identifier->addChild('GroupID', $group->getGroupId());
         } else {
